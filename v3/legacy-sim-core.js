@@ -1,9 +1,9 @@
 (()=>{'use strict';
 const DEF={
 knight:{hp:175,dmg:18,range:.062,cd:30,spd:.00105,r:.024,armor:.28},
-goose:{hp:72,dmg:9,range:.052,cd:16,spd:.00165,r:.018,dodge:.20},
-sniper:{hp:44,dmg:31,range:.38,cd:78,spd:.00072,r:.018,kite:.19},
-dragon:{hp:290,dmg:43,range:.255,cd:48,spd:.00072,r:.034,armor:.14},
+goose:{hp:70,dmg:8.5,range:.052,cd:16,spd:.00172,r:.018,dodge:.22},
+sniper:{hp:42,dmg:26,range:.35,cd:88,spd:.00070,r:.018,kite:.20},
+dragon:{hp:300,dmg:42,range:.255,cd:48,spd:.00082,r:.034,armor:.15},
 assassin:{hp:66,dmg:27,range:.058,cd:32,spd:.00155,r:.018,dodge:.12},
 beetank:{hp:255,dmg:18,range:.068,cd:42,spd:.00070,r:.032,armor:.34},
 mole:{hp:92,dmg:25,range:.058,cd:34,spd:.00115,r:.021,armor:.08},
@@ -24,7 +24,7 @@ function attack(u,t,m=1){hurt(t,u.dmg*m,u);u.cooldown=u.cd}
 function act(u,t){const d=Math.hypot(t.x-u.x,t.y-u.y),r=u.range;if(u.stun>0){u.stun--;u.action='stun';return}if(u.cooldown>0)u.cooldown--;
 if(u.type==='sniper'){if(d<u.kite){u.action='retreat';move(u,t,1.15,true);return}if(d<=r){u.action='aim';if(u.cooldown<=0){u.action='attack';attack(u,t)}return}u.action='move';move(u,t);return}
 if(u.type==='dragon'){if(d<=r){u.action='fire';if(u.cooldown<=0){attack(u,t);for(const v of alive(t.team))if(v.id!==t.id&&Math.hypot(v.x-t.x,v.y-t.y)<.10)hurt(v,u.dmg*.38,u)}return}u.action='stalk';move(u,t,.8);return}
-if(u.type==='goose'&&tick%95===u.id%95){u.action='honk';for(const v of alive(t.team))if(Math.hypot(v.x-u.x,v.y-u.y)<.13)v.stun=Math.max(v.stun,7);u.y=clamp(u.y+(rnd()-.5)*.07);return}
+if(u.type==='goose'&&tick%72===u.id%72){u.action='honk';for(const v of alive(t.team))if(Math.hypot(v.x-u.x,v.y-u.y)<.14)v.stun=Math.max(v.stun,6);u.y=clamp(u.y+(rnd()-.5)*.11);u.x=clamp(u.x+(rnd()-.5)*.035);return}
 if(u.type==='mole'&&tick%125===u.id%125&&d>.14){u.action='burrow';u.x=clamp(t.x+(u.team==='blue'?-.07:.07));u.y=clamp(t.y+(rnd()-.5)*.05);return}
 if(u.type==='beetank'&&d>.09&&d<.28&&tick%110===u.id%110){u.action='ram';move(u,t,2.4);return}
 if(u.type==='turtle'&&u.hp/u.maxHp<.5&&tick%90<18){u.action='shell';return}
