@@ -1,36 +1,13 @@
-/* v2.6 Turn 2 — Battle Camera & Scale */
+/* v2.6 Turn 3 — Visual Forge II */
 (function(){
-  document.documentElement.dataset.mobileBuild='v2.6-t2';
-  const badge=document.querySelector('.top h2 small'); if(badge) badge.textContent='v2.6 Mobile Dev · T2';
-  document.title='Showdown Lab v2.6 Mobile Dev';
-  window.copyDiagnostics=async function(){
-    const txt=`Showdown Lab v2.6-dev T2 | checksum ${typeof simChecksum==='function'?simChecksum():'n/a'} | FPS ${window.perf?.fps??'n/a'} | units ${window.units?.length??'n/a'} | projectiles ${window.projectiles?.length??'n/a'} | tick ${window.tick??'n/a'} | seed ${window.seed??'n/a'} | phase ${window.phase??'n/a'} | ${navigator.userAgent}`;
-    try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(txt);if(typeof toast==='function')toast('Diagnostics copied');return}}catch(e){}
-    try{const ta=document.createElement('textarea');ta.value=txt;ta.readOnly=true;ta.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();if(typeof toast==='function')toast('Diagnostics copied');return}catch(e){}
-    try{const p=document.querySelector('#panel'),ov=document.querySelector('#overlay');if(p){p.innerHTML='<h3>Diagnostics</h3><textarea readonly style="width:100%;min-height:160px">'+txt.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</textarea><button onclick="showHome()">Return Home</button>';ov?.classList.remove('hidden')}}catch(e){}
-  };
-  const root=document.documentElement, canvas=document.querySelector('#c'), overlay=document.querySelector('#overlay');
-  const syncViewport=()=>root.style.setProperty('--app-vh',`${window.innerHeight}px`);
-  function syncBattleFocus(){
-    let active=false;
-    try{active=!!canvas && overlay?.classList.contains('hidden') && typeof phase!=='undefined' && phase==='battle'}catch(e){}
-    root.dataset.battleFocus=active?'1':'0';
-  }
-  function fitArena(){
-    if(!canvas)return;
-    const battle=root.dataset.battleFocus==='1';
-    const top=document.querySelector('#app>.top:nth-of-type(2)');
-    const spells=document.querySelector('#spellBar');
-    const reserved=(top?.offsetHeight||38)+(battle?(spells?.offsetHeight||0):130)+18;
-    const avail=Math.max(300,window.innerHeight-reserved);
-    /* Keep the simulation's 900x600 coordinate system intact. CSS performs the camera fit. */
-    canvas.style.maxHeight=battle?`${avail}px`:'';
-  }
-  function sync(){syncViewport();syncBattleFocus();fitArena()}
-  sync(); addEventListener('resize',sync,{passive:true}); addEventListener('orientationchange',()=>setTimeout(sync,80),{passive:true});
-  if(overlay)new MutationObserver(sync).observe(overlay,{attributes:true,attributeFilter:['class']});
-  /* Game state is not event-driven, so cheaply sample phase changes without touching the simulation loop. */
-  let lastPhase=''; setInterval(()=>{let p='';try{p=String(phase)}catch(e){}if(p!==lastPhase){lastPhase=p;sync()}},250);
-  /* Double-tap the arena to toggle a distraction-free battle camera. */
-  let lastTap=0; canvas?.addEventListener('pointerup',()=>{const now=Date.now();if(now-lastTap<330){const forced=root.dataset.battleFocus==='1';root.dataset.battleFocus=forced?'0':'1';fitArena();lastTap=0}else lastTap=now},{passive:true});
+ const root=document.documentElement,C=document.querySelector('#c'),OV=document.querySelector('#overlay');root.dataset.mobileBuild='v2.6-t3';const badge=document.querySelector('.top h2 small');if(badge)badge.textContent='v2.6 Mobile Dev · T3';document.title='Showdown Lab v2.6 Mobile Dev';
+ window.copyDiagnostics=async function(){const txt=`Showdown Lab v2.6-dev T3 | FPS ${window.perf?.fps??'n/a'} | tick ${window.tick??'n/a'} | ${navigator.userAgent}`;try{if(navigator.clipboard&&isSecureContext){await navigator.clipboard.writeText(txt);toast?.('Diagnostics copied');return}}catch(e){}try{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast?.('Diagnostics copied')}catch(e){alert(txt)}};
+ const syncViewport=()=>root.style.setProperty('--app-vh',`${innerHeight}px`);function sync(){syncViewport();let a=false;try{a=!!C&&OV?.classList.contains('hidden')&&phase==='battle'}catch(e){}root.dataset.battleFocus=a?'1':'0';if(C&&a){const top=document.querySelector('#app>.top:nth-of-type(2)'),sp=document.querySelector('#spellBar');C.style.maxHeight=`${Math.max(300,innerHeight-(top?.offsetHeight||38)-(sp?.offsetHeight||0)-18)}px`}}sync();addEventListener('resize',sync,{passive:true});if(OV)new MutationObserver(sync).observe(OV,{attributes:true});let lp='';setInterval(()=>{let p='';try{p=String(phase)}catch(e){}if(p!==lp){lp=p;sync()}},250);
+ /* Visual Forge II: high-resolution DOM overlay sprites. Simulation stays untouched. */
+ if(!C)return;const layer=document.createElement('div');layer.id='vf2';C.parentNode.insertBefore(layer,C.nextSibling);const app=document.querySelector('#app');app?.classList.add('vf2host');
+ const glyph={knight:'🛡️',goose:'🪿',assassin:'🥷',sniper:'🎯',snail:'🐌',engineer:'🔧',turret:'⚙️',tnt:'💣',beetank:'🐝',mole:'🦫',turtle:'🐢',goblin:'👺',merlinor:'🧙',archer:'🏹',barbarian:'🪓',spartan:'🔱',bloodvine:'🌿',whelp:'🐲',sixshoot:'🔫',parasite:'🦠',cowboy:'🤠',agent:'🕶️',villain:'🦹',totem:'🗿',spider:'🕷️',dragon:'🐉',captain:'🪝'};
+ let nodes=new Map(),last=0;function renderVF(t){requestAnimationFrame(renderVF);if(t-last<33)return;last=t;let us=[];try{us=units||[]}catch(e){return}const n=us.length,quality=n<=80?2:n<=220?1:0;layer.dataset.quality=quality;const seen=new Set(),rect=C.getBoundingClientRect(),sx=rect.width/900,sy=rect.height/600;layer.style.cssText=`left:${C.offsetLeft}px;top:${C.offsetTop}px;width:${rect.width}px;height:${rect.height}px`;
+  for(const u of us){if(u.hp<=0)continue;seen.add(u.id);let el=nodes.get(u.id);if(!el){el=document.createElement('div');el.className='vfunit';el.innerHTML='<div class="vfring"></div><div class="vfglyph"></div><div class="vflevel"></div><div class="vfhp"><i></i></div>';layer.appendChild(el);nodes.set(u.id,el)}let size=quality===2?Math.max(28,(u.r||8)*3.3):quality===1?Math.max(20,(u.r||8)*2.4):Math.max(12,(u.r||8)*1.45);if(u.type==='dragon'||u.type==='beetank')size*=1.18;el.style.transform=`translate3d(${u.x*sx-size/2}px,${u.y*sy-size/2}px,0)`;el.style.width=el.style.height=size+'px';el.dataset.team=u.team?'r':'b';el.dataset.elite=u.l>=10?'2':u.l>=5?'1':'0';el.querySelector('.vfglyph').textContent=glyph[u.type]||u.ch||'?';el.querySelector('.vflevel').textContent=u.l>=10?'★★':u.l>=5?'★':'';el.querySelector('.vfhp i').style.transform=`scaleX(${Math.max(0,Math.min(1,u.hp/u.max))})`;el.title=`${u.type} L${u.l}`}
+  for(const [id,el] of nodes)if(!seen.has(id)){el.remove();nodes.delete(id)}layer.classList.toggle('vfhidden',root.dataset.battleFocus!=='1');}
+ requestAnimationFrame(renderVF);
 })();
