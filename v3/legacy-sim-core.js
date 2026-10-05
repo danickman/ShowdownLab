@@ -36,7 +36,7 @@ function separate(passes=1){const a=alive();for(let p=0;p<passes;p++)for(let i=0
 function step(){tick++;for(const u of alive()){const t=targetFor(u);u.target=t?.id??null;if(t)act(u,t);else u.action='idle'}separate(alive().length>35?1:2)}
 function winner(){const b=alive('blue').length,r=alive('red').length;return b&&!r?'blue':r&&!b?'red':null}
 function emit(force=false){const now=performance.now();if(!force&&now-emitAt<45)return;emitAt=now;onState({tick,units:units.map(u=>({...u})),winner:winner(),running,speed})}
-function frame(now){const dt=Math.min(80,now-last);last=now;if(running){acc+=dt*speed;while(acc>=16.666){step();acc-=16.666;if(winner()){running=false;break}}emit()}raf=requestAnimationFrame(frame)}
+function frame(now){const dt=Math.min(80,now-last);last=now;if(running){acc+=dt*speed;let terminal=false;while(acc>=16.666){step();acc-=16.666;if(winner()){running=false;terminal=true;break}}emit(terminal)}raf=requestAnimationFrame(frame)}
 function loop(){if(!raf){last=performance.now();raf=requestAnimationFrame(frame)}}
 function configure(o={}){if(Number.isFinite(o.seed))seed=o.seed>>>0;if(typeof o.onState==='function')onState=o.onState;if([1,2,4].includes(+o.speed))speed=+o.speed;loop()}
 function setRunning(v){running=!!v;last=performance.now();emit(true);loop()}
