@@ -1,0 +1,11 @@
+(()=>{
+'use strict';
+const listeners=new Set();let speed=1;
+let snapshot={version:1,phase:'idle',round:1,playing:false,speed:1,blueLives:4,redLives:4,units:[],selectedUnitId:null,winner:null};
+const clone=()=>({...snapshot,units:snapshot.units.map(u=>({...u}))});
+function publish(){const s=clone();listeners.forEach(fn=>fn(s));window.dispatchEvent(new CustomEvent('showdown:state',{detail:s}))}
+function normalize(u={}){return{id:u.id,type:u.type||'knight',team:u.team==='red'?'red':'blue',level:Math.max(1,+u.level||1),hp:Math.max(0,+u.hp||0),maxHp:Math.max(1,+u.maxHp||1),x:Number.isFinite(u.x)?u.x:.5,y:Number.isFinite(u.y)?u.y:.5,facing:+u.facing||0,action:u.action||'idle',target:u.target??null,status:u.status??null}}
+function receive(core){snapshot={...snapshot,units:(core.units||[]).map(normalize),winner:core.winner||null};if(core.winner){snapshot.playing=false;snapshot.phase='results'}publish()}
+const api={getState:clone,subscribe(fn){listeners.add(fn);fn(clone());return()=>listeners.delete(fn)},startBattle(config={}){snapshot={...snapshot,phase:'battle',playing:true,round:config.round||1,blueLives:config.blueLives||4,redLives:config.redLives||4,winner:null};window.LegacySimCore.configure({seed:config.seed||1337,onState:receive});window.LegacySimCore.deploy(config.blue||['knight','sniper'],config.red||['goose','dragon']);window.LegacySimCore.setRunning(true);publish()},pauseBattle(){const playing=window.LegacySimCore.pause();snapshot={...snapshot,playing};publish()},setSpeed(v){speed=[1,2,4].includes(+v)?+v:1;snapshot={...snapshot,speed};window.dispatchEvent(new CustomEvent('showdown:command',{detail:{type:'speed',speed}}));publish()},selectUnit(id){snapshot={...snapshot,selectedUnitId:id??null};publish()},castSpell(spell){window.dispatchEvent(new CustomEvent('showdown:command',{detail:{type:'castSpell',spell}}))}};
+window.ShowdownAdapter=api;
+})();
