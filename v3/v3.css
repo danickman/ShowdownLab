@@ -3,3 +3,37 @@
 
 /* Visuals 3 — stronger battle hierarchy */
 .battle-hud{box-shadow:inset 0 1px #ffffff18,0 8px 28px #000b}.battle-hud .team b{letter-spacing:.08em}.battle-hud .team span{margin-top:3px}.battle-actions{filter:drop-shadow(0 8px 18px #0008)}.round-draft .rd-choice{transition:transform .14s ease,background .14s ease,outline-color .14s ease}.round-draft .rd-choice:active{transform:scale(.98)}
+
+/* Visuals 12.2 — daylight / real-world lighting pass */
+:root{color-scheme:light;--bg:#d8eef4;--panel:#eff7f4;--ink:#102129;--muted:#5f7478;--amber:#d99920;--blue:#138fca;--red:#d64c45}
+html,body{background:#b8d8e1;color:var(--ink)}
+.game-shell{background:linear-gradient(180deg,#cbeaf3,#eef1d9 72%,#d9d2ae)}
+.lab-atmosphere{background:
+  radial-gradient(circle at 18% 18%,#fff7b8cc,transparent 22%),
+  radial-gradient(circle at 75% 32%,#8fd0ef66,transparent 36%),
+  linear-gradient(180deg,#8fd0ee 0%,#d9eef0 43%,#e8e4bf 72%,#c6b68d 100%)}
+.lab-atmosphere:after{opacity:.35;background:repeating-linear-gradient(90deg,transparent 0 42px,#264b5212 43px 44px),repeating-linear-gradient(0deg,transparent 0 42px,#264b5212 43px 44px)}
+.brand h1{text-shadow:0 8px 22px #ffffff99,0 2px 0 #17323b22}
+.brand p{color:#29434a}
+.hero-stage:before{background:radial-gradient(ellipse,#fff7b84a,transparent 60%)}
+.hero-fighter{filter:drop-shadow(0 15px 12px #49636a55)}
+.home-actions>button,.primary{box-shadow:inset 0 2px #fff9d8cc,0 8px 22px #52656b44}
+.home-actions>button:nth-child(2){background:linear-gradient(180deg,#eef7f5,#c9dde0);color:#173139;border:1px solid #547b8644}
+.minor-actions button,.corner-button{background:linear-gradient(180deg,#f4f7ef,#cadde0);color:#173139;border:1px solid #547b8644;box-shadow:0 5px 12px #52656b33}
+.screen-draft{background:radial-gradient(circle at 50% 18%,#fff5bc,#a9d7e7 42%,#d8dec5 100%)}
+.screen-head>button{background:#eef5f1;color:#173139;border:1px solid #486d7740}
+.fighter-card{background:linear-gradient(155deg,#f6f5df,#bdd7d5);border-color:#486d7730;box-shadow:inset 0 1px #ffffffcc,0 7px 17px #586c7038}
+.fighter-card:before{background:radial-gradient(circle at 50% 31%,#ffffff88,transparent 48%)}
+.fighter-card span{color:#4b6065}
+.screen-ready{background:linear-gradient(135deg,#9fd6ee 0 49.4%,#f1b6a7 50.6% 100%)}
+.ready-backdrop{background:radial-gradient(circle at 17% 51%,#ffffff66,transparent 35%),radial-gradient(circle at 83% 51%,#fff1df55,transparent 35%),repeating-linear-gradient(0deg,#14343d08 0 1px,transparent 1px 36px)}
+.ready-tip{color:#29434a;background:#ffffffa6}
+.screen-results{background:radial-gradient(circle at 50% 38%,#fff2a8,#a9d7e7 55%,#7299a3 100%)}
+.screen-lab,.scroll-screen{background:linear-gradient(180deg,#d5edf3,#e9e8cf)}
+.lab-block,.roster-card{background:linear-gradient(180deg,#f9f8e8,#d7e5df);color:#173139;border-color:#58798538;box-shadow:0 8px 18px #54676c2b}
+.lab-block label{color:#29434a}
+.lab-cheat{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+.lab-cheat input{width:24px;height:24px;accent-color:#d99920}
+.preset-grid button,.mini-grid button{background:#eef5ef;color:#173139;border-color:#5e7f8b42}
+.sheet{background:#f3f5e9f2;color:#173139;border-color:#486d7740;box-shadow:0 14px 38px #42565d55}
+.sheet button{background:#d7e6e1}
