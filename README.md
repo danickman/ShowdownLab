@@ -9,6 +9,7 @@ Showdown Lab is an experimental mobile-first auto-battler built around drafting 
 - [Execution roadmap & milestone tracker](docs/ROADMAP.md)
 - [Character art & evolution bible](docs/CHARACTER_ART_BIBLE.md)
 - [Test matrix](docs/TEST_MATRIX.md)
+- [Draft Showdown 1.17.1 mechanical research notes](docs/DRAFT_SHOWDOWN_RESEARCH.md)
 
 ## Current status
 

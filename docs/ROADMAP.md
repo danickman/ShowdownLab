@@ -247,3 +247,22 @@ Every implementation turn should state:
 5. commit SHA when done
 
 If a task cannot be described this way, it is probably still too vague.
+
+## Research-informed parity additions
+
+See `DRAFT_SHOWDOWN_RESEARCH.md` for the evidence and confidence levels behind these items.
+
+Before M4 roster scale-out, insert a **data-model checkpoint**:
+- define a declarative UnitDefinition registry (stats, targeting, movement, attack, special/spawn behaviors, evolution metadata)
+- define an effect-based DraftCard model (spawn, multiply, upgrade, merge, spell, eligibility, phase weights)
+- define deterministic Spell objects instead of special-casing ARC/BLOOM
+- preserve seeded RNG and event/state separation so battle codes/replays remain possible
+
+Expand M5 capability-parity work with these future executable turns:
+- **Turn 5.8 — Smart Draft AI:** tendency + unit-count + synergy + round-context scoring, with aiSmartness controlling greed/optimality
+- **Turn 5.9 — Comeback rules:** optional consolation draft after round loss, with no ads/paywalls
+- **Turn 5.10 — Commander/Mastery model:** separate global progression, unit mastery and visual evolution rather than one overloaded level
+- **Turn 5.11 — Ghost opponent spike:** replay a deterministic opponent deck/seed profile without real-time networking
+- **Turn 5.12 — Lab AI transparency:** show candidate draft scores and why the bot selected a card
+
+After M4 reaches 26/26, treat extra researched unit identities as an **expansion backlog**, not baseline scope. Add only when they introduce a genuinely new behavior family.

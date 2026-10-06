@@ -131,3 +131,30 @@ Cover the fighter name and shrink to battlefield scale. A successful design stil
 2. broad role
 3. current major action
 4. base vs evolved/ultimate form
+
+## Visual north-star references
+
+The two concept sheets supplied during Visuals 11 planning are the clearest expression of the intended **feel**:
+- crisp faceted comic rendering
+- extremely readable silhouettes
+- oversized signature anatomy/equipment
+- high-energy action typography
+- arenas with unmistakable visual identity
+- evolutions that visibly alter the fighter rather than only adding a badge
+- battles staged like a moving comic panel
+
+These are design references, not assets to reproduce literally. Future geometry, hybrid or authored art should be judged by whether it achieves the same readability, energy and hierarchy while remaining original.
+
+Specific quality checks derived from the references:
+- Knight must read by shield/helmet before color.
+- Sniper must read by rifle length and planted aim line.
+- Goose must remain comedic and unmistakable at tiny scale.
+- Dragon must dominate horizontally through wings/head/tail and never resemble Barbarian.
+- Assassin must be angular, dark and surgical rather than bulky.
+- Beetank must read as low armored mass plus horn.
+- Mole must read by claws/nose/earth action.
+- Turtle must be shell-first and intentional, never blob-like.
+- Goblin must read as tiny/kinetic with oversized blade/ears.
+- Barbarian must dominate vertically as humanoid shoulders + axe.
+
+If authored external art is explored, first compare one asset against the current geometry at **actual battle scale**, not only at card/portrait size.
