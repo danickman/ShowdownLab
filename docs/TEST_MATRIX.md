@@ -101,6 +101,11 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] match terminates
 
 ### Targeted combat regressions
+- [ ] Turtle shell counter triggers a visible roll/slam sequence instead of passively sitting in shell
+- [ ] Turtle counterattack briefly stuns and meaningfully threatens melee opponents without becoming a top DPS unit
+- [ ] Turtle survives/competes better than the previous passive-shell build across mixed matchups
+- [ ] Bloom, battle menu, Results secondary actions, and sheet controls remain clearly visible in daylight UI
+- [ ] comic words clear in about one second and do not obscure ongoing melee
 - [ ] deadlock recovery never lets opposing teams pass through and swap engagement sides
 - [ ] 4× L1 Sniper vs 1× L1 Assassin: Snipers can defend at close range; expected typical result is Blue win with roughly 3 survivors
 - [ ] Sniper close-defense damage remains clearly weaker than normal rifle damage
