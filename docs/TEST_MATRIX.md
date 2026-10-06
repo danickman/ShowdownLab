@@ -85,6 +85,16 @@ At 10× require correctness/termination, not cinematic readability.
 - [ ] MVP is living winner
 
 ### Navigation/rematch
+- [ ] Ready screen names the active mode and uses mode-specific instructions
+- [ ] battle HUD identifies Quick / Draft / Lab without adding visual clutter
+- [ ] Quick Results primary action starts another Quick match, not Draft
+- [ ] Draft Results primary action starts a fresh Draft flow
+- [ ] Lab Results primary action returns to Ultimate Lab
+- [ ] Ultimate Lab exposes all four spells for experimentation without permanently unlocking them
+- [ ] leaving Lab restores normal purchased-spell visibility
+- [ ] Upgrade Bay sticky Parts wallet stays visible and does not overlap the title on small phones
+- [ ] Upgrade Bay collapses spell cards to one column on narrow portrait screens
+- [ ] no dark-theme panels remain in between-round evolution preview or match-complete overlay
 - [ ] NEXT SHOWDOWN starts clean match
 - [ ] REMATCH starts clean battle
 - [ ] no old defeated bodies/effects
