@@ -176,3 +176,11 @@ html,body{background:#b8d8e1;color:var(--ink)}
   .roster-card{padding:12px;gap:10px}
   .roster-avatar{width:74px;height:94px}
 }
+
+/* Package 13.15 — Ultimate Lab free upgrade sandbox */
+.lab-tech{margin:16px 0 6px;padding:12px;border-radius:16px;background:#eef4e8;border:1px solid #6e878b35}
+.lab-tech>.eyebrow{display:block;margin-bottom:8px;color:#6e5600}
+.lab-tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lab-tech-grid label{margin:0;padding:9px;border-radius:12px;background:#ffffffa8;border:1px solid #71888c30}
+.lab-tech-grid output{color:#7f6200}
+@media(max-width:390px){.lab-tech-grid{grid-template-columns:1fr}}
