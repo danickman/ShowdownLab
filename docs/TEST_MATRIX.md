@@ -100,6 +100,16 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] 2×/4×/10× works
 - [ ] match terminates
 
+### Targeted combat regressions
+- [ ] deadlock recovery never lets opposing teams pass through and swap engagement sides
+- [ ] 4× L1 Sniper vs 1× L1 Assassin: Snipers can defend at close range; expected typical result is Blue win with roughly 3 survivors
+- [ ] Sniper close-defense damage remains clearly weaker than normal rifle damage
+- [ ] Dragon has a weak close-defense attack when pinned inside firing posture
+- [ ] Mole is not targetable while burrowed
+- [ ] Mole tunnels only forward toward an enemy, erupts near the target, and can re-burrow toward the next enemy if it survives
+- [ ] Assassin rear-line behavior remains distinct from Mole forward tunneling
+- [ ] L1 vs L2 vs L3 of the same unit can be distinguished at battlefield scale without reading labels
+
 ### Stress
 - [ ] 8+ round match
 - [ ] 10× terminal correctness
