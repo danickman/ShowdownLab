@@ -144,6 +144,14 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] Upgrade Bay is the single roster/upgrade destination
 
 ### Combat feel / environment polish
+- [ ] mastery pips match stored mastery level on every fighter card
+- [ ] mastered fighter cards gain visual prestige without looking like a separate in-match evolution tier
+- [ ] card sheen animation remains subtle and does not affect scrolling performance
+- [ ] daylight unit shadows fall consistently away from the upper-left sun direction
+- [ ] arena landmarks are distinguishable but stay behind combat silhouettes
+- [ ] Verdant ruins, Ember industrial shapes, Moon domes, and Lab structures read differently at a glance
+- [ ] Dragon fire ember fragments add texture without hiding nearby fighters
+- [ ] warm rim lighting no longer gives base fighters a neon outline
 - [ ] directional melee impact arcs read as motion, not another comic bubble
 - [ ] Sniper attacks show a brief muzzle cue/tracer without obscuring targets
 - [ ] charge/ram/rush actions kick up restrained ground dust
