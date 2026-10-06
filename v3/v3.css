@@ -127,3 +127,18 @@ html,body{background:#b8d8e1;color:var(--ink)}
 }
 .podium span{color:#5f7478}
 .result-fighter{filter:drop-shadow(0 14px 12px #485b6045)}
+
+/* Package 13.13 — spell identity without another wall of comic text */
+.ability-callout{
+  font-size:12px!important;
+  min-width:auto!important;
+  padding:6px 10px!important;
+  letter-spacing:.08em;
+  border-radius:999px!important;
+  box-shadow:0 5px 14px #4f626633!important;
+  opacity:.9;
+}
+.ability-callout.spell-zap{background:#fff0a8!important;color:#4a3700!important;border:1px solid #c89d26!important}
+.ability-callout.spell-heal{background:#dff2c9!important;color:#28522f!important;border:1px solid #78a75c!important}
+.ability-callout.spell-quake{background:#ead2bc!important;color:#57341f!important;border:1px solid #a87752!important}
+.ability-callout.spell-aegis{background:#dcedf8!important;color:#244b62!important;border:1px solid #77a9c7!important}
