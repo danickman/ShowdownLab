@@ -1,6 +1,6 @@
 # Showdown Lab — Execution Roadmap & Milestone Tracker
 
-Status: **ACTIVE PLAN — post Visuals 11 RC**
+Status: **ACTIVE PLAN — Package 13 RC candidate**
 Protected combat baseline: **RC4 rich combat core**
 
 This is the operating plan for future work. Its purpose is to replace free-form iteration with bounded, testable milestones.
@@ -38,14 +38,14 @@ Working:
 - lives, reinforcement and evolution round loop
 - four procedural arenas
 - 1× / 2× / 4× / 10× speed
-- ARC / BLOOM interventions
-- differentiated Lab presets
+- ARC / BLOOM interventions plus unlockable Quake / Aegis spell system and spell tech
+- differentiated Lab presets with free evolution, mastery, spell-tech and spell-unlock sandbox controls
 - geometry-first comic character renderer
 - Visuals 11 skyboxes, comic FX, round ceremony, progression previews, arena escalation, clutch-state storytelling, team banners, ambience and result framing
 - art-preview contact sheet / battlefield-scale / silhouette QA page
 
 Unfinished/risky:
-- Visuals 11 has not yet had a full production playtest
+- Package 13 requires production/device playtest after RC deployment
 - Results → NEXT SHOWDOWN reset needs regression
 - Lab rematch lives behavior needs regression
 - cooldown UI on quick rematches needs regression
@@ -227,12 +227,12 @@ No unresolved P0/P1/P2.
 
 | Milestone | State |
 |---|---|
-| M0 Visuals 11 validation | NEXT |
-| M1 Stabilize v3 shell | PLANNED |
+| M0 Visuals 11 validation | SUBSTANTIALLY COMPLETE · RC PLAYTEST NEXT |
+| M1 Stabilize v3 shell | PARTIAL · LIFECYCLE/HUD/LAB ADVANCED |
 | M2 Long-term art path | PLANNED |
 | M3 Character progression | PLANNED |
 | M4 Full 26-unit roster | 10/26 BASE UNITS COMPLETE |
-| M5 Feature/capability parity | PARTIAL |
+| M5 Feature/capability parity | PARTIAL · PERSISTENT PARTS/MASTERY/SPELL TECH ADDED |
 | M6 Arena/content expansion | PARTIAL |
 | M7 Community-ready architecture | NOT STARTED |
 | M8 Release hardening | NOT STARTED |

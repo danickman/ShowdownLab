@@ -37,3 +37,150 @@ html,body{background:#b8d8e1;color:var(--ink)}
 .preset-grid button,.mini-grid button{background:#eef5ef;color:#173139;border-color:#5e7f8b42}
 .sheet{background:#f3f5e9f2;color:#173139;border-color:#486d7740;box-shadow:0 14px 38px #42565d55}
 .sheet button{background:#d7e6e1}
+
+/* Package 13 dev — progression / collection surfaces */
+.home-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.parts-chip{font-size:11px;letter-spacing:.08em;padding:7px 10px;border-radius:999px;background:#fff5c9cc;color:#6a4a00;border:1px solid #c99b2d55;box-shadow:0 4px 12px #5f6a6d22}
+.result-reward{display:block;margin-top:6px;padding:8px 12px;border-radius:999px;background:#fff0ad;color:#6a4a00;font-size:11px;letter-spacing:.08em;border:1px solid #d0a12755}
+.tech-bay{margin:4px 0 14px;padding:14px;border-radius:20px;background:linear-gradient(180deg,#fff8d8,#dce9e3);border:1px solid #607d8740;box-shadow:0 8px 18px #54676c2b}
+.tech-bay-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.tech-bay-head strong{font-size:12px;color:#6b4a00;background:#fff2a9;padding:7px 9px;border-radius:999px}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tech-grid article{display:grid;gap:6px;padding:11px;border-radius:15px;background:#f7faf4;border:1px solid #5d7a8435}
+.tech-grid article b{font-size:13px;color:#173139}
+.tech-grid article small{font-size:10px;color:#587078;min-height:22px}
+.tech-grid article button{min-height:42px;border-radius:11px;background:linear-gradient(180deg,#ffdf78,#efb33c);color:#332200;font-size:10px;font-weight:1000;padding:7px}
+.tech-grid article button:disabled{filter:grayscale(.75);opacity:.5}
+.roster-card small{display:block;margin-top:5px;color:#74878a;font-size:9px}
+
+/* Package 13.2 — scrollable spell rack for purchased abilities */
+.battle-actions{grid-template-columns:minmax(0,1fr) 56px;align-items:end}
+.spell-rack{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:1px}
+.spell-rack::-webkit-scrollbar{display:none}
+.spell-rack .spell{flex:0 0 108px;min-width:108px}
+.spell[hidden]{display:none!important}
+.tech-grid article{position:relative}
+.tech-grid article button[hidden]{display:none!important}
+
+/* Package 13.5 — fighter card mastery */
+.mastery-card{align-items:center}
+.mastery-copy{min-width:0;flex:1}
+.mastery-copy small{display:block;margin:5px 0 8px;color:#5b7075;font-size:10px;font-weight:800}
+.mastery-copy button{min-height:40px;border-radius:11px;padding:7px 10px;background:linear-gradient(180deg,#ffe07c,#efb13c);color:#332200;font-size:10px;font-weight:1000}
+.mastery-copy button:disabled{filter:grayscale(.75);opacity:.48}
+
+/* Package 13.9 — daylight contrast corrections */
+.battle-actions button{color:#16313a;background:linear-gradient(180deg,#f7f3df,#cddfe0);border-color:#5f7e884d;box-shadow:inset 0 1px #fff,0 6px 16px #52656b42}
+.spell[data-spell=zap]{background:linear-gradient(180deg,#fff2a9,#e8c956);color:#493700;border-color:#b49324}
+.spell[data-spell=heal]{background:linear-gradient(180deg,#dff7d9,#9fd5a3);color:#184827;border-color:#5f9e6c}
+.spell[data-spell=quake]{background:linear-gradient(180deg,#f4ddc6,#d3a677);color:#4f3117;border-color:#9d7047}
+.spell[data-spell=aegis]{background:linear-gradient(180deg,#e0efff,#a8cdea);color:#183b56;border-color:#6d9dbf}
+#battleMenu{background:linear-gradient(180deg,#ffffff,#d7e4e5);color:#1b3941;border-color:#78949b;box-shadow:inset 0 1px #fff,0 6px 16px #52656b42}
+.result-actions button{background:linear-gradient(180deg,#f7f5e7,#d7e5e0);color:#173139;border:1px solid #69858d55;box-shadow:0 6px 15px #52656b38}
+.result-actions .primary{background:linear-gradient(180deg,#ffe58a,#efb33e);color:#382500;border-color:#c99625}
+.sheet button{background:linear-gradient(180deg,#f5f7ef,#d3e1df);color:#173139;border:1px solid #66838d44}
+
+/* Package 13.10 — collectible Upgrade Bay cards */
+.mastery-card{position:relative;overflow:hidden;border:1px solid #6c858d42;background:
+  radial-gradient(circle at 18% 15%,#ffffffd9,transparent 30%),
+  linear-gradient(145deg,#fbf8df,#dce8df 58%,#cadbdd)}
+.mastery-card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 0 38%,#ffffff66 48%,transparent 58%);transform:translateX(-90%);opacity:.28}
+.mastery-card[data-mastery="2"]:before,.mastery-card[data-mastery="3"]:before{opacity:.38}
+.mastery-card[data-mastery="4"]:before,.mastery-card.mastered:before{opacity:.5;animation:cardSheen 6s ease-in-out infinite}
+.roster-avatar{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 32%,#fff8c8,#b9d5d2 55%,#85a8aa);border:1px solid #5e7d8740;box-shadow:inset 0 1px #fff,0 6px 14px #65777c2d}
+.roster-avatar canvas{width:94%;height:auto;filter:drop-shadow(0 8px 7px #42555a40)}
+.card-mark{position:absolute;right:5px;bottom:5px;display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#f7e28a;color:#684a00;font-size:8px;font-weight:1000;border:1px solid #b68d28}
+.mastery-pips{display:flex;gap:4px;margin:7px 0 4px}
+.mastery-pips i{display:block;width:18px;height:5px;border-radius:999px;background:#9caeb04d;border:1px solid #627b8138}
+.mastery-pips i.on{background:linear-gradient(90deg,#e8b93d,#ffe88c);border-color:#bc8d22;box-shadow:0 1px 5px #e6b92c55}
+.mastery-card[data-mastery="3"]{border-color:#c7a53b75}
+.mastery-card[data-mastery="4"],.mastery-card.mastered{border-color:#d5a72b;box-shadow:0 9px 24px #8b73272c,inset 0 1px #fff}
+.mastery-card.mastered .card-mark{background:#ffd759;box-shadow:0 0 12px #efbd35a6}
+@keyframes cardSheen{0%,65%,100%{transform:translateX(-90%)}82%{transform:translateX(90%)}}
+
+/* Package 13.11 — daylight HUD / results cohesion */
+.battle-hud{
+  background:linear-gradient(180deg,#f7f6e8e8,#d7e6e2dc);
+  border-color:#6e899142;
+  box-shadow:inset 0 1px #ffffff,0 7px 18px #52656b3a;
+  color:#173139;
+}
+.team.blue{color:#176b9b;text-shadow:none}
+.team.red{color:#a3423f;text-shadow:none}
+.team span{color:#536d73;opacity:1}
+.round{background:#fff6d7cc;color:#173139;border:1px solid #c8aa5545}
+.round small{color:#667b80}
+.round i{color:#9a6b00}
+.battle-banner{color:#fff3b9;text-shadow:0 3px 0 #9a5b2b,0 8px 22px #40555a66}
+.screen-results{
+  background:
+    radial-gradient(circle at 50% 28%,#fff5b8 0 18%,transparent 42%),
+    linear-gradient(180deg,#a8d8ec 0%,#dce9df 48%,#d8cda8 100%);
+  color:#173139;
+}
+.screen-results h2{color:#17445b;text-shadow:0 3px 0 #ffffff99,0 8px 22px #5f737744}
+.result-rays{opacity:.42}
+.podium{
+  background:linear-gradient(180deg,#ffffffcc,#e6eee6cc);
+  border-color:#71898f38;
+  box-shadow:0 10px 26px #5a6d7132;
+}
+.podium span{color:#5f7478}
+.result-fighter{filter:drop-shadow(0 14px 12px #485b6045)}
+
+/* Package 13.13 — spell identity without another wall of comic text */
+.ability-callout{
+  font-size:12px!important;
+  min-width:auto!important;
+  padding:6px 10px!important;
+  letter-spacing:.08em;
+  border-radius:999px!important;
+  box-shadow:0 5px 14px #4f626633!important;
+  opacity:.9;
+}
+.ability-callout.spell-zap{background:#fff0a8!important;color:#4a3700!important;border:1px solid #c89d26!important}
+.ability-callout.spell-heal{background:#dff2c9!important;color:#28522f!important;border:1px solid #78a75c!important}
+.ability-callout.spell-quake{background:#ead2bc!important;color:#57341f!important;border:1px solid #a87752!important}
+.ability-callout.spell-aegis{background:#dcedf8!important;color:#244b62!important;border:1px solid #77a9c7!important}
+
+/* Package 13.14 — UI/game-feel cleanup */
+.scroll-screen{background:linear-gradient(180deg,#d6edf3,#ebe8cf)}
+.sticky{
+  background:linear-gradient(180deg,#f8f8e9f2,#dce8e3ee);
+  border-bottom:1px solid #617d8540;
+  box-shadow:0 5px 14px #50656a22;
+  color:#173139;
+}
+.upgrade-head{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px}
+.sticky-parts{white-space:nowrap;align-self:center}
+.scroll-content{background:transparent}
+.roster-card,.lab-block{color:#173139}
+.lab-block output{color:#8b6500}
+.lab-block input[type=range]{accent-color:#d49b24}
+.mini-grid button,.preset-grid button{min-height:48px}
+.mini-grid button.selected,.preset-grid button.selected{
+  outline:2px solid #c89724;
+  background:#fff0b5;
+  color:#493700;
+  box-shadow:0 5px 14px #8a722d26;
+}
+.screen-head.sticky button{background:#f7f8ef;color:#173139;border:1px solid #647f8740}
+.spell-rack{scroll-snap-type:x proximity}
+.spell-rack .spell{scroll-snap-align:start}
+@media(max-width:410px){
+  .upgrade-head{grid-template-columns:40px 1fr}
+  .upgrade-head .sticky-parts{grid-column:2;justify-self:start;margin-top:-4px}
+  .tech-grid{grid-template-columns:1fr}
+  .spell-rack .spell{flex-basis:98px;min-width:98px;height:58px}
+  .spell span{font-size:11px}
+  .roster-card{padding:12px;gap:10px}
+  .roster-avatar{width:74px;height:94px}
+}
+
+/* Package 13.15 — Ultimate Lab free upgrade sandbox */
+.lab-tech{margin:16px 0 6px;padding:12px;border-radius:16px;background:#eef4e8;border:1px solid #6e878b35}
+.lab-tech>.eyebrow{display:block;margin-bottom:8px;color:#6e5600}
+.lab-tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lab-tech-grid label{margin:0;padding:9px;border-radius:12px;background:#ffffffa8;border:1px solid #71888c30}
+.lab-tech-grid output{color:#7f6200}
+@media(max-width:390px){.lab-tech-grid{grid-template-columns:1fr}}
