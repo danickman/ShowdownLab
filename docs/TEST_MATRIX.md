@@ -111,6 +111,14 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] L1 vs L2 vs L3 of the same unit can be distinguished at battlefield scale without reading labels
 
 ### Meta progression / Parts
+- [ ] Quake unlock costs 90 Parts and persists after reload
+- [ ] Aegis unlock costs 120 Parts and persists after reload
+- [ ] locked spells do not appear in the battle spell rack
+- [ ] unlocked spells appear without replacing ARC/BLOOM
+- [ ] Quake applies light AoE damage + short stun to living enemies only
+- [ ] Aegis applies a temporary visible ward to all living allies and reduces incoming damage
+- [ ] purchased spell tech upgrades increase the new spell's effect
+- [ ] spell rack remains usable on portrait mobile with 4 unlocked spells
 - [ ] Quick Showdown and Draft wins award Parts exactly once per completed match
 - [ ] Ultimate Lab awards no Parts
 - [ ] Parts persist across reloads
