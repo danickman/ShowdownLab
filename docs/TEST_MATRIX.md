@@ -111,6 +111,15 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] L1 vs L2 vs L3 of the same unit can be distinguished at battlefield scale without reading labels
 
 ### Meta progression / Parts
+- [ ] fighter mastery purchase deducts Parts and persists after reload
+- [ ] fighter mastery is capped at 5
+- [ ] each mastery rank adds only 2.5% HP and damage, separate from in-match level/evolution
+- [ ] player mastery applies in Quick and Draft but not Ultimate Lab sandbox runs
+- [ ] rematch preserves the same mastery values used by the completed match
+- [ ] armored hits use sparks/debris while organic hits use restrained blood flecks
+- [ ] ranged organic hits show a distinct puncture/impact cue
+- [ ] comic words are limited to signature moments and never dominate dense fights
+- [ ] clouds, birds, banners and other ambient motion stay subtle behind combat
 - [ ] Quake unlock costs 90 Parts and persists after reload
 - [ ] Aegis unlock costs 120 Parts and persists after reload
 - [ ] locked spells do not appear in the battle spell rack
