@@ -114,6 +114,8 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] Mole tunnels only forward toward an enemy, erupts near the target, and can re-burrow toward the next enemy if it survives
 - [ ] Assassin rear-line behavior remains distinct from Mole forward tunneling
 - [ ] L1 vs L2 vs L3 of the same unit can be distinguished at battlefield scale without reading labels
+- [ ] L2 and L3 each add a unit-specific silhouette change rather than only scale/glow
+- [ ] Dragon, Beetank, Sniper, Goblin and Turtle evolution shapes remain recognizable in dense fights
 
 ### Meta progression / Parts
 - [ ] fighter mastery purchase deducts Parts and persists after reload
