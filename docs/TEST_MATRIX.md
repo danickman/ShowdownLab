@@ -110,6 +110,17 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] Assassin rear-line behavior remains distinct from Mole forward tunneling
 - [ ] L1 vs L2 vs L3 of the same unit can be distinguished at battlefield scale without reading labels
 
+### Meta progression / Parts
+- [ ] Quick Showdown and Draft wins award Parts exactly once per completed match
+- [ ] Ultimate Lab awards no Parts
+- [ ] Parts persist across reloads
+- [ ] ARC/BLOOM tech purchases deduct the correct amount and persist
+- [ ] spell tech increases real spell effect without changing normal unit combat
+- [ ] max spell tech cannot exceed 5
+- [ ] insufficient Parts disables upgrade purchase
+- [ ] reopening Results does not duplicate rewards
+- [ ] Upgrade Bay is the single roster/upgrade destination
+
 ### Stress
 - [ ] 8+ round match
 - [ ] 10× terminal correctness
