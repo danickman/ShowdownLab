@@ -18,3 +18,8 @@ Current focus: **Visuals 11 RC** on the v3 vertical slice.
 Protected gameplay baseline: **RC4 rich combat core**.
 
 Before major feature work, complete M0 Visuals 11 validation and record findings in the test matrix.
+
+
+## Canonical application
+
+The former v3 experience is now the canonical Showdown Lab application and is served from the repository root in production. Its implementation files remain under `/v3` during stabilization to avoid unnecessary path churn; root `index.html` intentionally serves the same app. Legacy v2.6 files remain only as historical reference until cleanup is explicitly scheduled.
