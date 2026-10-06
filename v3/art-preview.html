@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Showdown Lab · Visuals 11 Roster Preview</title>
+<style>
+body{margin:0;background:#0b0f14;color:#f5f2e8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:20px 24px;border-bottom:1px solid #26313c;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+h1{font-size:22px;margin:0}.tag{font-size:12px;padding:5px 9px;border:1px solid #4d5d6d;border-radius:999px;color:#ffd76a}
+main{padding:18px;overflow:auto}
+canvas{display:block;background:linear-gradient(#171d25,#0e1319);border:1px solid #2b3743;border-radius:14px;box-shadow:0 10px 30px #0007;max-width:none}
+p{margin:5px 0 0;color:#9fb0c1;font-size:13px}
+</style></head>
+<body><header><h1>Visuals 11 · Roster Contact Sheet</h1><span class="tag">WORKSHOP BRANCH</span><p>L1 → L4, blue/red alternation, idle + signature action.</p></header>
+<main><canvas id="sheet" width="1400" height="1180"></canvas></main>
+<script src="./fighter-art.js"></script>
+<script>
+const types=['knight','sniper','goose','dragon','assassin','beetank','mole','turtle','goblin','barbarian'];
+const actions={knight:'charge',sniper:'aim',goose:'honk',dragon:'fire',assassin:'backstab',beetank:'ram',mole:'erupt',turtle:'shell',goblin:'rush',barbarian:'rage_swing'};
+const cv=document.getElementById('sheet'),c=cv.getContext('2d'),W=cv.width,rowH=112,colW=245,left=170,top=82;
+function label(txt,x,y,size=16,align='left',color='#f4edd9'){c.fillStyle=color;c.font='800 '+size+'px system-ui';c.textAlign=align;c.textBaseline='middle';c.fillText(txt,x,y)}
+function panel(x,y,w,h){c.fillStyle='#141b22';c.strokeStyle='#263440';c.lineWidth=2;c.beginPath();c.roundRect(x,y,w,h,12);c.fill();c.stroke()}
+function draw(){c.clearRect(0,0,cv.width,cv.height);c.fillStyle='#0b0f14';c.fillRect(0,0,W,cv.height);
+label('FIGHTER',26,42,14);for(let l=1;l<=4;l++)label('EVOLUTION '+l,left+(l-1)*colW+colW/2,42,14,'center',l===4?'#ffd85a':'#dce6ef');
+types.forEach((type,r)=>{const y=top+r*rowH;label(type.toUpperCase(),26,y+43,18);for(let l=1;l<=4;l++){const x=left+(l-1)*colW;panel(x+6,y,colW-12,rowH-10);const team=(r+l)%2?'blue':'red';const action=l===4?actions[type]:'idle';FighterArt.draw(c,type,x+colW/2,y+54,58,team,{level:l,action,time:900,id:r,flip:false});label(l===4?action.toUpperCase():'IDLE',x+colW/2,y+94,10,'center','#8397a9')}});requestAnimationFrame(draw)}
+draw();
+</script></body></html>
