@@ -144,6 +144,15 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] Upgrade Bay is the single roster/upgrade destination
 
 ### Combat feel / environment polish
+- [ ] Quick Showdown never opens the between-round draft; both sides auto-reinforce and continue
+- [ ] Draft Battle still opens the full between-round choice/evolution overlay
+- [ ] Ultimate Lab is unaffected by Quick auto-reinforcement rules
+- [ ] inter-round Draft overlay uses daylight surfaces and readable dark text
+- [ ] match-finish overlay no longer snaps back to the old dark/neon presentation
+- [ ] battle HUD remains readable against bright skies without obscuring arena art
+- [ ] Results podium and controls remain clearly readable in daylight
+- [ ] Sniper casing FX are tiny, brief, and disabled in dense battles
+- [ ] atmospheric sunlight motes remain nearly invisible during active combat
 - [ ] mastery pips match stored mastery level on every fighter card
 - [ ] mastered fighter cards gain visual prestige without looking like a separate in-match evolution tier
 - [ ] card sheen animation remains subtle and does not affect scrolling performance
