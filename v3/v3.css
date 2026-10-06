@@ -37,3 +37,18 @@ html,body{background:#b8d8e1;color:var(--ink)}
 .preset-grid button,.mini-grid button{background:#eef5ef;color:#173139;border-color:#5e7f8b42}
 .sheet{background:#f3f5e9f2;color:#173139;border-color:#486d7740;box-shadow:0 14px 38px #42565d55}
 .sheet button{background:#d7e6e1}
+
+/* Package 13 dev — progression / collection surfaces */
+.home-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.parts-chip{font-size:11px;letter-spacing:.08em;padding:7px 10px;border-radius:999px;background:#fff5c9cc;color:#6a4a00;border:1px solid #c99b2d55;box-shadow:0 4px 12px #5f6a6d22}
+.result-reward{display:block;margin-top:6px;padding:8px 12px;border-radius:999px;background:#fff0ad;color:#6a4a00;font-size:11px;letter-spacing:.08em;border:1px solid #d0a12755}
+.tech-bay{margin:4px 0 14px;padding:14px;border-radius:20px;background:linear-gradient(180deg,#fff8d8,#dce9e3);border:1px solid #607d8740;box-shadow:0 8px 18px #54676c2b}
+.tech-bay-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.tech-bay-head strong{font-size:12px;color:#6b4a00;background:#fff2a9;padding:7px 9px;border-radius:999px}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tech-grid article{display:grid;gap:6px;padding:11px;border-radius:15px;background:#f7faf4;border:1px solid #5d7a8435}
+.tech-grid article b{font-size:13px;color:#173139}
+.tech-grid article small{font-size:10px;color:#587078;min-height:22px}
+.tech-grid article button{min-height:42px;border-radius:11px;background:linear-gradient(180deg,#ffdf78,#efb33c);color:#332200;font-size:10px;font-weight:1000;padding:7px}
+.tech-grid article button:disabled{filter:grayscale(.75);opacity:.5}
+.roster-card small{display:block;margin-top:5px;color:#74878a;font-size:9px}
