@@ -1,0 +1,160 @@
+# Showdown Lab — Test Matrix
+
+Status: **ACTIVE**
+Purpose: validate underplayed changes before more feature work.
+
+## Severity
+- P0 — catastrophic/unplayable
+- P1 — core loop broken, battle cannot finish, state corruption
+- P2 — significant UX/visual/performance defect
+- P3 — polish
+
+P0–P2 block release.
+
+## Visuals 11 first-play
+
+### Boot/cache
+- [ ] splash says VISUALS 11 · RC
+- [ ] no asset guard error
+- [ ] hard reload keeps same version
+- [ ] no stale Visuals 9/10 art
+
+### Draft
+- [ ] all 10 fighters render
+- [ ] selection obvious
+- [ ] two-pick limit/confirm work
+- [ ] Dragon/Barbarian/Turtle distinct
+- [ ] no phone overflow
+
+### Ready
+- [ ] Blue choice truthful
+- [ ] Red opponent truthful
+- [ ] battle transition reliable
+
+### Round opening
+- [ ] round correct
+- [ ] arena name/background match
+- [ ] army counts/evolution summary truthful
+- [ ] ceremony does not hide first meaningful combat too long
+
+### Arena presentation
+For Neon Lab, Ember Pit, Moon Vault, Verdant Ruins:
+- [ ] distinct skybox
+- [ ] banners visible but not distracting
+- [ ] ambience fits
+- [ ] halftone treatment preserves readability
+- [ ] floor markings add depth
+- [ ] later rounds feel more intense
+
+### Combat readability
+At 2× and 4×:
+- [ ] units recognizable
+- [ ] major ability tells readable
+- [ ] health bars appear only when useful
+- [ ] comic callouts linger enough
+- [ ] no wall of text
+
+At 10× require correctness/termination, not cinematic readability.
+
+### Clutch storytelling
+- [ ] LAST FIGHTER truthful
+- [ ] OUTNUMBERED truthful
+- [ ] FINAL K.O. once
+- [ ] vignette subtle
+- [ ] victory spotlight picks living winner
+- [ ] old round outro clears before next round
+
+### Between-round progression
+- [ ] result banner matches winner
+- [ ] hearts/pips match lives
+- [ ] Blue pips blue / Red pips red
+- [ ] reinforce/multiply/evolve deltas truthful
+- [ ] choice changeable before deploy
+- [ ] evolution preview matches selected unit/new level
+- [ ] preview hides for non-evolution choice
+- [ ] next arena label matches actual arena
+- [ ] overlay scrolls on small phone
+- [ ] opponent reinforces after deploy
+
+### Match completion
+- [ ] ends without ARC/BLOOM intervention
+- [ ] no immortal/zombie units
+- [ ] final lives truthful
+- [ ] largest squad/highest evolution summary truthful
+- [ ] results opens once
+- [ ] MVP is living winner
+
+### Navigation/rematch
+- [ ] NEXT SHOWDOWN starts clean match
+- [ ] REMATCH starts clean battle
+- [ ] no old defeated bodies/effects
+- [ ] cooldown visuals reset
+- [ ] leaving battle safe
+- [ ] Home → Draft does not reuse stale phase
+
+### Lab
+Run Duel, Horde, Crossfire and Boss Hunt:
+- [ ] expected Red composition
+- [ ] selected Blue respected
+- [ ] lives respected
+- [ ] 2×/4×/10× works
+- [ ] match terminates
+
+### Stress
+- [ ] 8+ round match
+- [ ] 10× terminal correctness
+- [ ] dense Goose/Goblin callouts acceptable
+- [ ] Dragon FX does not hide all fighters
+- [ ] repeated rematches do not accumulate stale state
+
+## First-10 art scorecard
+
+Score 1–5.
+
+| Unit | Silhouette | Personality | Small scale | Action | Evolution | Notes |
+|---|---:|---:|---:|---:|---:|---|
+| Knight | | | | | | |
+| Sniper | | | | | | |
+| Goose | | | | | | |
+| Dragon | | | | | | |
+| Assassin | | | | | | |
+| Beetank | | | | | | |
+| Mole | | | | | | |
+| Turtle | | | | | | |
+| Goblin | | | | | | |
+| Barbarian | | | | | | |
+
+If silhouette or small-scale clarity <3, fix before adding more units.
+
+## Deterministic regression seeds
+
+After first Visuals 11 playtest, curate seeds for:
+- baseline melee/ranged
+- swarm vs heavy
+- Assassin backline
+- Dragon splash
+- Turtle long fight
+- extreme comeback
+- final-life round
+
+Record armies/levels, speed and expected termination. Only lock expected winner when balance is intentionally locked.
+
+## Device matrix
+Primary:
+- [ ] iPhone portrait ~390×844
+
+Secondary:
+- [ ] smaller iPhone
+- [ ] iPad portrait
+- [ ] desktop narrow/tall
+- [ ] landscape does not corrupt navigation
+
+## Performance observations
+Record rather than guess:
+- normal/max fighter count
+- frame stability at 2×/4×/10×
+- thermal slowdown
+- input latency
+- large FX spikes
+
+Future profiling tools stay behind a development flag and out of production HUD.
