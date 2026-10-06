@@ -79,3 +79,21 @@ html,body{background:#b8d8e1;color:var(--ink)}
 .result-actions button{background:linear-gradient(180deg,#f7f5e7,#d7e5e0);color:#173139;border:1px solid #69858d55;box-shadow:0 6px 15px #52656b38}
 .result-actions .primary{background:linear-gradient(180deg,#ffe58a,#efb33e);color:#382500;border-color:#c99625}
 .sheet button{background:linear-gradient(180deg,#f5f7ef,#d3e1df);color:#173139;border:1px solid #66838d44}
+
+/* Package 13.10 — collectible Upgrade Bay cards */
+.mastery-card{position:relative;overflow:hidden;border:1px solid #6c858d42;background:
+  radial-gradient(circle at 18% 15%,#ffffffd9,transparent 30%),
+  linear-gradient(145deg,#fbf8df,#dce8df 58%,#cadbdd)}
+.mastery-card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 0 38%,#ffffff66 48%,transparent 58%);transform:translateX(-90%);opacity:.28}
+.mastery-card[data-mastery="2"]:before,.mastery-card[data-mastery="3"]:before{opacity:.38}
+.mastery-card[data-mastery="4"]:before,.mastery-card.mastered:before{opacity:.5;animation:cardSheen 6s ease-in-out infinite}
+.roster-avatar{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 32%,#fff8c8,#b9d5d2 55%,#85a8aa);border:1px solid #5e7d8740;box-shadow:inset 0 1px #fff,0 6px 14px #65777c2d}
+.roster-avatar canvas{width:94%;height:auto;filter:drop-shadow(0 8px 7px #42555a40)}
+.card-mark{position:absolute;right:5px;bottom:5px;display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#f7e28a;color:#684a00;font-size:8px;font-weight:1000;border:1px solid #b68d28}
+.mastery-pips{display:flex;gap:4px;margin:7px 0 4px}
+.mastery-pips i{display:block;width:18px;height:5px;border-radius:999px;background:#9caeb04d;border:1px solid #627b8138}
+.mastery-pips i.on{background:linear-gradient(90deg,#e8b93d,#ffe88c);border-color:#bc8d22;box-shadow:0 1px 5px #e6b92c55}
+.mastery-card[data-mastery="3"]{border-color:#c7a53b75}
+.mastery-card[data-mastery="4"],.mastery-card.mastered{border-color:#d5a72b;box-shadow:0 9px 24px #8b73272c,inset 0 1px #fff}
+.mastery-card.mastered .card-mark{background:#ffd759;box-shadow:0 0 12px #efbd35a6}
+@keyframes cardSheen{0%,65%,100%{transform:translateX(-90%)}82%{transform:translateX(90%)}}
