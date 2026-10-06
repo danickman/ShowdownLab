@@ -118,6 +118,12 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] Dragon, Beetank, Sniper, Goblin and Turtle evolution shapes remain recognizable in dense fights
 
 ### Meta progression / Parts
+- [ ] ARC uses a directional lightning strike rather than a generic pulse
+- [ ] BLOOM uses leaf/petal growth cues rather than a generic circle
+- [ ] QUAKE reads through ground cracks/dust across the enemy side, not a screen-filling flash
+- [ ] AEGIS uses hexagonal shield geometry plus per-unit wards
+- [ ] spell callout pills remain secondary to the battlefield effect
+- [ ] all four spell buttons disable correctly when the battle cannot accept the spell
 - [ ] fighter mastery purchase deducts Parts and persists after reload
 - [ ] fighter mastery is capped at 5
 - [ ] each mastery rank adds only 2.5% HP and damage, separate from in-match level/evolution
