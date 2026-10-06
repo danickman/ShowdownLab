@@ -142,3 +142,37 @@ html,body{background:#b8d8e1;color:var(--ink)}
 .ability-callout.spell-heal{background:#dff2c9!important;color:#28522f!important;border:1px solid #78a75c!important}
 .ability-callout.spell-quake{background:#ead2bc!important;color:#57341f!important;border:1px solid #a87752!important}
 .ability-callout.spell-aegis{background:#dcedf8!important;color:#244b62!important;border:1px solid #77a9c7!important}
+
+/* Package 13.14 — UI/game-feel cleanup */
+.scroll-screen{background:linear-gradient(180deg,#d6edf3,#ebe8cf)}
+.sticky{
+  background:linear-gradient(180deg,#f8f8e9f2,#dce8e3ee);
+  border-bottom:1px solid #617d8540;
+  box-shadow:0 5px 14px #50656a22;
+  color:#173139;
+}
+.upgrade-head{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px}
+.sticky-parts{white-space:nowrap;align-self:center}
+.scroll-content{background:transparent}
+.roster-card,.lab-block{color:#173139}
+.lab-block output{color:#8b6500}
+.lab-block input[type=range]{accent-color:#d49b24}
+.mini-grid button,.preset-grid button{min-height:48px}
+.mini-grid button.selected,.preset-grid button.selected{
+  outline:2px solid #c89724;
+  background:#fff0b5;
+  color:#493700;
+  box-shadow:0 5px 14px #8a722d26;
+}
+.screen-head.sticky button{background:#f7f8ef;color:#173139;border:1px solid #647f8740}
+.spell-rack{scroll-snap-type:x proximity}
+.spell-rack .spell{scroll-snap-align:start}
+@media(max-width:410px){
+  .upgrade-head{grid-template-columns:40px 1fr}
+  .upgrade-head .sticky-parts{grid-column:2;justify-self:start;margin-top:-4px}
+  .tech-grid{grid-template-columns:1fr}
+  .spell-rack .spell{flex-basis:98px;min-width:98px;height:58px}
+  .spell span{font-size:11px}
+  .roster-card{padding:12px;gap:10px}
+  .roster-avatar{width:74px;height:94px}
+}
