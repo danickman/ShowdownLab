@@ -138,6 +138,18 @@ Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] reopening Results does not duplicate rewards
 - [ ] Upgrade Bay is the single roster/upgrade destination
 
+### Combat feel / environment polish
+- [ ] directional melee impact arcs read as motion, not another comic bubble
+- [ ] Sniper attacks show a brief muzzle cue/tracer without obscuring targets
+- [ ] charge/ram/rush actions kick up restrained ground dust
+- [ ] heavy impacts can create a brief ground puff without stacking into screen fog
+- [ ] blood remains stylized, small, and absent on Knight/Beetank/Turtle armored hits
+- [ ] Verdant foliage sway is barely noticeable during active combat
+- [ ] Ember smoke drifts slowly in the distant background
+- [ ] Moon Vault distant rotor motion remains behind the battle plane
+- [ ] Neon Lab distant instrument motion does not compete with units
+- [ ] Sniper, Beetank and Goblin silhouettes remain legible at dense battle scale after added detail
+
 ### Stress
 - [ ] 8+ round match
 - [ ] 10× terminal correctness
