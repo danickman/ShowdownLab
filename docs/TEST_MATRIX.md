@@ -256,3 +256,16 @@ Record rather than guess:
 - large FX spikes
 
 Future profiling tools stay behind a development flag and out of production HUD.
+
+
+## Package 13 RC automated evidence
+
+Automated gate run before promotion:
+- Runtime parse check: all 8 browser JS modules passed.
+- Canonical shell: root `index.html` and `v3/index.html` are byte-identical.
+- Mixed combat stress: 40/40 seeded 8-vs-8 mixed-roster battles terminated; no stalled winnerless case.
+- Lifecycle stress: 8 sequential reset/start matches produced strictly increasing battleIds 1→8 and all reached `match_over`.
+- Spell mechanics: Quake at 1.75× power affected both living enemies; Aegis at 1.75× applied ward 114 to both living allies.
+- Turtle targeted smoke: Turtle consistently defeats light Goblin pressure but still loses to Barbarian, Beetank and Dragon-class power in tested baseline matchups, preserving a counter-bruiser rather than top-DPS identity.
+
+Manual device/visual checks remain required after deployment; automated evidence does not mark unchecked visual rows above as complete.
