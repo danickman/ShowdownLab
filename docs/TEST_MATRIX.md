@@ -103,6 +103,14 @@ At 10× require correctness/termination, not cinematic readability.
 - [ ] Home → Draft does not reuse stale phase
 
 ### Lab
+- [ ] Lab Blue/Red mastery sliders freely set M0–M5 without spending Parts
+- [ ] Lab ARC/BLOOM/QUAKE/AEGIS tech sliders freely set T0–T5
+- [ ] Lab spell tech affects real spell power but never mutates saved progression
+- [ ] Lab evolution level, mastery, and spell tech can be combined independently
+- [ ] Lab rematch reuses the exact chosen experiment configuration
+- [ ] leaving Lab restores normal purchased spell visibility and saved progression
+- [ ] stale cooling classes are cleared when a new battle starts
+- [ ] direct spell casting cannot push the FX queue beyond the density cap
 Run Duel, Horde, Crossfire and Boss Hunt:
 - [ ] expected Red composition
 - [ ] selected Blue respected
