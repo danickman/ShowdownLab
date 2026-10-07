@@ -281,3 +281,30 @@ Renderer-only changes:
 - light fighters keep faster, more agile movement cadence
 
 No simulation state, movement physics, targeting, damage, cooldown or round logic changed.
+
+
+## Turn 17 — framing, team readability, fighter balance, theatre
+
+Status: **IMPLEMENTED ON BRANCH; PHONE QA NEXT**
+
+Fixes:
+- presentation rendering now uses anchor-aware containment instead of height-only fitting
+  - full fighter image is placed from the authored ground anchor
+  - head / weapon / feet should remain inside Upgrade Bay, Guide, Ready and Results canvases
+  - space is reserved below the figure for the team ring
+- Fighter Guide markup typo fixed so the large-art wrapper uses the intended guide class
+- team ownership is more visible via a filled ground halo plus thicker outer and inner team rings
+- Assassin durability increased:
+  - HP 66 -> 96
+  - Dodge 14% -> 18%
+  - Armor 0% -> 6%
+- Barbarian movement speed increased:
+  - 0.88 -> 1.08
+- arena theatre strengthened:
+  - broader skybox haze and cloud bands
+  - horizon bloom
+  - subtle blue/red floor-side washes
+  - centerline and side-stage lights
+  - soft overhead light panels for more depth
+
+No targeting rules, attack damage, cooldown cadence, fighter abilities or terminal-state behavior changed.
