@@ -6,14 +6,17 @@ const manifest={
 const authoredKnight={
   scale:1.38,
   anchor:[.5,.918],
+  // Wiring-validation map. Repository inspection found five pose blobs are not valid
+  // WebP files (missing RIFF/WEBP headers). Keep the renderer testable by routing
+  // those states to the two verified WebPs until the full pose pack is re-uploaded.
   states:{
-    idle:'/v3/assets/authored/knight/idle.webp',
-    move:'/v3/assets/authored/knight/move.webp',
-    attack:'/v3/assets/authored/knight/attack.webp',
-    guard:'/v3/assets/authored/knight/guard.webp',
-    charge:'/v3/assets/authored/knight/charge.webp',
-    hit:'/v3/assets/authored/knight/hit.webp',
-    defeat:'/v3/assets/authored/knight/defeat.webp'
+    idle:'/v3/assets/authored/knight/move.webp?v=knight-wire2',
+    move:'/v3/assets/authored/knight/move.webp?v=knight-wire2',
+    attack:'/v3/assets/authored/knight/move.webp?v=knight-wire2',
+    guard:'/v3/assets/authored/knight/move.webp?v=knight-wire2',
+    charge:'/v3/assets/authored/knight/move.webp?v=knight-wire2',
+    hit:'/v3/assets/authored/knight/move.webp?v=knight-wire2',
+    defeat:'/v3/assets/authored/knight/defeat.webp?v=knight-wire2'
   }
 };
 const KNIGHT_ART_KEY='showdownlab.art.knight';
@@ -29,7 +32,7 @@ function knightState(action){
   return'idle'
 }
 function resolve(type,state){const f=manifest[type];if(!f)return null;return f.states[state]||f.states.attack||f.states.idle}
-function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false};cache.set(src,rec);img.onload=()=>rec.ready=true;img.onerror=()=>missing.add(src);img.src=src;return rec}
+function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);updateToggle()};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);updateToggle()};img.src=src;return rec}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));Object.values(authoredKnight.states).forEach(load)}
 function drawTeamRing(c,x,y,size,team){c.save();c.strokeStyle=team==='red'?'#ff655f':'#48baff';c.globalAlpha=.58;c.lineWidth=Math.max(1.5,size*.018);c.beginPath();c.ellipse(x,y+size*.37,size*.34,size*.105,0,0,Math.PI*2);c.stroke();c.restore()}
 function knightArtMode(){try{return localStorage.getItem(KNIGHT_ART_KEY)||'authored'}catch{return'authored'}}
@@ -51,7 +54,7 @@ function draw(c,type,x,y,size,team='blue',o={}){
   if(fighter&&spec){const frame=Math.floor(((o.time||0)/1000)*(spec.fps||8))%spec.frames.length,rec=load(spec.frames[frame]);if(rec.ready){const img=rec.img,scale=size*fighter.scale,ratio=img.naturalWidth/Math.max(1,img.naturalHeight),h=scale,w=h*ratio,ax=fighter.anchor?.[0]??.5,ay=fighter.anchor?.[1]??.82;c.save();c.translate(x,y);if(o.flip)c.scale(-1,1);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true}}
   return false
 }
-function updateToggle(){const b=document.getElementById('knightArtToggle');if(!b)return;const authored=knightArtMode()==='authored';b.textContent=authored?'KNIGHT ART · AUTHORED':'KNIGHT ART · PROCEDURAL';b.dataset.mode=authored?'authored':'procedural'}
+function updateToggle(){const b=document.getElementById('knightArtToggle');if(!b)return;const authored=knightArtMode()==='authored';if(!authored){b.textContent='KNIGHT ART · PROCEDURAL';b.dataset.mode='procedural';return}const src=authoredKnight.states.idle,rec=cache.get(src);b.textContent=rec?.error?'KNIGHT ART · ASSET ERROR':rec?.ready?'KNIGHT ART · AUTHORED READY':'KNIGHT ART · AUTHORED LOADING';b.dataset.mode=rec?.error?'error':rec?.ready?'authored':'loading'}
 function mountToggle(){
   if(document.getElementById('knightArtToggle'))return;
   const b=document.createElement('button');b.id='knightArtToggle';b.type='button';b.setAttribute('aria-label','Toggle Knight art renderer');
