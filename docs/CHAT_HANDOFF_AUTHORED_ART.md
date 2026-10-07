@@ -472,3 +472,8 @@ Then complete the Sniper integration and visual-framing fix on the branch, QA it
 ### Presentation Turn 2 — sunny authored Sunlit Lab pilot
 
 One authored skyline now replaces Sunlit Lab distant scenery only. Floor scorch residue, impact cracks, dirt/dust and flying debris are explicitly preserved with their existing caps and expiration. Other arenas, fighters and combat logic are unchanged. See [ARENA_ART_PILOT.md](ARENA_ART_PILOT.md) for the asset, final generation prompt, checks and phone acceptance. Automated/native renderer checks pass; browser/iPhone visual and performance QA remains open. Branch checkpoint only; no main merge or production release.
+
+
+### Presentation Turn 3 — physical effects and sunny academy UI
+
+Branch implementation adds branching ground fractures, dirt/chips, daylight edges and Dragon char; improves local spell impact hierarchy/crowd budgets and places comic callouts above silhouettes. A shared sunny cream/brass/navy presentation stylesheet now styles menus and battle controls. No new images, combat/progression changes or production release. See [THEATRE_UI_PASS.md](THEATRE_UI_PASS.md) for exact files, evidence, phone acceptance and remaining overlap/performance work. Automated/native checks pass; browser/iPhone layout, touch, visual and performance QA remain open.
