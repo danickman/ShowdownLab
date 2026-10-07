@@ -163,3 +163,32 @@ Next gate:
 - branch deployment
 - phone smoke test across several mixed-fighter battles
 - visual scale / anchor corrections only
+
+
+## Turn 6 — runtime visual normalization
+
+Status: **IMPLEMENTED ON BRANCH; PHONE RECHECK NEXT**
+
+Phone QA found three presentation issues:
+- inconsistent relative fighter scale, especially heavy units receiving both camera-size and authored-scale amplification
+- static-looking slow/rear-line fighters such as Turtle
+- inconsistent outer-ink strength causing some fighters, especially Dragon, to read softer than Beetank
+
+Corrections implemented:
+- reduced authored scale multipliers for heavy fighters so camera class remains the primary size signal
+- tightened the normal / small fighter multipliers for better roster consistency
+- added subtle code-driven idle, guard, move and signature motion using existing frame time + unit id
+- Turtle receives stronger low-amplitude idle/guard weight-shift so it no longer reads as a frozen cut-out during long defensive states
+- added deterministic outer-silhouette ink to prepared runtime sprites
+- rejected small disconnected sheet debris during prep while preserving materially-sized detached equipment
+- cleaned Dragon pose-label remnants from the prepared runtime pack
+- activated normalized authored pack cache key `base-pack2`
+
+No combat state transitions, timings, targeting, damage, movement logic or protected core behavior changed.
+
+Next QA:
+- mixed-fighter phone battles
+- verify heavy-vs-normal size balance
+- verify Turtle/slow-fighter motion reads naturally
+- compare Dragon / Goose / Goblin outline quality against Beetank
+- verify no detached weapon was accidentally removed by cleanup
