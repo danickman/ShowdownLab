@@ -401,3 +401,12 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Slash/stab/axe/shell contact arcs use distinct geometry and remain readable at 2×.
 - [ ] Dense and 10× fights continue to suppress secondary spectacle before core combat readability.
 - [ ] All changes remain presentation-only: no damage, targeting, cooldown, lifecycle or terminal-state rules change.
+
+### Package 16.4 — progression theatre
+- [ ] Quick intermission choices have unmistakable REINFORCE / WILDCARD / EVOLVE visual identities.
+- [ ] All three reward types preview their next-round impact; preview is not limited to evolution.
+- [ ] REINFORCE preview shows squad growth, WILDCARD shows multiplied battlefield count, EVOLVE shows the upgraded fighter form.
+- [ ] Selecting a reward creates a brief lock-in/reward-acquired moment before the next round starts.
+- [ ] Quick remains fast: choice + lock-in handoff adds only a brief pause and preserves the ~4s auto-pick path.
+- [ ] Draft keeps deliberate choice/change-preview behavior, with a stronger deploy handoff rather than auto-starting on selection.
+- [ ] Reward theatre is visual only; draft application logic, bot reinforcement, round seeds and lives are unchanged.
