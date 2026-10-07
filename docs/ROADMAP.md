@@ -9,7 +9,7 @@ Status: **RC candidate**. Adds a 4-second Quick Showdown intermission with REINF
 Status: **RC candidate**. Scope includes power-scaled spell spectacle, Upgrade Bay economy clarity, full 10-fighter redraw/polish, material-aware combat impacts, battle staging/performance refinement, progression theatre, fighter-specific battle personality, and reward-key reload hardening. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual phone visual/tap QA remains post-deploy.
 # Showdown Lab — Execution Roadmap & Milestone Tracker
 
-Status: **ACTIVE PLAN — Package 13 RC candidate**
+Status: **ACTIVE PLAN — Package 16 production; M2 authored-art spike in progress**
 Protected combat baseline: **RC4 rich combat core**
 
 This is the operating plan for future work. Its purpose is to replace free-form iteration with bounded, testable milestones.
@@ -248,7 +248,7 @@ No unresolved P0/P1/P2.
 |---|---|
 | M0 Visuals 11 validation | SUBSTANTIALLY COMPLETE · RC PLAYTEST NEXT |
 | M1 Stabilize v3 shell | PARTIAL · LIFECYCLE/HUD/LAB ADVANCED |
-| M2 Long-term art path | PLANNED |
+| M2 Long-term art path | IN PROGRESS · KNIGHT AUTHORED SPIKE · PHONE QA NEXT |
 | M3 Character progression | PLANNED |
 | M4 Full 26-unit roster | 10/26 BASE UNITS COMPLETE |
 | M5 Feature/capability parity | PARTIAL · PERSISTENT PARTS/MASTERY/SPELL TECH ADDED |
