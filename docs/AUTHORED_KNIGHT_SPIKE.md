@@ -4,7 +4,7 @@ Status: renderer-integrated on an isolated test branch; **phone visual QA is the
 
 Branch: `art-spike-knight-authored-v1`
 
-Current branch head at handoff: `b21da0eeb2d7cab5a1c9c09ab463850a1cdb3a24`
+Renderer-integration head before documentation updates: `b21da0eeb2d7cab5a1c9c09ab463850a1cdb3a24`
 
 Production remains on Package 16 and is intentionally unchanged.
 
