@@ -35,6 +35,18 @@ const sunX=w*.18,sunY=h*.105,sunR=Math.min(w,h)*.055,sunG=ctx.createRadialGradie
 sunG.addColorStop(0,'#fffbe8');sunG.addColorStop(.28,'#ffe79aee');sunG.addColorStop(1,'#ffe79a00');ctx.fillStyle=sunG;ctx.beginPath();ctx.arc(sunX,sunY,sunR*2.4,0,Math.PI*2);ctx.fill();
 ctx.fillStyle='#fff9dfdd';ctx.beginPath();ctx.arc(sunX,sunY,sunR,0,Math.PI*2);ctx.fill();
 ctx.globalAlpha=.52;ctx.fillStyle='#ffffff';for(let i=0;i<4;i++){const drift=((time*.000006*(10+i*3)+i*.21)%1),cx=((w*(.28+i*.19)+drift*w*.12)% (w*1.12))-w*.06,cy=h*(.075+(i%2)*.038),cw=w*(.11+(i%3)*.025);ctx.beginPath();ctx.ellipse(cx,cy,cw*.45,cw*.12,0,0,Math.PI*2);ctx.ellipse(cx-cw*.23,cy+2,cw*.26,cw*.1,0,0,Math.PI*2);ctx.ellipse(cx+cw*.22,cy+3,cw*.3,cw*.11,0,0,Math.PI*2);ctx.fill()}
+/* Package 16 authored-art environment bridge: richer atmospheric depth without competing with fighters. */
+ctx.globalAlpha=.18;
+let haze=ctx.createLinearGradient(0,h*.16,0,horizon);
+haze.addColorStop(0,'#ffffff00');haze.addColorStop(1,'#ffffffcc');ctx.fillStyle=haze;ctx.fillRect(0,h*.14,w,horizon-h*.14);
+ctx.globalAlpha=.18;ctx.fillStyle=theme.name==='EMBER PIT'?'#8d5c48':theme.name==='VERDANT RUINS'?'#55775a':'#607b86';
+ctx.beginPath();ctx.moveTo(0,horizon);for(let x=0;x<=w;x+=44){const yy=horizon-h*(.045+.018*Math.sin(x*.017+2.3)+.010*Math.sin(x*.047));ctx.lineTo(x,yy)}ctx.lineTo(w,horizon);ctx.closePath();ctx.fill();
+ctx.globalAlpha=.22;ctx.fillStyle=theme.name==='MOON VAULT'?'#6f7892':theme.name==='EMBER PIT'?'#765043':'#4e6970';
+for(let i=0;i<5;i++){const tw=w*(.08+i*.205),th=h*(.055+(i%3)*.018),bw=w*.035;ctx.fillRect(tw,horizon-th,bw,th);ctx.beginPath();ctx.moveTo(tw-bw*.18,horizon-th);ctx.lineTo(tw+bw*.5,horizon-th-h*.018);ctx.lineTo(tw+bw*1.18,horizon-th);ctx.closePath();ctx.fill()}
+ctx.globalAlpha=.10;ctx.strokeStyle='#ffffff';ctx.lineWidth=1.2;
+for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(w*(.18+i*.22),horizon-h*(.025+(i%2)*.012),w*(.11+(i%2)*.02),Math.PI,Math.PI*2);ctx.stroke()}
+ctx.globalAlpha=.08;ctx.fillStyle=theme.accent;
+for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(w*(.18+i*.31),horizon);ctx.lineTo(w*(.24+i*.31),h*.07);ctx.lineTo(w*(.30+i*.31),horizon);ctx.closePath();ctx.fill()}
 ctx.globalAlpha=.38;ctx.fillStyle=theme.name==='VERDANT RUINS'?'#658866':theme.name==='EMBER PIT'?'#9b7154':'#708b92';ctx.beginPath();ctx.moveTo(0,horizon);for(let x=0;x<=w;x+=36)ctx.lineTo(x,horizon-h*(.025+.026*Math.sin(x*.024+1.7)+.012*Math.sin(x*.061)));ctx.lineTo(w,horizon);ctx.closePath();ctx.fill();
 /* Tiny ambient life stays behind combat: distant birds and slow-moving world details. */
 const ambientRapid=(state.speed||2)>=10,ambientCrowd=state.units.filter(u=>u.hp>0).length>32;ctx.globalAlpha=ambientRapid?.10:ambientCrowd?.16:.26;ctx.strokeStyle='#344b52';ctx.lineWidth=1.2;for(let i=0;i<(ambientRapid?1:ambientCrowd?2:3);i++){const bx=((time*.006+i*137)%(w+80))-40,by=h*(.14+i*.025)+Math.sin(time*.001+i)*3,wing=3+Math.sin(time*.012+i)*1.2;ctx.beginPath();ctx.moveTo(bx-wing,by);ctx.quadraticCurveTo(bx-wing*.4,by-2,bx,by);ctx.quadraticCurveTo(bx+wing*.4,by-2,bx+wing,by);ctx.stroke()}
