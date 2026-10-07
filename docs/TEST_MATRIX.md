@@ -287,3 +287,13 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] With 34 Parts at M0, fighter cards visibly say NEED 1 MORE · 35 PARTS rather than presenting an unexplained disabled button.
 - [ ] Buying/upgrading immediately refreshes wallet, next benefit, next price and button state.
 - [ ] 390px portrait renders spell cards one-column with no clipped CTA/cost text.
+
+### Package 14.3 — hero-five fighter redraw
+- [ ] Knight reads shield-first at phone scale; guard/charge/attack poses are visually distinct and L4 is not merely larger.
+- [ ] Sniper silhouette is dominated by hood + long rifle + optic; aim, shot recoil and reload are distinguishable without labels.
+- [ ] Goose remains comedic and unmistakable through beak, wing, crest and HONK gesture; stronger levels do not turn it into a generic bird.
+- [ ] Dragon reads as the broadest/heaviest of the five with dominant wings, jaw, horns and fire profile; never resembles Barbarian.
+- [ ] Assassin reads lean/angular with eye slit, split cloak and asymmetric twin blades; vanish/backstab/disengage poses remain clear.
+- [ ] Hero-five material highlights improve separation without washing out team accents or dark ink contours.
+- [ ] L2/L3/L4 shape progression remains visible at battle scale for all five.
+- [ ] Cover labels in a 390×844 battle: all five remain identifiable from silhouette + signature equipment alone.
