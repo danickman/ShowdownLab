@@ -192,3 +192,25 @@ Next QA:
 - verify Turtle/slow-fighter motion reads naturally
 - compare Dragon / Goose / Goblin outline quality against Beetank
 - verify no detached weapon was accidentally removed by cleanup
+
+
+## Turn 8 — permanent authored UI + 1x default
+
+Status: **IMPLEMENTED ON BRANCH; PHONE QA NEXT**
+
+Changes:
+- removed the procedural/authored art toggle and localStorage mode switch
+- authored sprites are now the normal renderer path for all 10 implemented fighters
+- procedural FighterArt remains only as a silent safety fallback if an authored asset is missing or fails to draw
+- restored 1× as the default battle speed for Quick, Draft and normal rematches
+- Ultimate Lab speed options are now 1× / 2× / 4× / 10× with 1× default
+- added presentation-only per-fighter UI scaling for Draft, Ready, Upgrade Bay, Home and Results surfaces
+- increased authored sprite size and contrast on fighter cards
+- reduced the pale card overlay that was washing out Draft art
+- enlarged Results / MVP presentation art
+
+No combat rules, damage, targeting, movement physics, round rules or protected freeze fixes changed.
+
+Next gate:
+- phone QA for menu/card scale and contrast
+- then renderer-side pose persistence so attacks/signatures/hits hold longer than move poses
