@@ -100,6 +100,21 @@ Knight action mapping:
 - `defeat` → defeat
 - other/default states → idle
 
+## Phone QA incident — authored art did not appear
+
+First iPhone test showed the toggle in Authored mode while Blue Knights still rendered procedurally.
+
+Repository inspection found the immediate cause: five authored pose files committed as `.webp` do not contain valid WebP headers and therefore fail image decode in the browser. The verified-good runtime files are currently `move.webp` and `defeat.webp`.
+
+Temporary wiring-validation hotfix:
+- idle / move / attack / guard / charge / hit route to the verified `move.webp`
+- defeat routes to the verified `defeat.webp`
+- the toggle now reports `AUTHORED READY`, `AUTHORED LOADING`, or `ASSET ERROR`
+- this is intentionally a renderer-pipeline proof only, not final pose QA
+- once authored rendering is visibly confirmed on phone, re-upload the five corrupted pose assets from the prepared source pack and restore the full state mapping
+
+No combat code or procedural fallback was changed.
+
 ## Verification already completed
 
 - all 8 runtime JavaScript files parse
