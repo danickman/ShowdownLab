@@ -317,3 +317,14 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Beetank ram, Turtle shell impact, Barbarian heavy swing, Assassin/Goblin blade contact and Mole/Dragon claw hits are readable at 2×.
 - [ ] 10× automatically reduces secondary particles/trails and lowers the FX cap; combat still terminates normally.
 - [ ] No gameplay damage, targeting, cooldown or terminal-state mechanics are changed by this presentation pass.
+
+### Package 14.6 — staging and performance
+- [ ] Camera framing follows combat smoothly without jittering on small target movements; late duels/clutch states get a modest readable zoom.
+- [ ] Large crowds zoom out enough to preserve both teams and keep spell controls/HUD unobstructed.
+- [ ] Fighters feel grounded through weighted directional contact shadows and arena perspective cues.
+- [ ] Daylight arenas gain depth bands/floor guides without reverting to a dark simulator look.
+- [ ] Dragon fire reads as layered luminous breath rather than a flat polygon.
+- [ ] Sniper shots read as precise tracers with a distinct impact point.
+- [ ] Dense/10× combat reduces background birds/motes and secondary scene detail before reducing core fighter readability.
+- [ ] Battle HUD and spell rack remain readable/tappable at ~390px portrait width.
+- [ ] Staging changes do not alter simulation damage, targeting, cooldowns, progression, or terminal-state behavior.
