@@ -102,66 +102,69 @@ Important implemented presentation behavior includes:
 - Fighter Guide work in progress
 - arena/skybox polish pass in progress
 
-## Sniper — immediate unfinished task
+## Sniper + shared presentation framing — implementation checkpoint
 
-This is the first task for the new chat.
+Milestone M2 / Base polish turn: **implemented on branch; device QA and release pending**.
+Starting head verified clean: `d0af43fc0c10508a0757bf8b4fdf6f8c14b5cbe8`.
 
-The old Sniper assets caused two visible defects:
-1. AIM could show detached/floating body parts because the crop came from a bad sheet extraction.
-2. Normal standing/idle art was later damaged/cropped so the legs/boots could be cut off.
+The immediate defect was worse than a stale mapping: `idle-v2.webp` and
+`aim-v2.webp` were binary payloads without WebP headers and could not decode.
+The old idle was cropped; the old signature contained disconnected fragments.
 
-The user supplied replacement full-body source images for:
-- standing / idle Sniper
-- aiming Sniper
+Converted existing user-supplied art, with no image generation:
+- standing: `A3609F5B-CD16-46EA-85E9-BFBADA473A01.png`, existing transparent canonical
+- AIM: `4545D040-3D50-43A2-8207-690CB3BE0754.jpeg`, complete rifle-up pose
+- AIM background removal preserved non-background light details by removing only border-connected near-white pixels
+- both combat copies normalized to 96×96, content fitted within 88 px, ground at 91 px, lossless WebP and the existing one-pixel outline convention
+- high-resolution standing presentation copy normalized to 512×512, 469 px content / 485 px ground; approximately 101 KiB, UI only
 
-Several replacement candidate images were generated during troubleshooting. **Do not generate more Sniper art.** There is already enough source material.
+Authoritative runtime paths:
+- `v3/assets/authored/sniper/idle.webp`: complete standing body, both boots and rifle
+- `v3/assets/authored/sniper/signature.webp`: coherent AIM, selected by the existing aim action mapping
+- `v3/assets/authored/sniper/presentation.webp`: sharp standing/canonical for UI
 
-Current repo state includes files such as:
-- `v3/assets/authored/sniper/idle-v2.webp`
-- `v3/assets/authored/sniper/aim-v2.webp`
-- `v3/assets/authored/sniper/signature-v2.webp`
-plus the older pose pack.
+Removed the two corrupt v2 files and superseded signature-v2 candidate. No v1/v2 runtime selection remains.
+Other Sniper actions retain the existing pose pack and mappings.
 
-However the final approved replacement integration was **not completed** before handoff.
+## Shared presentation framing checkpoint
 
-Required next work:
-1. inspect the current Sniper asset files and renderer mappings on the branch
-2. choose the approved complete full-body standing source for the canonical runtime idle
-3. choose the approved complete full-body rifle-up source for AIM
-4. convert/prep to the same runtime WebP/alpha/anchor contract as the rest of the roster
-5. replace or deliberately remap the active runtime files — do not leave ambiguous v1/v2 selection
-6. ensure standing/idle shows both legs and boots in combat
-7. ensure AIM is one coherent body with no detached floating limbs/equipment
-8. ensure Upgrade Bay / Draft / Ready / Results / Fighter Guide use the intended full-body presentation image rather than a cropped action pose
-9. cache-bust only as needed
-10. phone QA before release
+`FighterAssets.presentationFrame()` now fits art into explicit logical-pixel bounds,
+preserving aspect ratio with padding and a separate team-ring reserve. UI uses idle
+only; optional high-resolution presentation art falls back to authored idle on failure.
+Battle motion, pose holds, fighter scales, anchors and camera stay separate.
 
-Do not regenerate the canonical Sniper again unless the user explicitly requests new art.
+`paintOne()` sizes each canvas backing store to its actual CSS box, capped at 2× DPR,
+and renders in logical CSS pixels. This fixes the previous 320×360 Guide canvas being
+stretched into differently proportioned boxes. Surface defaults replace the old
+per-fighter/per-screen scale matrix. Resize/screen-size changes schedule static repaint.
 
-## Fighter Guide / menu framing debt
+Surfaces covered: Draft, Ready/pre-match, Upgrade Bay, Fighter Guide, Results/MVP and
+Home. Match-start currently presents live combat plus a text ceremony, not a separate
+portrait; its combat rendering is preserved. Guide remains the largest UI art surface.
 
-Upgrade Bay improved substantially, but Fighter Guide framing remains inconsistent and has appeared vertically squashed/cropped.
+Validation:
+- all 71 authored files decode with nonempty transparent content; all 10 pose packs exist
+- all runtime JavaScript parses; both HTML entry pages remain identical; diff whitespace clean
+- actual production draw function exercised for all 10 fighters across six UI sizes: 60 renders
+- 180 aspect/bounds checks cover narrow/tall/wide source ratios and reserved team rings
+- Sniper standing/AIM and full-roster Guide-size Canvas renders visually inspected
+- presentation with an explicit aim action still selects the 512×512 standing canonical
+- 24 mixed-roster seeded 8-vs-8 matches at 10× terminated and paired seeds reproduced identical results
+- an additional throwing-listener run terminated; RAF scheduling continued
 
-Known failure modes:
-- `object-fit` / contain logic applied against the wrong container proportions
-- presentation canvas reserve for team ring reducing usable art area too aggressively
-- source pose selection using an action/cropped asset instead of the canonical idle
-- guide art being enlarged beyond the available aspect ratio
+Browser limitation: no local browser binary was available, the browser download failed,
+and the available browser could not open localhost. **Browser layout/tap QA and real
+390×844 / short-phone iPhone QA are still open.** Canvas tests do not certify them.
 
-Next implementation should make one shared presentation-framing function/config for:
-- Draft cards
-- Ready screen
-- Upgrade Bay
-- Fighter Guide
-- Match start
-- Results / MVP
+Run `python tools/check-authored-assets.py` before release to catch malformed payloads.
 
-Requirements:
-- never crop head, weapon, feet or signature equipment
-- preserve source aspect ratio
-- reserve ring/ground space explicitly rather than shrinking art unpredictably
-- Fighter Guide should show the largest, highest-quality full-body art in the UI
-- per-fighter overrides are acceptable, but the default should be data-driven and consistent
+Remaining quality debt: nine other fighters still enlarge their small combat idle copies
+in the Guide. Recover higher-resolution approved canonical presentation copies later;
+do not generate new art to fix framing. No claim of a fully polished Guide yet.
+
+Next action: obtain one branch preview for required iPhone smoke/visual QA, fix only
+confirmed defects, then freeze the approved head. Merge to main and production deploy
+remain one gated release event. Neither has happened in this turn.
 
 ## Battle presentation findings
 
@@ -427,7 +430,7 @@ For implementation turns report:
 
 ## First action in the new chat
 
-Before changing code:
+Read the implementation checkpoint above before repeating asset preparation. Verify the branch head, then obtain the remaining phone QA. For new confirmed defects:
 1. inspect the actual branch head
 2. inspect current Sniper files and renderer mappings
 3. verify which replacement WebPs already exist and which are actually referenced

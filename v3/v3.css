@@ -257,8 +257,8 @@ html,body{background:#b8d8e1;color:var(--ink)}
   background:radial-gradient(circle at 50% 30%,#ffffff55,transparent 50%);
 }
 .art-canvas{
-  width:108%;
-  margin-left:-4%;
+  width:100%;
+  margin-left:0;
   opacity:1!important;
   filter:saturate(1.18) contrast(1.10) drop-shadow(0 7px 7px #324b5148);
 }
@@ -266,8 +266,8 @@ html,body{background:#b8d8e1;color:var(--ink)}
   overflow:hidden;
 }
 .roster-avatar canvas{
-  width:108%;
-  max-width:none;
+  width:100%;
+  max-width:100%;
   opacity:1!important;
   filter:saturate(1.16) contrast(1.09) drop-shadow(0 7px 6px #314a5048);
 }
@@ -307,6 +307,6 @@ html,body{background:#b8d8e1;color:var(--ink)}
 /* Guide hardening: prevent legacy card rules from collapsing the codex. */
 .screen-guide .sl-guide-card{display:block!important;min-height:620px!important;height:auto!important;overflow:hidden!important}
 .screen-guide .sl-guide-art-wrap{display:grid!important;height:340px!important;min-height:340px!important;overflow:hidden!important}
-.screen-guide .sl-guide-art{display:block!important;width:100%!important;height:100%!important;min-height:340px!important}
+.screen-guide .sl-guide-art{display:block!important;width:100%!important;height:100%!important;min-height:0!important}
 .screen-guide .sl-guide-copy{display:block!important;min-height:260px!important;visibility:visible!important;opacity:1!important}
-@media(max-height:700px){.screen-guide .sl-guide-card{min-height:560px!important}.screen-guide .sl-guide-art-wrap,.screen-guide .sl-guide-art{height:300px!important;min-height:300px!important}}
+@media(max-height:700px){.screen-guide .sl-guide-card{min-height:560px!important}.screen-guide .sl-guide-art-wrap{height:300px!important;min-height:300px!important}}

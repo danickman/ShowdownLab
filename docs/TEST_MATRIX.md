@@ -437,3 +437,21 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [x] Persistent reward de-duplication run key remains present.
 - [x] Spectacle density tiers, bounded visible spell aftermath, and all four spell render paths are present.
 - [ ] Manual 390×844 iPhone visual/tap QA remains required after production deployment; automated checks cannot certify subjective spectacle quality or touch feel.
+
+
+### Authored Base polish — Sniper / shared framing, 2026-10-07
+
+- [x] `python tools/check-authored-assets.py`: 71 WebPs decode with alpha, nonempty art and all 10 pose packs present.
+- [x] Sniper standing and AIM normalized to 96×96; canonical presentation is 512×512.
+- [x] Sniper complete body/boots/rifle and coherent AIM checked in Canvas renders.
+- [x] All 10 fighters rendered via production draw API at six presentation sizes (60 renders).
+- [x] 180 framing checks for image/ring bounds and narrow/square/wide aspect ratios.
+- [x] Explicit AIM action on a presentation surface still chooses standing canonical.
+- [x] 24 seeded mixed-roster 8-vs-8 10× runs reached match_over; paired seeds produced identical winner and per-unit HP.
+- [x] Throwing adapter listener was contained; match terminated and next RAF remained scheduled.
+- [x] All runtime JS parses, identical root/v3 HTML, clean diff whitespace.
+- [ ] Browser Draft → Ready → Battle → Results and Guide/Upgrade Bay layout/tap smoke: unavailable in this environment (browser missing; download failed; localhost blocked).
+- [ ] Real iPhone: standing/AIM transitions at 1× and full body on Draft/Ready/Bay/Guide/Results.
+- [ ] Real iPhone at ~390×844 and a shorter viewport: no stretched canvas, cropping, horizontal overflow or ring clipping.
+- [ ] Real iPhone dense-fight performance: no regression; no new per-fighter blur/filter cost introduced.
+- [ ] User visual approval → frozen branch head → main merge → one deliberate production deployment.

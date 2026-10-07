@@ -365,3 +365,19 @@ When the Sniper replacement and current framing fixes pass phone QA:
 4. perform one deliberate production deployment for that approved release
 
 Avoid unnecessary intermediate production deployments.
+
+
+## Base polish turn — Sniper and shared UI framing (2026-10-07)
+
+Implemented on `art-spike-knight-authored-v1`; browser/device release gate remains open.
+
+- Rebuilt canonical `sniper/idle.webp` and AIM `sniper/signature.webp` from supplied sources as 96×96 alpha lossless WebPs.
+- Removed corrupt idle-v2/aim-v2 payloads and the superseded signature-v2 candidate.
+- Added UI-only `sniper/presentation.webp` (512×512); menus always request standing art.
+- Added shared logical-bounds contain framing with ring reserve; static canvases use their displayed size and capped DPR.
+- Combat state mapping/motion/scales and simulation are preserved.
+- Added `tools/check-authored-assets.py` to reject corrupt headers, decode failures, empty/opaque sprites and missing pose files.
+- Asset decode, Canvas render/bounds and deterministic regression passed; browser and subjective iPhone QA remain pending.
+- Other nine Guide portraits still upscale small runtime art. Recover approved high-resolution canonical copies as a separate polish task.
+
+See `CHAT_HANDOFF_AUTHORED_ART.md` for source filenames, exact active paths and validation evidence.

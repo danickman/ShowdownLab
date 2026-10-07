@@ -252,7 +252,7 @@ No unresolved P0/P1/P2.
 |---|---|
 | M0 Visuals 11 validation | SUBSTANTIALLY COMPLETE · RC PLAYTEST NEXT |
 | M1 Stabilize v3 shell | PARTIAL · LIFECYCLE/HUD/LAB ADVANCED |
-| M2 Long-term art path | AUTHORED HYBRID SELECTED · 10-FIGHTER BASE POLISH / SNIPER FINAL FIX NEXT |
+| M2 Long-term art path | AUTHORED HYBRID SELECTED · SNIPER / SHARED FRAMING IMPLEMENTED · PHONE QA NEXT |
 | M3 Character progression | PLANNING · BASE / EVOLVED / ULTIMATE PIPELINE NEXT |
 | M4 Full 26-unit roster | DEPRIORITIZED · CURRENT ROSTER FROZEN AT 10 |
 | M5 Feature/capability parity | PARTIAL · PERSISTENT PARTS/MASTERY/SPELL TECH ADDED |
@@ -328,3 +328,10 @@ After branch QA:
 - perform one deliberate production deployment for the release
 
 Do not spend production deployments on tiny intermediate asset swaps.
+
+
+### Base polish checkpoint — 2026-10-07
+
+Sniper standing/AIM integration and shared UI contain framing are implemented on the art branch. Corrupt v2 payloads were replaced from existing supplied sources; no new art generated. Static/asset/Canvas/seeded regression passed. Browser/device QA is open, so the branch is not release-approved.
+
+Next: one required phone branch-preview pass, confirmed-defect fixes only, then frozen-head merge and production release. Guide high-resolution canonical recovery for the other nine fighters remains separate presentation debt.
