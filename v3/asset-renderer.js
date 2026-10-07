@@ -27,7 +27,7 @@ const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
   sniper:{move:'move',retreat:'move',aim:'signature',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'guard',reload:'guard'},
   goose:{waddle:'move',scamper:'move',dash:'move',circle:'move',honk:'signature',peck:'attack'},
-  dragon:{stalk:'move',loom:'move',fire_windup:'signature',fire:'signature',attack:'attack'},
+  dragon:{stalk:'move',loom:'move',fire_windup:'signature',fire:'signature',attack:'attack',claw_swipe:'attack',guard_close:'guard'},
   assassin:{stalk:'move',disengage:'move',vanish:'signature',backstab:'attack'},
   beetank:{bulldoze:'move',ram:'signature',horn:'attack',brace:'guard'},
   mole:{scuttle:'move',dig:'signature',burrow:'signature',erupt:'signature',claw:'attack',claw_swipe:'attack',scrap:'guard'},
@@ -39,6 +39,7 @@ function authoredState(type,action){
   if(action==='defeat'||action==='dead')return'defeat';
   if(action==='hit'||action==='stun')return'hit';
   if(action==='heal')return'idle';
+  if(action==='reengage')return'move';
   return ACTION_STATES[type]?.[action]||((action==='attack'||action==='kill')?'attack':action==='move'?'move':'idle');
 }
 function stateName(action){return action==='kill'?'attack':action==='move'?'move':action==='attack'?'attack':action==='hit'?'hit':action==='skill'?'skill':action==='defeat'?'defeat':'idle'}
