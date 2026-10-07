@@ -420,3 +420,20 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Quick/Draft reward cards, preview panel and deploy button fit narrow/short phone screens without clipping.
 - [ ] Reduced-motion preference disables nonessential UI animation while preserving state feedback.
 - [ ] No simulation damage, targeting, cooldown, lives, rewards, draft mechanics or terminal-state logic changes in this pass.
+
+### Package 16 RC automated evidence — 2026-10-06
+- [x] All 8 runtime JavaScript modules parse successfully.
+- [x] Root `index.html` and `v3/index.html` are byte-identical.
+- [x] 24/24 seeded mixed-roster 8-vs-8 battles at 10× reached `match_over` with a winner.
+- [x] 6 sequential reset/start lifecycle runs reached `match_over`; battle IDs were strictly increasing (25→30 in the RC test runtime).
+- [x] QUAKE T0 vs T5 scaling verified through deterministic core: 10 base damage vs 17.5 base damage per target before armor modifiers.
+- [x] ARC at 1.75× produced a successful 56-damage precision strike.
+- [x] BLOOM at 1.75× restored a damaged ally to max HP in the harness.
+- [x] AEGIS at 1.75× applied 114 ward ticks to every living Blue unit.
+- [x] Quick intermission source gates verified: 4-second timer, REINFORCE / WILDCARD / EVOLVE identity, auto-pick path, reward preview and lock-in.
+- [x] Draft path remains deliberate/changeable before deploy.
+- [x] Lab spell-tech override and unlimited-spell paths remain present.
+- [x] Upgrade Bay ownership hotfix remains intact; Stage5B helper no longer contains the legacy ACTIVE FIGHTER overwrite path.
+- [x] Persistent reward de-duplication run key remains present.
+- [x] Spectacle density tiers, bounded visible spell aftermath, and all four spell render paths are present.
+- [ ] Manual 390×844 iPhone visual/tap QA remains required after production deployment; automated checks cannot certify subjective spectacle quality or touch feel.
