@@ -240,3 +240,24 @@ Next QA:
 - verify Turtle / Beetank feel heavy rather than jittery
 - verify Sniper / Assassin do not look stuck on attack frames
 - verify pose holds do not create obvious sliding while simulation movement continues
+
+
+## Turn 10 — defeat-state recovery, first-load authored sync, Dragon emphasis
+
+Status: **IMPLEMENTED ON BRANCH; PHONE QA NEXT**
+
+Phone QA identified three defects:
+- some units could inherit / retain the defeat pose across later rounds
+- first screen paint could briefly show procedural art before authored assets finished loading
+- Dragon still read too small and too softly outlined relative to Beetank and other heavy fighters
+
+Corrections:
+- defeat pose is no longer stored with an infinite visual hold
+- any live non-defeat state immediately clears a stale defeat pose
+- authored pose memory is explicitly reset when entering battle and at every round boundary
+- authored assets now emit a ready event when each image finishes loading
+- static UI canvases repaint when authored assets become ready
+- while an authored asset is merely loading, the renderer does not substitute procedural art; procedural fallback is reserved for actual asset/draw failure
+- Dragon battle scale increased and receives a dark silhouette underlay to strengthen its outer ink at mobile battle scale
+
+No combat simulation behavior changed.
