@@ -308,3 +308,60 @@ Fixes:
   - soft overhead light panels for more depth
 
 No targeting rules, attack damage, cooldown cadence, fighter abilities or terminal-state behavior changed.
+
+
+## Turn 18 — handoff checkpoint: Sniper replacement and release gate
+
+Status: **DOCUMENTED; SNIPER FINAL INTEGRATION STILL PENDING**
+
+Branch head immediately before the handoff documentation pass:
+`9ff20a15b2b7dc4834ddc48d58a2d439ab1b9d2c`
+
+Current Base-art direction:
+- authored sprites are permanent for the current 10
+- the old procedural/art toggle is gone
+- procedural FighterArt remains only as a silent failure fallback
+- no additional roster expansion is planned until art direction, evolution, arena presentation and performance are stronger
+
+### Sniper debt
+
+The old runtime Sniper pack has two known visual defects:
+- the AIM extraction can contain detached floating body parts / equipment
+- the standing/idle asset path was damaged during replacement work and can crop the lower legs/boots
+
+The user supplied multiple full-body replacement sources. No more Sniper image generation is needed.
+
+The repository already contains replacement candidates including:
+- `sniper/idle-v2.webp`
+- `sniper/aim-v2.webp`
+- `sniper/signature-v2.webp`
+
+The next implementation must inspect actual renderer mappings and deliberately select one full-body idle and one coherent full-body aim asset. Do not leave ambiguous duplicate runtime names.
+
+Acceptance:
+- idle/standing shows complete legs and boots
+- AIM is a single coherent figure with no floating detached parts
+- normal standing art is used for cards/guide unless a surface explicitly needs another pose
+- no aspect-ratio distortion in Fighter Guide
+- no regression in Sniper aim/retreat/reload combat behavior
+
+### Shared presentation framing
+
+The current remaining art-layout debt is concentrated in Fighter Guide and some match start/end surfaces. Use a shared contain/anchor rule so:
+- full head, weapon and feet remain visible
+- aspect ratio is preserved
+- team ring space is reserved explicitly
+- Fighter Guide gets the largest/highest-quality canonical presentation
+- per-fighter scale overrides are data-driven rather than ad-hoc CSS cropping
+
+### Release gate
+
+Do not merge partially fixed Sniper art.
+
+When the Sniper replacement and current framing fixes pass phone QA:
+1. run regression/static checks
+2. freeze the branch head
+3. merge the authored-art branch to `main`
+4. perform one deliberate production deployment for that approved release
+
+Avoid unnecessary intermediate production deployments.
