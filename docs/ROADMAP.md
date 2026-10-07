@@ -101,14 +101,24 @@ Fixed seeds; assert termination, no immortal units, single terminal emission and
 Score the first 10 on silhouette, personality, small-scale clarity, action readability, evolution readability and perceived production quality.
 
 ### Turn 2.2 — External art spike
-Generate **one original Showdown Lab fighter only** (Knight or Goose), transparent background, consistent camera angle, readable at 40–60 px. Integrate through asset-renderer with geometry fallback.
+Status: **IMPLEMENTED ON TEST BRANCH — PHONE QA NEXT**
+
+Knight is the selected spike fighter. Seven individually generated authored Base poses are integrated through `asset-renderer.js` with the procedural renderer preserved as fallback. A runtime Authored/Procedural toggle supports direct comparison. Blue Knight is authored during the spike; Red Knight remains procedural for same-fight A/B comparison.
+
+Generation method is now canonical-reference + pose-reference + one pose per generation. Multi-pose sheets were rejected because equipment and body design drifted. Real-phone battle-scale QA is the gate before any roster-wide art production.
 
 ### Turn 2.3 — Animation strategy spike
-Compare:
-A. authored body + procedural motion/FX
-B. 3–5 authored pose frames
-C. sprite sheet
-D. geometry-only
+Status: **IN PROGRESS**
+
+Current leading pattern:
+A. authored key poses + procedural motion/FX
+
+The Knight spike currently uses seven key poses while code continues to own translation, facing, battle movement, camera response, particles and other presentation. Do not expand to high-frame-count sprite animation unless phone testing shows pose switching is too discontinuous.
+
+Still compare against:
+B. fewer authored poses with stronger procedural tween/motion
+C. sprite-sheet animation only if clearly justified
+D. geometry-only fallback
 
 ### Turn 2.4 — Art-path decision
 Choose Geometry-first, Hybrid or Authored Sprites before scaling art production to 26.
