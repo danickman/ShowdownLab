@@ -133,3 +133,33 @@ The old Knight API names remain as compatibility aliases for the duration of the
 
 No combat-core code was changed.
 No production deployment has been performed.
+
+
+## Turn 4 — pre-deploy QA hardening
+
+Status: **PASSED STATIC / LOCAL ASSET QA; NOT DEPLOYED**
+
+Checks completed:
+- all 63 newly prepared non-Knight WebPs opened and verified successfully with Pillow
+- all 7 Knight runtime files expose valid RIFF/WEBP VP8X headers, and the Knight authored path was already proven on-device
+- renderer syntax parses successfully
+- renderer now handles adapter/core terminal `dead` as authored `defeat`
+- renderer maps `stun` to authored `hit`
+- renderer maps shared `reengage` recovery movement to authored `move`
+- Dragon close-range `claw_swipe` and `guard_close` are explicitly mapped
+- fighter-specific core actions are mapped to move / attack / guard / signature without changing combat logic
+- authored draw exceptions are isolated and fall back to procedural art instead of breaking the render loop
+- diagnostics expose per-fighter per-state loading / ready / error status
+- the visible Base Art toggle always retains a procedural recovery path
+
+Protected regression checks:
+- `legacy-sim-core.js` still catches state-consumer exceptions
+- the core frame loop still schedules the next RAF in `finally`
+- `simulation-adapter.js` still isolates listener and CustomEvent dispatch exceptions
+- `stage5b-ui.js` does not own or overwrite `#rosterContent`
+- the authored-art renderer changes since the asset checkpoint are limited to `v3/asset-renderer.js`, the two HTML cache keys, and authored-art documentation
+
+Next gate:
+- branch deployment
+- phone smoke test across several mixed-fighter battles
+- visual scale / anchor corrections only
