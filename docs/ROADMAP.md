@@ -1,3 +1,6 @@
+## Package 16 — Spectacle Overdrive RC
+Status: **RC candidate**. Five build turns are complete: spell choreography, persistent spell aftermath, combat spectacle, progression theatre, and cohesion/performance/mobile polish. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual iPhone visual/tap QA remains post-deploy.
+
 ## Package 15 — Arcade Flow & Spell Spectacle
 Status: **RC candidate**. Adds a 4-second Quick Showdown intermission with REINFORCE / WILDCARD / EVOLVE choices, plus a second-generation spell presentation pass for ARC, BLOOM, QUAKE and AEGIS. Spell rendering now scales more visibly with tech while bounding sampled visual targets in large fights.
 

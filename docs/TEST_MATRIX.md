@@ -373,3 +373,67 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] AEGIS reads as an unmistakable protective dome/hex shield network.
 - [ ] Large fights cap sampled spell targets for rendering only; spell mechanics still affect all valid units.
 - [ ] 10× combat remains readable and terminates normally after the visual changes.
+
+### Package 16.1 — spell choreography
+- [ ] Every spell cast produces a target/area sigil before/through the primary visual impact.
+- [ ] ARC gets the strongest white-blue screen pulse and target-centric sigil without obscuring the struck unit.
+- [ ] BLOOM cast pulse is green/life-coded and remains visually different from AEGIS.
+- [ ] QUAKE receives the heaviest camera/arena response while keeping HUD controls readable.
+- [ ] AEGIS cast moment reads cool-blue/protective, not like ARC damage.
+- [ ] Spell callout shows current T0–T5 and actual power percentage.
+- [ ] T3–T5 callouts and sigils visibly scale without adding gameplay damage beyond existing core mechanics.
+
+### Package 16.2 — persistent spell aftermath
+- [ ] ARC leaves a brief world-space scorch/electrical residue that fades over several seconds.
+- [ ] BLOOM leaves visible green growth/leaves after the initial heal burst; higher tech adds subtle drifting leaf motion.
+- [ ] QUAKE leaves persistent ground fractures/dust residue at affected enemy positions.
+- [ ] AEGIS leaves fading hex ward residue at allied positions after activation.
+- [ ] Damage taken while warded produces a distinct shield-hit shimmer/spark rather than looking like ordinary damage.
+- [ ] High-tech residual animation is subtle and bounded; spell aftermath never grows without limit.
+- [ ] Spell aftermath is cleared when a new battle begins and remains presentation-only.
+
+### Package 16.3 — combat spectacle
+- [ ] Heavy hits and KOs trigger a brief presentation-only camera punch without pausing or altering the simulation loop.
+- [ ] Armor impacts throw metallic shards/sparks; organic/ranged punctures use a different material response.
+- [ ] Axe, blade, claw, shell, ram and peck trails are visually distinct at normal phone scale.
+- [ ] Sniper fire gets a visible muzzle shock/recoil flash in addition to tracer and casing cues.
+- [ ] KO punctuation changes with finishing attack flavor instead of using one generic burst.
+- [ ] Slash/stab/axe/shell contact arcs use distinct geometry and remain readable at 2×.
+- [ ] Dense and 10× fights continue to suppress secondary spectacle before core combat readability.
+- [ ] All changes remain presentation-only: no damage, targeting, cooldown, lifecycle or terminal-state rules change.
+
+### Package 16.4 — progression theatre
+- [ ] Quick intermission choices have unmistakable REINFORCE / WILDCARD / EVOLVE visual identities.
+- [ ] All three reward types preview their next-round impact; preview is not limited to evolution.
+- [ ] REINFORCE preview shows squad growth, WILDCARD shows multiplied battlefield count, EVOLVE shows the upgraded fighter form.
+- [ ] Selecting a reward creates a brief lock-in/reward-acquired moment before the next round starts.
+- [ ] Quick remains fast: choice + lock-in handoff adds only a brief pause and preserves the ~4s auto-pick path.
+- [ ] Draft keeps deliberate choice/change-preview behavior, with a stronger deploy handoff rather than auto-starting on selection.
+- [ ] Reward theatre is visual only; draft application logic, bot reinforcement, round seeds and lives are unchanged.
+
+### Package 16.5 — cohesion and performance
+- [ ] Combat spectacle uses full / balanced / reduced / minimal density tiers rather than independent ad-hoc thresholds.
+- [ ] 10× and large crowds reduce secondary FX lifetime, opacity, visible aftermath and queue caps before core hit/spell readability is reduced.
+- [ ] Persistent spell aftermath remains visible in ordinary fights but is bounded more aggressively in dense fights.
+- [ ] Active AEGIS ward reads as a protective dome with shield-panel structure, not a generic ellipse.
+- [ ] Spell callouts, HUD, spell rack and menu remain tappable/readable at ~390px portrait width and on shorter phone screens.
+- [ ] Quick/Draft reward cards, preview panel and deploy button fit narrow/short phone screens without clipping.
+- [ ] Reduced-motion preference disables nonessential UI animation while preserving state feedback.
+- [ ] No simulation damage, targeting, cooldown, lives, rewards, draft mechanics or terminal-state logic changes in this pass.
+
+### Package 16 RC automated evidence — 2026-10-06
+- [x] All 8 runtime JavaScript modules parse successfully.
+- [x] Root `index.html` and `v3/index.html` are byte-identical.
+- [x] 24/24 seeded mixed-roster 8-vs-8 battles at 10× reached `match_over` with a winner.
+- [x] 6 sequential reset/start lifecycle runs reached `match_over`; battle IDs were strictly increasing (25→30 in the RC test runtime).
+- [x] QUAKE T0 vs T5 scaling verified through deterministic core: 10 base damage vs 17.5 base damage per target before armor modifiers.
+- [x] ARC at 1.75× produced a successful 56-damage precision strike.
+- [x] BLOOM at 1.75× restored a damaged ally to max HP in the harness.
+- [x] AEGIS at 1.75× applied 114 ward ticks to every living Blue unit.
+- [x] Quick intermission source gates verified: 4-second timer, REINFORCE / WILDCARD / EVOLVE identity, auto-pick path, reward preview and lock-in.
+- [x] Draft path remains deliberate/changeable before deploy.
+- [x] Lab spell-tech override and unlimited-spell paths remain present.
+- [x] Upgrade Bay ownership hotfix remains intact; Stage5B helper no longer contains the legacy ACTIVE FIGHTER overwrite path.
+- [x] Persistent reward de-duplication run key remains present.
+- [x] Spectacle density tiers, bounded visible spell aftermath, and all four spell render paths are present.
+- [ ] Manual 390×844 iPhone visual/tap QA remains required after production deployment; automated checks cannot certify subjective spectacle quality or touch feel.
