@@ -297,3 +297,13 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Hero-five material highlights improve separation without washing out team accents or dark ink contours.
 - [ ] L2/L3/L4 shape progression remains visible at battle scale for all five.
 - [ ] Cover labels in a 390×844 battle: all five remain identifiable from silhouette + signature equipment alone.
+
+### Package 14.4 — second-five fighter redraw
+- [ ] Beetank reads as low fortress-beetle mass with oversized ram horn; ram/bulldoze silhouette is unmistakable.
+- [ ] Mole reads through shovel claws and squat digging body; burrow/erupt contrast is obvious without labels.
+- [ ] Turtle shell dominates the silhouette; shell, roll, slam and exposed-head states remain visually distinct.
+- [ ] Goblin reads tiny, frantic and knife-first with exaggerated ears; rush/stab motion is more kinetic without becoming visual noise.
+- [ ] Barbarian remains a broad vertical humanoid with oversized axe; rage changes posture/crest/impact without resembling Dragon.
+- [ ] L2/L3/L4 progression for all five changes shape language and signature equipment, not only scale/glow.
+- [ ] Material edge-light and team accents remain secondary to silhouette.
+- [ ] All ten current fighters remain distinguishable at normal 390×844 battle scale with labels hidden.
