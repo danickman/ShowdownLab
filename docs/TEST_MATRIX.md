@@ -336,3 +336,12 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Spell unlock/tech purchase immediately updates card state, power text, wallet balance and battle availability.
 - [ ] Successful purchases show a brief non-blocking celebration/toast; no modal or extra tap is required.
 - [ ] Purchase animations do not shift surrounding layout or trap focus on narrow mobile screens.
+
+### Package 14 Bonus B — battle personality
+- [ ] Signature actions use fighter-specific comic vocabulary without flooding dense fights.
+- [ ] Knight, Sniper, Goose, Dragon, Assassin, Beetank, Mole, Turtle, Goblin and Barbarian each have at least one distinctive visual/action callout.
+- [ ] Low-HP clutch aura appears only in smaller fights and does not obscure health bars or targeting.
+- [ ] Selective signature bursts reinforce major actions without replacing core attack/hit readability.
+- [ ] Last-fighter moments include fighter-specific flavor text and remain brief/non-blocking.
+- [ ] Final-KO story beat attributes a recognizable finisher personality without changing winner logic.
+- [ ] 10× and large-crowd fights suppress personality flourishes before suppressing core combat FX.
