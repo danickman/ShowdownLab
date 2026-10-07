@@ -410,3 +410,13 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Quick remains fast: choice + lock-in handoff adds only a brief pause and preserves the ~4s auto-pick path.
 - [ ] Draft keeps deliberate choice/change-preview behavior, with a stronger deploy handoff rather than auto-starting on selection.
 - [ ] Reward theatre is visual only; draft application logic, bot reinforcement, round seeds and lives are unchanged.
+
+### Package 16.5 — cohesion and performance
+- [ ] Combat spectacle uses full / balanced / reduced / minimal density tiers rather than independent ad-hoc thresholds.
+- [ ] 10× and large crowds reduce secondary FX lifetime, opacity, visible aftermath and queue caps before core hit/spell readability is reduced.
+- [ ] Persistent spell aftermath remains visible in ordinary fights but is bounded more aggressively in dense fights.
+- [ ] Active AEGIS ward reads as a protective dome with shield-panel structure, not a generic ellipse.
+- [ ] Spell callouts, HUD, spell rack and menu remain tappable/readable at ~390px portrait width and on shorter phone screens.
+- [ ] Quick/Draft reward cards, preview panel and deploy button fit narrow/short phone screens without clipping.
+- [ ] Reduced-motion preference disables nonessential UI animation while preserving state feedback.
+- [ ] No simulation damage, targeting, cooldown, lives, rewards, draft mechanics or terminal-state logic changes in this pass.
