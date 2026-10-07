@@ -24,7 +24,7 @@ for(const [type,spec] of Object.entries(authored)){
 const cache=new Map(),missing=new Set(),reported=new Set(),poseMemory=new Map();
 const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
-  sniper:{move:'idle',retreat:'idle',aim:'signature',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
+  sniper:{move:'idle',retreat:'idle',aim:'attack',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
   goose:{waddle:'move',scamper:'move',dash:'move',circle:'move',honk:'signature',peck:'attack'},
   dragon:{stalk:'move',loom:'move',fire_windup:'signature',fire:'signature',attack:'attack',claw_swipe:'attack',guard_close:'guard'},
   assassin:{stalk:'move',disengage:'move',vanish:'signature',backstab:'attack'},
