@@ -1,3 +1,6 @@
+## Package 15 — Arcade Flow & Spell Spectacle
+Status: **RC candidate**. Adds a 4-second Quick Showdown intermission with REINFORCE / WILDCARD / EVOLVE choices, plus a second-generation spell presentation pass for ARC, BLOOM, QUAKE and AEGIS. Spell rendering now scales more visibly with tech while bounding sampled visual targets in large fights.
+
 
 ## Package 14 — Visual Overdrive RC
 Status: **RC candidate**. Scope includes power-scaled spell spectacle, Upgrade Bay economy clarity, full 10-fighter redraw/polish, material-aware combat impacts, battle staging/performance refinement, progression theatre, fighter-specific battle personality, and reward-key reload hardening. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual phone visual/tap QA remains post-deploy.
