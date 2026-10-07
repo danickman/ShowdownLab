@@ -46,7 +46,14 @@ function resolve(type,state){const f=manifest[type];if(!f)return null;return f.s
 function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
 function allAuthoredUrls(){return Object.values(authored).flatMap(f=>Object.values(f.urls))}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
-function drawTeamRing(c,x,y,size,team){c.save();c.strokeStyle=team==='red'?'#ff655f':'#48baff';c.globalAlpha=.58;c.lineWidth=Math.max(1.5,size*.018);c.beginPath();c.ellipse(x,y+size*.37,size*.34,size*.105,0,0,Math.PI*2);c.stroke();c.restore()}
+function drawTeamRing(c,x,y,size,team){
+  const col=team==='red'?'#ff5d57':'#36bfff';
+  c.save();
+  c.globalAlpha=.15;c.fillStyle=col;c.beginPath();c.ellipse(x,y+size*.37,size*.39,size*.14,0,0,Math.PI*2);c.fill();
+  c.globalAlpha=.84;c.strokeStyle=col;c.lineWidth=Math.max(2,size*.024);c.beginPath();c.ellipse(x,y+size*.37,size*.35,size*.108,0,0,Math.PI*2);c.stroke();
+  c.globalAlpha=.28;c.lineWidth=Math.max(1,size*.010);c.beginPath();c.ellipse(x,y+size*.37,size*.27,size*.078,0,0,Math.PI*2);c.stroke();
+  c.restore()
+}
 function drawProcedural(c,type,x,y,size,team,o){if(!window.FighterArt)return false;window.FighterArt.draw(c,type,x,y,size,team,o);drawTeamRing(c,x,y,size,team);return true}
 const POSE_HOLD={attack:380,signature:560,hit:340,guard:220};
 const MOTION_PROFILE={
@@ -130,14 +137,17 @@ function drawAuthored(c,type,x,y,size,team,o){
   if(!rec.ready){drawTeamRing(c,x,y,size,team);return 'loading'}
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
   const ratio=img.naturalWidth/img.naturalHeight,ax=fighter.anchor[0],ay=fighter.anchor[1],m=motion(type,state,o,size,pose.age,pose.hold);
-  let h=o.presentation?size:size*fighter.scale;
+  let h=o.presentation?size:size*fighter.scale,drawX=x,drawY=y;
   if(o.presentation){
     const cw=c.canvas?.width||size,ch=c.canvas?.height||size;
-    const padX=cw*.09,padY=ch*.08,maxW=Math.max(1,cw-padX*2),maxH=Math.max(1,ch-padY*2);
+    const padX=cw*.08,padY=ch*.055,ringReserve=ch*.16,maxW=Math.max(1,cw-padX*2),maxH=Math.max(1,ch-padY*2-ringReserve);
     h=Math.min(h,maxH,maxW/Math.max(.001,ratio));
+    drawX=cw*.5;
+    drawY=padY+h*ay;
+    y=drawY;
   }
   const w=h*ratio;
-  c.save();c.translate(x+m.dx,y+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);
+  c.save();c.translate(drawX+m.dx,drawY+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);
   if(fighter.inkBoost){
     c.save();c.filter='brightness(0)';c.globalAlpha=.92;
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
