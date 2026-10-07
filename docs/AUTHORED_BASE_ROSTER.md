@@ -1,0 +1,99 @@
+# Authored Base Roster — Runtime Preparation
+
+Status: **IN PROGRESS on `art-spike-knight-authored-v1`**. No production merge or deployment is approved.
+
+## Scope
+
+Base authored art is now frozen for the implemented 10-fighter roster:
+
+- Knight
+- Dragon
+- Sniper
+- Goose
+- Assassin
+- Beetank
+- Mole
+- Turtle
+- Goblin
+- Barbarian
+
+The planned remaining 16 fighters are deliberately deprioritized. Art effort now goes to:
+1. finishing Base runtime integration for these 10
+2. Evolved forms for L5–9
+3. Ultimate forms for L10
+4. arenas, backgrounds, progression scenes and other presentation art
+
+## Source-art status
+
+Approved Base reference / production art exists for all 10.
+
+Runtime preparation target per fighter:
+- idle
+- move
+- attack
+- guard / defensive
+- signature
+- hit
+- defeat
+
+Knight already has a verified seven-pose authored runtime pack.
+
+For Assassin and Turtle, the approved sheet supplies a shared Hit/Defeat source rather than distinct final poses. During first-pass runtime integration, that approved source may temporarily back both `hit` and `defeat`. This is a known visual-quality debt, not a gameplay blocker.
+
+## Runtime preparation contract
+
+All runtime authored assets:
+- true alpha, not green background
+- green-spill reduced
+- 96 × 96 transparent canvas
+- common ground anchor
+- lossless WebP
+- one pose per file
+- procedural renderer preserved as fallback
+- no combat logic changes required
+
+Expected path pattern:
+
+`v3/assets/authored/<fighter>/<pose>.webp`
+
+Pose names:
+- `idle.webp`
+- `move.webp`
+- `attack.webp`
+- `guard.webp`
+- `signature.webp`
+- `hit.webp`
+- `defeat.webp`
+
+Knight retains its existing `charge.webp` runtime naming until renderer normalization is completed deliberately.
+
+## Performance constraint
+
+Real-phone testing demonstrated that authored art works, but very high unit counts become slow around the Round 6 / ~180-unit range.
+
+Therefore:
+- keep runtime sprites lightweight
+- retain the current spectacle-density/performance tier system
+- do not add high-frame-count sprite animation yet
+- authored key poses + code-driven motion remains the preferred pattern
+
+## Build sequence
+
+1. prepare and QA transparent runtime packs
+2. commit packs to the isolated art branch
+3. generalize the asset renderer from Knight-only to roster-aware authored rendering
+4. preserve per-fighter procedural fallback
+5. test the 10-fighter Base set on phone
+6. fix scale / anchor / state-mapping defects only
+7. freeze Base authored runtime contract
+8. only then begin Evolved-form integration
+
+## Explicit non-goals
+
+- no merge to `main`
+- no production deploy without explicit approval
+- no remaining-16 roster expansion
+- no combat rewrite
+- no removal of `FighterArt`
+- no high-frame-count animation system
+- no Evolved / Ultimate runtime work until Base passes
