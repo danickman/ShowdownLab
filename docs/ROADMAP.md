@@ -9,7 +9,7 @@ Status: **RC candidate**. Adds a 4-second Quick Showdown intermission with REINF
 Status: **RC candidate**. Scope includes power-scaled spell spectacle, Upgrade Bay economy clarity, full 10-fighter redraw/polish, material-aware combat impacts, battle staging/performance refinement, progression theatre, fighter-specific battle personality, and reward-key reload hardening. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual phone visual/tap QA remains post-deploy.
 # Showdown Lab — Execution Roadmap & Milestone Tracker
 
-Status: **ACTIVE PLAN — Package 16 production; M2 authored-art spike in progress**
+Status: **ACTIVE PLAN — Package 16 production; 10-fighter authored Base rollout in progress**
 Protected combat baseline: **RC4 rich combat core**
 
 This is the operating plan for future work. Its purpose is to replace free-form iteration with bounded, testable milestones.
@@ -59,9 +59,9 @@ Unfinished/risky:
 - Lab rematch lives behavior needs regression
 - cooldown UI on quick rematches needs regression
 - Boss Hunt is not yet a true boss ruleset
-- only 10/26 primary units implemented
+- implemented roster intentionally frozen at the current 10 while authored Base/Evolved/Ultimate art and presentation are completed
 - full L5/L10 evolution system not implemented
-- external authored art pipeline not selected
+- hybrid authored-key-pose + procedural-motion art path selected for the current 10, pending final roster-wide phone QA
 - Daily Challenge, battle codes, saved armies, persistence/settings and full feature parity are incomplete
 - accessibility, offline/PWA, device hardening and profiling are incomplete
 
@@ -101,11 +101,11 @@ Fixed seeds; assert termination, no immortal units, single terminal emission and
 Score the first 10 on silhouette, personality, small-scale clarity, action readability, evolution readability and perceived production quality.
 
 ### Turn 2.2 — External art spike
-Status: **IMPLEMENTED ON TEST BRANCH — PHONE QA NEXT**
+Status: **PASSED ON PHONE — SCALING TO CURRENT 10**
 
 Knight is the selected spike fighter. Seven individually generated authored Base poses are integrated through `asset-renderer.js` with the procedural renderer preserved as fallback. A runtime Authored/Procedural toggle supports direct comparison. Blue Knight is authored during the spike; Red Knight remains procedural for same-fight A/B comparison.
 
-Generation method is now canonical-reference + pose-reference + one pose per generation. Multi-pose sheets were rejected because equipment and body design drifted. Real-phone battle-scale QA is the gate before any roster-wide art production.
+Generation method is now canonical-reference + pose-reference + one pose per generation. Multi-pose sheets were rejected because equipment and body design drifted. Real-phone battle-scale QA passed for the authored Knight path. Base authored reference / production art is now approved for all 10 implemented fighters, and runtime asset preparation is underway on the isolated art branch.
 
 ### Turn 2.3 — Animation strategy spike
 Status: **IN PROGRESS**
@@ -121,7 +121,9 @@ C. sprite-sheet animation only if clearly justified
 D. geometry-only fallback
 
 ### Turn 2.4 — Art-path decision
-Choose Geometry-first, Hybrid or Authored Sprites before scaling art production to 26.
+Status: **HYBRID SELECTED FOR CURRENT 10**
+
+Use authored key poses plus procedural movement/FX/fallback. Do not scale to 26. Finish Base runtime integration for the current 10, then prioritize Evolved/Ultimate forms and scene/background art.
 
 # M3 — Character progression system
 
@@ -147,9 +149,11 @@ Reveal ceremony, pre-commit preview, results history and roster next-form displa
 ### Turn 3.5 — Scale to first 10
 Only after the system proves stable.
 
-# M4 — Full 26-unit roster
+# M4 — Full 26-unit roster — DEPRIORITIZED
 
 Remaining 16: Snail, Engineer, TNT, Merlinor, Archer, Spartan, Bloodvine, Whelp, Sixshoot, Parasite, Cowboy, Agent, Villain, Totem, Spider, Captain.
+
+**Current decision:** do not expand beyond the implemented 10 until Base authored art, L5–9 Evolved forms, L10 Ultimate forms, and higher-impact arena/background/progression art are established. This milestone remains a future option, not current execution scope.
 
 ### Turn 4.1 — Artillery wave
 Snail, Merlinor, Bloodvine.
