@@ -261,3 +261,23 @@ Corrections:
 - Dragon battle scale increased and receives a dark silhouette underlay to strengthen its outer ink at mobile battle scale
 
 No combat simulation behavior changed.
+
+
+## Turn 12 — heavy-unit and transition polish
+
+Status: **IMPLEMENTED ON BRANCH; PHONE QA NEXT**
+
+Renderer-only changes:
+- introduced per-fighter motion profiles for cadence, move-duty cycle, weight, attack lunge and signature commitment
+- heavy fighters now spend more of each movement cycle in a planted / settle state
+- Beetank, Turtle, Dragon and Barbarian use slower, lower-amplitude motion than light fighters
+- guard transitions now include a brief planted compression / settle
+- attack transitions now ease into and out of the lunge instead of snapping
+- signature transitions now have fighter-specific commitment:
+  - Beetank/Turtle: stronger squash, plant and forward drive
+  - Dragon: much less forward travel and more breath/weight anticipation
+  - Barbarian: stronger forward commitment
+- hit recoil is reduced for heavy fighters according to weight
+- light fighters keep faster, more agile movement cadence
+
+No simulation state, movement physics, targeting, damage, cooldown or round logic changed.
