@@ -9,7 +9,7 @@ Status: **RC candidate**. Adds a 4-second Quick Showdown intermission with REINF
 Status: **RC candidate**. Scope includes power-scaled spell spectacle, Upgrade Bay economy clarity, full 10-fighter redraw/polish, material-aware combat impacts, battle staging/performance refinement, progression theatre, fighter-specific battle personality, and reward-key reload hardening. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual phone visual/tap QA remains post-deploy.
 # Showdown Lab — Execution Roadmap & Milestone Tracker
 
-Status: **ACTIVE PLAN — Package 16 production; 10-fighter authored Base rollout in progress**
+Status: **ACTIVE PLAN — Package 16 production; authored 10-fighter Base polish and professional presentation pass in progress**
 Protected combat baseline: **RC4 rich combat core**
 
 This is the operating plan for future work. Its purpose is to replace free-form iteration with bounded, testable milestones.
@@ -252,9 +252,9 @@ No unresolved P0/P1/P2.
 |---|---|
 | M0 Visuals 11 validation | SUBSTANTIALLY COMPLETE · RC PLAYTEST NEXT |
 | M1 Stabilize v3 shell | PARTIAL · LIFECYCLE/HUD/LAB ADVANCED |
-| M2 Long-term art path | IN PROGRESS · KNIGHT AUTHORED SPIKE · PHONE QA NEXT |
-| M3 Character progression | PLANNED |
-| M4 Full 26-unit roster | 10/26 BASE UNITS COMPLETE |
+| M2 Long-term art path | AUTHORED HYBRID SELECTED · 10-FIGHTER BASE POLISH / SNIPER FINAL FIX NEXT |
+| M3 Character progression | PLANNING · BASE / EVOLVED / ULTIMATE PIPELINE NEXT |
+| M4 Full 26-unit roster | DEPRIORITIZED · CURRENT ROSTER FROZEN AT 10 |
 | M5 Feature/capability parity | PARTIAL · PERSISTENT PARTS/MASTERY/SPELL TECH ADDED |
 | M6 Arena/content expansion | PARTIAL |
 | M7 Community-ready architecture | NOT STARTED |
@@ -289,3 +289,42 @@ Expand M5 capability-parity work with these future executable turns:
 - **Turn 5.12 — Lab AI transparency:** show candidate draft scores and why the bot selected a card
 
 After M4 reaches 26/26, treat extra researched unit identities as an **expansion backlog**, not baseline scope. Add only when they introduce a genuinely new behavior family.
+
+## 2026-10-07 execution reprioritization
+
+The current quality bottleneck is presentation, not roster breadth.
+
+Near-term execution order:
+1. finish the Sniper idle/AIM replacement using the already-approved source images
+2. eliminate remaining Fighter Guide / match-start / results framing and crop defects
+3. perform a coherent battle-theatre polish pass: staging, spacing, readable team ownership, attack pose visibility, arena depth, skybox quality and effects discipline
+4. profile phone performance and preserve density-tier degradation before adding expensive rendering
+5. define and prove the evolution-art pipeline on one fighter
+6. only then scale Evolved / Ultimate forms across the current 10
+
+The remaining 16 planned fighters stay out of active scope.
+
+### Evolution implementation direction
+
+Preferred model to validate:
+- Base authored form
+- Evolved authored form
+- Ultimate authored form
+
+Intermediate progression inside a form should use restrained procedural prestige treatment rather than a completely new sprite pack for every level. Candidate treatments include gold/metal accents, aura/rim intensity, equipment glow, crest/mark overlays and stronger signature FX. Evolved and Ultimate must still have genuinely distinct canonical silhouettes.
+
+The image-generation pipeline should be optimized from the Base process. Test:
+one approved evolution canonical → one multi-pose sheet → extract good cells → regenerate only failed poses individually.
+
+Do not mass-generate evolution art until one fighter proves this faster pipeline at phone battle scale.
+
+### Release batching
+
+The authored-art branch should remain isolated until the Sniper and current presentation fixes are ready.
+
+After branch QA:
+- freeze the approved head
+- merge to `main`
+- perform one deliberate production deployment for the release
+
+Do not spend production deployments on tiny intermediate asset swaps.
