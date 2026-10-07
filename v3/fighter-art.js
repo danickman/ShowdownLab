@@ -20,7 +20,7 @@ if(type==='knight'){
  /* visor eyes / face focal point */
  line(c,-s*.13,-s*.31,s*.13,-s*.31,s*.048,'#17242a');
  ellipse(c,-s*.055,-s*.315,s*.022,s*.014,'#ffd75c');ellipse(c,s*.055,-s*.315,s*.022,s*.014,'#ffd75c');
- if(level>=3)poly(c,[[-s*.09,-s*.5],[0,-s*.72],[s*.12,-s*.49]],'#e8b937');
+ if(level>=3)poly(c,[[-s*.09,-s*.5],[0,-s*.72],[s*.12,-s*.49]],'#e8b937');if(level>=4){poly(c,[[-s*.47,-s*.08],[-s*.59,-s*.3],[-s*.38,-s*.39],[-s*.25,-s*.19]],'#dce6e7');line(c,s*.3,-s*.1,s*.87,-s*.54,s*.045,'#fff1a8')}
 }else if(type==='sniper'){
  const aim=action==='aim',attack=action==='attack',reload=action==='reload';
  poly(c,[[-s*.31,-s*.28],[-s*.42,s*.08],[-s*.22,s*.34],[-s*.08,s*.06]],'#39483d');
@@ -36,7 +36,7 @@ if(type==='knight'){
  if(aim){c.save();c.strokeStyle='#ffe67c';c.lineWidth=Math.max(1,s*.014);c.setLineDash([s*.05,s*.04]);c.beginPath();c.moveTo(s*.72,gy-s*.08);c.lineTo(s*1.15,gy-s*.13);c.stroke();c.setLineDash([]);c.restore()}
  if(attack)poly(c,[[s*.87,gy-s*.11],[s*1.12,gy-s*.21],[s*.93,gy+s*.015]],'#fff0a0');
  ellipse(c,s*.08,-s*.29,s*.055,s*.032,'#162124');ellipse(c,s*.095,-s*.292,s*.018,s*.015,'#b9f7ff');
- if(level>=3)poly(c,[[s*.12,-s*.5],[s*.29,-s*.72],[s*.39,-s*.44]],a);
+ if(level>=3)poly(c,[[s*.12,-s*.5],[s*.29,-s*.72],[s*.39,-s*.44]],a);if(level>=4){line(c,s*.55,gy-s*.07,s*1.08,gy-s*.12,s*.032,'#f3e7a6');poly(c,[[-s*.4,s*.04],[-s*.57,s*.22],[-s*.34,s*.27]],a)}
 }else if(type==='goose'){
  const honk=action==='honk',peck=action==='peck',dash=action==='dash'||action==='scamper';
  if(dash)c.translate(s*.035,0);
@@ -54,7 +54,7 @@ if(type==='knight'){
  poly(c,[[s*.03,-s*.5],[s*.1,-s*.68],[s*.18,-s*.5]],'#f3c64f');
  poly(c,[[-s*.32,s*.13],[-s*.57,s*.31],[-s*.27,s*.3]],'#fff9e8');
  if(honk){for(let i=1;i<=4;i++){c.strokeStyle=i%2?'#ffe259':'#fff7bb';c.lineWidth=Math.max(1,s*(.034-i*.004));c.beginPath();c.arc(s*.64,-s*.33,s*(.11*i),-.72,.72);c.stroke()}}
- if(level>=3)poly(c,[[-s*.08,-s*.52],[s*.02,-s*.74],[s*.14,-s*.51]],'#e7ad2e');
+ if(level>=3)poly(c,[[-s*.08,-s*.52],[s*.02,-s*.74],[s*.14,-s*.51]],'#e7ad2e');if(level>=4){poly(c,[[-s*.42,s*.08],[-s*.7,s*.32],[-s*.29,s*.3]],a);poly(c,[[s*.01,-s*.55],[s*.09,-s*.83],[s*.19,-s*.54]],'#ffd85b')}
 }else if(type==='dragon'){
  const fire=action==='fire',wind=action==='fire_windup';
  /* broader wings, heavier jaw and crown-like horns */
@@ -71,7 +71,7 @@ if(type==='knight'){
  for(let i=0;i<5;i++)poly(c,[[(-.3+i*.14)*s,s*.24],[(-.23+i*.14)*s,s*(.47-i*.012)],[(-.12+i*.14)*s,s*.26]],i%2?'#f2b93b':'#ffd85b');
  if(wind){c.shadowColor='#ffb03b';c.shadowBlur=s*.22;ellipse(c,s*.66,-s*.13,s*.08,s*.06,'#fff2a1')}
  if(fire){poly(c,[[s*.68,-s*.16],[s*1.02,-s*.39],[s*1.45,-s*.13],[s*1.08,s*.07]],'#ff6b21');poly(c,[[s*.72,-s*.14],[s*1.06,-s*.28],[s*1.27,-s*.13],[s*1.02,-s*.02]],'#ffd451')}
- if(level>=3)for(let i=0;i<3;i++)poly(c,[[(-.12+i*.17)*s,-s*.46],[(-.03+i*.17)*s,-s*(.72+i*.025)],[(.07+i*.17)*s,-s*.42]],'#ffe064');
+ if(level>=3)for(let i=0;i<3;i++)poly(c,[[(-.12+i*.17)*s,-s*.46],[(-.03+i*.17)*s,-s*(.72+i*.025)],[(.07+i*.17)*s,-s*.42]],'#ffe064');if(level>=4){poly(c,[[-s*.58,-s*.08],[-s*.98,-s*.7],[-s*.78,s*.02]],'#7c1822');poly(c,[[s*.08,-s*.09],[s*.84,-s*.72],[s*.66,s*.03]],'#e13c34')}
 }else if(type==='assassin'){
  const stab=action==='backstab',vanish=action==='vanish',out=action==='disengage';
  if(vanish)c.globalAlpha=.74;
@@ -94,7 +94,7 @@ if(type==='knight'){
  poly(c,[[-s*.52,-s*.15],[-s*.68,-s*.22],[-s*.56,-s*.07]],'#eefcff');
  if(out){line(c,-s*.38,s*.18,-s*.68,s*.28,s*.025,'#8b7bdf');line(c,-s*.25,s*.24,-s*.57,s*.38,s*.018,'#8b7bdf')}
  if(vanish)for(let i=0;i<5;i++){c.globalAlpha=.28+i*.08;ellipse(c,-s*(.32+i*.11),s*(.18-i*.055),s*.07,s*.024,'#a792ff')}
- if(level>=3){poly(c,[[-s*.33,s*.02],[-s*.62,-s*.22],[-s*.45,s*.23]],a);poly(c,[[s*.34,s*.01],[s*.61,-s*.23],[s*.45,s*.23]],a)}
+ if(level>=3){poly(c,[[-s*.33,s*.02],[-s*.62,-s*.22],[-s*.45,s*.23]],a);poly(c,[[s*.34,s*.01],[s*.61,-s*.23],[s*.45,s*.23]],a)}if(level>=4){poly(c,[[-s*.28,-s*.18],[-s*.55,-s*.57],[-s*.03,-s*.34]],'#211b39');poly(c,[[s*.26,-s*.18],[s*.56,-s*.57],[s*.04,-s*.34]],'#211b39')}
 }
 c.restore()}function overdriveFinish(c,s,team,type,action,level){c.save();c.lineCap='round';c.lineJoin='round';c.globalAlpha=.62;
 if(type==='knight'){c.strokeStyle='#fffdf0';c.lineWidth=Math.max(1.5,s*.022);c.beginPath();c.moveTo(-s*.18,-s*.44);c.lineTo(0,-s*.55);c.lineTo(s*.17,-s*.41);c.stroke();c.globalAlpha=.34;line(c,-s*.36,-s*.16,-s*.3,s*.15,s*.018,'#dff7ff')}
