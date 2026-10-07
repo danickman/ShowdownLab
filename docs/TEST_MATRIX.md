@@ -391,3 +391,13 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Damage taken while warded produces a distinct shield-hit shimmer/spark rather than looking like ordinary damage.
 - [ ] High-tech residual animation is subtle and bounded; spell aftermath never grows without limit.
 - [ ] Spell aftermath is cleared when a new battle begins and remains presentation-only.
+
+### Package 16.3 — combat spectacle
+- [ ] Heavy hits and KOs trigger a brief presentation-only camera punch without pausing or altering the simulation loop.
+- [ ] Armor impacts throw metallic shards/sparks; organic/ranged punctures use a different material response.
+- [ ] Axe, blade, claw, shell, ram and peck trails are visually distinct at normal phone scale.
+- [ ] Sniper fire gets a visible muzzle shock/recoil flash in addition to tracer and casing cues.
+- [ ] KO punctuation changes with finishing attack flavor instead of using one generic burst.
+- [ ] Slash/stab/axe/shell contact arcs use distinct geometry and remain readable at 2×.
+- [ ] Dense and 10× fights continue to suppress secondary spectacle before core combat readability.
+- [ ] All changes remain presentation-only: no damage, targeting, cooldown, lifecycle or terminal-state rules change.
