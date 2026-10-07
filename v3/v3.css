@@ -246,3 +246,36 @@ html,body{background:#b8d8e1;color:var(--ink)}
 @media(prefers-reduced-motion:reduce){
   .ability-callout,.upgrade-toast,.shop-card,.spell-rack .spell{animation:none!important;transition:none!important}
 }
+
+
+/* Authored Base integration — presentation surfaces */
+.fighter-card{
+  background:linear-gradient(155deg,#eef4df 0%,#b7d7d4 58%,#9fc7cd 100%);
+}
+.fighter-card:before{
+  opacity:.28;
+  background:radial-gradient(circle at 50% 30%,#ffffff55,transparent 50%);
+}
+.art-canvas{
+  width:108%;
+  margin-left:-4%;
+  opacity:1!important;
+  filter:saturate(1.18) contrast(1.10) drop-shadow(0 7px 7px #324b5148);
+}
+.roster-avatar{
+  overflow:hidden;
+}
+.roster-avatar canvas{
+  width:108%;
+  max-width:none;
+  opacity:1!important;
+  filter:saturate(1.16) contrast(1.09) drop-shadow(0 7px 6px #314a5048);
+}
+.ready-team canvas,.hero-fighter,.result-fighter{
+  opacity:1!important;
+  filter:saturate(1.12) contrast(1.08) drop-shadow(0 12px 10px #344d5348);
+}
+.result-fighter{
+  width:218px;
+  height:242px;
+}
