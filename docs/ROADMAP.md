@@ -1,3 +1,6 @@
+
+## Package 14 — Visual Overdrive RC
+Status: **RC candidate**. Scope includes power-scaled spell spectacle, Upgrade Bay economy clarity, full 10-fighter redraw/polish, material-aware combat impacts, battle staging/performance refinement, progression theatre, fighter-specific battle personality, and reward-key reload hardening. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual phone visual/tap QA remains post-deploy.
 # Showdown Lab — Execution Roadmap & Milestone Tracker
 
 Status: **ACTIVE PLAN — Package 13 RC candidate**
