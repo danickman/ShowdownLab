@@ -335,3 +335,12 @@ Do not spend production deployments on tiny intermediate asset swaps.
 Sniper standing/AIM integration and shared UI contain framing are implemented on the art branch. Corrupt v2 payloads were replaced from existing supplied sources; no new art generated. Static/asset/Canvas/seeded regression passed. Browser/device QA is open, so the branch is not release-approved.
 
 Next: one required phone branch-preview pass, confirmed-defect fixes only, then frozen-head merge and production release. Guide high-resolution canonical recovery for the other nine fighters remains separate presentation debt.
+
+
+### Presentation Turn 1 — sunny composition and grounding
+
+Implemented on the art integration branch. User direction: daylight/sunny, discourage neon and dark themes. Sunlit Lab replaces the Neon Lab display name. Foot-aligned rings/shadows, full-sprite camera bounds and a quiet bright floor replace the layered dark/coloured overlay stack. Combat core, simulation adapter, progression, targeting and density-tier combat FX remain unchanged.
+
+Automatic asset/presentation/camera/seeded checks pass; browser/device visual QA remains open.
+
+Next turns before evolutions: (2) one sunny authored Sunlit Lab environment pilot, (3) combat hierarchy/callout/spacing refinement, (4) arena cohesion and phone performance. Do not mass-generate scenes before the pilot passes.

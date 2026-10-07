@@ -455,3 +455,22 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Real iPhone at ~390×844 and a shorter viewport: no stretched canvas, cropping, horizontal overflow or ring clipping.
 - [ ] Real iPhone dense-fight performance: no regression; no new per-fighter blur/filter cost introduced.
 - [ ] User visual approval → frozen branch head → main merge → one deliberate production deployment.
+
+
+### Presentation Turn 1 — sunny staging / grounding, 2026-10-07
+
+- [x] `node tools/check-presentation.cjs`: 8,220 full-sprite bounds checks at initial and settled camera states.
+- [x] Viewports: 320×568, 375×667, 390×700, 390×844, 768×1024; 2/8/24/60/180 live units; cluster, corner and spread layouts.
+- [x] Camera does not mutate combat units; equipment/head/feet stay inside camera stage bounds.
+- [x] Sniper idle ring centres at its foot point and draws behind the sprite.
+- [x] Native Canvas renders exercise all four daylight arena paths and living-unit shadows/rings.
+- [x] Sampled arc/ellipse/fillRect calls across four six-unit scenes reduced from 3,733 to 236. This is a background-work proxy, not a phone FPS result.
+- [x] Existing 71-asset decode, 180 UI-framing bounds and 60 presentation renders pass.
+- [x] 24 seeded mixed-roster matches terminate with repeatable outcomes; intentional listener exception remains contained with RAF scheduling preserved.
+- [x] Runtime JS parses, HTML entry pages identical, clean diff whitespace; protected simulation/adapter/round-loop/Stage5B files unchanged.
+- [ ] Real iPhone: sunlight/contrast, feet/rings/shadows, initial camera framing, camera tracking and widening through multiple rounds.
+- [ ] Real iPhone: all four arenas and round intro/outro remain bright and readable.
+- [ ] Real iPhone: dense ~180-unit scenes and 10× performance; no subjective pass or FPS claim yet.
+- [ ] Browser layout/tap smoke: environment limitation from the previous turn remains open.
+
+Known remaining debt: sprite stacking and callout/effect placement (Turn 3); authored sky/environment detail (Turn 2 pilot).

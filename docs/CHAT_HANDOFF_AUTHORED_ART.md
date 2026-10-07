@@ -166,6 +166,35 @@ Next action: obtain one branch preview for required iPhone smoke/visual QA, fix 
 confirmed defects, then freeze the approved head. Merge to main and production deploy
 remain one gated release event. Neither has happened in this turn.
 
+## Presentation Turn 1 — sunny composition / grounding (2026-10-07)
+
+Implemented on the integration branch after `b1c2d3dec28d25dce316216d23cd23b194700c29`. No new art, combat changes, main merge or production release.
+
+User direction is now explicitly **daylight and sunny; discourage neon/dark themes**.
+
+Changes:
+- Authored world points are foot anchors. Combat team rings now centre on that point and draw behind the sprite. Procedural fallback translates its body centre to respect the same foot contract.
+- Contact/cast shadows in `drawUnit()` now sit at the feet instead of ~0.3 sprite heights below them.
+- Camera composes the full live-army bounds on the floor, reserves actual authored scale/anchor/equipment dimensions, snaps initial framing, widens when required and smooths inward motion. It does not mutate units or targeting.
+- Sky/floor boundary moved from 31% to 23.5% of view height; camera floor composition accounts for sprite height instead of centring only foot points.
+- First arena renamed Sunlit Lab; all four use daylight skies, light material palettes, sun/cloud/horizon depth, a quiet sparse-joint floor, edge-only team washes and small pennants.
+- Removed layered dark floor panels, oversized side ellipses, repeated central circles/stripes, dense floor texture, sky halftone, neon skyline geometry and global dark vignette.
+- Round intro/outro retain timing and state flow but use warm light overlays/dark text instead of darkening the sunny scene.
+- Persistent impact scars, bounded spell aftermath, density tiers and combat FX remain intact.
+
+Validation: 8,220 initial/settled full-sprite camera-bound checks across five viewport sizes, three layouts and 2/8/24/60/180 units; camera state immutability; foot-aligned ring/render-order checks; native Canvas render review of all four arenas; authored-asset/UI framing and seeded combat regression. See `TEST_MATRIX.md`.
+
+Run `node tools/check-presentation.cjs` and `python tools/check-authored-assets.py`.
+
+Remaining: browser/iPhone layout, camera motion, crowded-fight legibility and FPS must be tested on the branch preview. Native Canvas checks do not certify browser/device performance. Sprite stacking and FX/callout placement are intentionally still presentation-turn-3 work. The simplified procedural courtyard is a clean scaffold for authored scenery, not a claim that environment polish is finished.
+
+Planned subsequent bounded turns:
+1. Turn 2: one sunny Sunlit Lab authored environment pilot; review in-engine before generating other scenes.
+2. Turn 3: combat visual hierarchy, controlled callouts, team identification and presentation spacing.
+3. Turn 4: approved environment language across the other arenas, UI/lighting cohesion and phone performance.
+
+Evolutions remain deferred. Keep changes on the art branch; avoid repeated intermediate production deploys.
+
 ## Battle presentation findings
 
 Real-phone testing has repeatedly surfaced these priorities:

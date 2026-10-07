@@ -47,7 +47,7 @@ function resolve(type,state){const f=manifest[type];if(!f)return null;return f.s
 function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
 function allAuthoredUrls(){return Object.values(authored).flatMap(f=>[...Object.values(f.urls),...(f.presentationUrl?[f.presentationUrl]:[])])}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
-function drawTeamRing(c,x,y,size,team,ground=y+size*.37){
+function drawTeamRing(c,x,y,size,team,ground=y){
   const col=team==='red'?'#ff5d57':'#36bfff';
   c.save();
   c.globalAlpha=.15;c.fillStyle=col;c.beginPath();c.ellipse(x,ground,size*.39,size*.14,0,0,Math.PI*2);c.fill();
@@ -66,7 +66,7 @@ function presentationFrame(bounds,ratio=1,anchor=[.5,.948],scale=1){
 function drawProcedural(c,type,x,y,size,team,o){
   if(!window.FighterArt)return false;
   if(o.presentation){const b=o.presentationBounds||{width:c.canvas.width,height:c.canvas.height},f=presentationFrame(b);window.FighterArt.draw(c,type,f.x,f.y-f.h*.35,f.h*.68,team,{...o,action:'idle'});drawTeamRing(c,f.ringX,0,f.ringSize,team,f.ringY)}
-  else{window.FighterArt.draw(c,type,x,y,size,team,o);drawTeamRing(c,x,y,size,team)}
+  else{drawTeamRing(c,x,y,size,team);window.FighterArt.draw(c,type,x,y-size*.43,size,team,o)}
   return true
 }
 const POSE_HOLD={attack:380,signature:560,hit:340,guard:220};
@@ -161,14 +161,14 @@ function drawAuthored(c,type,x,y,size,team,o){
     h=frame.h;drawX=frame.x;drawY=frame.y;
   }
   const w=h*ratio;
-  if(frame)drawTeamRing(c,frame.ringX,0,frame.ringSize,team,frame.ringY);
+  if(frame)drawTeamRing(c,frame.ringX,0,frame.ringSize,team,frame.ringY);else drawTeamRing(c,x,y,size,team);
   c.save();c.translate(drawX+m.dx,drawY+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);
   if(fighter.inkBoost&&!o.presentation){
     c.save();c.filter='brightness(0)';c.globalAlpha=.92;
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
   }
-  c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();if(!frame)drawTeamRing(c,x,y,size,team);return true
+  c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
   if(authored[type]){

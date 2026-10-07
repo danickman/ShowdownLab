@@ -17,6 +17,16 @@ Original **comic-book battle laboratory**:
 
 The renderer may be geometry, hybrid or authored. The identity contract stays the same.
 
+## Daylight environment direction — 2026-10-07
+
+User-approved direction: **sunny daylight, bright outdoor arenas, warm material colour and clear atmospheric depth**. Discourage neon and dark scene themes. Team Blue/Red remain identification accents; spell energy is brief action feedback, not the environment palette.
+
+Use a consistent upper-left daylight source, grounded contact shadows, restrained stone/earth/grass surfaces and quiet combat space. Avoid global dark vignettes, glowing skyline geometry, dense halftone wallpaper, overlapping floor washes and decorative shapes under fighters.
+
+The first arena is now **Sunlit Lab**, replacing the user-facing Neon Lab name. Moon Vault retains its current name but uses pale stone in daylight; it is not a night scene.
+
+Next authored-art pilot: one sunny environment-only Sunlit Lab backdrop, followed by in-engine review. Do not bake fighters, HUD, team colours, rings, shadows or combat effects into environment art. Approve one pilot before scaling.
+
 ## Evolution contract
 
 **L1–4 Base:** same identity, refined equipment, stronger accents, posture and modest scale.
