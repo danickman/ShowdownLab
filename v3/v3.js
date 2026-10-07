@@ -21,6 +21,8 @@ else if(theme.name==='EMBER PIT'){ctx.strokeStyle='#714d3c';for(const x of [w*.0
 else if(theme.name==='MOON VAULT'){ctx.strokeStyle='#61768b';for(const x of [w*.12,w*.68]){ctx.beginPath();ctx.arc(x,h*.276,w*.065,Math.PI,Math.PI*2);ctx.stroke();ctx.fillRect(x-w*.065,h*.276,w*.13,h*.018)}ctx.beginPath();ctx.moveTo(w*.47,h*.285);ctx.lineTo(w*.51,h*.23);ctx.lineTo(w*.55,h*.285);ctx.stroke()}
 else{ctx.strokeStyle='#4b6871';ctx.fillRect(w*.09,h*.245,w*.1,h*.04);ctx.fillRect(w*.7,h*.25,w*.13,h*.035);ctx.beginPath();ctx.moveTo(w*.52,h*.285);ctx.lineTo(w*.54,h*.225);ctx.lineTo(w*.56,h*.285);ctx.stroke()}
 ctx.restore();
+/* Package 14.6 perspective floor guides: sparse, daylight-safe, and increasingly subtle in dense fights. */
+ctx.save();const floorDensity=state.units.filter(u=>u.hp>0).length,guideA=floorDensity>30?.055:.09;ctx.globalAlpha=guideA;ctx.strokeStyle='#29464d';ctx.lineWidth=1;for(let i=1;i<=4;i++){const yy=h*(.38+i*.115),half=w*(.18+i*.085);ctx.beginPath();ctx.moveTo(w*.5-half,yy);ctx.quadraticCurveTo(w*.5,yy+4,w*.5+half,yy);ctx.stroke()}for(const x of[-.36,-.18,0,.18,.36]){ctx.beginPath();ctx.moveTo(w*.5+x*w*.18,h*.33);ctx.lineTo(w*.5+x*w*.74,h*.9);ctx.stroke()}ctx.restore();
 /* Sparse sunlit motes add depth without becoming particles players track. */
 ctx.save();ctx.globalAlpha=.11;ctx.fillStyle='#fff8d2';for(let i=0;i<5;i++){const mx=((i*83+time*.004*(i+1))%(w+30))-15,my=h*(.34+.1*((i*37)%5))+Math.sin(time*.0008+i)*5,rr=1+(i%2)*.6;ctx.beginPath();ctx.arc(mx,my,rr,0,Math.PI*2);ctx.fill()}ctx.restore();
 /* Visuals 11 pass 2: comic-book skybox + escalating arena theatre. */
