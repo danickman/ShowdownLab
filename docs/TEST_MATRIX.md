@@ -474,3 +474,8 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Browser layout/tap smoke: environment limitation from the previous turn remains open.
 
 Known remaining debt: sprite stacking and callout/effect placement (Turn 3); authored sky/environment detail (Turn 2 pilot).
+
+
+### Presentation Turn 2 — sunny authored Sunlit Lab pilot
+
+One authored skyline now replaces Sunlit Lab distant scenery only. Floor scorch residue, impact cracks, dirt/dust and flying debris are explicitly preserved with their existing caps and expiration. Other arenas, fighters and combat logic are unchanged. See [ARENA_ART_PILOT.md](ARENA_ART_PILOT.md) for the asset, final generation prompt, checks and phone acceptance. Automated/native renderer checks pass; browser/iPhone visual and performance QA remains open. Branch checkpoint only; no main merge or production release.
