@@ -8,7 +8,7 @@ const authored={
   knight:{scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
   sniper:{scale:1.32,anchor:[.5,.948]},
   goose:{scale:1.20,anchor:[.5,.948]},
-  dragon:{scale:1.16,anchor:[.5,.948]},
+  dragon:{scale:1.36,anchor:[.5,.948],inkBoost:1.065},
   assassin:{scale:1.28,anchor:[.5,.948]},
   beetank:{scale:1.16,anchor:[.5,.948]},
   mole:{scale:1.20,anchor:[.5,.948]},
@@ -43,7 +43,7 @@ function authoredState(type,action){
 }
 function stateName(action){return action==='kill'?'attack':action==='move'?'move':action==='attack'?'attack':action==='hit'?'hit':action==='skill'?'skill':action==='defeat'?'defeat':'idle'}
 function resolve(type,state){const f=manifest[type];if(!f)return null;return f.states[state]||f.states.attack||f.states.idle}
-function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src)};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src)};img.src=src;return rec}
+function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
 function allAuthoredUrls(){return Object.values(authored).flatMap(f=>Object.values(f.urls))}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
 function drawTeamRing(c,x,y,size,team){c.save();c.strokeStyle=team==='red'?'#ff655f':'#48baff';c.globalAlpha=.58;c.lineWidth=Math.max(1.5,size*.018);c.beginPath();c.ellipse(x,y+size*.37,size*.34,size*.105,0,0,Math.PI*2);c.stroke();c.restore()}
@@ -53,7 +53,8 @@ const POSE_PRIORITY={idle:0,move:1,guard:2,attack:3,signature:4,hit:5,defeat:6};
 function displayedPose(type,o,requested){
   if(o.presentation||!Number.isFinite(o.id)||!Number.isFinite(Number(o.time)))return{state:requested,age:999,hold:0};
   const now=Number(o.time),key=String(o.id),prev=poseMemory.get(key)||{raw:null,state:'idle',entered:now,holdUntil:0,lastSeen:now};
-  if(requested==='defeat'){prev.raw=requested;prev.state='defeat';prev.entered=now;prev.holdUntil=Infinity;prev.lastSeen=now;poseMemory.set(key,prev);return{state:'defeat',age:0,hold:0}}
+  if(requested==='defeat'){prev.raw=requested;prev.state='defeat';prev.entered=now;prev.holdUntil=now+650;prev.lastSeen=now;poseMemory.set(key,prev);return{state:'defeat',age:0,hold:650}}
+  if(prev.state==='defeat'&&requested!=='defeat'){prev.raw=requested;prev.state=requested;prev.entered=now;prev.holdUntil=0;prev.lastSeen=now;poseMemory.set(key,prev);return{state:requested,age:0,hold:0}}
   const changed=requested!==prev.raw;
   if(changed){
     prev.raw=requested;
@@ -108,14 +109,21 @@ function motion(type,state,o,size,age=999,hold=0){
 function drawAuthored(c,type,x,y,size,team,o){
   const fighter=authored[type];if(!fighter)return false;
   const requested=authoredState(type,o.action),pose=displayedPose(type,o,requested),state=pose.state,src=fighter.urls[state]||fighter.urls.idle,rec=load(src);
-  if(!rec.ready||missing.has(src))return false;
+  if(rec.error||missing.has(src))return false;
+  if(!rec.ready){drawTeamRing(c,x,y,size,team);return 'loading'}
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
   const scale=size*fighter.scale,ratio=img.naturalWidth/img.naturalHeight,h=scale,w=h*ratio,ax=fighter.anchor[0],ay=fighter.anchor[1],m=motion(type,state,o,size,pose.age,pose.hold);
-  c.save();c.translate(x+m.dx,y+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true
+  c.save();c.translate(x+m.dx,y+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);
+  if(fighter.inkBoost){
+    c.save();c.filter='brightness(0)';c.globalAlpha=.92;
+    const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
+    c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
+  }
+  c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
   if(authored[type]){
-    try{if(drawAuthored(c,type,x,y,size,team,o))return true}
+    try{const drawn=drawAuthored(c,type,x,y,size,team,o);if(drawn===true||drawn==='loading')return true}
     catch(err){const key=type+':'+(o.action||'idle');if(!reported.has(key)){reported.add(key);console.error('[Showdown authored art] draw error',key,err)}}
     return drawProcedural(c,type,x,y,size,team,o)
   }
