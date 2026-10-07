@@ -5,16 +5,16 @@ const manifest={
 };
 const V='base-pack1';
 const authored={
-  knight:{scale:1.38,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
-  sniper:{scale:1.42,anchor:[.5,.948]},
-  goose:{scale:1.26,anchor:[.5,.948]},
-  dragon:{scale:1.50,anchor:[.5,.948]},
-  assassin:{scale:1.40,anchor:[.5,.948]},
-  beetank:{scale:1.50,anchor:[.5,.948]},
-  mole:{scale:1.28,anchor:[.5,.948]},
-  turtle:{scale:1.46,anchor:[.5,.948]},
-  goblin:{scale:1.18,anchor:[.5,.948]},
-  barbarian:{scale:1.46,anchor:[.5,.948]}
+  knight:{scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
+  sniper:{scale:1.32,anchor:[.5,.948]},
+  goose:{scale:1.20,anchor:[.5,.948]},
+  dragon:{scale:1.16,anchor:[.5,.948]},
+  assassin:{scale:1.28,anchor:[.5,.948]},
+  beetank:{scale:1.16,anchor:[.5,.948]},
+  mole:{scale:1.20,anchor:[.5,.948]},
+  turtle:{scale:1.12,anchor:[.5,.948]},
+  goblin:{scale:1.16,anchor:[.5,.948]},
+  barbarian:{scale:1.16,anchor:[.5,.948]}
 };
 for(const [type,spec] of Object.entries(authored)){
   if(!spec.states)spec.states={idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'signature',hit:'hit',defeat:'defeat'};
@@ -51,13 +51,36 @@ function drawTeamRing(c,x,y,size,team){c.save();c.strokeStyle=team==='red'?'#ff6
 function artMode(){try{return localStorage.getItem(ART_KEY)||'authored'}catch{return'authored'}}
 function setArtMode(mode){const next=mode==='procedural'?'procedural':'authored';try{localStorage.setItem(ART_KEY,next)}catch{}updateToggle();return next}
 function drawProcedural(c,type,x,y,size,team,o){if(!window.FighterArt)return false;window.FighterArt.draw(c,type,x,y,size,team,o);drawTeamRing(c,x,y,size,team);return true}
+function motion(type,state,o,size){
+  if(state==='defeat'||state==='hit')return{dy:0,rot:0,sx:1,sy:1};
+  const id=Number.isFinite(o.id)?o.id:0,t=(Number(o.time)||0)/1000+id*.731;
+  const heavy=type==='turtle'||type==='beetank'||type==='dragon'||type==='barbarian';
+  let dy=0,rot=0,sx=1,sy=1;
+  if(state==='move'){
+    const q=Math.sin(t*(heavy?6.2:8.4));
+    dy=q*size*(heavy?.018:.026);rot=q*(heavy?.010:.018);
+    sx=1+Math.abs(q)*.008;sy=1-Math.abs(q)*.008;
+  }else if(state==='guard'){
+    const q=Math.sin(t*(type==='turtle'?3.6:2.8));
+    dy=q*size*(type==='turtle'?.020:.010);rot=q*(type==='turtle'?.007:.004);
+    sx=1+q*.006;sy=1-q*.006;
+  }else if(state==='signature'){
+    const q=Math.sin(t*5.0);
+    dy=q*size*.010;sx=1+q*.010;sy=1-q*.010;
+  }else{
+    const q=Math.sin(t*(type==='turtle'?3.2:2.5));
+    dy=q*size*(type==='turtle'?.018:heavy?.010:.013);rot=q*(type==='goose'?.006:.003);
+    sx=1+q*.004;sy=1-q*.004;
+  }
+  return{dy,rot,sx,sy};
+}
 function drawAuthored(c,type,x,y,size,team,o){
   const fighter=authored[type];if(!fighter)return false;
   const state=authoredState(type,o.action),src=fighter.urls[state]||fighter.urls.idle,rec=load(src);
   if(!rec.ready||missing.has(src))return false;
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
-  const scale=size*fighter.scale,ratio=img.naturalWidth/img.naturalHeight,h=scale,w=h*ratio,ax=fighter.anchor[0],ay=fighter.anchor[1];
-  c.save();c.translate(x,y);if(o.flip)c.scale(-1,1);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true
+  const scale=size*fighter.scale,ratio=img.naturalWidth/img.naturalHeight,h=scale,w=h*ratio,ax=fighter.anchor[0],ay=fighter.anchor[1],m=motion(type,state,o,size);
+  c.save();c.translate(x,y+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
   if(authored[type]&&artMode()==='authored'){
