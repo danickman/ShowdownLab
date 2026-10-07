@@ -214,3 +214,29 @@ No combat rules, damage, targeting, movement physics, round rules or protected f
 Next gate:
 - phone QA for menu/card scale and contrast
 - then renderer-side pose persistence so attacks/signatures/hits hold longer than move poses
+
+
+## Turn 9 — combat pose persistence
+
+Status: **IMPLEMENTED ON BRANCH; PHONE QA NEXT**
+
+Renderer-only presentation changes:
+- attack pose minimum visual hold: ~360 ms
+- signature / charge pose minimum visual hold: ~520 ms
+- hit pose minimum visual hold: ~340 ms
+- guard pose receives a short stabilization hold
+- move presentation is intentionally broken into move / settle pulses rather than displaying the move pose continuously
+- heavy units use slower, lower-amplitude movement motion than light units
+- attack gets a short forward lunge and settle
+- signature gets a stronger anticipation / commitment transform
+- hit gets a short recoil
+- presentation-only pose memory is keyed by unit id and never changes simulation state
+
+No combat timing, movement physics, damage, targeting, action selection, round flow or protected core behavior changed.
+
+Next QA:
+- confirm attacks are now easier to see than move cycles at 1×
+- confirm signatures are clearly readable
+- verify Turtle / Beetank feel heavy rather than jittery
+- verify Sniper / Assassin do not look stuck on attack frames
+- verify pose holds do not create obvious sliding while simulation movement continues
