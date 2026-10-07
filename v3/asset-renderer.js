@@ -6,17 +6,14 @@ const manifest={
 const authoredKnight={
   scale:1.38,
   anchor:[.5,.918],
-  // Wiring-validation map. Deep binary inspection found defeat.webp is the only
-  // structurally valid WebP in the committed pack. Route every state to that one
-  // asset solely to prove authored-image loading/rendering on the phone.
   states:{
-    idle:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3',
-    move:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3',
-    attack:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3',
-    guard:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3',
-    charge:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3',
-    hit:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3',
-    defeat:'/v3/assets/authored/knight/defeat.webp?v=knight-wire3'
+    idle:'/v3/assets/authored/knight/idle.webp?v=knight-pack2',
+    move:'/v3/assets/authored/knight/move.webp?v=knight-pack2',
+    attack:'/v3/assets/authored/knight/attack.webp?v=knight-pack2',
+    guard:'/v3/assets/authored/knight/guard.webp?v=knight-pack2',
+    charge:'/v3/assets/authored/knight/charge.webp?v=knight-pack2',
+    hit:'/v3/assets/authored/knight/hit.webp?v=knight-pack2',
+    defeat:'/v3/assets/authored/knight/defeat.webp?v=knight-pack2'
   }
 };
 const KNIGHT_ART_KEY='showdownlab.art.knight';
