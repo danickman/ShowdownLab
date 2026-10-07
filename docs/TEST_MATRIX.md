@@ -382,3 +382,12 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] AEGIS cast moment reads cool-blue/protective, not like ARC damage.
 - [ ] Spell callout shows current T0–T5 and actual power percentage.
 - [ ] T3–T5 callouts and sigils visibly scale without adding gameplay damage beyond existing core mechanics.
+
+### Package 16.2 — persistent spell aftermath
+- [ ] ARC leaves a brief world-space scorch/electrical residue that fades over several seconds.
+- [ ] BLOOM leaves visible green growth/leaves after the initial heal burst; higher tech adds subtle drifting leaf motion.
+- [ ] QUAKE leaves persistent ground fractures/dust residue at affected enemy positions.
+- [ ] AEGIS leaves fading hex ward residue at allied positions after activation.
+- [ ] Damage taken while warded produces a distinct shield-hit shimmer/spark rather than looking like ordinary damage.
+- [ ] High-tech residual animation is subtle and bounded; spell aftermath never grows without limit.
+- [ ] Spell aftermath is cleared when a new battle begins and remains presentation-only.
