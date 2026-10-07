@@ -373,3 +373,12 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] AEGIS reads as an unmistakable protective dome/hex shield network.
 - [ ] Large fights cap sampled spell targets for rendering only; spell mechanics still affect all valid units.
 - [ ] 10× combat remains readable and terminates normally after the visual changes.
+
+### Package 16.1 — spell choreography
+- [ ] Every spell cast produces a target/area sigil before/through the primary visual impact.
+- [ ] ARC gets the strongest white-blue screen pulse and target-centric sigil without obscuring the struck unit.
+- [ ] BLOOM cast pulse is green/life-coded and remains visually different from AEGIS.
+- [ ] QUAKE receives the heaviest camera/arena response while keeping HUD controls readable.
+- [ ] AEGIS cast moment reads cool-blue/protective, not like ARC damage.
+- [ ] Spell callout shows current T0–T5 and actual power percentage.
+- [ ] T3–T5 callouts and sigils visibly scale without adding gameplay damage beyond existing core mechanics.
