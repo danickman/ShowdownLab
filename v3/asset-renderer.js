@@ -6,7 +6,7 @@ const manifest={
 const V='base-pack2';
 const authored={
   knight:{scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
-  sniper:{scale:1.32,anchor:[.5,.948]},
+  sniper:{scale:1.32,anchor:[.5,.948],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'signature-v2',hit:'hit',defeat:'defeat'}},
   goose:{scale:1.20,anchor:[.5,.948]},
   dragon:{scale:1.36,anchor:[.5,.948],inkBoost:1.065},
   assassin:{scale:1.28,anchor:[.5,.948]},
@@ -24,7 +24,7 @@ for(const [type,spec] of Object.entries(authored)){
 const cache=new Map(),missing=new Set(),reported=new Set(),poseMemory=new Map();
 const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
-  sniper:{move:'idle',retreat:'idle',aim:'attack',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
+  sniper:{move:'idle',retreat:'idle',aim:'signature',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
   goose:{waddle:'move',scamper:'move',dash:'move',circle:'move',honk:'signature',peck:'attack'},
   dragon:{stalk:'move',loom:'move',fire_windup:'signature',fire:'signature',attack:'attack',claw_swipe:'attack',guard_close:'guard'},
   assassin:{stalk:'move',disengage:'move',vanish:'signature',backstab:'attack'},
