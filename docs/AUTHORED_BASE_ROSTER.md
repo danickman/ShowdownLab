@@ -97,3 +97,39 @@ Therefore:
 - no removal of `FighterArt`
 - no high-frame-count animation system
 - no Evolved / Ultimate runtime work until Base passes
+
+
+## Turn 3 — roster-aware renderer checkpoint
+
+Status: **IMPLEMENTED ON BRANCH; NOT DEPLOYED**
+
+The authored renderer now recognizes all 10 implemented Base fighters and uses the same safe resolution pattern for both teams:
+
+combat action → fighter-specific authored state → authored WebP → procedural `FighterArt` fallback on missing/not-ready asset.
+
+The runtime switch is now roster-wide:
+
+`showdownlab.art.base`
+
+Visible test control:
+- `BASE ART · AUTHORED LOADING`
+- `BASE ART · AUTHORED READY`
+- `BASE ART · ASSET ERROR`
+- `BASE ART · PROCEDURAL`
+
+Fighter-specific signature mappings include:
+- Knight → charge
+- Sniper → aim
+- Goose → honk
+- Dragon → fire wind-up / fire
+- Assassin → vanish
+- Beetank → ram / bulldoze
+- Mole → dig / burrow / erupt
+- Turtle → shell / shell roll / shell slam
+- Goblin → rush
+- Barbarian → rage states
+
+The old Knight API names remain as compatibility aliases for the duration of the spike.
+
+No combat-core code was changed.
+No production deployment has been performed.
