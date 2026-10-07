@@ -212,3 +212,18 @@ html,body{background:#b8d8e1;color:var(--ink)}
 .spell-shop[data-tech="5"] .shop-icon{box-shadow:0 0 24px #fff0a8aa;transform:scale(1.08);border-width:2px}
 .upgrade-toast{position:fixed;z-index:50;left:50%;top:calc(var(--safeT) + 92px);transform:translate(-50%,-14px) scale(.92);opacity:0;width:min(330px,88vw);padding:12px 16px;border-radius:16px;background:linear-gradient(135deg,#fff7cf,#d9eadf);color:#173139;border:1px solid #b69a3d66;box-shadow:0 14px 34px #2a41474f;text-align:center;pointer-events:none;transition:.24s cubic-bezier(.2,.9,.2,1)}
 .upgrade-toast.show{transform:translate(-50%,0) scale(1);opacity:1}.upgrade-toast b,.upgrade-toast small{display:block}.upgrade-toast b{font-size:15px}.upgrade-toast small{margin-top:4px;font-size:10px;color:#50686e;font-weight:800}.upgrade-toast.spell-toast{background:linear-gradient(135deg,#fff2a9,#dbeeff)}
+
+/* Package 16.1 — spell choreography: screen-space cast pulse and stronger tier callout */
+.screen-battle::after{content:"";position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0}
+.screen-battle.spell-cast-zap::after{animation:spellPulseZap .52s ease-out}
+.screen-battle.spell-cast-heal::after{animation:spellPulseHeal .58s ease-out}
+.screen-battle.spell-cast-quake::after{animation:spellPulseQuake .62s ease-out}
+.screen-battle.spell-cast-aegis::after{animation:spellPulseAegis .62s ease-out}
+@keyframes spellPulseZap{0%{opacity:.9;box-shadow:inset 0 0 0 999px #dff7ff2f,inset 0 0 80px #7bdcffaa}35%{opacity:.52;box-shadow:inset 0 0 90px #86ddff88}100%{opacity:0;box-shadow:inset 0 0 150px #86ddff00}}
+@keyframes spellPulseHeal{0%{opacity:.72;box-shadow:inset 0 0 0 999px #b6ff9a24,inset 0 0 90px #6be26f88}50%{opacity:.4;box-shadow:inset 0 0 120px #89ef7d66}100%{opacity:0;box-shadow:inset 0 0 160px #89ef7d00}}
+@keyframes spellPulseQuake{0%{opacity:.7;box-shadow:inset 0 0 0 999px #c78b5827,inset 0 0 110px #b77b4a88}30%{opacity:.45;box-shadow:inset 0 0 120px #d1a06d66}100%{opacity:0;box-shadow:inset 0 0 180px #d1a06d00}}
+@keyframes spellPulseAegis{0%{opacity:.74;box-shadow:inset 0 0 0 999px #a8e4ff22,inset 0 0 110px #78cfff88}45%{opacity:.42;box-shadow:inset 0 0 145px #8ed9ff66}100%{opacity:0;box-shadow:inset 0 0 180px #8ed9ff00}}
+.ability-callout{display:grid!important;gap:1px!important;place-items:center!important;min-width:126px!important;padding:7px 12px!important;animation:spellCalloutPop .55s cubic-bezier(.2,.9,.2,1)!important}
+.ability-callout span{display:block;font-size:13px;font-weight:1000;letter-spacing:.09em}.ability-callout small{display:block;font-size:8px;font-weight:900;letter-spacing:.12em;opacity:.72}
+.ability-callout.power-high{transform-origin:center;box-shadow:0 7px 20px #40555a55,0 0 22px #fff2a766!important}
+@keyframes spellCalloutPop{0%{opacity:0;transform:translate(-50%,-15px) scale(.65)}35%{opacity:1;transform:translate(-50%,0) scale(1.12)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
