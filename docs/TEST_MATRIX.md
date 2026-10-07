@@ -360,3 +360,16 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [x] Reward de-duplication hardened with a per-page run identifier so persisted reward keys do not collide after browser reload.
 - [x] Vercel preview deployment status for the RC branch is successful.
 - [ ] Manual 390×844 iPhone visual/tap QA after production deployment remains required; automated checks cannot certify subjective art readability or touch feel.
+
+### Package 15 — Quick arcade & spell spectacle
+- [ ] Quick Showdown pauses after each non-terminal round for a compact timed intermission.
+- [ ] Quick presents exactly three large arcade choices: REINFORCE, WILDCARD, EVOLVE.
+- [ ] Tapping a Quick choice applies it and launches the next round without the full Draft flow.
+- [ ] If the player does nothing, Quick auto-picks after ~4 seconds and proceeds.
+- [ ] Draft Battle keeps its deliberate between-round picker unchanged.
+- [ ] ARC reads as a sky-to-ground lightning strike with forked branches and stronger impact at higher tech.
+- [ ] BLOOM reads as living green growth: vines, leaves, particles and healing halo, scaling with tech.
+- [ ] QUAKE visibly fractures the ground, throws debris, emits arena shockwaves and increases camera shake with tech.
+- [ ] AEGIS reads as an unmistakable protective dome/hex shield network.
+- [ ] Large fights cap sampled spell targets for rendering only; spell mechanics still affect all valid units.
+- [ ] 10× combat remains readable and terminates normally after the visual changes.
