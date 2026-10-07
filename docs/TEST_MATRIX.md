@@ -277,3 +277,13 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] AEGIS reads as a protective dome/shield around each living ally, with stronger shield geometry at higher tech.
 - [ ] Spell FX duration scales modestly with tech but remains bounded; 10× and dense Lab fights still terminate and retain fighter silhouettes.
 - [ ] Spell mechanics/damage/heal/ward values remain governed by the existing deterministic core; Package 14.1 presentation changes do not alter combat balance.
+
+### Package 14.2 — Upgrade Bay economy/readability
+- [ ] Upgrade Bay opens with a prominent current Parts wallet and one-sentence earn/spend explanation.
+- [ ] Spell Armory is visually separated from Fighter Mastery.
+- [ ] Every spell shows current T-rank/power, exact next benefit, exact next cost, and affordability state.
+- [ ] Locked Quake/Aegis show exact unlock price and how many additional Parts are needed.
+- [ ] Every fighter shows current M-rank, cumulative HP/DMG bonus, exact next bonus, exact next cost, and affordability state.
+- [ ] With 34 Parts at M0, fighter cards visibly say NEED 1 MORE · 35 PARTS rather than presenting an unexplained disabled button.
+- [ ] Buying/upgrading immediately refreshes wallet, next benefit, next price and button state.
+- [ ] 390px portrait renders spell cards one-column with no clipped CTA/cost text.
