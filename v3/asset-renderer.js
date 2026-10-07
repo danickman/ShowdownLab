@@ -21,7 +21,6 @@ for(const [type,spec] of Object.entries(authored)){
   spec.urls={};
   for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${V}`;
 }
-const ART_KEY='showdownlab.art.base';
 const cache=new Map(),missing=new Set(),reported=new Set();
 const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
@@ -44,12 +43,10 @@ function authoredState(type,action){
 }
 function stateName(action){return action==='kill'?'attack':action==='move'?'move':action==='attack'?'attack':action==='hit'?'hit':action==='skill'?'skill':action==='defeat'?'defeat':'idle'}
 function resolve(type,state){const f=manifest[type];if(!f)return null;return f.states[state]||f.states.attack||f.states.idle}
-function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);updateToggle()};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);updateToggle()};img.src=src;return rec}
+function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src)};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src)};img.src=src;return rec}
 function allAuthoredUrls(){return Object.values(authored).flatMap(f=>Object.values(f.urls))}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
 function drawTeamRing(c,x,y,size,team){c.save();c.strokeStyle=team==='red'?'#ff655f':'#48baff';c.globalAlpha=.58;c.lineWidth=Math.max(1.5,size*.018);c.beginPath();c.ellipse(x,y+size*.37,size*.34,size*.105,0,0,Math.PI*2);c.stroke();c.restore()}
-function artMode(){try{return localStorage.getItem(ART_KEY)||'authored'}catch{return'authored'}}
-function setArtMode(mode){const next=mode==='procedural'?'procedural':'authored';try{localStorage.setItem(ART_KEY,next)}catch{}updateToggle();return next}
 function drawProcedural(c,type,x,y,size,team,o){if(!window.FighterArt)return false;window.FighterArt.draw(c,type,x,y,size,team,o);drawTeamRing(c,x,y,size,team);return true}
 function motion(type,state,o,size){
   if(state==='defeat'||state==='hit')return{dy:0,rot:0,sx:1,sy:1};
@@ -83,7 +80,7 @@ function drawAuthored(c,type,x,y,size,team,o){
   c.save();c.translate(x,y+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
-  if(authored[type]&&artMode()==='authored'){
+  if(authored[type]){
     try{if(drawAuthored(c,type,x,y,size,team,o))return true}
     catch(err){const key=type+':'+(o.action||'idle');if(!reported.has(key)){reported.add(key);console.error('[Showdown authored art] draw error',key,err)}}
     return drawProcedural(c,type,x,y,size,team,o)
@@ -93,15 +90,7 @@ function draw(c,type,x,y,size,team='blue',o={}){
   if(fighter&&spec){const frame=Math.floor(((o.time||0)/1000)*(spec.fps||8))%spec.frames.length,rec=load(spec.frames[frame]);if(rec.ready){const img=rec.img,scale=size*fighter.scale,ratio=img.naturalWidth/Math.max(1,img.naturalHeight),h=scale,w=h*ratio,ax=fighter.anchor?.[0]??.5,ay=fighter.anchor?.[1]??.82;c.save();c.translate(x,y);if(o.flip)c.scale(-1,1);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true}}
   return false
 }
-function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:artMode(),total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
-function updateToggle(){const b=document.getElementById('baseArtToggle');if(!b)return;const d=diagnostics();if(d.mode!=='authored'){b.textContent='BASE ART · PROCEDURAL';b.dataset.mode='procedural';return}b.textContent=d.errors?`BASE ART · ${d.errors} ASSET ERROR${d.errors===1?'':'S'}`:d.ready===d.total?'BASE ART · AUTHORED READY':`BASE ART · LOADING ${d.ready}/${d.total}`;b.dataset.mode=d.errors?'error':d.ready===d.total?'authored':'loading';b.title=d.errors?d.missing.join('\n'):`Authored assets ready: ${d.ready}/${d.total}`}
-function mountToggle(){
-  const old=document.getElementById('knightArtToggle');if(old)old.remove();
-  if(document.getElementById('baseArtToggle'))return;
-  const b=document.createElement('button');b.id='baseArtToggle';b.type='button';b.setAttribute('aria-label','Toggle authored Base fighter art');
-  b.style.cssText='position:fixed;right:8px;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:9999;border:1px solid #17313966;border-radius:999px;padding:7px 10px;background:#fff9e5e8;color:#173139;font:900 9px/1 system-ui;letter-spacing:.06em;box-shadow:0 4px 14px #23363d33;backdrop-filter:blur(5px);touch-action:manipulation';
-  b.onclick=()=>setArtMode(artMode()==='authored'?'procedural':'authored');document.body.appendChild(b);updateToggle()
-}
-preload();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountToggle,{once:true});else mountToggle();
-window.FighterAssets={manifest,authored,draw,preload,missing,artMode,setArtMode,authoredState,diagnostics,ACTION_STATES,knightArtMode:artMode,setKnightArtMode:setArtMode}
+function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
+preload();
+window.FighterAssets={manifest,authored,draw,preload,missing,authoredState,diagnostics,ACTION_STATES}
 })();
