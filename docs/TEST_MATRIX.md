@@ -345,3 +345,18 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Last-fighter moments include fighter-specific flavor text and remain brief/non-blocking.
 - [ ] Final-KO story beat attributes a recognizable finisher personality without changing winner logic.
 - [ ] 10× and large-crowd fights suppress personality flourishes before suppressing core combat FX.
+
+### Package 14 RC automated evidence — 2026-10-06
+- [x] All 8 runtime JavaScript modules parse successfully with `new Function`.
+- [x] Root `index.html` and `v3/index.html` are byte-identical.
+- [x] 40/40 seeded mixed-roster 8-vs-8 battles at 10× reached `match_over` with a winner.
+- [x] 8 sequential reset/start lifecycle runs reached `match_over`; battle IDs were strictly increasing (41→48 in the test runtime).
+- [x] Quake at 1.75× reported 17.5 base damage to every living enemy and applied its stun behavior through the deterministic core.
+- [x] Aegis at 1.75× applied 114 ward ticks to every living Blue unit.
+- [x] ARC at 1.75× produced a successful 56-damage precision strike and stun in the deterministic test harness.
+- [x] BLOOM at 1.75× restored a damaged ally to its max HP in the test harness.
+- [x] Mastery M5 produced the intended +12.5% HP/damage multiplier (Knight 175→196.875 HP; 18→20.25 damage).
+- [x] Upgrade formulas/source gates verified: fighter cost 35×next rank, spell tech 50×next tech, four cooldown keys, Lab spell-tech override and unlimited-spell path present.
+- [x] Reward de-duplication hardened with a per-page run identifier so persisted reward keys do not collide after browser reload.
+- [x] Vercel preview deployment status for the RC branch is successful.
+- [ ] Manual 390×844 iPhone visual/tap QA after production deployment remains required; automated checks cannot certify subjective art readability or touch feel.
