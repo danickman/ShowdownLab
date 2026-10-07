@@ -307,3 +307,13 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] L2/L3/L4 progression for all five changes shape language and signature equipment, not only scale/glow.
 - [ ] Material edge-light and team accents remain secondary to silhouette.
 - [ ] All ten current fighters remain distinguishable at normal 390×844 battle scale with labels hidden.
+
+### Package 14.5 — combat impact and readable chaos
+- [ ] Sword, axe, blade, claw, ram, shell and peck attacks produce visually distinct contact trails/impact shapes.
+- [ ] Armored targets (Knight, Beetank, Turtle) produce sparks/clash bursts rather than organic blood effects.
+- [ ] Organic hits retain restrained blood/puncture cues; ranged puncture stays visually different from melee.
+- [ ] Heavy axe/ram/shell/claw contacts generate ground shock rings and stronger camera punch.
+- [ ] KOs receive a brief decisive burst without obscuring adjacent fighters or HUD controls.
+- [ ] Beetank ram, Turtle shell impact, Barbarian heavy swing, Assassin/Goblin blade contact and Mole/Dragon claw hits are readable at 2×.
+- [ ] 10× automatically reduces secondary particles/trails and lowers the FX cap; combat still terminates normally.
+- [ ] No gameplay damage, targeting, cooldown or terminal-state mechanics are changed by this presentation pass.
