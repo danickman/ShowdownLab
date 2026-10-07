@@ -48,7 +48,19 @@ function allAuthoredUrls(){return Object.values(authored).flatMap(f=>Object.valu
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
 function drawTeamRing(c,x,y,size,team){c.save();c.strokeStyle=team==='red'?'#ff655f':'#48baff';c.globalAlpha=.58;c.lineWidth=Math.max(1.5,size*.018);c.beginPath();c.ellipse(x,y+size*.37,size*.34,size*.105,0,0,Math.PI*2);c.stroke();c.restore()}
 function drawProcedural(c,type,x,y,size,team,o){if(!window.FighterArt)return false;window.FighterArt.draw(c,type,x,y,size,team,o);drawTeamRing(c,x,y,size,team);return true}
-const POSE_HOLD={attack:360,signature:520,hit:340,guard:190};
+const POSE_HOLD={attack:380,signature:560,hit:340,guard:220};
+const MOTION_PROFILE={
+  knight:{moveCycle:410,moveActive:.58,attackLunge:.078,signatureLunge:.060,weight:1.00},
+  sniper:{moveCycle:430,moveActive:.54,attackLunge:.035,signatureLunge:.015,weight:.88},
+  goose:{moveCycle:360,moveActive:.62,attackLunge:.060,signatureLunge:.020,weight:.72},
+  dragon:{moveCycle:680,moveActive:.42,attackLunge:.040,signatureLunge:.018,weight:1.34},
+  assassin:{moveCycle:380,moveActive:.60,attackLunge:.085,signatureLunge:.050,weight:.82},
+  beetank:{moveCycle:720,moveActive:.40,attackLunge:.085,signatureLunge:.105,weight:1.45},
+  mole:{moveCycle:470,moveActive:.52,attackLunge:.072,signatureLunge:.055,weight:1.04},
+  turtle:{moveCycle:760,moveActive:.38,attackLunge:.060,signatureLunge:.085,weight:1.52},
+  goblin:{moveCycle:330,moveActive:.64,attackLunge:.090,signatureLunge:.070,weight:.68},
+  barbarian:{moveCycle:620,moveActive:.44,attackLunge:.100,signatureLunge:.095,weight:1.28}
+};
 const POSE_PRIORITY={idle:0,move:1,guard:2,attack:3,signature:4,hit:5,defeat:6};
 function displayedPose(type,o,requested){
   if(o.presentation||!Number.isFinite(o.id)||!Number.isFinite(Number(o.time)))return{state:requested,age:999,hold:0};
@@ -66,8 +78,7 @@ function displayedPose(type,o,requested){
   if(now>=prev.holdUntil){
     let state=requested;
     if(requested==='move'){
-      const heavy=type==='turtle'||type==='beetank'||type==='dragon'||type==='barbarian';
-      const cycle=heavy?520:390,active=heavy?.58:.64,phase=((now+(Number(o.id)||0)*97)%cycle)/cycle;
+      const p=MOTION_PROFILE[type]||MOTION_PROFILE.knight,cycle=p.moveCycle||410,active=p.moveActive??.58,phase=((now+(Number(o.id)||0)*97)%cycle)/cycle;
       state=phase<active?'move':'idle';
     }
     if(state!==prev.state){prev.state=state;prev.entered=now}
@@ -76,32 +87,38 @@ function displayedPose(type,o,requested){
   if(poseMemory.size>700)for(const[k,v]of poseMemory){if(now-v.lastSeen>12000)poseMemory.delete(k)}
   return{state:prev.state,age:Math.max(0,now-prev.entered),hold:Math.max(0,prev.holdUntil-prev.entered)};
 }
+function easePulse(age,hold,peak=.62){
+  if(!hold)return 0;
+  const p=Math.max(0,Math.min(1,age/hold));
+  if(p<=peak)return Math.sin((p/peak)*Math.PI*.5);
+  return Math.cos(((p-peak)/(1-peak))*Math.PI*.5);
+}
 function motion(type,state,o,size,age=999,hold=0){
   if(state==='defeat')return{dx:0,dy:0,rot:0,sx:1,sy:1};
-  const id=Number.isFinite(o.id)?o.id:0,t=(Number(o.time)||0)/1000+id*.731;
-  const heavy=type==='turtle'||type==='beetank'||type==='dragon'||type==='barbarian';
+  const id=Number.isFinite(o.id)?o.id:0,t=(Number(o.time)||0)/1000+id*.731,pf=MOTION_PROFILE[type]||MOTION_PROFILE.knight,w=pf.weight||1;
   let dx=0,dy=0,rot=0,sx=1,sy=1;
   if(state==='move'){
-    const q=Math.sin(t*(heavy?4.4:6.2));
-    dy=q*size*(heavy?.012:.018);rot=q*(heavy?.006:.012);
-    sx=1+Math.abs(q)*.005;sy=1-Math.abs(q)*.005;
+    const freq=(Math.PI*2)/Math.max(.25,(pf.moveCycle||410)/1000),q=Math.sin(t*freq),amp=.020/Math.sqrt(w);
+    dy=q*size*amp;rot=q*(.012/Math.sqrt(w));sx=1+Math.abs(q)*(.006/Math.sqrt(w));sy=1-Math.abs(q)*(.006/Math.sqrt(w));
   }else if(state==='guard'){
-    const q=Math.sin(t*(type==='turtle'?2.8:2.2));
-    dy=q*size*(type==='turtle'?.014:.008);rot=q*(type==='turtle'?.005:.003);
-    sx=1+q*.004;sy=1-q*.004;
+    const q=Math.sin(t*(type==='turtle'?2.15:type==='beetank'?2.3:2.6)),settle=easePulse(age,hold,.42);
+    dy=size*((q*.005/Math.sqrt(w))+.018*settle*w/1.5);rot=q*(.004/Math.sqrt(w));
+    sx=1+.010*settle;sy=1-.020*settle;
   }else if(state==='attack'){
-    const p=hold?Math.min(1,age/hold):1,b=Math.sin(Math.min(1,p/.78)*Math.PI);
-    dx=size*.075*b;dy=-size*.008*b;rot=-.025*b;sx=1+.018*b;sy=1-.012*b;
+    const b=easePulse(age,hold,.48),l=pf.attackLunge||.075;
+    dx=size*l*b;dy=-size*.010*b;rot=-.026*b/Math.sqrt(w);sx=1+.020*b;sy=1-.014*b;
   }else if(state==='signature'){
-    const p=hold?Math.min(1,age/hold):1,b=Math.sin(Math.min(1,p/.82)*Math.PI),q=Math.sin(t*4.2);
-    dx=size*.045*b;dy=(q*.006-b*.018)*size;rot=-.012*b;sx=1+.024*b;sy=1-.016*b;
+    const b=easePulse(age,hold,.55),l=pf.signatureLunge||.050,q=Math.sin(t*3.4);
+    dx=size*l*b;dy=size*((q*.004/Math.sqrt(w))-.018*b);rot=-.016*b/Math.sqrt(w);sx=1+.028*b;sy=1-.020*b;
+    if(type==='beetank'||type==='turtle'){dy+=size*.018*b;sx+=.018*b;sy-=.024*b}
+    if(type==='dragon'){dx*=.35;dy-=size*.010*b;rot*=.35;sx+=.010*b}
+    if(type==='barbarian'){dx*=1.12;rot*=1.25}
   }else if(state==='hit'){
-    const p=hold?Math.min(1,age/hold):1,b=Math.sin(Math.min(1,p/.72)*Math.PI);
-    dx=-size*.055*b;rot=.035*b;sx=1-.012*b;sy=1+.010*b;
+    const b=easePulse(age,hold,.40);
+    dx=-size*.055*b/Math.sqrt(w);rot=.036*b/Math.sqrt(w);sx=1-.014*b;sy=1+.012*b;
   }else{
-    const q=Math.sin(t*(type==='turtle'?2.5:2.1));
-    dy=q*size*(type==='turtle'?.012:heavy?.008:.010);rot=q*(type==='goose'?.004:.002);
-    sx=1+q*.003;sy=1-q*.003;
+    const q=Math.sin(t*(2.35/Math.sqrt(w))),amp=.011/Math.sqrt(w);
+    dy=q*size*amp;rot=q*(type==='goose'?.004:.0025)/Math.sqrt(w);sx=1+q*.003;sy=1-q*.003;
   }
   if(o.flip)dx=-dx;
   return{dx,dy,rot:o.flip?-rot:rot,sx,sy};
