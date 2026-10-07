@@ -112,7 +112,7 @@ function drawAuthored(c,type,x,y,size,team,o){
   if(rec.error||missing.has(src))return false;
   if(!rec.ready){drawTeamRing(c,x,y,size,team);return 'loading'}
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
-  const scale=size*fighter.scale,ratio=img.naturalWidth/img.naturalHeight,h=scale,w=h*ratio,ax=fighter.anchor[0],ay=fighter.anchor[1],m=motion(type,state,o,size,pose.age,pose.hold);
+  const scale=o.presentation?size:size*fighter.scale,ratio=img.naturalWidth/img.naturalHeight,h=scale,w=h*ratio,ax=fighter.anchor[0],ay=fighter.anchor[1],m=motion(type,state,o,size,pose.age,pose.hold);
   c.save();c.translate(x+m.dx,y+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);
   if(fighter.inkBoost){
     c.save();c.filter='brightness(0)';c.globalAlpha=.92;
