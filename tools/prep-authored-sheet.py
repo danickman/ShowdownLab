@@ -15,7 +15,7 @@ import argparse
 from pathlib import Path
 import cv2
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 POSES_7 = ("idle","move","attack","guard","signature","hit","defeat")
 POSES_6 = ("idle","move","attack","guard","signature","hit")
@@ -34,21 +34,47 @@ def chroma_alpha(rgb: np.ndarray) -> np.ndarray:
 
 def extract_main(rgb: np.ndarray) -> Image.Image:
     rgba=chroma_alpha(rgb)
-    mask=(rgba[:,:,3]>45).astype(np.uint8)*255
+    mask=(rgba[:,:,3]>45).astype(np.uint8)
     mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((2,2),np.uint8))
-    n,_,stats,_=cv2.connectedComponentsWithStats(mask,8)
+    n,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
     comps=[]
     for i in range(1,n):
         x,y,w,h,area=stats[i]
         if area>250 and h>20 and w>20:
-            comps.append((area,x,y,w,h))
+            comps.append((area,i,x,y,w,h))
     if not comps:
         raise RuntimeError("No usable foreground component found")
-    _,x,y,w,h=max(comps)
-    pad=max(4,round(max(w,h)*0.04))
-    x0=max(0,x-pad); y0=max(0,y-pad)
-    x1=min(mask.shape[1],x+w+pad); y1=min(mask.shape[0],y+h+pad)
+    main=max(comps)
+    main_area,main_i,x,y,w,h=main
+
+    # Preserve the main figure plus only materially-sized detached equipment.
+    # This rejects pose labels, neighboring-cell fragments and chroma debris.
+    keep=np.zeros_like(mask,dtype=np.uint8)
+    keep[labels==main_i]=1
+    for area,i,cx,cy,cw,ch in comps:
+        if i==main_i:
+            continue
+        if area/main_area>=0.05:
+            keep[labels==i]=1
+    rgba[:,:,3]=(rgba[:,:,3]*keep).astype(np.uint8)
+
+    ys,xs=np.where(rgba[:,:,3]>20)
+    if not len(xs):
+        raise RuntimeError("Foreground disappeared during cleanup")
+    x0=max(0,int(xs.min())-4); y0=max(0,int(ys.min())-4)
+    x1=min(mask.shape[1],int(xs.max())+5); y1=min(mask.shape[0],int(ys.max())+5)
     return Image.fromarray(rgba,"RGBA").crop((x0,y0,x1,y1))
+
+def add_outline(im: Image.Image) -> Image.Image:
+    """Add one-pixel dark outer ink so all fighters survive 40–60 px runtime scale."""
+    alpha=im.getchannel("A")
+    dilated=alpha.filter(ImageFilter.MaxFilter(3))
+    a=np.asarray(alpha,dtype=np.int16)
+    d=np.asarray(dilated,dtype=np.int16)
+    ring=np.clip(d-a,0,225).astype(np.uint8)
+    stroke=Image.new("RGBA",im.size,(22,26,29,0))
+    stroke.putalpha(Image.fromarray(ring))
+    return Image.alpha_composite(stroke,im)
 
 def normalize(im: Image.Image, canvas: int=96, content: int=88, bottom: int=91) -> Image.Image:
     a=np.asarray(im)[:,:,3]
@@ -96,6 +122,7 @@ def main():
     for pose,box in zip(poses,cells):
         crop=np.asarray(src.crop(box))
         out=normalize(extract_main(crop))
+        out=add_outline(out)
         out.save(args.output/f"{pose}.webp","WEBP",lossless=True,method=6)
 
     if args.duplicate_hit_as_defeat:
