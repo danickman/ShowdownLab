@@ -37,6 +37,24 @@ if(type==='knight'){
  if(attack)poly(c,[[s*.87,gy-s*.11],[s*1.12,gy-s*.21],[s*.93,gy+s*.015]],'#fff0a0');
  ellipse(c,s*.08,-s*.29,s*.055,s*.032,'#162124');ellipse(c,s*.095,-s*.292,s*.018,s*.015,'#b9f7ff');
  if(level>=3)poly(c,[[s*.12,-s*.5],[s*.29,-s*.72],[s*.39,-s*.44]],a);
+}else if(type==='goose'){
+ const honk=action==='honk',peck=action==='peck',dash=action==='dash'||action==='scamper';
+ if(dash)c.translate(s*.035,0);
+ /* huge wing gesture and longer neck keep the comedy readable */
+ poly(c,[[-s*.34,s*.02],[-s*.64,-s*.14],[-s*.53,s*.16],[-s*.18,s*.25]],'#f7f0dc');
+ facet(c,[[-s*.5,-s*.08],[-s*.27,s*.02],[-s*.22,s*.2]],'#ffffff');
+ poly(c,[[-s*.4,s*.05],[-s*.57,s*.18],[-s*.33,s*.28]],a);
+ const nx=peck?.16:0;
+ ellipse(c,s*(.14+nx),-s*.43,s*.18,s*.15,'#fffdf2');
+ poly(c,[[s*(.22+nx),-s*.48],[s*(.7+nx),-s*.33],[s*(.25+nx),-s*.2]],'#f2a329');
+ poly(c,[[s*(.3+nx),-s*.42],[s*(.61+nx),-s*.33],[s*(.3+nx),-s*.3]],'#ffbf3b');
+ eye(c,s*(.17+nx),-s*.44,s*.035,'#fff');
+ brow(c,s*(.17+nx),-s*.515,s*.14,-.22);
+ /* manic crest and tail fan */
+ poly(c,[[s*.03,-s*.5],[s*.1,-s*.68],[s*.18,-s*.5]],'#f3c64f');
+ poly(c,[[-s*.32,s*.13],[-s*.57,s*.31],[-s*.27,s*.3]],'#fff9e8');
+ if(honk){for(let i=1;i<=4;i++){c.strokeStyle=i%2?'#ffe259':'#fff7bb';c.lineWidth=Math.max(1,s*(.034-i*.004));c.beginPath();c.arc(s*.64,-s*.33,s*(.11*i),-.72,.72);c.stroke()}}
+ if(level>=3)poly(c,[[-s*.08,-s*.52],[s*.02,-s*.74],[s*.14,-s*.51]],'#e7ad2e');
 }
 c.restore()}function rankSilhouette(c,s,team,level,type){if(level<=1)return;const a=TEAM[team];c.save();c.lineJoin='round';c.lineCap='round';const P=(pts,fill)=>poly(c,pts,fill);if(level>=2){c.globalAlpha=.95;if(type==='knight'){P([[-s*.34,-s*.12],[-s*.46,-s*.34],[-s*.22,-s*.28]],a);P([[s*.24,-s*.18],[s*.38,-s*.38],[s*.31,-s*.12]],'#d9e4ea')}else if(type==='sniper'){P([[-s*.29,-s*.34],[-s*.08,-s*.58],[s*.22,-s*.5]],'#344638');line(c,s*.28,-s*.18,s*.82,-s*.29,s*.045,'#d6e5df')}else if(type==='goose'){P([[-s*.34,s*.02],[-s*.56,-s*.16],[-s*.38,s*.21]],a);P([[s*.04,-s*.49],[s*.14,-s*.64],[s*.21,-s*.46]],'#ffc84f')}else if(type==='dragon'){P([[-s*.57,-s*.04],[-s*.84,-s*.58],[-s*.65,s*.04]],'#92212e');P([[s*.06,-s*.05],[s*.68,-s*.62],[s*.56,s*.06]],'#d83a33')}else if(type==='assassin'){P([[-s*.25,-s*.14],[-s*.43,-s*.46],[-s*.04,-s*.3]],'#3a2e59');P([[s*.23,-s*.14],[s*.42,-s*.46],[s*.05,-s*.3]],'#3a2e59')}else if(type==='beetank'){P([[-s*.36,-s*.12],[0,-s*.49],[s*.36,-s*.12]],'#71905e');line(c,s*.02,-s*.34,s*.62,-s*.66,s*.06,'#f2d98a')}else if(type==='mole'){P([[-s*.27,-s*.08],[-s*.49,s*.1],[-s*.21,s*.23]],a);P([[s*.27,-s*.08],[s*.49,s*.1],[s*.21,s*.23]],a)}else if(type==='turtle'){P([[-s*.35,-s*.2],[-s*.12,-s*.49],[s*.02,-s*.28]],a);P([[s*.02,-s*.28],[s*.2,-s*.49],[s*.35,-s*.18]],a)}else if(type==='goblin'){P([[-s*.2,-s*.32],[-s*.5,-s*.52],[-s*.28,-s*.16]],'#8eb461');P([[s*.2,-s*.32],[s*.5,-s*.52],[s*.28,-s*.16]],'#8eb461')}else if(type==='barbarian'){P([[-s*.3,-s*.12],[-s*.49,-s*.34],[-s*.24,-s*.28]],a);P([[s*.3,-s*.12],[s*.49,-s*.34],[s*.24,-s*.28]],a)}}if(level>=3){c.globalAlpha=.98;c.shadowColor='#ffd86b';c.shadowBlur=s*.12;if(type==='knight'){P([[-s*.12,-s*.46],[0,-s*.68],[s*.13,-s*.46]],'#ffd85d');line(c,s*.2,-s*.08,s*.7,-s*.48,s*.05,'#fff0b0')}else if(type==='sniper'){line(c,-s*.33,-s*.02,s*.92,-s*.31,s*.055,'#ffd85a');P([[s*.15,-s*.48],[s*.28,-s*.7],[s*.37,-s*.43]],a)}else if(type==='goose'){P([[-s*.18,-s*.46],[0,-s*.7],[s*.2,-s*.48]],'#ffd85a');P([[-s*.38,s*.11],[-s*.63,s*.31],[-s*.22,s*.28]],'#f4f0d8')}else if(type==='dragon'){for(let i=0;i<4;i++)P([[(-.2+i*.15)*s,-s*.38],[(-.12+i*.15)*s,-s*(.68+i*.025)],[(-.02+i*.15)*s,-s*.35]],'#ffd34f')}else if(type==='assassin'){for(const x of[-.38,.38])P([[s*x,s*.03],[s*(x+(x<0?-.2:.2)),-s*.2],[s*(x+(x<0?-.08:.08)),s*.18]],a)}else if(type==='beetank'){P([[-s*.42,s*.01],[-s*.64,-s*.2],[-s*.5,s*.25]],'#38513b');P([[s*.42,s*.01],[s*.64,-s*.2],[s*.5,s*.25]],'#38513b');P([[s*.03,-s*.36],[s*.74,-s*.76],[s*.52,-s*.3]],'#f2dc92')}else if(type==='mole'){P([[-s*.36,s*.03],[-s*.68,-s*.05],[-s*.43,s*.28]],'#ead8b8');P([[s*.36,s*.03],[s*.68,-s*.05],[s*.43,s*.28]],'#ead8b8')}else if(type==='turtle'){P([[-s*.43,s*.03],[-s*.61,-s*.16],[-s*.49,s*.27]],'#bacb72');P([[s*.29,s*.02],[s*.51,-s*.18],[s*.45,s*.27]],'#bacb72')}else if(type==='goblin'){P([[s*.15,-s*.4],[s*.3,-s*.68],[s*.38,-s*.34]],'#ffd14f');line(c,s*.12,s*.02,s*.76,-s*.18,s*.045,'#fff3cd')}else if(type==='barbarian'){P([[-s*.17,-s*.42],[0,-s*.7],[s*.17,-s*.42]],'#ff6b3c');line(c,s*.15,s*.02,s*.78,-s*.42,s*.065,'#ffd4a8')}}c.restore()}function evoIdentity(c,s,team,level,type){if(level<2)return;const a=TEAM[team],P=(pts,fill)=>poly(c,pts,fill);c.save();c.lineJoin='round';c.lineCap='round';c.globalAlpha=.96;
 /* L2 = one unmistakable silhouette change. L3 = a second, stronger identity change. */
