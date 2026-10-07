@@ -227,3 +227,22 @@ html,body{background:#b8d8e1;color:var(--ink)}
 .ability-callout span{display:block;font-size:13px;font-weight:1000;letter-spacing:.09em}.ability-callout small{display:block;font-size:8px;font-weight:900;letter-spacing:.12em;opacity:.72}
 .ability-callout.power-high{transform-origin:center;box-shadow:0 7px 20px #40555a55,0 0 22px #fff2a766!important}
 @keyframes spellCalloutPop{0%{opacity:0;transform:translate(-50%,-15px) scale(.65)}35%{opacity:1;transform:translate(-50%,0) scale(1.12)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
+
+/* Package 16.5 — mobile spectacle/readability guardrails */
+@media(max-width:410px){
+  .ability-callout{top:calc(var(--safeT) + 74px)!important;min-width:112px!important;padding:6px 10px!important}
+  .ability-callout span{font-size:12px!important}.ability-callout small{font-size:7px!important}
+  .battle-actions{left:5px;right:5px;bottom:calc(var(--safeB) + 5px)!important}
+  .spell-rack{gap:5px;padding:4px!important}
+  .spell-rack .spell{min-width:88px!important;flex-basis:88px!important;height:54px!important}
+  .spell-rack .spell b{font-size:16px!important}.spell-rack .spell span{font-size:10px!important}
+  #battleMenu{width:54px!important;min-width:54px!important;height:54px!important}
+}
+@media(max-height:720px){
+  .battle-hud{height:60px!important}
+  .ability-callout{top:calc(var(--safeT) + 66px)!important}
+  .battle-actions{bottom:calc(var(--safeB) + 4px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .ability-callout,.upgrade-toast,.shop-card,.spell-rack .spell{animation:none!important;transition:none!important}
+}
