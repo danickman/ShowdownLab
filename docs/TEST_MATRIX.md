@@ -328,3 +328,11 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [ ] Dense/10× combat reduces background birds/motes and secondary scene detail before reducing core fighter readability.
 - [ ] Battle HUD and spell rack remain readable/tappable at ~390px portrait width.
 - [ ] Staging changes do not alter simulation damage, targeting, cooldowns, progression, or terminal-state behavior.
+
+### Package 14 Bonus A — progression theatre
+- [ ] Affordable fighter/spell upgrades are visually highlighted without hiding non-affordable options.
+- [ ] Locked, affordable, maxed and intermediate spell-tech states are visually distinct.
+- [ ] Fighter mastery purchase immediately updates pips, exact next cost, wallet balance and affordability state.
+- [ ] Spell unlock/tech purchase immediately updates card state, power text, wallet balance and battle availability.
+- [ ] Successful purchases show a brief non-blocking celebration/toast; no modal or extra tap is required.
+- [ ] Purchase animations do not shift surrounding layout or trap focus on narrow mobile screens.
