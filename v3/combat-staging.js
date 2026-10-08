@@ -11,7 +11,7 @@
       const alive=units.filter(u=>u.hp>0),cap=limits(alive.length,camera.arena),active=cap.x>0;
       const dt=previousTime==null?16:Math.max(0,Math.min(50,time-previousTime));previousTime=time;
       const blend=1-Math.exp(-dt/130),grid=new Map(),cellW=100,cellH=80;
-      const entries=alive.map(u=>{const p=camera.worldToScreen(u.x,u.y),size=camera.unitSize(kind(u.type),alive.length),spec=window.FighterAssets?.authored?.[u.type],height=size*(spec?.scale||1.3)*(spec?.inkBoost||1),anchor=spec?.anchor?.[1]||.948;return {u,p,size,height,anchor}});
+      const entries=alive.map(u=>{const p=camera.worldToScreen(u.x,u.y),size=camera.unitSize(kind(u.type),alive.length),spec=window.FighterAssets?.authored?.[u.type],height=size*(spec?.scale||1.3)*(spec?.inkBoost||1),anchor=spec?.anchor?.[1]||.948;const envelope=window.FighterAssets?.visualEnvelope?.(u.type,u.level)||{left:height/size*.5,right:height/size*.5,above:height/size*anchor,below:height/size*(1-anchor)};return {u,p,size,height,anchor,envelope}});
       // Sorting IDs keeps rank independent of the simulator's array order.
       if(active){entries.sort((a,b)=>a.u.id-b.u.id);for(const e of entries){const key=Math.floor(e.p.x/cellW)+':'+Math.floor(e.p.y/cellH);if(!grid.has(key))grid.set(key,[]);grid.get(key).push(e)}}
       for(const e of entries){
@@ -36,7 +36,7 @@
         const approach=(from,to)=>from+Math.max(-step,Math.min(step,(to-from)*blend));
         let nextX=approach(old.dx,dx),nextY=approach(old.dy,dy);
         // Clamp the complete authored box, rather than only the foot point.
-        const a=camera.arena,left=a.x+e.height*.5,right=a.x+a.w-e.height*.5,top=a.y+e.height*e.anchor,bottom=a.y+a.h-e.height*(1-e.anchor);
+        const a=camera.arena,left=a.x+e.size*e.envelope.left,right=a.x+a.w-e.size*e.envelope.right,top=a.y+e.size*e.envelope.above,bottom=a.y+a.h-e.size*e.envelope.below;
         const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
         nextX=clamp(e.p.x+nextX,left,right)-e.p.x;nextY=clamp(e.p.y+nextY,top,bottom)-e.p.y;
         // Returning to dense/isolated state is smooth, without leaving an

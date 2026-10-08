@@ -17,7 +17,7 @@ def main():
                      "charge" if fighter == "knight" else "signature"):
             if not (ASSETS / fighter / f"{pose}.webp").is_file():
                 errors.append(f"{fighter}/{pose}.webp: missing")
-    for path in sorted(ASSETS.glob("*/*.webp")):
+    for path in sorted(ASSETS.rglob("*.webp")):
         try:
             payload = path.read_bytes()
             assert payload[:4] == b"RIFF" and payload[8:12] == b"WEBP", "invalid WebP header"

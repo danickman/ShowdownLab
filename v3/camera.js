@@ -5,7 +5,7 @@ function create(viewW,viewH,o={}){
   const a={x:pad,y:top+pad,w:Math.max(1,viewW-pad*2),h:Math.max(1,viewH-top-bottom-pad*2)};
   let frame={x:.5,y:.5,zoom:.92},density=0,initialized=false;
   const maxScale={normal:1.36,heavy:1.36,large:1.36,small:1.36,boss:1.36};
-  for(const [type,spec]of Object.entries(window.FighterAssets?.authored||{})){const k=type==='dragon'?'large':['beetank','turtle'].includes(type)?'heavy':['goose','goblin'].includes(type)?'small':'normal';maxScale[k]=Math.max(maxScale[k],(spec.scale||1.36)*(spec.inkBoost||1))}
+  for(const [type,spec]of Object.entries(window.FighterAssets?.authored||{})){const k=type==='dragon'?'large':['beetank','turtle'].includes(type)?'heavy':['goose','goblin'].includes(type)?'small':'normal';const e=window.FighterAssets.visualEnvelope?.(type,5);maxScale[k]=Math.max(maxScale[k],(spec.scale||1.36)*(spec.inkBoost||1),e?Math.max(e.above+e.below,2*e.left,2*e.right):0)}
   const maxSpriteHeight=Math.max(1,Math.min(a.h*.70-12,a.w*.65-16));
   const project=(x,y)=>{const d=Math.max(0,Math.min(1,y)),p=.78+d*.28;return{x:.5+(x-.5)*p,y:.16+d*.76}};
   const kindFor=type=>type==='dragon'?'large':type==='beetank'||type==='turtle'?'heavy':type==='goblin'||type==='goose'?'small':'normal';
@@ -19,9 +19,10 @@ function create(viewW,viewH,o={}){
       const kind=kindFor(u.type),spec=window.FighterAssets?.authored?.[u.type],scale=spec?.scale??1.36,anchor=spec?.anchor?.[1]??.948,ink=spec?.inkBoost??1;
       // Reserve the maximum supported zoom size, so zoom smoothing cannot clip equipment.
       const size=sizeFor(kind,density,1.28),h=size*scale*ink,stage=window.CombatStaging?.limits(density,a)||{x:0,y:0};
-      edge=Math.max(edge,h*.5+8+stage.x);head=Math.max(head,h*anchor+10+stage.y);foot=Math.max(foot,h*(1-anchor)+8+stage.y,size*.14+4);
+      const e=window.FighterAssets?.visualEnvelope?.(u.type,u.level)||{left:scale*ink*.5,right:scale*ink*.5,above:scale*ink*anchor,below:scale*ink*(1-anchor)};
+      edge=Math.max(edge,size*Math.max(e.left,e.right)+8+stage.x);head=Math.max(head,size*e.above+10+stage.y);foot=Math.max(foot,size*e.below+8+stage.y,size*.14+4);
     }
-    edge=Math.min(edge,a.w*.38);head=Math.min(head,a.h*.72);foot=Math.min(foot,a.h*.12);
+    edge=Math.min(edge,a.w*.45);head=Math.min(head,a.h*.72);foot=Math.min(foot,a.h*.20);
     const spanX=Math.max(.12,maxX-minX),spanY=Math.max(.12,maxY-minY);
     const fit=Math.min((1-edge*2/a.w)/spanX,(1-(head+foot)/a.h)/spanY);
     const crowd=density>55?.80:density>35?.86:density>20?.92:1,target=Math.min(1.28,Math.max(.25,fit)*crowd);
