@@ -18,8 +18,8 @@ function create(viewW,viewH,o={}){
       const p=project(u.x,u.y);minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);
       const kind=kindFor(u.type),spec=window.FighterAssets?.authored?.[u.type],scale=spec?.scale??1.36,anchor=spec?.anchor?.[1]??.948,ink=spec?.inkBoost??1;
       // Reserve the maximum supported zoom size, so zoom smoothing cannot clip equipment.
-      const size=sizeFor(kind,density,1.28),h=size*scale*ink,stagePad=density<=44&&window.CombatStaging?14:0;
-      edge=Math.max(edge,h*.5+8+stagePad);head=Math.max(head,h*anchor+10+stagePad*.5);foot=Math.max(foot,h*(1-anchor)+8+stagePad*.5,size*.14+4);
+      const size=sizeFor(kind,density,1.28),h=size*scale*ink,stage=window.CombatStaging?.limits(density,a)||{x:0,y:0};
+      edge=Math.max(edge,h*.5+8+stage.x);head=Math.max(head,h*anchor+10+stage.y);foot=Math.max(foot,h*(1-anchor)+8+stage.y,size*.14+4);
     }
     edge=Math.min(edge,a.w*.38);head=Math.min(head,a.h*.72);foot=Math.min(foot,a.h*.12);
     const spanX=Math.max(.12,maxX-minX),spanY=Math.max(.12,maxY-minY);

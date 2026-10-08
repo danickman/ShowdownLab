@@ -511,3 +511,8 @@ See docs/CANONICAL_MENU_RECOVERY.md for provenance, reproduction and QA gates.
 See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.
 
 Full-source audit additionally repairs 19 nominal-grid cuts across Goblin, Mole, Beetank, Goose and Barbarian. Reproduce with `tools/repair-source-boundaries.py`; provenance in `tools/art-sources/boundary-repairs.json`. Native repair contact sheet reviewed; decodes/all-arena actions/seeded regressions pass.
+
+
+## Phone panorama / floor / spacing correction
+
+See [LANDMARKS_FLOOR_SPACING.md](LANDMARKS_FLOOR_SPACING.md): full-width side landmarks with proportional architecture, stronger arena-specific cached floor identity, and body-aware ordinary melee staging up to 60 units with larger viewport-bounded caps. Camera/cues/ground impacts share positions; combat core/outcomes/evolution assets are unchanged. Native/automated checks pass; phone visual/contact/performance remains OPEN. No main merge or production deployment. This supersedes the earlier 14px/6px and 44-unit staging limits.

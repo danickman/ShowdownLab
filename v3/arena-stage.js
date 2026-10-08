@@ -34,11 +34,38 @@
         const left=tile*.25+offset,right=left+.25;
         ctx.save();ctx.beginPath();ctx.rect(rail,0,w-rail*2,h);ctx.clip();
         ctx.beginPath();ctx.moveTo(project(left,far),far*h);ctx.lineTo(project(right,far),far*h);ctx.lineTo(project(right,near),near*h);ctx.lineTo(project(left,near),near*h);ctx.closePath();
-        ctx.globalAlpha=(row+tile)%3===0?.055:.025;ctx.fillStyle=(row+tile)%2?'#fff9df':'#8e805d';ctx.fill();
-        ctx.globalAlpha=.18;ctx.lineWidth=1;ctx.strokeStyle=theme.joint;ctx.stroke();
+        ctx.globalAlpha=(row+tile)%3===0?.12:.055;ctx.fillStyle=(row+tile)%2?'#fff9df':'#8e805d';ctx.fill();
+        ctx.globalAlpha=.26;ctx.lineWidth=1;ctx.strokeStyle=theme.joint;ctx.stroke();
         ctx.globalAlpha=.28;ctx.strokeStyle='#fff8de';ctx.beginPath();ctx.moveTo(project(left,near),near*h-1);ctx.lineTo(project(right,near),near*h-1);ctx.stroke();ctx.restore();
       }
     }
+    // Large architectural/material shapes establish a PLACE before small wear.
+    // The combat centre stays low contrast; these are cached with the floor.
+    ctx.save();ctx.beginPath();ctx.rect(rail+5,4,w-rail*2-10,h-8);ctx.clip();
+    const garden=theme.dressing==='garden',battlefield=['frontier','siege'].includes(theme.dressing);
+    if(!battlefield){
+      // An inset courtyard border follows the same floor perspective.
+      ctx.fillStyle=garden?'#81935a':'#988b64';ctx.globalAlpha=garden?.22:.15;
+      for(const side of [0,1]){const a=side?.90:.07,b=side?.93:.10;ctx.beginPath();ctx.moveTo(project(a,0),0);ctx.lineTo(project(b,0),0);ctx.lineTo(project(b,1),h);ctx.lineTo(project(a,1),h);ctx.closePath();ctx.fill()}
+      // A few substantial corner slabs/grass pockets, not uniform tiny dots.
+      for(let i=0;i<8;i++){const side=i%2,q=.17+Math.floor(i/2)*.22,x=project(side?.94:.06,q),y=q*h,r=w*(.025+q*.019);
+        ctx.globalAlpha=garden?.33:.17;ctx.fillStyle=garden?'#718550':'#9c8f6d';ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x+r*.8,y-r*.35);ctx.lineTo(x+r,y+r*.50);ctx.lineTo(x-r*.7,y+r*.45);ctx.closePath();ctx.fill();
+        if(garden){ctx.globalAlpha=.65;ctx.strokeStyle='#849950';ctx.lineWidth=1;for(let j=0;j<4;j++){ctx.beginPath();ctx.moveTo(x+(j-1.5)*3,y);ctx.lineTo(x+(j-1.5)*4,y-r*.46);ctx.stroke()}}
+      }
+      if(!garden){ctx.globalAlpha=.12;ctx.strokeStyle='#927a41';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(w*.5,h*.88,w*.22,h*.045,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(w*.5-w*.13,h*.88);ctx.lineTo(w*.5+w*.13,h*.88);ctx.moveTo(w*.5,h*.85);ctx.lineTo(w*.5,h*.91);ctx.stroke()}
+    }else{
+      // Broken paving transitions into broad dusty tracks and angular rubble.
+      const ruined=theme.dressing==='siege';
+      ctx.globalAlpha=ruined?.19:.14;ctx.fillStyle='#b39062';
+      for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(w*.5+side*w*.075,0);ctx.lineTo(w*.5+side*w*.13,0);ctx.lineTo(w*.5+side*w*.36,h);ctx.lineTo(w*.5+side*w*.23,h);ctx.closePath();ctx.fill()}
+      for(let i=0;i<(ruined?20:12);i++){const side=i%2,q=.06+Math.floor(i/2)*.086,x=project(side?.91:.09,q),y=q*h,r=w*(.017+q*.025);
+        ctx.globalAlpha=ruined?.48:.32;ctx.fillStyle='#6e604b';ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x+r*.85,y-r*.38);ctx.lineTo(x+r*1.4,y+r*.50);ctx.lineTo(x-r*.6,y+r*.65);ctx.closePath();ctx.fill();
+        ctx.globalAlpha=.72;ctx.fillStyle=theme.stone;ctx.beginPath();ctx.moveTo(x-r*.8,y-r*.13);ctx.lineTo(x+r*.55,y-r*.45);ctx.lineTo(x+r,y+r*.15);ctx.lineTo(x-r*.4,y+r*.31);ctx.closePath();ctx.fill();
+        ctx.strokeStyle='#f7e1ba';ctx.globalAlpha=.46;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-r*.8,y-r*.13);ctx.lineTo(x+r*.55,y-r*.45);ctx.stroke();
+      }
+      if(ruined){ctx.globalAlpha=.22;ctx.strokeStyle='#645747';ctx.lineWidth=1.7;for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(w*.5+side*w*.34,h*.28);ctx.lineTo(w*.5+side*w*.21,h*.41);ctx.lineTo(w*.5+side*w*.27,h*.52);ctx.lineTo(w*.5+side*w*.13,h*.65);ctx.stroke()}}
+    }
+    ctx.restore();
     // Material detail is painted once into the bounded cache, never per fighter.
     // Quiet weathering across the floor; heavier earth/scars in war arenas.
     const war=['frontier','siege'].includes(theme.dressing),siege=theme.dressing==='siege';

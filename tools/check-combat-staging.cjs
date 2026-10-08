@@ -9,10 +9,10 @@ for(const [w,h]of [[320,568],[390,844],[430,932],[844,390],[1024,768]])for(const
  const before=JSON.stringify(units),camera=r.ShowdownCamera.create(w,h),stage=r.CombatStaging.create();
  for(let frame=0;frame<100;frame++){camera.focus(units);stage.prepare(units,camera,frame*16);if(frame!==0&&frame!==99)continue;
   for(const u of units){const p=stage.point(u,camera),o=stage.offset(u.id),spec=r.FighterAssets.authored[u.type],size=camera.unitSize(kind(u.type),count),height=size*spec.scale*(spec.inkBoost||1),a=camera.arena,anchor=spec.anchor[1];
-   assert(Math.abs(o.dx)<=14.00001&&Math.abs(o.dy)<=6.00001,'bounded offset');
+   const caps=r.CombatStaging.limits(Math.max(2,Math.min(60,count)),a);assert(Math.abs(o.dx)<=caps.x+.00001&&Math.abs(o.dy)<=caps.y+.00001,'bounded offset');
    assert(p.x-height*.5>=a.x-.01&&p.x+height*.5<=a.x+a.w+.01,`${w}/${h}/${count}/${layout}/${u.type}: horizontal box`);
    assert(p.y-height*anchor>=a.y-.01&&p.y+height*(1-anchor)<=a.y+a.h+.01,`${w}/${h}/${count}/${layout}/${u.type}: vertical box`);boxes++;
-   if(count>44)assert.equal(o.dx,0,'dense fight has no staging spread');
+   if(count>60)assert.equal(o.dx,0,'dense fight has no staging spread');
   }
  }
  assert.equal(JSON.stringify(units),before,'simulation objects unchanged');
@@ -20,7 +20,9 @@ for(const [w,h]of [[320,568],[390,844],[430,932],[844,390],[1024,768]])for(const
 const camera=r.ShowdownCamera.create(390,844),units=[1,2,3,4].map(id=>({id,type:'knight',team:id<3?'blue':'red',hp:100,x:.5,y:.5}));camera.focus(units);
 const stage=r.CombatStaging.create(),reverse=r.CombatStaging.create();for(let frame=0;frame<80;frame++){stage.prepare(units,camera,frame*16);reverse.prepare([...units].reverse(),camera,frame*16)}
 for(const u of units)assert.deepEqual(stage.offset(u.id),reverse.offset(u.id),'stable across array order');assert(stage.offset(1).dx<stage.offset(2).dx,'same-team silhouettes spread');
-const old=stage.offset(1);stage.prepare([units[0]],camera,1296);assert(Math.abs(stage.offset(1).dx)<Math.abs(old.dx),'smooth return when isolated');assert(Math.abs(stage.offset(1).dx-old.dx)<3,'no abrupt settling');
+const span=Math.max(...units.map(u=>stage.point(u,camera).x))-Math.min(...units.map(u=>stage.point(u,camera).x));
+assert(span>50,'coincident ordinary fighters spread wider than the previous 28px envelope');
+const old=stage.offset(1);stage.prepare([units[0]],camera,1296);assert(Math.abs(stage.offset(1).dx)<Math.abs(old.dx),'smooth return when isolated');assert(Math.abs(stage.offset(1).dx-old.dx)<=32*.18+.001,'settling obeys pixel-per-ms limit');
 stage.prepare([],camera,1500);assert.notEqual(stage.offset(1).dx,0,'fallen offset retained');stage.prepare([],camera,2400);assert.equal(stage.offset(1).dx,0,'fallen offset expires');stage.reset();assert.equal(stage.offset(2).dx,0,'round reset');
 const src=fs.readFileSync(path.join(root,'v3/v3.js'),'utf8');vm.runInContext(src.slice(src.indexOf('function spritePoint('),src.indexOf('function effectScale(')),r);
 r.cam=camera;r.staging=reverse;r.state={units};r.renderSnapshot=()=>({live:units,byId:new Map(units.map(u=>[u.id,u]))});
