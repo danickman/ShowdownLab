@@ -1,0 +1,306 @@
+[
+  {
+    "fighter": "goblin",
+    "pose": "idle",
+    "source_bounds": [
+      57,
+      39,
+      380,
+      357
+    ],
+    "alpha_bounds": [
+      3,
+      4,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "goblin",
+    "pose": "move",
+    "source_bounds": [
+      390,
+      58,
+      726,
+      347
+    ],
+    "alpha_bounds": [
+      3,
+      14,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "goblin",
+    "pose": "attack",
+    "source_bounds": [
+      690,
+      30,
+      1109,
+      347
+    ],
+    "alpha_bounds": [
+      3,
+      23,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "goblin",
+    "pose": "signature",
+    "source_bounds": [
+      39,
+      424,
+      509,
+      711
+    ],
+    "alpha_bounds": [
+      3,
+      36,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "mole",
+    "pose": "idle",
+    "source_bounds": [
+      23,
+      45,
+      349,
+      336
+    ],
+    "alpha_bounds": [
+      3,
+      11,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "mole",
+    "pose": "move",
+    "source_bounds": [
+      361,
+      49,
+      697,
+      340
+    ],
+    "alpha_bounds": [
+      3,
+      14,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "mole",
+    "pose": "attack",
+    "source_bounds": [
+      720,
+      49,
+      1082,
+      349
+    ],
+    "alpha_bounds": [
+      3,
+      17,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "mole",
+    "pose": "signature",
+    "source_bounds": [
+      61,
+      434,
+      468,
+      736
+    ],
+    "alpha_bounds": [
+      3,
+      25,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "mole",
+    "pose": "hit",
+    "source_bounds": [
+      498,
+      388,
+      890,
+      736
+    ],
+    "alpha_bounds": [
+      3,
+      12,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "beetank",
+    "pose": "idle",
+    "source_bounds": [
+      36,
+      83,
+      356,
+      356
+    ],
+    "alpha_bounds": [
+      3,
+      15,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "beetank",
+    "pose": "attack",
+    "source_bounds": [
+      729,
+      22,
+      1040,
+      359
+    ],
+    "alpha_bounds": [
+      6,
+      2,
+      89,
+      92
+    ]
+  },
+  {
+    "fighter": "beetank",
+    "pose": "signature",
+    "source_bounds": [
+      100,
+      438,
+      508,
+      711
+    ],
+    "alpha_bounds": [
+      3,
+      31,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "beetank",
+    "pose": "hit",
+    "source_bounds": [
+      565,
+      361,
+      884,
+      712
+    ],
+    "alpha_bounds": [
+      7,
+      2,
+      89,
+      92
+    ]
+  },
+  {
+    "fighter": "goose",
+    "pose": "move",
+    "source_bounds": [
+      366,
+      75,
+      689,
+      334
+    ],
+    "alpha_bounds": [
+      3,
+      19,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "goose",
+    "pose": "attack",
+    "source_bounds": [
+      682,
+      150,
+      1028,
+      355
+    ],
+    "alpha_bounds": [
+      3,
+      38,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "goose",
+    "pose": "guard",
+    "source_bounds": [
+      979,
+      28,
+      1354,
+      356
+    ],
+    "alpha_bounds": [
+      3,
+      13,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "goose",
+    "pose": "defeat",
+    "source_bounds": [
+      871,
+      574,
+      1342,
+      726
+    ],
+    "alpha_bounds": [
+      3,
+      62,
+      93,
+      92
+    ]
+  },
+  {
+    "fighter": "barbarian",
+    "pose": "move",
+    "source_bounds": [
+      831,
+      76,
+      1400,
+      731
+    ],
+    "alpha_bounds": [
+      9,
+      2,
+      87,
+      92
+    ]
+  },
+  {
+    "fighter": "barbarian",
+    "pose": "attack",
+    "source_bounds": [
+      1462,
+      21,
+      2109,
+      744
+    ],
+    "alpha_bounds": [
+      7,
+      2,
+      88,
+      92
+    ]
+  }
+]

@@ -9,7 +9,7 @@ Status: **RC candidate**. Adds a 4-second Quick Showdown intermission with REINF
 Status: **RC candidate**. Scope includes power-scaled spell spectacle, Upgrade Bay economy clarity, full 10-fighter redraw/polish, material-aware combat impacts, battle staging/performance refinement, progression theatre, fighter-specific battle personality, and reward-key reload hardening. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual phone visual/tap QA remains post-deploy.
 # Showdown Lab — Execution Roadmap & Milestone Tracker
 
-Status: **ACTIVE PLAN — Package 13 RC candidate**
+Status: **ACTIVE PLAN — Package 16 production; authored 10-fighter Base polish and professional presentation pass in progress**
 Protected combat baseline: **RC4 rich combat core**
 
 This is the operating plan for future work. Its purpose is to replace free-form iteration with bounded, testable milestones.
@@ -59,9 +59,9 @@ Unfinished/risky:
 - Lab rematch lives behavior needs regression
 - cooldown UI on quick rematches needs regression
 - Boss Hunt is not yet a true boss ruleset
-- only 10/26 primary units implemented
+- implemented roster intentionally frozen at the current 10 while authored Base/Evolved/Ultimate art and presentation are completed
 - full L5/L10 evolution system not implemented
-- external authored art pipeline not selected
+- hybrid authored-key-pose + procedural-motion art path selected for the current 10, pending final roster-wide phone QA
 - Daily Challenge, battle codes, saved armies, persistence/settings and full feature parity are incomplete
 - accessibility, offline/PWA, device hardening and profiling are incomplete
 
@@ -101,17 +101,29 @@ Fixed seeds; assert termination, no immortal units, single terminal emission and
 Score the first 10 on silhouette, personality, small-scale clarity, action readability, evolution readability and perceived production quality.
 
 ### Turn 2.2 — External art spike
-Generate **one original Showdown Lab fighter only** (Knight or Goose), transparent background, consistent camera angle, readable at 40–60 px. Integrate through asset-renderer with geometry fallback.
+Status: **PASSED ON PHONE — SCALING TO CURRENT 10**
+
+Knight is the selected spike fighter. Seven individually generated authored Base poses are integrated through `asset-renderer.js` with the procedural renderer preserved as fallback. A runtime Authored/Procedural toggle supports direct comparison. Blue Knight is authored during the spike; Red Knight remains procedural for same-fight A/B comparison.
+
+Generation method is now canonical-reference + pose-reference + one pose per generation. Multi-pose sheets were rejected because equipment and body design drifted. Real-phone battle-scale QA passed for the authored Knight path. Base authored reference / production art is now approved for all 10 implemented fighters, and runtime asset preparation is underway on the isolated art branch.
 
 ### Turn 2.3 — Animation strategy spike
-Compare:
-A. authored body + procedural motion/FX
-B. 3–5 authored pose frames
-C. sprite sheet
-D. geometry-only
+Status: **IN PROGRESS**
+
+Current leading pattern:
+A. authored key poses + procedural motion/FX
+
+The Knight spike currently uses seven key poses while code continues to own translation, facing, battle movement, camera response, particles and other presentation. Do not expand to high-frame-count sprite animation unless phone testing shows pose switching is too discontinuous.
+
+Still compare against:
+B. fewer authored poses with stronger procedural tween/motion
+C. sprite-sheet animation only if clearly justified
+D. geometry-only fallback
 
 ### Turn 2.4 — Art-path decision
-Choose Geometry-first, Hybrid or Authored Sprites before scaling art production to 26.
+Status: **HYBRID SELECTED FOR CURRENT 10**
+
+Use authored key poses plus procedural movement/FX/fallback. Do not scale to 26. Finish Base runtime integration for the current 10, then prioritize Evolved/Ultimate forms and scene/background art.
 
 # M3 — Character progression system
 
@@ -137,9 +149,11 @@ Reveal ceremony, pre-commit preview, results history and roster next-form displa
 ### Turn 3.5 — Scale to first 10
 Only after the system proves stable.
 
-# M4 — Full 26-unit roster
+# M4 — Full 26-unit roster — DEPRIORITIZED
 
 Remaining 16: Snail, Engineer, TNT, Merlinor, Archer, Spartan, Bloodvine, Whelp, Sixshoot, Parasite, Cowboy, Agent, Villain, Totem, Spider, Captain.
+
+**Current decision:** do not expand beyond the implemented 10 until Base authored art, L5–9 Evolved forms, L10 Ultimate forms, and higher-impact arena/background/progression art are established. This milestone remains a future option, not current execution scope.
 
 ### Turn 4.1 — Artillery wave
 Snail, Merlinor, Bloodvine.
@@ -238,9 +252,9 @@ No unresolved P0/P1/P2.
 |---|---|
 | M0 Visuals 11 validation | SUBSTANTIALLY COMPLETE · RC PLAYTEST NEXT |
 | M1 Stabilize v3 shell | PARTIAL · LIFECYCLE/HUD/LAB ADVANCED |
-| M2 Long-term art path | PLANNED |
-| M3 Character progression | PLANNED |
-| M4 Full 26-unit roster | 10/26 BASE UNITS COMPLETE |
+| M2 Long-term art path | AUTHORED HYBRID SELECTED · SNIPER / SHARED FRAMING IMPLEMENTED · PHONE QA NEXT |
+| M3 Character progression | PLANNING · BASE / EVOLVED / ULTIMATE PIPELINE NEXT |
+| M4 Full 26-unit roster | DEPRIORITIZED · CURRENT ROSTER FROZEN AT 10 |
 | M5 Feature/capability parity | PARTIAL · PERSISTENT PARTS/MASTERY/SPELL TECH ADDED |
 | M6 Arena/content expansion | PARTIAL |
 | M7 Community-ready architecture | NOT STARTED |
@@ -275,3 +289,110 @@ Expand M5 capability-parity work with these future executable turns:
 - **Turn 5.12 — Lab AI transparency:** show candidate draft scores and why the bot selected a card
 
 After M4 reaches 26/26, treat extra researched unit identities as an **expansion backlog**, not baseline scope. Add only when they introduce a genuinely new behavior family.
+
+## 2026-10-07 execution reprioritization
+
+The current quality bottleneck is presentation, not roster breadth.
+
+Near-term execution order:
+1. finish the Sniper idle/AIM replacement using the already-approved source images
+2. eliminate remaining Fighter Guide / match-start / results framing and crop defects
+3. perform a coherent battle-theatre polish pass: staging, spacing, readable team ownership, attack pose visibility, arena depth, skybox quality and effects discipline
+4. profile phone performance and preserve density-tier degradation before adding expensive rendering
+5. define and prove the evolution-art pipeline on one fighter
+6. only then scale Evolved / Ultimate forms across the current 10
+
+The remaining 16 planned fighters stay out of active scope.
+
+### Evolution implementation direction
+
+Preferred model to validate:
+- Base authored form
+- Evolved authored form
+- Ultimate authored form
+
+Intermediate progression inside a form should use restrained procedural prestige treatment rather than a completely new sprite pack for every level. Candidate treatments include gold/metal accents, aura/rim intensity, equipment glow, crest/mark overlays and stronger signature FX. Evolved and Ultimate must still have genuinely distinct canonical silhouettes.
+
+The image-generation pipeline should be optimized from the Base process. Test:
+one approved evolution canonical → one multi-pose sheet → extract good cells → regenerate only failed poses individually.
+
+Do not mass-generate evolution art until one fighter proves this faster pipeline at phone battle scale.
+
+### Release batching
+
+The authored-art branch should remain isolated until the Sniper and current presentation fixes are ready.
+
+After branch QA:
+- freeze the approved head
+- merge to `main`
+- perform one deliberate production deployment for the release
+
+Do not spend production deployments on tiny intermediate asset swaps.
+
+
+### Base polish checkpoint — 2026-10-07
+
+Sniper standing/AIM integration and shared UI contain framing are implemented on the art branch. Corrupt v2 payloads were replaced from existing supplied sources; no new art generated. Static/asset/Canvas/seeded regression passed. Browser/device QA is open, so the branch is not release-approved.
+
+Next: one required phone branch-preview pass, confirmed-defect fixes only, then frozen-head merge and production release. Guide high-resolution canonical recovery for the other nine fighters remains separate presentation debt.
+
+
+### Presentation Turn 1 — sunny composition and grounding
+
+Implemented on the art integration branch. User direction: daylight/sunny, discourage neon and dark themes. Sunlit Lab replaces the Neon Lab display name. Foot-aligned rings/shadows, full-sprite camera bounds and a quiet bright floor replace the layered dark/coloured overlay stack. Combat core, simulation adapter, progression, targeting and density-tier combat FX remain unchanged.
+
+Automatic asset/presentation/camera/seeded checks pass; browser/device visual QA remains open.
+
+Next turns before evolutions: (2) one sunny authored Sunlit Lab environment pilot, (3) combat hierarchy/callout/spacing refinement, (4) arena cohesion and phone performance. Do not mass-generate scenes before the pilot passes.
+
+
+### Presentation Turn 2 — sunny authored Sunlit Lab pilot
+
+One authored skyline now replaces Sunlit Lab distant scenery only. Floor scorch residue, impact cracks, dirt/dust and flying debris are explicitly preserved with their existing caps and expiration. Other arenas, fighters and combat logic are unchanged. See [ARENA_ART_PILOT.md](ARENA_ART_PILOT.md) for the asset, final generation prompt, checks and phone acceptance. Automated/native renderer checks pass; browser/iPhone visual and performance QA remains open. Branch checkpoint only; no main merge or production release.
+
+
+### Presentation Turn 3 — physical effects and sunny academy UI
+
+Branch implementation adds branching ground fractures, dirt/chips, daylight edges and Dragon char; improves local spell impact hierarchy/crowd budgets and places comic callouts above silhouettes. A shared sunny cream/brass/navy presentation stylesheet now styles menus and battle controls. No new images, combat/progression changes or production release. See [THEATRE_UI_PASS.md](THEATRE_UI_PASS.md) for exact files, evidence, phone acceptance and remaining overlap/performance work. Automated/native checks pass; browser/iPhone layout, touch, visual and performance QA remain open.
+
+
+### Presentation Turn 4 — courtyard floor / crowd rendering
+
+Cached perspective paving connects the floor to the sunny skyline; live physical damage remains separate. Stronger foot-aligned team rings, limited dense-fight health bars, gradual sprite-size reduction above 60 living units and a snapshot target index reduce presentation clutter/work without changing combat positions or targeting. See [FLOOR_CROWD_PASS.md](FLOOR_CROWD_PASS.md) for exact files, cache budget, native comparison and phone acceptance. Tests pass; real phone performance and visual/tap QA remain open. No new art/evolutions, main merge or production release. Address phone findings next before expanding environment/evolution art.
+
+
+### Turn 3/4 release-gate follow-through
+
+Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one prioritized comic callout now refine hierarchy. All four arenas share one authored sunny skyline and distinct cached academy/forge/observatory/garden dressing. Ordinary/dense native checks pass; spacing was evaluated without moving combat positions. Dense overlap remains a phone assessment item. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for exact implementation/evidence and the explicitly OPEN phone visual, touch and acceptable-performance gates. Turn labels are not release approval. No main merge/production deployment or evolution work.
+
+
+### Presentation Turn 6 — bounded melee staging
+
+Shared smooth presentation offsets now modestly open ordinary melee without changing simulation coordinates or targeting. Fighters/cues/rings and emitted physical impacts share staged anchors. Spread is capped and disabled above 44 living fighters; landscape size limits protect full sprite bounds. Automated/native evidence passes; real-phone visual, touch and ordinary/extreme performance gates remain OPEN. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md). Continue from confirmed phone findings before evolutions or the deliberate main/production release.
+
+
+### Presentation Turn 7 — living daylight battlefields and phone corrections
+
+Shorter opening wash, content-sized Guide cards, stronger cached menu ink and repaired Turtle running/full-resolution presentation respond to phone feedback. Two new authored daylight locations progress from frontier fortifications to siege ruins; bounded cloud/bird/smoke/perimeter motion makes the stage feel alive without filling combat space. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md). Eight menu fighters still have small-source quality debt. Verify these changes on the branch phone preview, then use the existing approved-head release contract before a one-fighter evolution spike.
+
+
+## Canonical menu recovery — 2026-10-08
+
+Eight remaining menu canonicals recovered from supplied originals at 512px;
+Sniper/Turtle approved presentations retained. Battle poses untouched.
+See docs/CANONICAL_MENU_RECOVERY.md for provenance, reproduction and QA gates.
+
+
+## Skyline / cropping correction and Knight evolution pilot
+
+See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.
+
+
+## Phone panorama / floor / spacing correction
+
+See [LANDMARKS_FLOOR_SPACING.md](LANDMARKS_FLOOR_SPACING.md): full-width side landmarks with proportional architecture, stronger arena-specific cached floor identity, and body-aware ordinary melee staging up to 60 units with larger viewport-bounded caps. Camera/cues/ground impacts share positions; combat core/outcomes/evolution assets are unchanged. Native/automated checks pass; phone visual/contact/performance remains OPEN. No main merge or production deployment. This supersedes the earlier 14px/6px and 44-unit staging limits.
+
+
+## Knight Evolved branch registration — 2026-10-08
+
+See [KNIGHT_EVOLUTION_REGISTRATION.md](KNIGHT_EVOLUTION_REGISTRATION.md). Seven shared-scale poses now active for Knight L5+, with registered equipment bounds and L10 Evolved fallback. Lab permits L1–10. Automated/native checks pass; phone release gates remain OPEN. This supersedes the prior inactive-spike status. No main merge or production release.

@@ -1,0 +1,27 @@
+{
+  "milestone": "Presentation Turn 7 — phone feedback, living daylight arenas and Turtle repair",
+  "base_commit": "a9a9d72f1ddc8b29baf43abec761d82cb5c27f8b",
+  "generation": "Built-in image_gen; two new environment assets only. No fighter generation.",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: wide 2:1 fantasy mobile battle game distant arena backdrop. Generate a polished hand-painted sunny fortified frontier scene, matching an illustrated ink-outlined fantasy roster. Clear blue sky with soft white clouds fills upper 55 percent. Lower portion shows sunlit ochre limestone bastions, crenellated watchtowers, cloth standards and a fortified mountain pass with hazy distant ridges, weathered walls and military encampments beyond. Medium-distance fortifications flank left and right; centre retains open sky and a distant road through hills. Bottom edge is a low horizontal sandstone parapet across the entire width, with no foreground ground plane: runtime game floor begins below this image. This is a place preparing for battle, substantial military architecture, worn stone, subtle evidence of old bombardment, readable silhouettes. Bright daylight from upper left; warm sand/cream materials, restrained red and blue cloth, atmospheric perspective. Professional painterly game environment with clear edge contrast, cohesive with inked cartoon fighters, not photographic. No characters, text, UI, weapons close to camera, neon, night, dark overall treatment, oversized smoke hiding the landscape. The game will crop the wide image into a centred portrait window: primary landmarks must remain legible in central half.",
+    "Use case: stylized-concept. Asset type: wide 2:1 fantasy mobile battle game distant arena backdrop. Generate a polished hand-painted sunny battle-scarred siege landscape, matching an illustrated ink-outlined fantasy roster. Clear blue sky with wind-stretched white clouds fills upper 55 percent. Below, a breached pale stone fortress on a dry rust-ochre plateau, broken battlements, jagged ruined towers, abandoned siege scaffolding and battered cloth standards frame a distant valley. A few faint thin grey smoke columns rise from distant ruins without obscuring the bright blue sky. Warm daylight from upper left, sunlit stone edges, bright dusty landscape with distant hazy mountains. Centre contains unmistakable ruined fortress silhouettes and atmospheric depth; left and right reveal damaged fortified walls. Bottom edge is a low battered horizontal stone parapet across the entire width, no foreground floor plane: runtime arena floor begins below. More warlike and weathered than a clean academy or fortified frontier; still inviting readable fantasy game art, never grimdark. Professional painterly environment with clear ink-like architectural edge contrast, cohesive with cartoon fighters, not photorealistic. No characters, text, UI, neon, night, large foreground equipment or opaque smoke. Image will be centre-cropped to a portrait window: place strong damaged skyline landmarks inside central half."
+  ],
+  "assets": [
+    {
+      "path": "v3/assets/arenas/frontier/skyline.webp",
+      "size": [
+        1774,
+        887
+      ],
+      "bytes": 303588
+    },
+    {
+      "path": "v3/assets/arenas/siege/skyline.webp",
+      "size": [
+        1774,
+        887
+      ],
+      "bytes": 283186
+    }
+  ]
+}

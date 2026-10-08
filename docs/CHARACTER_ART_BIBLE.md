@@ -17,6 +17,16 @@ Original **comic-book battle laboratory**:
 
 The renderer may be geometry, hybrid or authored. The identity contract stays the same.
 
+## Daylight environment direction — 2026-10-07
+
+User-approved direction: **sunny daylight, bright outdoor arenas, warm material colour and clear atmospheric depth**. Discourage neon and dark scene themes. Team Blue/Red remain identification accents; spell energy is brief action feedback, not the environment palette.
+
+Use a consistent upper-left daylight source, grounded contact shadows, restrained stone/earth/grass surfaces and quiet combat space. Avoid global dark vignettes, glowing skyline geometry, dense halftone wallpaper, overlapping floor washes and decorative shapes under fighters.
+
+The first arena is now **Sunlit Lab**, replacing the user-facing Neon Lab name. Moon Vault retains its current name but uses pale stone in daylight; it is not a night scene.
+
+Next authored-art pilot: one sunny environment-only Sunlit Lab backdrop, followed by in-engine review. Do not bake fighters, HUD, team colours, rings, shadows or combat effects into environment art. Approve one pilot before scaling.
+
 ## Evolution contract
 
 **L1–4 Base:** same identity, refined equipment, stronger accents, posture and modest scale.
@@ -28,10 +38,12 @@ The renderer may be geometry, hybrid or authored. The identity contract stays th
 ## Current 10
 
 ### Knight
-Core read: heroic armored vanguard, shield first and sword second.
-- Base: broad shoulders, large shield, visor, compact sword, forward brace.
-- Evolved: taller angular shield, stronger pauldrons, longer energized sword, wedge-like charge.
-- Ultimate: fortress knight; body-height shield, crown/crest helm, strong geometric charge wake. Reads as a mobile wall.
+Core read: heroic armored vanguard, shield first and spear second.
+- Base canonical v1: broad shoulders, compact angular shield, T-shaped visor, long spear, blue tabard, forward brace.
+- Evolved: taller angular shield, stronger pauldrons, longer energized spear, more aggressive wedge-like charge.
+- Ultimate: fortress knight; body-height shield, crown/crest helm, dominant spear architecture and strong geometric charge wake. Reads as a mobile wall.
+
+Authored-pipeline rule: the canonical master is the design source of truth. Generate large pose changes one image at a time using the canonical Knight as the design/equipment reference and a separate pose reference when needed. Do not allow shield shape, spear count, armor proportions or tabard design to drift between poses.
 
 ### Sniper
 Core read: lean precision shooter dominated by rifle length.
@@ -114,10 +126,12 @@ Core read: broad muscular axe bruiser, visually opposite Dragon.
 Pros: code-native, no asset pipeline, consistent scaling/team/evolution, easy procedural animation.
 Cons: lower authored-detail ceiling.
 
-### B — Hybrid — preferred experiment
-Authored transparent body/portrait + procedural team accent, recoil, hit/death, motion lines, ability FX and evolution overlays.
+### B — Hybrid — current leading path
+Authored fighter key poses + procedural movement, team cues, recoil, camera response, hit flash, motion lines, ability FX and evolution overlays.
 Pros: quality jump while preserving renderer investment.
 Cons: 26-unit consistency still needs disciplined art direction.
+
+The Knight spike has validated the generation method strongly enough to test in-engine: canonical-reference + pose-reference + one pose per generation. The remaining decision is whether it holds up at real iPhone battle scale and in motion.
 
 ### C — Authored pose/sprite system
 Pros: highest visual ceiling.
