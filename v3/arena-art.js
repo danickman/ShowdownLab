@@ -1,11 +1,12 @@
-// One decoded environment image per arena; combat marks remain separate live layers.
+// Shared academy skyline across sunny courtyards; one decode, live combat layers separate.
 (()=>{'use strict';
   const images=new Map();
-  const scenes={'SUNLIT LAB':'/v3/assets/arenas/sunlit-lab/skyline.webp?v=1'};
+  const skyline='/v3/assets/arenas/sunlit-lab/skyline.webp?v=1';
+  const scenes=Object.fromEntries(['SUNLIT LAB','EMBER PIT','MOON VAULT','VERDANT RUINS'].map(name=>[name,skyline]));
   function load(name){
-    if(images.has(name))return images.get(name);
     const url=scenes[name];if(!url)return null;
-    const entry={image:new Image(),ready:false};images.set(name,entry);
+    if(images.has(url))return images.get(url);
+    const entry={image:new Image(),ready:false};images.set(url,entry);
     entry.image.onload=()=>{entry.ready=entry.image.naturalWidth>0&&entry.image.naturalHeight>0};
     entry.image.onerror=()=>{entry.ready=false};entry.image.src=url;return entry;
   }

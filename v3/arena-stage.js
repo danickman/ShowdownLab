@@ -1,6 +1,28 @@
 // Static floor only. Fighters, damage, debris and pennants are always live layers.
 (()=>{'use strict';
   let cached=null;
+  function dressing(ctx,w,theme){
+    if(!theme.dressing)return;
+    const size=Math.min(27,w*.065);
+    for(const x of [w*.14,w*.86]){
+      ctx.save();ctx.translate(x,size*.84);ctx.lineJoin='round';ctx.lineWidth=1;
+      ctx.globalAlpha=.16;ctx.fillStyle='#6e6145';ctx.beginPath();ctx.ellipse(3,size*.32,size*.82,size*.24,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+      ctx.fillStyle=theme.stone;ctx.strokeStyle=theme.joint;ctx.fillRect(-size*.52,-size*.22,size*1.04,size*.56);ctx.strokeRect(-size*.52,-size*.22,size*1.04,size*.56);
+      ctx.fillStyle='#f7e6bf';ctx.fillRect(-size*.60,-size*.27,size*1.20,size*.13);
+      if(theme.dressing==='garden'){
+        ctx.fillStyle='#62553a';ctx.fillRect(-size*.45,-size*.25,size*.9,size*.1);
+        for(let i=0;i<7;i++){const a=i*.9,px=Math.cos(a)*size*.44,py=-size*.42+Math.sin(a)*size*.15;ctx.fillStyle=i%2?'#60864c':'#8ba35f';ctx.beginPath();ctx.ellipse(px,py,size*.22,size*.10,a,0,Math.PI*2);ctx.fill()}
+      }else if(theme.dressing==='forge'){
+        ctx.fillStyle='#b8865d';ctx.beginPath();ctx.arc(0,-size*.22,size*.44,Math.PI,Math.PI*2);ctx.lineTo(size*.44,size*.1);ctx.lineTo(-size*.44,size*.1);ctx.closePath();ctx.fill();ctx.stroke();
+        ctx.fillStyle='#624b36';ctx.fillRect(-size*.23,-size*.30,size*.46,size*.36);ctx.strokeStyle='#c49d68';for(let i=-1;i<=1;i++){ctx.beginPath();ctx.moveTo(i*size*.12,-size*.30);ctx.lineTo(i*size*.12,size*.06);ctx.stroke()}
+      }else{
+        ctx.strokeStyle='#b28c43';ctx.lineWidth=1.7;const r=theme.dressing==='observatory'?size*.39:size*.28;
+        ctx.beginPath();ctx.arc(0,-size*.52,r,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(-r,-size*.52);ctx.lineTo(r,-size*.52);ctx.moveTo(0,-size*.52-r);ctx.lineTo(0,-size*.52+r);ctx.stroke();
+        if(theme.dressing==='observatory'){ctx.beginPath();ctx.ellipse(0,-size*.52,r*.45,r,-.35,0,Math.PI*2);ctx.stroke()}
+      }
+      ctx.restore();
+    }
+  }
   function paint(ctx,w,h,theme){
     const gradient=ctx.createLinearGradient(0,0,0,h);theme.floor.forEach((col,i)=>gradient.addColorStop([0,.65,1][i],col));ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
     const rail=Math.max(8,w*.024),project=(t,q)=>w*.5+(t-.5)*(w-rail*2)*(.52+q*.48);
@@ -25,11 +47,12 @@
     // Team side accents are quiet edge treatments, leaving the centre readable.
     for(const [side,col]of [[0,'#3b9dc5'],[1,'#d85d50']]){const wash=ctx.createLinearGradient(side?w:0,0,side?w-w*.12:w*.12,0);wash.addColorStop(0,col+'18');wash.addColorStop(1,col+'00');ctx.fillStyle=wash;ctx.fillRect(side?w*.88:0,0,w*.12,h)}
     const foreground=ctx.createLinearGradient(0,h*.86,0,h);foreground.addColorStop(0,'#71694e00');foreground.addColorStop(1,'#71694e18');ctx.fillStyle=foreground;ctx.fillRect(0,h*.86,w,h*.14);
+    dressing(ctx,w,theme);
   }
   function drawFloor(ctx,w,h,horizon,theme){
     const height=h-horizon-4;if(w<=0||height<=0)return false;
     const dpr=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1200000/(w*height)));
-    const key=JSON.stringify([w,height,dpr,theme.floor,theme.stone,theme.joint]);
+    const key=JSON.stringify([w,height,dpr,theme.floor,theme.stone,theme.joint,theme.dressing]);
     if(cached?.key!==key){
       let canvas;
       try{canvas=typeof OffscreenCanvas==='function'?new OffscreenCanvas(1,1):window.document?.createElement('canvas');if(!canvas)return false;

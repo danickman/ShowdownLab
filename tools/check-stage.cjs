@@ -3,7 +3,7 @@ const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('ass
 const root=path.resolve(__dirname,'..');let builds=0,blits=0,depth=0;
 const context={save(){depth++},restore(){depth--;assert(depth>=0)},setTransform(){},beginPath(){},closePath(){},clip(){},fill(){},stroke(){},
   createLinearGradient(){return{addColorStop(){}}}};
-for(const method of ['rect','fillRect','moveTo','lineTo'])context[method]=(...args)=>assert(args.every(Number.isFinite),'finite floor geometry');
+for(const method of ['rect','fillRect','strokeRect','moveTo','lineTo','translate','arc','ellipse'])context[method]=(...args)=>assert(args.every(Number.isFinite),'finite floor geometry');
 context.drawImage=()=>blits++;
 const canvases=[],runtime={devicePixelRatio:3,document:{createElement(){builds++;const cv={width:0,height:0,getContext:()=>context};canvases.push(cv);return cv}},window:null};runtime.window=runtime;vm.createContext(runtime);
 vm.runInContext(fs.readFileSync(path.join(root,'v3/arena-stage.js'),'utf8'),runtime);
@@ -15,6 +15,7 @@ runtime.ArenaStage.drawFloor(context,320,568,133,{...theme,stone:'#aabbcc'});ass
 runtime.devicePixelRatio=1;runtime.ArenaStage.drawFloor(context,320,568,133,theme);assert.equal(builds,4,'DPR change rebuild');
 runtime.devicePixelRatio=3;runtime.ArenaStage.drawFloor(context,768,1024,240,theme);
 assert(canvases.every(c=>c.width*c.height<=1210000),'bounded backing-store pixel budget');assert.equal(depth,0);assert.equal(JSON.stringify(theme),original);
+for(const dressing of ['academy','forge','observatory','garden'])assert(runtime.ArenaStage.drawFloor(context,390,844,198,{...theme,dressing}));assert.equal(depth,0,'all dressing paths balance Canvas state');
 const fallback={window:null};fallback.window=fallback;vm.createContext(fallback);vm.runInContext(fs.readFileSync(path.join(root,'v3/arena-stage.js'),'utf8'),fallback);
 assert.equal(fallback.ArenaStage.drawFloor(context,390,844,198,theme),false,'no-canvas fallback');
 assert.equal(fallback.ArenaStage.drawFloor(context,390,198,198,theme),false,'empty stage fallback');

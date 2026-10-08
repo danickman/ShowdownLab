@@ -482,3 +482,8 @@ Branch implementation adds branching ground fractures, dirt/chips, daylight edge
 ### Presentation Turn 4 — courtyard floor / crowd rendering
 
 Cached perspective paving connects the floor to the sunny skyline; live physical damage remains separate. Stronger foot-aligned team rings, limited dense-fight health bars, gradual sprite-size reduction above 60 living units and a snapshot target index reduce presentation clutter/work without changing combat positions or targeting. See [FLOOR_CROWD_PASS.md](FLOOR_CROWD_PASS.md) for exact files, cache budget, native comparison and phone acceptance. Tests pass; real phone performance and visual/tap QA remain open. No new art/evolutions, main merge or production release. Address phone findings next before expanding environment/evolution art.
+
+
+### Turn 3/4 release-gate follow-through
+
+Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one prioritized comic callout now refine hierarchy. All four arenas share one authored sunny skyline and distinct cached academy/forge/observatory/garden dressing. Ordinary/dense native checks pass; spacing was evaluated without moving combat positions. Dense overlap remains a phone assessment item. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for exact implementation/evidence and the explicitly OPEN phone visual, touch and acceptable-performance gates. Turn labels are not release approval. No main merge/production deployment or evolution work.

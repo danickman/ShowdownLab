@@ -22,7 +22,7 @@ for(const [type,spec] of Object.entries(authored)){
   for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${V}`;
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
-const cache=new Map(),missing=new Set(),reported=new Set(),poseMemory=new Map();
+const cache=new Map(),missing=new Set(),reported=new Set(),poseMemory=new Map(),hitReactions=new Map();
 const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
   sniper:{move:'idle',retreat:'idle',aim:'signature',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
@@ -143,6 +143,8 @@ function motion(type,state,o,size,age=999,hold=0){
     const q=Math.sin(t*(2.35/Math.sqrt(w))),amp=.011/Math.sqrt(w);
     dy=q*size*amp;rot=q*(type==='goose'?.004:.0025)/Math.sqrt(w);sx=1+q*.003;sy=1-q*.003;
   }
+  const reaction=hitReactions.get(String(o.id));
+  if(reaction&&!o.presentation){const elapsed=(Number(o.time)||0)-reaction.time;if(elapsed>240)hitReactions.delete(String(o.id));else if(elapsed>=0&&state!=='hit'){const b=easePulse(elapsed,240,.20)*reaction.strength/Math.sqrt(w);dx-=size*.04*b;rot+=.024*b;sy+=.012*b}}
   if(o.flip)dx=-dx;
   return{dx,dy,rot:o.flip?-rot:rot,sx,sy};
 }
@@ -183,8 +185,9 @@ function draw(c,type,x,y,size,team='blue',o={}){
   if(fighter&&spec){const frame=Math.floor(((o.time||0)/1000)*(spec.fps||8))%spec.frames.length,rec=load(spec.frames[frame]);if(rec.ready){const img=rec.img,scale=size*fighter.scale,ratio=img.naturalWidth/Math.max(1,img.naturalHeight),h=scale,w=h*ratio,ax=fighter.anchor?.[0]??.5,ay=fighter.anchor?.[1]??.82;c.save();c.translate(x,y);if(o.flip)c.scale(-1,1);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team,y,o.density||0);return true}}
   return false
 }
-function resetPoseMemory(){poseMemory.clear()}
+function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(String(id),{time,strength:Math.max(.3,Math.min(1,strength))});if(hitReactions.size>192)hitReactions.delete(hitReactions.keys().next().value)}
+function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
 function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
 preload();
-window.FighterAssets={manifest,authored,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame}
+window.FighterAssets={manifest,authored,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();

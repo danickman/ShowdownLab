@@ -63,5 +63,17 @@
     ctx.globalAlpha=Math.max(0,1-age*2.5)*.55;ctx.strokeStyle='#f4d8a4';ctx.lineWidth=2.4*(1-age)+.6;
     ctx.beginPath();ctx.ellipse(0,3,(9+age*62)*power,(3+age*18)*power,0,0,Math.PI*2);ctx.stroke();ctx.restore();
   }
-  window.BattleTheatre={drawDamage,drawImpact};
+  const weapons={knight:[.25,-.55],sniper:[.24,-.61],goose:[.20,-.40],dragon:[.32,-.55],assassin:[.23,-.54],beetank:[.30,-.35],mole:[.24,-.38],turtle:[.28,-.37],goblin:[.23,-.52],barbarian:[.24,-.62]};
+  function anchor(type,role,height,facing=1){const point=role==='weapon'?(weapons[type]||weapons.knight):[0,-.47];return{x:point[0]*height*facing,y:point[1]*height}}
+  function effectLife(kind,tier,tech=0){
+    if(kind==='comic')return 1050;
+    if(/Spell$/.test(kind))return Math.min(1250,820+tech*70);
+    if(['shot','muzzle','muzzleShock'].includes(kind))return 180;
+    if(['slash','weaponTrail','impactArc'].includes(kind))return tier==='minimal'?170:260;
+    if(['hit','clash','puncture'].includes(kind))return 230;
+    if(kind==='fire')return 420;
+    if(kind==='signatureBurst')return 460;
+    return tier==='minimal'?460:tier==='reduced'?560:tier==='balanced'?660:760;
+  }
+  window.BattleTheatre={drawDamage,drawImpact,anchor,effectLife};
 })();
