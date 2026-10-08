@@ -1,0 +1,144 @@
+{
+  "fighter": "knight",
+  "form": "evolved",
+  "levels": [
+    5,
+    9
+  ],
+  "status": "candidate; user visual approval pending; not runtime mapped",
+  "poses": [
+    {
+      "pose": "idle",
+      "source_component_bounds": [
+        14,
+        98,
+        361,
+        523
+      ],
+      "alpha_bounds": [
+        11,
+        2,
+        85,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source_component_bounds": [
+        382,
+        113,
+        729,
+        515
+      ],
+      "alpha_bounds": [
+        9,
+        2,
+        87,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source_component_bounds": [
+        714,
+        145,
+        1265,
+        502
+      ],
+      "alpha_bounds": [
+        3,
+        33,
+        93,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source_component_bounds": [
+        1207,
+        52,
+        1514,
+        508
+      ],
+      "alpha_bounds": [
+        17,
+        2,
+        78,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "charge",
+      "source_component_bounds": [
+        21,
+        617,
+        625,
+        939
+      ],
+      "alpha_bounds": [
+        3,
+        43,
+        93,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source_component_bounds": [
+        539,
+        539,
+        1025,
+        958
+      ],
+      "alpha_bounds": [
+        3,
+        14,
+        93,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source_component_bounds": [
+        1076,
+        637,
+        1501,
+        980
+      ],
+      "alpha_bounds": [
+        3,
+        19,
+        93,
+        92
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}

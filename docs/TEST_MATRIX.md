@@ -508,3 +508,17 @@ Phone: ordinary 1× melee silhouettes/contact, stable feet/rings, aligned hits/s
 Run `node tools/check-living-arenas.cjs`: 64 bounded ambient cases, reduced-motion bypass, opening wash gone at 350ms/captions at 900ms, cached ink and Guide content layout structure. Cue/cache checks now cover academy/garden/frontier/siege and three unique preloaded skyline images. All 72 authored assets decode; Turtle move has transparent margins and complete source extraction; Turtle standing uses dedicated 512px presentation. Existing staging/camera/menu/seeded tests pass. Native all-arena actions/spells and all-ten menu ink composites inspected.
 
 Phone remains OPEN: Guide all text/Mastery visible through scroll, opening readability, full Turtle running silhouette, distinct frontier/siege scenery, subtle living atmosphere, existing physical floor aftermath, ordinary/~180-unit FPS and reduced motion. Eight other small menu sources remain quality debt. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md); overall-positive feedback alone is not release approval.
+
+
+## Canonical menu recovery — 2026-10-08
+
+Eight remaining menu canonicals recovered from supplied originals at 512px;
+Sniper/Turtle approved presentations retained. Battle poses untouched.
+See docs/CANONICAL_MENU_RECOVERY.md for provenance, reproduction and QA gates.
+
+
+## Skyline / cropping correction and Knight evolution pilot
+
+See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.
+
+Full-source audit additionally repairs 19 nominal-grid cuts across Goblin, Mole, Beetank, Goose and Barbarian. Reproduce with `tools/repair-source-boundaries.py`; provenance in `tools/art-sources/boundary-repairs.json`. Native repair contact sheet reviewed; decodes/all-arena actions/seeded regressions pass.

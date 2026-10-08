@@ -1,7 +1,7 @@
 (()=>{'use strict';
 function create(viewW,viewH,o={}){
   // The camera composes the active fight on the floor; the sky is scenery.
-  const top=o.top??Math.max(116,viewH*.25),bottom=o.bottom??96,pad=o.pad??14;
+  const top=o.top??Math.max(116,viewH*(viewH>=viewW?.35:.29)),bottom=o.bottom??96,pad=o.pad??14;
   const a={x:pad,y:top+pad,w:Math.max(1,viewW-pad*2),h:Math.max(1,viewH-top-bottom-pad*2)};
   let frame={x:.5,y:.5,zoom:.92},density=0,initialized=false;
   const maxScale={normal:1.36,heavy:1.36,large:1.36,small:1.36,boss:1.36};

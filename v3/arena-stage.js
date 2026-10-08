@@ -39,6 +39,34 @@
         ctx.globalAlpha=.28;ctx.strokeStyle='#fff8de';ctx.beginPath();ctx.moveTo(project(left,near),near*h-1);ctx.lineTo(project(right,near),near*h-1);ctx.stroke();ctx.restore();
       }
     }
+    // Material detail is painted once into the bounded cache, never per fighter.
+    // Quiet weathering across the floor; heavier earth/scars in war arenas.
+    const war=['frontier','siege'].includes(theme.dressing),siege=theme.dressing==='siege';
+    ctx.save();ctx.beginPath();ctx.rect(rail+7,8,w-rail*2-14,h-16);ctx.clip();
+    for(let i=0;i<64;i++){
+      const q=.08+((i*37)%89)/100,p=((i*53)%97)/100,x=project(p,q),y=q*h;
+      const r=(3+i%7)*(.35+q*.9);
+      ctx.globalAlpha=war?.11:.06;ctx.fillStyle=war?'#846b48':'#96896a';
+      ctx.beginPath();ctx.ellipse(x,y,r*2.6,r*.48,.13*Math.sin(i),0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=.15;ctx.strokeStyle='#fff5d5';ctx.lineWidth=.7;
+      ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x+r*.4,y-r*.16);ctx.stroke();
+    }
+    if(war){
+      // Broad earth deposits and wheel wear turn paving into a used battleground.
+      for(let i=0;i<(siege?10:6);i++){
+        const q=.14+i*.075,x=project(i%2?.83:.17,q),y=q*h,r=w*(.028+q*.025);
+        ctx.globalAlpha=siege?.19:.12;ctx.fillStyle='#886c46';ctx.beginPath();
+        ctx.ellipse(x,y,r*1.9,r*.65,(i%3-1)*.25,0,Math.PI*2);ctx.fill();
+        ctx.globalAlpha=.36;ctx.strokeStyle='#776247';ctx.lineWidth=1.3;
+        ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x-r*.2,y+r*.12);ctx.lineTo(x+r*.2,y-r*.30);ctx.lineTo(x+r,y-r*.10);ctx.stroke();
+        ctx.globalAlpha=.30;ctx.fillStyle=theme.stone;
+        for(let j=0;j<3;j++){const px=x-r+j*r*.7,py=y+r*.27;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+4+q*3,py-3);ctx.lineTo(px+7,py+2);ctx.closePath();ctx.fill()}
+      }
+    }else if(theme.dressing==='garden'){
+      ctx.globalAlpha=.22;ctx.fillStyle='#6d8750';
+      for(let i=0;i<14;i++){const q=.1+i*.06,x=project(i%2?.95:.05,q),y=q*h;ctx.beginPath();ctx.ellipse(x,y,5+q*8,2+q*2,0,0,Math.PI*2);ctx.fill()}
+    }
+    ctx.restore();
     // Dressed perimeter stones connect the floor to the distant courtyard wall.
     ctx.fillStyle=theme.stone;ctx.fillRect(0,0,rail,h);ctx.fillRect(w-rail,0,rail,h);
     ctx.fillStyle='#fff8de';ctx.globalAlpha=.65;ctx.fillRect(rail,0,2,h);ctx.fillRect(w-rail-2,0,2,h);

@@ -374,3 +374,15 @@ Shared smooth presentation offsets now modestly open ordinary melee without chan
 ### Presentation Turn 7 — living daylight battlefields and phone corrections
 
 Shorter opening wash, content-sized Guide cards, stronger cached menu ink and repaired Turtle running/full-resolution presentation respond to phone feedback. Two new authored daylight locations progress from frontier fortifications to siege ruins; bounded cloud/bird/smoke/perimeter motion makes the stage feel alive without filling combat space. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md). Eight menu fighters still have small-source quality debt. Verify these changes on the branch phone preview, then use the existing approved-head release contract before a one-fighter evolution spike.
+
+
+## Canonical menu recovery — 2026-10-08
+
+Eight remaining menu canonicals recovered from supplied originals at 512px;
+Sniper/Turtle approved presentations retained. Battle poses untouched.
+See docs/CANONICAL_MENU_RECOVERY.md for provenance, reproduction and QA gates.
+
+
+## Skyline / cropping correction and Knight evolution pilot
+
+See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.

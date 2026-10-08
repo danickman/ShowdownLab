@@ -497,3 +497,17 @@ A shared presentation-only transform now modestly separates ordinary melee (2–
 ## Turn 7 — phone feedback / living daylight arenas / Turtle repair
 
 User reports presentation looks better, with specific remaining intro/Guide/quality and Turtle-run issues. Opening wash now ends by 350ms, captions at 900ms; Guide cards use content-sized block flow and more spacing. Menu ink is cached once per canonical; Turtle move is repaired from supplied complete source and Turtle gains a 512px standing presentation. Eight other menu fighters still need higher-resolution approved source recovery. New frontier/siege authored daylight scenery and bounded sky/perimeter animation extend the sunny direction. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md) for exact files, source crops/hash, generation prompts, verification and OPEN phone gates. No fighter generation, combat/evolution change or production release.
+
+
+## Canonical menu recovery — 2026-10-08
+
+Eight remaining menu canonicals recovered from supplied originals at 512px;
+Sniper/Turtle approved presentations retained. Battle poses untouched.
+See docs/CANONICAL_MENU_RECOVERY.md for provenance, reproduction and QA gates.
+
+
+## Skyline / cropping correction and Knight evolution pilot
+
+See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.
+
+Full-source audit additionally repairs 19 nominal-grid cuts across Goblin, Mole, Beetank, Goose and Barbarian. Reproduce with `tools/repair-source-boundaries.py`; provenance in `tools/art-sources/boundary-repairs.json`. Native repair contact sheet reviewed; decodes/all-arena actions/seeded regressions pass.

@@ -3,18 +3,18 @@ const manifest={
   knight:{scale:1,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/knight/idle.webp'],fps:4},move:{frames:['/v3/assets/knight/move-1.webp','/v3/assets/knight/move-2.webp'],fps:8},attack:{frames:['/v3/assets/knight/attack-1.webp','/v3/assets/knight/attack-2.webp','/v3/assets/knight/attack-3.webp'],fps:12},skill:{frames:['/v3/assets/knight/skill-1.webp','/v3/assets/knight/skill-2.webp'],fps:10},hit:{frames:['/v3/assets/knight/hit.webp'],fps:8},defeat:{frames:['/v3/assets/knight/defeat.webp'],fps:4}}},
   dragon:{scale:1.28,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/dragon/idle.webp'],fps:4},move:{frames:['/v3/assets/dragon/move-1.webp','/v3/assets/dragon/move-2.webp'],fps:7},attack:{frames:['/v3/assets/dragon/attack-1.webp','/v3/assets/dragon/attack-2.webp'],fps:10},skill:{frames:['/v3/assets/dragon/fire-1.webp','/v3/assets/dragon/fire-2.webp','/v3/assets/dragon/fire-3.webp'],fps:12},hit:{frames:['/v3/assets/dragon/hit.webp'],fps:8},defeat:{frames:['/v3/assets/dragon/defeat.webp'],fps:4}}}
 };
-const V='base-pack5';
+const V='base-pack7';
 const authored={
-  knight:{scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
+  knight:{presentation:'presentation',scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
   sniper:{scale:1.26,anchor:[.5,.948],presentation:'presentation'},
-  goose:{scale:1.20,anchor:[.5,.948]},
-  dragon:{scale:1.36,anchor:[.5,.948],inkBoost:1.065},
-  assassin:{scale:1.28,anchor:[.5,.948]},
-  beetank:{scale:1.16,anchor:[.5,.948]},
-  mole:{scale:1.20,anchor:[.5,.948]},
+  goose:{presentation:'presentation',scale:1.20,anchor:[.5,.948]},
+  dragon:{presentation:'presentation',scale:1.36,anchor:[.5,.948],inkBoost:1.065},
+  assassin:{presentation:'presentation',scale:1.28,anchor:[.5,.948]},
+  beetank:{presentation:'presentation',scale:1.16,anchor:[.5,.948]},
+  mole:{presentation:'presentation',scale:1.20,anchor:[.5,.948]},
   turtle:{scale:1.12,anchor:[.5,.948],presentation:'presentation'},
-  goblin:{scale:1.16,anchor:[.5,.948]},
-  barbarian:{scale:1.16,anchor:[.5,.948]}
+  goblin:{presentation:'presentation',scale:1.16,anchor:[.5,.948]},
+  barbarian:{presentation:'presentation',scale:1.16,anchor:[.5,.948]}
 };
 for(const [type,spec] of Object.entries(authored)){
   if(!spec.states)spec.states={idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'signature',hit:'hit',defeat:'defeat'};

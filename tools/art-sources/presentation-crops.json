@@ -1,0 +1,82 @@
+{
+  "knight": {
+    "source": "tools/art-sources/knight-canonical-original.jpg",
+    "crop": [
+      0,
+      0,
+      1024,
+      1024
+    ],
+    "bottom": 470
+  },
+  "dragon": {
+    "source": "tools/art-sources/dragon-base-sheet.jpg",
+    "crop": [
+      0,
+      0,
+      400,
+      312
+    ],
+    "bottom": 485
+  },
+  "goblin": {
+    "source": "tools/art-sources/goblin-canonical-original.jpg",
+    "crop": [
+      0,
+      0,
+      1408,
+      768
+    ],
+    "bottom": 485
+  },
+  "goose": {
+    "source": "tools/art-sources/goose-canonical-original.jpg",
+    "crop": [
+      0,
+      0,
+      1408,
+      768
+    ],
+    "bottom": 485
+  },
+  "barbarian": {
+    "source": "tools/art-sources/barbarian-canonical-original.jpg",
+    "crop": [
+      0,
+      0,
+      1408,
+      768
+    ],
+    "bottom": 485
+  },
+  "mole": {
+    "source": "tools/art-sources/mole-canonical-original.jpg",
+    "crop": [
+      0,
+      0,
+      1408,
+      768
+    ],
+    "bottom": 485
+  },
+  "beetank": {
+    "source": "tools/art-sources/beetank-canonical-original.jpg",
+    "crop": [
+      0,
+      0,
+      1408,
+      768
+    ],
+    "bottom": 485
+  },
+  "assassin": {
+    "source": "tools/art-sources/assassin-base-sheet.jpg",
+    "crop": [
+      0,
+      0,
+      420,
+      415
+    ],
+    "bottom": 485
+  }
+}

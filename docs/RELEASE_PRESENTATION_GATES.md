@@ -74,3 +74,8 @@ Phone acceptance remains OPEN: ordinary 1× melee should show clearer individual
 ## Turn 7 — latest phone corrections and environment extension
 
 See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md) for the shortened opening, Guide layout, cached menu outlines, supplied-source Turtle repair and two new living daylight war settings. This supersedes the earlier all-four-same-location statement: academy/garden share one skyline, frontier and siege have distinct authored backdrops (three decodes). Live physical damage and bounded staging remain. Automated/native evidence passes; phone Guide layout, ambient visuals and measured ordinary/extreme performance remain OPEN. Eight small-source menu fighters still need approved original-source recovery. No main merge/production release or evolution work at this checkpoint.
+
+
+## Skyline / cropping correction and Knight evolution pilot
+
+See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.

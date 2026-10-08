@@ -13,7 +13,6 @@ This is intentionally asset-only. It does not modify combat logic.
 from __future__ import annotations
 import argparse
 from pathlib import Path
-import cv2
 import numpy as np
 from PIL import Image, ImageFilter
 
@@ -33,6 +32,7 @@ def chroma_alpha(rgb: np.ndarray) -> np.ndarray:
     return np.dstack([px,alpha*255]).astype(np.uint8)
 
 def extract_main(rgb: np.ndarray) -> Image.Image:
+    import cv2  # Only component extraction needs OpenCV.
     rgba=chroma_alpha(rgb)
     mask=(rgba[:,:,3]>45).astype(np.uint8)
     mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((2,2),np.uint8))
