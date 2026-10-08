@@ -5,7 +5,7 @@ const context={save(){depth++},restore(){depth--;assert(depth>=0)},setTransform(
   createLinearGradient(){return{addColorStop(){}}}};
 for(const method of ['rect','fillRect','strokeRect','moveTo','lineTo','translate','arc','ellipse'])context[method]=(...args)=>assert(args.every(Number.isFinite),'finite floor geometry');
 context.drawImage=()=>blits++;
-const canvases=[],runtime={devicePixelRatio:3,document:{createElement(){builds++;const cv={width:0,height:0,getContext:()=>context};canvases.push(cv);return cv}},window:null};runtime.window=runtime;vm.createContext(runtime);
+const canvases=[],runtime={staging:null,devicePixelRatio:3,document:{createElement(){builds++;const cv={width:0,height:0,getContext:()=>context};canvases.push(cv);return cv}},window:null};runtime.window=runtime;vm.createContext(runtime);
 vm.runInContext(fs.readFileSync(path.join(root,'v3/arena-stage.js'),'utf8'),runtime);
 const theme={floor:['#eee3c2','#ddd1b1','#c4b89c'],stone:'#b8b99e',joint:'#7f785d'},original=JSON.stringify(theme);
 for(let i=0;i<90;i++)assert(runtime.ArenaStage.drawFloor(context,390,844,198,theme));

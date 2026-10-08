@@ -494,3 +494,10 @@ Cached perspective paving connects the floor to the sunny skyline; live physical
 ### Turn 3/4 release-gate follow-through
 
 Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one prioritized comic callout now refine hierarchy. All four arenas share one authored sunny skyline and distinct cached academy/forge/observatory/garden dressing. Ordinary/dense native checks pass; spacing was evaluated without moving combat positions. Dense overlap remains a phone assessment item. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for exact implementation/evidence and the explicitly OPEN phone visual, touch and acceptable-performance gates. Turn labels are not release approval. No main merge/production deployment or evolution work.
+
+
+### Turn 6 staging checks — automated PASS / phone OPEN
+
+Run `node tools/check-combat-staging.cjs`: 9,540 complete sprite boxes across portrait/landscape, 2–180 units and cluster/corner/spread layouts; immutable state, order-stable offsets, caps, settling, dense bypass, defeat/reset and shared cue/ground anchors. Existing camera, theatre, floor-cache, cue/recoil, asset/presentation and seeded terminal checks remain passing. Native six-fighter before/after and 180-fighter scenes inspected; all-arena action and spell matrix checks pass.
+
+Phone: ordinary 1× melee silhouettes/contact, stable feet/rings, aligned hits/signatures, ground cracks/char staying at impact, lethal ARC, QUAKE/fire, round resets and landscape cropping; ordinary and ~180-fighter measured performance. These device gates are not passed by native Canvas tests. No production release until the exact branch head receives phone approval.

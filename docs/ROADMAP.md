@@ -364,3 +364,8 @@ Cached perspective paving connects the floor to the sunny skyline; live physical
 ### Turn 3/4 release-gate follow-through
 
 Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one prioritized comic callout now refine hierarchy. All four arenas share one authored sunny skyline and distinct cached academy/forge/observatory/garden dressing. Ordinary/dense native checks pass; spacing was evaluated without moving combat positions. Dense overlap remains a phone assessment item. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for exact implementation/evidence and the explicitly OPEN phone visual, touch and acceptable-performance gates. Turn labels are not release approval. No main merge/production deployment or evolution work.
+
+
+### Presentation Turn 6 — bounded melee staging
+
+Shared smooth presentation offsets now modestly open ordinary melee without changing simulation coordinates or targeting. Fighters/cues/rings and emitted physical impacts share staged anchors. Spread is capped and disabled above 44 living fighters; landscape size limits protect full sprite bounds. Automated/native evidence passes; real-phone visual, touch and ordinary/extreme performance gates remain OPEN. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md). Continue from confirmed phone findings before evolutions or the deliberate main/production release.

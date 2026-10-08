@@ -19,7 +19,8 @@ for(const tier of ['full','balanced','reduced','minimal'])for(const type of ['im
 const mark={type:'quake',x:.3,y:.4,t:1000,tech:2};calls.length=0;runtime.BattleTheatre.drawDamage(context,{x:120,y:400},mark,.3);const first=JSON.stringify(calls);calls.length=0;runtime.BattleTheatre.drawDamage(context,{x:120,y:400},mark,.3);assert.equal(JSON.stringify(calls),first);
 const src=fs.readFileSync(path.join(root,'v3/v3.js'),'utf8');
 const units=Array.from({length:180},(_,i)=>({id:i+1,x:.1+(i%10)*.08,y:.2+Math.floor(i/10)*.025,team:i%2?'blue':'red',hp:100}));
-Object.assign(runtime,{state:{units,speed:1},view:{w:390,h:844},cam:{worldToScreen:(x,y)=>({x:x*300+30,y:y*500+200})},fx:[],spellMarks:[],shake:0,flash:0});
+Object.assign(runtime,{staging:null,state:{units,speed:1},view:{w:390,h:844},cam:{worldToScreen:(x,y)=>({x:x*300+30,y:y*500+200})},fx:[],spellMarks:[],shake:0,flash:0});
+vm.runInContext(src.slice(src.indexOf('function spritePoint('),src.indexOf('function unitPos(')),runtime);
 vm.runInContext(src.slice(src.indexOf('function trimFX('),src.indexOf("document.addEventListener('click'")),runtime);
 vm.runInContext(src.slice(src.indexOf('function spectacleTier('),src.indexOf('const SIGNATURE_WORDS=')),runtime);
 const original=JSON.stringify(units);

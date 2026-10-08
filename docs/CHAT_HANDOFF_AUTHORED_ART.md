@@ -487,3 +487,8 @@ Cached perspective paving connects the floor to the sunny skyline; live physical
 ### Turn 3/4 release-gate follow-through
 
 Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one prioritized comic callout now refine hierarchy. All four arenas share one authored sunny skyline and distinct cached academy/forge/observatory/garden dressing. Ordinary/dense native checks pass; spacing was evaluated without moving combat positions. Dense overlap remains a phone assessment item. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for exact implementation/evidence and the explicitly OPEN phone visual, touch and acceptable-performance gates. Turn labels are not release approval. No main merge/production deployment or evolution work.
+
+
+## Turn 6 — bounded staging checkpoint (2026-10-08)
+
+A shared presentation-only transform now modestly separates ordinary melee (2–44 living fighters, horizontal cap 14px, vertical 6px, smooth settling). Fighters, rings/shadows, cues and callouts use the same staged positions; emitted ground damage/spell impacts/defeat capture their landing offset. Dense fights bypass spread; storage is capped/reset. Camera short-viewport sizing prevents full-height Dragon clipping in landscape. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for files, evidence, limits and OPEN phone gates. Combat core, outcomes, sunny environments/UI, physical damage and evolution state remain unchanged. No production release. Verify the actual branch head before continuing.

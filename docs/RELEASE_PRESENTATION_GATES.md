@@ -49,3 +49,23 @@ Protected simulation core/adapter/round-loop/Stage5B and combat/evolution/reward
 4. Merge that head to main and deploy its approved build as one deliberate release event.
 
 No main merge or production deployment is part of this checkpoint. Evolutions remain postponed until presentation QA is accepted.
+
+
+## Turn 6 — bounded melee staging pilot (2026-10-08)
+
+This follow-through supersedes the earlier decision to defer presentation offsets. `v3/combat-staging.js` now owns one presentation transform shared by fighters, shadows/rings, target-facing cues, weapon/body anchors, comic captions and spotlights. No simulation unit is modified. Nearby fighters in groups of 2–44 receive at most 14 CSS pixels horizontally and 6 vertically; isolated fighters settle back smoothly. ID rank is stable across snapshot array order. At more than 44 living fighters, separation work is bypassed and previous offsets relax away. This is a modest ordinary-melee improvement, not a claim that extreme armies become individually readable.
+
+Ground damage, spell impacts and defeat records capture a copy of the offset where the impact occurred. Existing cracks/char/dirt remain at that location rather than following a fighter that walks away. Offset storage is capped at 240; fallen offsets expire after one second and round/battle starts reset it. Camera padding reserves staging room; short viewports also cap the complete sprite height so Dragon does not exceed the floor area in landscape. No additional image generation or effect queues.
+
+Changed runtime: `v3/combat-staging.js`, `v3/camera.js`, `v3/v3.js`, both HTML entry points. Checks: `tools/check-combat-staging.cjs`, adapted `tools/check-stage.cjs` and `tools/check-theatre.cjs`. Handoff/roadmap/test matrix updated.
+
+Acceptance evidence:
+
+- 9,540 complete authored boxes at initial/settled frames across five viewport sizes including landscape, six army sizes (2–180), clustered/corner/spread layouts and all ten fighters.
+- Frozen combat objects unchanged; ID-order invariance, bounded spread, gradual settling, density bypass, defeat expiry, round reset, shared body/ground anchors and stationary emitted damage.
+- Native before/after six-fighter melee and 180-fighter composite inspected. Ordinary overlap improves modestly; extreme overlap remains. Native all-arena action matrix and 96 spell renders pass with bounded queues and balanced Canvas state.
+- Existing 8,220 camera bounds, 112 theatre lifecycle cases, floor-cache bounds, ten cue/recoil checks, 71 WebP decodes, 180 menu framing bounds/60 renders and 24 terminal deterministic matches/exception isolation pass.
+
+Non-goals: targeting, engagement slots, simulation separation, outcomes, progression/evolutions, roster expansion, menu redesign, more art generation or production deployment. Sunny menus, shared skyline, physical ground damage and protected core/adapter/round-loop/Stage5B remain intact.
+
+Phone acceptance remains OPEN: ordinary 1× melee should show clearer individual silhouettes without sliding feet, detached hits, misleading contact or cropping. Check round reset, lethal ARC, QUAKE/fire aftermath and menu/landscape framing. Measure ordinary and approximately 180-unit performance on a real phone. Approval of this exact branch head is required before the existing frozen-head/main/production release sequence.
