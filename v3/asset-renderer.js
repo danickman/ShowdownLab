@@ -3,7 +3,7 @@ const manifest={
   knight:{scale:1,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/knight/idle.webp'],fps:4},move:{frames:['/v3/assets/knight/move-1.webp','/v3/assets/knight/move-2.webp'],fps:8},attack:{frames:['/v3/assets/knight/attack-1.webp','/v3/assets/knight/attack-2.webp','/v3/assets/knight/attack-3.webp'],fps:12},skill:{frames:['/v3/assets/knight/skill-1.webp','/v3/assets/knight/skill-2.webp'],fps:10},hit:{frames:['/v3/assets/knight/hit.webp'],fps:8},defeat:{frames:['/v3/assets/knight/defeat.webp'],fps:4}}},
   dragon:{scale:1.28,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/dragon/idle.webp'],fps:4},move:{frames:['/v3/assets/dragon/move-1.webp','/v3/assets/dragon/move-2.webp'],fps:7},attack:{frames:['/v3/assets/dragon/attack-1.webp','/v3/assets/dragon/attack-2.webp'],fps:10},skill:{frames:['/v3/assets/dragon/fire-1.webp','/v3/assets/dragon/fire-2.webp','/v3/assets/dragon/fire-3.webp'],fps:12},hit:{frames:['/v3/assets/dragon/hit.webp'],fps:8},defeat:{frames:['/v3/assets/dragon/defeat.webp'],fps:4}}}
 };
-const V='base-pack4';
+const V='base-pack5';
 const authored={
   knight:{scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
   sniper:{scale:1.26,anchor:[.5,.948],presentation:'presentation'},
@@ -12,7 +12,7 @@ const authored={
   assassin:{scale:1.28,anchor:[.5,.948]},
   beetank:{scale:1.16,anchor:[.5,.948]},
   mole:{scale:1.20,anchor:[.5,.948]},
-  turtle:{scale:1.12,anchor:[.5,.948]},
+  turtle:{scale:1.12,anchor:[.5,.948],presentation:'presentation'},
   goblin:{scale:1.16,anchor:[.5,.948]},
   barbarian:{scale:1.16,anchor:[.5,.948]}
 };
@@ -23,6 +23,21 @@ for(const [type,spec] of Object.entries(authored)){
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
 const cache=new Map(),missing=new Set(),reported=new Set(),poseMemory=new Map(),hitReactions=new Map();
+const presentationInkCache=new WeakMap();
+function presentationInk(img){
+  if(presentationInkCache.has(img))return presentationInkCache.get(img);
+  let result=img;
+  try{
+    const make=()=>{const cv=window.document?.createElement('canvas');if(!cv)return null;cv.width=img.naturalWidth;cv.height=img.naturalHeight;return cv};
+    const mask=make(),out=make();if(mask&&out){const m=mask.getContext('2d'),c=out.getContext('2d');
+      m.drawImage(img,0,0);m.globalCompositeOperation='source-in';m.fillStyle='#152026';m.fillRect(0,0,mask.width,mask.height);
+      c.globalAlpha=.75;for(const [x,y]of [[-.3,0],[.3,0],[0,-.3],[0,.3]])c.drawImage(mask,x,y);
+      c.globalAlpha=1;c.filter='contrast(1.16)';c.drawImage(img,0,0);c.filter='none';result=out;
+    }
+  }catch{}
+  // One small processed bitmap per canonical image, never per unit or frame.
+  presentationInkCache.set(img,result);return result;
+}
 const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
   sniper:{move:'idle',retreat:'idle',aim:'signature',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
@@ -172,7 +187,7 @@ function drawAuthored(c,type,x,y,size,team,o){
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
   }
-  c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();return true
+  c.drawImage(o.presentation?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
   if(authored[type]){

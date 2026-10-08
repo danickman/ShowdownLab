@@ -369,3 +369,8 @@ Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one pr
 ### Presentation Turn 6 — bounded melee staging
 
 Shared smooth presentation offsets now modestly open ordinary melee without changing simulation coordinates or targeting. Fighters/cues/rings and emitted physical impacts share staged anchors. Spread is capped and disabled above 44 living fighters; landscape size limits protect full sprite bounds. Automated/native evidence passes; real-phone visual, touch and ordinary/extreme performance gates remain OPEN. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md). Continue from confirmed phone findings before evolutions or the deliberate main/production release.
+
+
+### Presentation Turn 7 — living daylight battlefields and phone corrections
+
+Shorter opening wash, content-sized Guide cards, stronger cached menu ink and repaired Turtle running/full-resolution presentation respond to phone feedback. Two new authored daylight locations progress from frontier fortifications to siege ruins; bounded cloud/bird/smoke/perimeter motion makes the stage feel alive without filling combat space. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md). Eight menu fighters still have small-source quality debt. Verify these changes on the branch phone preview, then use the existing approved-head release contract before a one-fighter evolution spike.

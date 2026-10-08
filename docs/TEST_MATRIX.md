@@ -501,3 +501,10 @@ Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one pr
 Run `node tools/check-combat-staging.cjs`: 9,540 complete sprite boxes across portrait/landscape, 2–180 units and cluster/corner/spread layouts; immutable state, order-stable offsets, caps, settling, dense bypass, defeat/reset and shared cue/ground anchors. Existing camera, theatre, floor-cache, cue/recoil, asset/presentation and seeded terminal checks remain passing. Native six-fighter before/after and 180-fighter scenes inspected; all-arena action and spell matrix checks pass.
 
 Phone: ordinary 1× melee silhouettes/contact, stable feet/rings, aligned hits/signatures, ground cracks/char staying at impact, lethal ARC, QUAKE/fire, round resets and landscape cropping; ordinary and ~180-fighter measured performance. These device gates are not passed by native Canvas tests. No production release until the exact branch head receives phone approval.
+
+
+### Turn 7 — intro / Guide / Turtle / living locations
+
+Run `node tools/check-living-arenas.cjs`: 64 bounded ambient cases, reduced-motion bypass, opening wash gone at 350ms/captions at 900ms, cached ink and Guide content layout structure. Cue/cache checks now cover academy/garden/frontier/siege and three unique preloaded skyline images. All 72 authored assets decode; Turtle move has transparent margins and complete source extraction; Turtle standing uses dedicated 512px presentation. Existing staging/camera/menu/seeded tests pass. Native all-arena actions/spells and all-ten menu ink composites inspected.
+
+Phone remains OPEN: Guide all text/Mastery visible through scroll, opening readability, full Turtle running silhouette, distinct frontier/siege scenery, subtle living atmosphere, existing physical floor aftermath, ordinary/~180-unit FPS and reduced motion. Eight other small menu sources remain quality debt. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md); overall-positive feedback alone is not release approval.

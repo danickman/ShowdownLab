@@ -12,8 +12,8 @@
       if(theme.dressing==='garden'){
         ctx.fillStyle='#62553a';ctx.fillRect(-size*.45,-size*.25,size*.9,size*.1);
         for(let i=0;i<7;i++){const a=i*.9,px=Math.cos(a)*size*.44,py=-size*.42+Math.sin(a)*size*.15;ctx.fillStyle=i%2?'#60864c':'#8ba35f';ctx.beginPath();ctx.ellipse(px,py,size*.22,size*.10,a,0,Math.PI*2);ctx.fill()}
-      }else if(theme.dressing==='forge'){
-        ctx.fillStyle='#b8865d';ctx.beginPath();ctx.arc(0,-size*.22,size*.44,Math.PI,Math.PI*2);ctx.lineTo(size*.44,size*.1);ctx.lineTo(-size*.44,size*.1);ctx.closePath();ctx.fill();ctx.stroke();
+      }else if(theme.dressing==='frontier'||theme.dressing==='siege'){
+        ctx.fillStyle=theme.dressing==='siege'?'#8e7960':'#b8865d';ctx.beginPath();ctx.arc(0,-size*.22,size*.44,Math.PI,Math.PI*2);ctx.lineTo(size*.44,size*.1);ctx.lineTo(-size*.44,size*.1);ctx.closePath();ctx.fill();ctx.stroke();
         ctx.fillStyle='#624b36';ctx.fillRect(-size*.23,-size*.30,size*.46,size*.36);ctx.strokeStyle='#c49d68';for(let i=-1;i<=1;i++){ctx.beginPath();ctx.moveTo(i*size*.12,-size*.30);ctx.lineTo(i*size*.12,size*.06);ctx.stroke()}
       }else{
         ctx.strokeStyle='#b28c43';ctx.lineWidth=1.7;const r=theme.dressing==='observatory'?size*.39:size*.28;
@@ -47,6 +47,13 @@
     // Team side accents are quiet edge treatments, leaving the centre readable.
     for(const [side,col]of [[0,'#3b9dc5'],[1,'#d85d50']]){const wash=ctx.createLinearGradient(side?w:0,0,side?w-w*.12:w*.12,0);wash.addColorStop(0,col+'18');wash.addColorStop(1,col+'00');ctx.fillStyle=wash;ctx.fillRect(side?w*.88:0,0,w*.12,h)}
     const foreground=ctx.createLinearGradient(0,h*.86,0,h);foreground.addColorStop(0,'#71694e00');foreground.addColorStop(1,'#71694e18');ctx.fillStyle=foreground;ctx.fillRect(0,h*.86,w,h*.14);
+    if(['frontier','siege'].includes(theme.dressing)){
+      // Cached edge rubble and old wheel scars leave the central battle floor clear.
+      const siege=theme.dressing==='siege';ctx.save();ctx.globalAlpha=siege?.17:.08;ctx.strokeStyle=theme.joint;ctx.lineWidth=1;
+      for(let i=0;i<(siege?18:8);i++){const side=i%2,q=.10+(i*.173)% .84,x=side?w-rail-9:rail+9,y=q*h;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+(side?-1:1)*(9+i%4*3),y+5);ctx.lineTo(x+(side?-1:1)*(4+i%3*3),y+11);ctx.stroke();ctx.fillStyle=theme.joint;ctx.fillRect(x+(side?-5:2),y+8,3+i%3,2)}
+      if(siege){ctx.globalAlpha=.05;ctx.strokeStyle='#795f42';for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(w*.5+side*w*.16,h*.18);ctx.lineTo(w*.5+side*w*.27,h*.92);ctx.stroke()}}
+      ctx.restore();
+    }
     dressing(ctx,w,theme);
   }
   function drawFloor(ctx,w,h,horizon,theme){

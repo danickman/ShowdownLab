@@ -1,8 +1,8 @@
-// Shared academy skyline across sunny courtyards; one decode, live combat layers separate.
+// Three daylight locations; decoded once per URL, live combat layers stay separate.
 (()=>{'use strict';
   const images=new Map();
   const skyline='/v3/assets/arenas/sunlit-lab/skyline.webp?v=1';
-  const scenes=Object.fromEntries(['SUNLIT LAB','EMBER PIT','MOON VAULT','VERDANT RUINS'].map(name=>[name,skyline]));
+  const scenes={'SUNLIT LAB':skyline,'VERDANT RUINS':skyline,'FRONTIER KEEP':'/v3/assets/arenas/frontier/skyline.webp?v=1','SIEGE RUINS':'/v3/assets/arenas/siege/skyline.webp?v=1'};
   function load(name){
     const url=scenes[name];if(!url)return null;
     if(images.has(url))return images.get(url);
@@ -18,5 +18,5 @@
     ctx.save();ctx.beginPath();ctx.rect(0,0,width,height);ctx.clip();
     ctx.drawImage(image,(width-dw)/2,height-dh,dw,dh);ctx.restore();return true;
   }
-  window.ArenaArt={drawSky};load('SUNLIT LAB');
+  window.ArenaArt={drawSky};Object.keys(scenes).forEach(load);
 })();

@@ -69,3 +69,8 @@ Acceptance evidence:
 Non-goals: targeting, engagement slots, simulation separation, outcomes, progression/evolutions, roster expansion, menu redesign, more art generation or production deployment. Sunny menus, shared skyline, physical ground damage and protected core/adapter/round-loop/Stage5B remain intact.
 
 Phone acceptance remains OPEN: ordinary 1× melee should show clearer individual silhouettes without sliding feet, detached hits, misleading contact or cropping. Check round reset, lethal ARC, QUAKE/fire aftermath and menu/landscape framing. Measure ordinary and approximately 180-unit performance on a real phone. Approval of this exact branch head is required before the existing frozen-head/main/production release sequence.
+
+
+## Turn 7 — latest phone corrections and environment extension
+
+See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md) for the shortened opening, Guide layout, cached menu outlines, supplied-source Turtle repair and two new living daylight war settings. This supersedes the earlier all-four-same-location statement: academy/garden share one skyline, frontier and siege have distinct authored backdrops (three decodes). Live physical damage and bounded staging remain. Automated/native evidence passes; phone Guide layout, ambient visuals and measured ordinary/extreme performance remain OPEN. Eight small-source menu fighters still need approved original-source recovery. No main merge/production release or evolution work at this checkpoint.

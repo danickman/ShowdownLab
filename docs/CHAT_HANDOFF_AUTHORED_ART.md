@@ -492,3 +492,8 @@ Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one pr
 ## Turn 6 — bounded staging checkpoint (2026-10-08)
 
 A shared presentation-only transform now modestly separates ordinary melee (2–44 living fighters, horizontal cap 14px, vertical 6px, smooth settling). Fighters, rings/shadows, cues and callouts use the same staged positions; emitted ground damage/spell impacts/defeat capture their landing offset. Dense fights bypass spread; storage is capped/reset. Camera short-viewport sizing prevents full-height Dragon clipping in landscape. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for files, evidence, limits and OPEN phone gates. Combat core, outcomes, sunny environments/UI, physical damage and evolution state remain unchanged. No production release. Verify the actual branch head before continuing.
+
+
+## Turn 7 — phone feedback / living daylight arenas / Turtle repair
+
+User reports presentation looks better, with specific remaining intro/Guide/quality and Turtle-run issues. Opening wash now ends by 350ms, captions at 900ms; Guide cards use content-sized block flow and more spacing. Menu ink is cached once per canonical; Turtle move is repaired from supplied complete source and Turtle gains a 512px standing presentation. Eight other menu fighters still need higher-resolution approved source recovery. New frontier/siege authored daylight scenery and bounded sky/perimeter animation extend the sunny direction. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md) for exact files, source crops/hash, generation prompts, verification and OPEN phone gates. No fighter generation, combat/evolution change or production release.
