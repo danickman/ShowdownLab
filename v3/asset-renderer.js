@@ -47,12 +47,14 @@ function resolve(type,state){const f=manifest[type];if(!f)return null;return f.s
 function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
 function allAuthoredUrls(){return Object.values(authored).flatMap(f=>[...Object.values(f.urls),...(f.presentationUrl?[f.presentationUrl]:[])])}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
-function drawTeamRing(c,x,y,size,team,ground=y){
-  const col=team==='red'?'#ff5d57':'#36bfff';
+function drawTeamRing(c,x,y,size,team,ground=y,density=0){
+  const col=team==='red'?'#dc5146':'#228fba';
   c.save();
-  c.globalAlpha=.15;c.fillStyle=col;c.beginPath();c.ellipse(x,ground,size*.39,size*.14,0,0,Math.PI*2);c.fill();
-  c.globalAlpha=.84;c.strokeStyle=col;c.lineWidth=Math.max(2,size*.024);c.beginPath();c.ellipse(x,ground,size*.35,size*.108,0,0,Math.PI*2);c.stroke();
+  c.globalAlpha=.23;c.fillStyle=col;c.beginPath();c.ellipse(x,ground,size*.39,size*.14,0,0,Math.PI*2);c.fill();
+  c.globalAlpha=.95;c.strokeStyle=col;c.lineWidth=Math.max(2.5,size*.032);c.beginPath();c.ellipse(x,ground,size*.35,size*.108,0,0,Math.PI*2);c.stroke();
+  if(density<36){
   c.globalAlpha=.28;c.lineWidth=Math.max(1,size*.010);c.beginPath();c.ellipse(x,ground,size*.27,size*.078,0,0,Math.PI*2);c.stroke();
+  }
   c.restore()
 }
 // Logical CSS-pixel bounds: independent of DPR and of the combat camera.
@@ -66,7 +68,7 @@ function presentationFrame(bounds,ratio=1,anchor=[.5,.948],scale=1){
 function drawProcedural(c,type,x,y,size,team,o){
   if(!window.FighterArt)return false;
   if(o.presentation){const b=o.presentationBounds||{width:c.canvas.width,height:c.canvas.height},f=presentationFrame(b);window.FighterArt.draw(c,type,f.x,f.y-f.h*.35,f.h*.68,team,{...o,action:'idle'});drawTeamRing(c,f.ringX,0,f.ringSize,team,f.ringY)}
-  else{drawTeamRing(c,x,y,size,team);window.FighterArt.draw(c,type,x,y-size*.43,size,team,o)}
+  else{drawTeamRing(c,x,y,size,team,y,o.density||0);window.FighterArt.draw(c,type,x,y-size*.43,size,team,o)}
   return true
 }
 const POSE_HOLD={attack:380,signature:560,hit:340,guard:220};
@@ -151,7 +153,7 @@ function drawAuthored(c,type,x,y,size,team,o){
   // A failed optional high-resolution portrait still has a valid authored idle.
   if(o.presentation&&rec.error&&src===fighter.presentationUrl){src=fighter.urls.idle;rec=load(src)}
   if(rec.error||missing.has(src))return false;
-  if(!rec.ready){if(o.presentation){const f=presentationFrame(o.presentationBounds||{width:c.canvas.width,height:c.canvas.height});drawTeamRing(c,f.ringX,0,f.ringSize,team,f.ringY)}else drawTeamRing(c,x,y,size,team);return 'loading'}
+  if(!rec.ready){if(o.presentation){const f=presentationFrame(o.presentationBounds||{width:c.canvas.width,height:c.canvas.height});drawTeamRing(c,f.ringX,0,f.ringSize,team,f.ringY)}else drawTeamRing(c,x,y,size,team,y,o.density||0);return 'loading'}
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
   const ratio=img.naturalWidth/img.naturalHeight,ax=fighter.anchor[0],ay=fighter.anchor[1],m=o.presentation?{dx:0,dy:0,rot:0,sx:1,sy:1}:motion(type,state,o,size,pose.age,pose.hold);
   let h=o.presentation?size:size*fighter.scale,drawX=x,drawY=y;
@@ -161,7 +163,7 @@ function drawAuthored(c,type,x,y,size,team,o){
     h=frame.h;drawX=frame.x;drawY=frame.y;
   }
   const w=h*ratio;
-  if(frame)drawTeamRing(c,frame.ringX,0,frame.ringSize,team,frame.ringY);else drawTeamRing(c,x,y,size,team);
+  if(frame)drawTeamRing(c,frame.ringX,0,frame.ringSize,team,frame.ringY);else drawTeamRing(c,x,y,size,team,y,o.density||0);
   c.save();c.translate(drawX+m.dx,drawY+m.dy);c.rotate(m.rot);c.scale(o.flip?-m.sx:m.sx,m.sy);
   if(fighter.inkBoost&&!o.presentation){
     c.save();c.filter='brightness(0)';c.globalAlpha=.92;
@@ -178,7 +180,7 @@ function draw(c,type,x,y,size,team='blue',o={}){
   }
   if(window.FighterArt)return drawProcedural(c,type,x,y,size,team,o);
   const fighter=manifest[type],state=stateName(o.action),spec=resolve(type,state);
-  if(fighter&&spec){const frame=Math.floor(((o.time||0)/1000)*(spec.fps||8))%spec.frames.length,rec=load(spec.frames[frame]);if(rec.ready){const img=rec.img,scale=size*fighter.scale,ratio=img.naturalWidth/Math.max(1,img.naturalHeight),h=scale,w=h*ratio,ax=fighter.anchor?.[0]??.5,ay=fighter.anchor?.[1]??.82;c.save();c.translate(x,y);if(o.flip)c.scale(-1,1);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team);return true}}
+  if(fighter&&spec){const frame=Math.floor(((o.time||0)/1000)*(spec.fps||8))%spec.frames.length,rec=load(spec.frames[frame]);if(rec.ready){const img=rec.img,scale=size*fighter.scale,ratio=img.naturalWidth/Math.max(1,img.naturalHeight),h=scale,w=h*ratio,ax=fighter.anchor?.[0]??.5,ay=fighter.anchor?.[1]??.82;c.save();c.translate(x,y);if(o.flip)c.scale(-1,1);c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();drawTeamRing(c,x,y,size,team,y,o.density||0);return true}}
   return false
 }
 function resetPoseMemory(){poseMemory.clear()}
