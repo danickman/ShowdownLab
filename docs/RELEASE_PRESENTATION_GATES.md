@@ -89,3 +89,8 @@ See [LANDMARKS_FLOOR_SPACING.md](LANDMARKS_FLOOR_SPACING.md): full-width side la
 ## Knight Evolved branch registration — 2026-10-08
 
 See [KNIGHT_EVOLUTION_REGISTRATION.md](KNIGHT_EVOLUTION_REGISTRATION.md). Seven shared-scale poses now active for Knight L5+, with registered equipment bounds and L10 Evolved fallback. Lab permits L1–10. Automated/native checks pass; phone release gates remain OPEN. This supersedes the prior inactive-spike status. No main merge or production release.
+
+
+## Beetank Evolved and academy floor — 2026-10-09
+
+See [BEETANK_EVOLUTION_ARENA_PASS.md](BEETANK_EVOLUTION_ARENA_PASS.md) for assets, implementation, verification and open phone gates; [EVOLUTION_DESIGN_MAP.md](EVOLUTION_DESIGN_MAP.md) defines candidate directions for all ten. Knight + Beetank Evolved now select at L5+, with L10 fallback. Sunlit Lab gains authored ground, bounded physical rush wakes, level-aware MVP/captions and corrected Beetank facing. Base assets and combat rules are unchanged. Goose, then Sniper are next art priorities after pilot phone review. No main merge or production release.

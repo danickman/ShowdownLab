@@ -17,6 +17,10 @@ def main():
                      "charge" if fighter == "knight" else "signature"):
             if not (ASSETS / fighter / f"{pose}.webp").is_file():
                 errors.append(f"{fighter}/{pose}.webp: missing")
+    for fighter in ('knight', 'beetank'):
+        for pose in ('idle', 'move', 'attack', 'guard', 'hit', 'defeat', 'presentation', 'charge' if fighter == 'knight' else 'signature'):
+            if not (ASSETS / fighter / 'evolved' / f'{pose}.webp').is_file():
+                errors.append(f'{fighter}/evolved/{pose}.webp: missing')
     for path in sorted(ASSETS.rglob("*.webp")):
         try:
             payload = path.read_bytes()

@@ -27,6 +27,8 @@
     const gradient=ctx.createLinearGradient(0,0,0,h);theme.floor.forEach((col,i)=>gradient.addColorStop([0,.65,1][i],col));ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
     const rail=Math.max(8,w*.024),project=(t,q)=>w*.5+(t-.5)*(w-rail*2)*(.52+q*.48);
     // Broad staggered flagstones: increasing row depth gives a grounded perspective.
+    const illustrated=window.ArenaFloorArt?.draw(ctx,w,h,theme.dressing)===true;
+    if(!illustrated){
     const rows=[0,.065,.16,.30,.49,.73,1];
     for(let row=0;row<rows.length-1;row++){
       const near=rows[row+1],far=rows[row],offset=row%2?.125:0;
@@ -94,6 +96,7 @@
       for(let i=0;i<14;i++){const q=.1+i*.06,x=project(i%2?.95:.05,q),y=q*h;ctx.beginPath();ctx.ellipse(x,y,5+q*8,2+q*2,0,0,Math.PI*2);ctx.fill()}
     }
     ctx.restore();
+    }
     // Dressed perimeter stones connect the floor to the distant courtyard wall.
     ctx.fillStyle=theme.stone;ctx.fillRect(0,0,rail,h);ctx.fillRect(w-rail,0,rail,h);
     ctx.fillStyle='#fff8de';ctx.globalAlpha=.65;ctx.fillRect(rail,0,2,h);ctx.fillRect(w-rail-2,0,2,h);
@@ -114,7 +117,7 @@
   function drawFloor(ctx,w,h,horizon,theme){
     const height=h-horizon-4;if(w<=0||height<=0)return false;
     const dpr=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1200000/(w*height)));
-    const key=JSON.stringify([w,height,dpr,theme.floor,theme.stone,theme.joint,theme.dressing]);
+    const key=JSON.stringify([w,height,dpr,theme.floor,theme.stone,theme.joint,theme.dressing,window.ArenaFloorArt?.revision||0]);
     if(cached?.key!==key){
       let canvas;
       try{canvas=typeof OffscreenCanvas==='function'?new OffscreenCanvas(1,1):window.document?.createElement('canvas');if(!canvas)return false;

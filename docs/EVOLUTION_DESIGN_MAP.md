@@ -1,0 +1,28 @@
+# Evolution design map — current ten fighters
+
+Candidate art direction, not new combat rules. L1–4 Base, L5–9 Evolved, L10 Ultimate. Numeric level and collection Mastery stay separate. Knight and Beetank Evolved are active branch pilots; all other forms below are design proposals. L10 temporarily uses the best available form; it does not imply Ultimate assets exist.
+
+Evolution should change readable silhouette and equipment construction while retaining the face, species, role, core colors and original weapon count. Intermediate levels use restrained details within a form. Avoid replacing an entire identity with gold trim, a larger sprite or glowing effects. Use sunny physical materials and clear outlines.
+
+| Fighter | Identity to preserve | Evolved L5–9 | Ultimate L10 | Signature visual direction |
+|---|---|---|---|---|
+| Knight | Closed T visor, blue tabard, one spear and kite shield | Layered brass-edged plate, stepped shield, divided tabard; active pilot | Banner-crest helm, broad shoulder mantle and long tower-shaped kite shield; same spear | Planted brace → controlled shield-led spear charge; stone wake |
+| Beetank | Teal rhino-beetle shell, amber eye, one horn, thick claws | Stepped wing-case dome and reinforced shoulder/forearm plates; active pilot | Broad ridged fortress carapace and reinforced horn with a single larger central tip; no cannon or wheels | Low ram stance → dirt and crushed stone thrown behind feet |
+| Sniper | Original face/hat, long rifle, patient ranged role | Braced stock, clear long coat hem and shoulder ammunition roll; one rifle | Sharpshooter cloak with separated triangular hem and heavier supported barrel; avoid modern robot armor | Brief muzzle flash, casing, thin shot and precise impact |
+| Goose | White goose, orange bill/feet, comic menace | Raised neck ruff, fuller pointed tail fan, blue neck band; no human arms | Tall crowned-feather silhouette and broad wing fan; remain a goose | Wing-driven dash, feathers and a short flattened honk pressure wave |
+| Dragon | Base face, wing and horn topology, fire silhouette | Stronger chest plates, segmented wing fingers and pronounced dorsal ridge | Crown-like head ridge and larger angular wing silhouette; retain limb/wing counts | Hot breath core, sparse embers and persistent char |
+| Assassin | Original hood/face treatment and blade set | Split coat tails, stepped shoulder guard and clearly separated blade posture | Long asymmetric cloak edge and segmented bracers; same blade count | Brief disappearance, small cloth streak and decisive close impact |
+| Mole | Original mole body, face and digging claws | Broad shovel-shaped foreclaws, reinforced shoulder harness and dust-colored straps | High rounded back plate and stronger spade claws; no drill machine substitution | Burrow furrow, clods and a local eruption rather than full-screen dust |
+| Turtle | Green turtle, rounded shell and sturdy legs | Raised hexagonal shell ridge, thicker rim and reinforced forelimb scutes | Layered dome with a fortress-like shell edge; no separate shield weapon | Shell-first rolling smear, stone skid and compressed slam |
+| Goblin | Long ears, expressive face, original short blade | Notched leather shoulder guard, longer scarf and heavier single short blade | Jagged shoulder silhouette and split leather mantle; avoid turning into an orc | Fast foot dirt, short blade arc and close-contact punctuation |
+| Barbarian | Original face/hair, fur/leather, original two-handed axe | Larger fur shoulder outline, layered leather belt and reinforced axe cheek | Mane-like fur mantle and distinct crescent axe head; still one axe | Weighted axe arc, stone chips and brief ground fracture |
+
+These are art contracts. Proposed gameplay differentiators, such as a stronger brace or altered ram behavior, require a separate balance milestone and deterministic regression; none are implemented here.
+
+## Production sequence and checks
+
+Complete one fighter at a time: Base reference → Evolved canonical → seven-pose sheet → extract complete components → repair only failed poses individually → shared-scale registration → contact-sheet/battle render → phone review. Do not create packs for every intermediate level. No new roster units.
+
+Each seven-pose pack needs idle, move, attack, guard, signature, hit and defeat. Preserve full horns, ears, feet, wings and both weapon ends. Use one scale across a sheet; anchor each pose by its actual ground point. Do not fit every pose into the same square. Store source, exact prompts, foot points, pose QA and generated metadata. Match identity, equipment and pose clarity at 8.5/10 or better, with no critical crop/equipment defects. Manual scores are editorial judgments, not automatic measurements.
+
+Next art priority: Goose Evolved for species/silhouette contrast, then Sniper Evolved for ranged equipment registration. Review the two active pilots on phone before accelerating production across the remaining roster. Ultimate begins with Knight only once its evolved progression feels right; the L10 silhouette should earn its own reveal.

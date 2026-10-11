@@ -63,9 +63,26 @@
     ctx.globalAlpha=Math.max(0,1-age*2.5)*.55;ctx.strokeStyle='#f4d8a4';ctx.lineWidth=2.4*(1-age)+.6;
     ctx.beginPath();ctx.ellipse(0,3,(9+age*62)*power,(3+age*18)*power,0,0,Math.PI*2);ctx.stroke();ctx.restore();
   }
+  function drawRush(ctx,f,age,tier='full'){
+    if(age<0||age>=1||tier==='minimal')return;
+    const size=Math.max(24,Math.min(112,f.size||80)),direction=f.facing===-1?-1:1,fade=(1-age)*(1-age),n=tier==='reduced'?3:5;
+    ctx.save();ctx.translate(f.x,f.y);ctx.scale(direction,1);ctx.lineCap='round';
+    // Short earth streaks and lifted stone crumbs trail the planted foot position.
+    // Physical tones and flattened geometry keep the wake beneath the silhouette.
+    for(let i=0;i<n;i++){
+      const lane=(i-(n-1)*.5)*size*.045,back=size*(.10+age*.58+(i%2)*.09),length=size*(.12+age*.18);
+      ctx.globalAlpha=fade*.30;ctx.strokeStyle='#856b48';ctx.lineWidth=f.heavy?2.4:1.6;
+      ctx.beginPath();ctx.moveTo(-back,lane);ctx.lineTo(-back-length,lane+size*.012);ctx.stroke();
+      ctx.globalAlpha=fade*.52;ctx.fillStyle=i%2?'#d6c39c':'#bba078';
+      const lift=Math.sin(age*Math.PI)*(4+i%3*2);polygon(ctx,-back, lane-lift,1.4+i%2,f.seed+i+age*3);ctx.fill();
+      ctx.globalAlpha=fade*.10;ctx.fillStyle='#c7b18a';ctx.beginPath();ctx.ellipse(-back-length*.5,lane-2,5+age*7,2+age*2,0,0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+  }
   const weapons={knight:[.25,-.55],sniper:[.24,-.61],goose:[.20,-.40],dragon:[.32,-.55],assassin:[.23,-.54],beetank:[.30,-.35],mole:[.24,-.38],turtle:[.28,-.37],goblin:[.23,-.52],barbarian:[.24,-.62]};
   function anchor(type,role,height,facing=1){const point=role==='weapon'?(weapons[type]||weapons.knight):[0,-.47];return{x:point[0]*height*facing,y:point[1]*height}}
   function effectLife(kind,tier,tech=0){
+    if(kind==='chargeWake')return 420;
     if(kind==='comic')return 1050;
     if(/Spell$/.test(kind))return Math.min(1250,820+tech*70);
     if(['shot','muzzle','muzzleShock'].includes(kind))return 180;
@@ -75,5 +92,5 @@
     if(kind==='signatureBurst')return 460;
     return tier==='minimal'?460:tier==='reduced'?560:tier==='balanced'?660:760;
   }
-  window.BattleTheatre={drawDamage,drawImpact,anchor,effectLife};
+  window.BattleTheatre={drawDamage,drawImpact,drawRush,anchor,effectLife};
 })();
