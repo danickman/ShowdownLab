@@ -1,8 +1,8 @@
-// Three daylight locations; decoded once per URL, live combat layers stay separate.
+// Four daylight locations; decoded once per URL, live combat layers stay separate.
 (()=>{'use strict';
   const images=new Map();
   const skyline='/v3/assets/arenas/sunlit-lab/skyline.webp?v=1';
-  const scenes={'SUNLIT LAB':skyline,'VERDANT RUINS':skyline,'FRONTIER KEEP':'/v3/assets/arenas/frontier/skyline.webp?v=1','SIEGE RUINS':'/v3/assets/arenas/siege/skyline.webp?v=1'};
+  const scenes={'SUNLIT LAB':skyline,'VERDANT RUINS':'/v3/assets/arenas/verdant/skyline.webp?v=1','FRONTIER KEEP':'/v3/assets/arenas/frontier/skyline.webp?v=1','SIEGE RUINS':'/v3/assets/arenas/siege/skyline.webp?v=1'};
   function load(name){
     const url=scenes[name];if(!url)return null;
     if(images.has(url))return images.get(url);
@@ -17,7 +17,7 @@
     // Preserve BOTH side landmarks. Extend only the upper sky band when a
     // portrait region is taller than the complete width-fitted panorama.
     ctx.save();ctx.beginPath();ctx.rect(0,0,width,height);ctx.clip();
-    const extra=Math.max(0,height-dh),skyColour=name==='SIEGE RUINS'?'#337bda':name==='FRONTIER KEEP'?'#478ae5':'#589ee8';
+    const extra=Math.max(0,height-dh),skyColour=name==='SIEGE RUINS'?'#337bda':name==='FRONTIER KEEP'?'#478ae5':name==='VERDANT RUINS'?'#579fe9':'#589ee8';
     if(extra){ctx.fillStyle=skyColour;ctx.fillRect(0,0,width,extra+1)}
     ctx.drawImage(image,0,height-dh,dw,dh);
     if(extra){

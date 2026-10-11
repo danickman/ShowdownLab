@@ -79,9 +79,26 @@
     }
     ctx.restore();
   }
+  function drawHonk(ctx,f,age,tier='full'){
+    if(age<0||age>=1)return;
+    const fade=(1-age)*(1-age),r=14+age*58;
+    ctx.save();ctx.translate(f.x,f.y);
+    // Sound pressure sits in the ground plane instead of obscuring the head.
+    ctx.globalAlpha=fade*.72;ctx.strokeStyle='#f1d789';ctx.lineWidth=tier==='minimal'?1.4:2.3;
+    ctx.beginPath();ctx.ellipse(0,2,r,r*.25,0,0,Math.PI*2);ctx.stroke();
+    const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
+    const count=tier==='minimal'||reduced?0:tier==='reduced'?2:(f.level>=5?5:2);
+    for(let i=0;i<count;i++){
+      const a=i*2.399+(f.seed||1)*.11,x=Math.cos(a)*(8+age*27),y=Math.sin(a)*(3+age*9)-Math.sin(age*Math.PI)*(10+i*2),angle=a+age*.7;
+      ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.globalAlpha=fade*.78;ctx.fillStyle='#fffcf0';ctx.strokeStyle='#8d998b';ctx.lineWidth=.65;
+      ctx.beginPath();ctx.moveTo(0,-4);ctx.quadraticCurveTo(3,0,0,4);ctx.quadraticCurveTo(-2,1,0,-4);ctx.fill();ctx.stroke();ctx.restore();
+    }
+    ctx.restore();
+  }
   const weapons={knight:[.25,-.55],sniper:[.24,-.61],goose:[.20,-.40],dragon:[.32,-.55],assassin:[.23,-.54],beetank:[.30,-.35],mole:[.24,-.38],turtle:[.28,-.37],goblin:[.23,-.52],barbarian:[.24,-.62]};
   function anchor(type,role,height,facing=1){const point=role==='weapon'?(weapons[type]||weapons.knight):[0,-.47];return{x:point[0]*height*facing,y:point[1]*height}}
   function effectLife(kind,tier,tech=0){
+    if(kind==='honk')return 420;
     if(kind==='chargeWake')return 420;
     if(kind==='comic')return 1050;
     if(/Spell$/.test(kind))return Math.min(1250,820+tech*70);
@@ -92,5 +109,5 @@
     if(kind==='signatureBurst')return 460;
     return tier==='minimal'?460:tier==='reduced'?560:tier==='balanced'?660:760;
   }
-  window.BattleTheatre={drawDamage,drawImpact,drawRush,anchor,effectLife};
+  window.BattleTheatre={drawDamage,drawImpact,drawRush,drawHonk,anchor,effectLife};
 })();

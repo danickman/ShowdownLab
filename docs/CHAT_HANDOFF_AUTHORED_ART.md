@@ -526,3 +526,8 @@ See [KNIGHT_EVOLUTION_REGISTRATION.md](KNIGHT_EVOLUTION_REGISTRATION.md). Seven 
 ## Beetank Evolved and academy floor — 2026-10-09
 
 See [BEETANK_EVOLUTION_ARENA_PASS.md](BEETANK_EVOLUTION_ARENA_PASS.md) for assets, implementation, verification and open phone gates; [EVOLUTION_DESIGN_MAP.md](EVOLUTION_DESIGN_MAP.md) defines candidate directions for all ten. Knight + Beetank Evolved now select at L5+, with L10 fallback. Sunlit Lab gains authored ground, bounded physical rush wakes, level-aware MVP/captions and corrected Beetank facing. Base assets and combat rules are unchanged. Goose, then Sniper are next art priorities after pilot phone review. No main merge or production release.
+
+
+## Goose Evolved and Verdant Ruins — 2026-10-11
+
+See [GOOSE_EVOLUTION_VERDANT_PASS.md](GOOSE_EVOLUTION_VERDANT_PASS.md) for scope and validation. Three active Evolved pilots now include Goose, with seven registered poses and L10 fallback. Verdant gains a dedicated sunny skyline and honk gains a bounded grounded pressure wave with reduced-motion feather suppression. Automated and native render checks pass; exact-head phone gates remain OPEN. Sniper is next. This supersedes the previous two-pilot count. No main merge or production release.
