@@ -1,0 +1,183 @@
+{
+  "fighter": "turtle",
+  "form": "evolved",
+  "status": "review branch; phone QA open",
+  "source_scale": 0.4,
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        206,
+        8,
+        523,
+        429
+      ],
+      "source_foot": [
+        369,
+        420
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        135,
+        175
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        629,
+        12,
+        983,
+        426
+      ],
+      "source_foot": [
+        703,
+        417
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        149,
+        173
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        1025,
+        50,
+        1469,
+        428
+      ],
+      "source_foot": [
+        1239,
+        420
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        185,
+        159
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        119,
+        450,
+        518,
+        778
+      ],
+      "source_foot": [
+        322,
+        771
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        167,
+        139
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "signature",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        580,
+        434,
+        990,
+        770
+      ],
+      "source_foot": [
+        763,
+        762
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        171,
+        142
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        1078,
+        428,
+        1504,
+        778
+      ],
+      "source_foot": [
+        1320,
+        768
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        178,
+        148
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        622,
+        768,
+        981,
+        1017
+      ],
+      "source_foot": [
+        839,
+        1006
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        151,
+        107
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# Turtle Evolved registration
+
+Continuation base: review `7cb57324df8f99a44a1d021f3f07035f4ceca5e7`. Its Vercel preview was confirmed READY with matching SHA at `showdownlab-oqd25ywf3-danickmans-projects.vercel.app`, including the five-level mechanics and Mole artwork. The earlier manual preview request's team-scope 403 remains a connector limitation; automatic Git deployment succeeded. Main/production remain `ba58c3d`.
+
+Turtle Evolved preserves its olive face/scutes, tan segmented plastron, upright sturdy anatomy, two bare fists, two three-toed feet, brown leather bracers/kneepads, wraps and utility belt. Its raised central hex shell ridge, thick stepped natural shell rim and reinforced forelimb scutes change the silhouette without a separate weapon, shield or generic metal knight armour. Taller battlement shell construction is reserved for Ultimate.
+
+Built-in imagegen created the canonical and complete 3/3/1 sheet. Exact prompts, lossless sources and QA/registration manifest are in `tools/art-spike/turtle/evolved/`; preparation is `tools/prep-evolved-turtle.py`. Complete alpha components share .4 extraction scale, six-pixel padding and thin comic ink. Runtime scale 1.12 / reference height 168.4 is shared by all poses, with manually registered ground points. Crouches/defeat are not fit to idle height. Each temporary WebP decodes before replacing the runtime file.
+
+The seven poses are idle, heavy trudge, forward snap bite, low shell brace, shell-slam wind-up, recoil and seated defeat. Per-pose body, attack mouth and signature shell-edge cues use the existing API. Actual files select from L2; L3 uses the existing accent, and L4/L5 temporarily use Evolved pending dedicated Ultimate art. Ricochet Shell remains 30%/45% nearby damage reflection; combat, HP/damage scaling, Mastery and progression are unchanged.
+
+Validation: 144 authored and six arena WebPs decode. Eight Evolved packs each pass 4,110 complete equipment/camera/staging cases; Turtle uses the heavy camera-size contract. All seven actual decoded Turtle poses select distinct files at one source-pixel scale. Mouth/shell cues mirror within the full shell/foot envelope; a failed Evolved attack falls back to Base. Native contact sheet and eight four-arena duel/mixed-crowd composites were inspected. Eight additional active L2/L5 24/180-unit scenes pass readiness, effect budgets, captured Ultimate ground anchors, dense suppression and balanced Canvas state. Existing progression/ten-ability/terminal/reduced-motion/physical/camera/staging regressions and baseline/mixed-level deterministic simulations pass.
+
+Editorial identity/equipment scores are 9/10 and pose clarity at least 8.5/10; these are manual judgments, not automatic or phone approval. The full shell rim, fists and feet are framed in the contact sheet. Mixed melee overlap, phone transition/framing/opacity/cold-load and FPS gates remain open.
+
+Reproduce: `python tools/prep-evolved-turtle.py`, `python tools/check-authored-assets.py`, `node tools/check-evolution-packs.cjs`, `node tools/render-evolution-review.cjs turtle`, `node tools/check-turtle-scenes.cjs [output.png]` and `node tools/check-evolution-effects.cjs`. Native tools require `@napi-rs/canvas`.
+
+Eight Evolved packs are complete; Goblin and Barbarian remain. All dedicated Ultimate artwork remains pending. During this pass the user explicitly requested Dragon Base regeneration; that is a separate authorized Base-only exception and subsequent checkpoint. Other approved Base art and Dragon Evolved remain protected.
