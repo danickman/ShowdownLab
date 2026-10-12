@@ -109,3 +109,10 @@ See [SNIPER_EVOLUTION_REGISTRATION.md](SNIPER_EVOLUTION_REGISTRATION.md) for exa
 ## Contact-aware staging and Verdant floor — 2026-10-11
 
 See [CROWD_VERDANT_READABILITY_PASS.md](CROWD_VERDANT_READABILITY_PASS.md). Crowded ranks fan away from nearby opponents, and four bounded allied torso passes improve spacing inside the unchanged 56px/36px and 60-unit limits. Secondary per-unit labels are limited to small fights. Verdant gains a sunny moss/stone illustrated floor with one current image record and procedural fallback; academy art and live physical damage are retained. Actual seeded 1× before/after frames and four-arena native composites were inspected. Automated checks pass; larger melee overlap and exact-head phone motion/FPS approval remain OPEN. Approved Base/Evolved art, combat, progression, main and production are unchanged.
+
+
+## Main release, effects hotfix and Dragon Evolved — 2026-10-11
+
+The user authorised main merge of review head `303c51a`; PR #7 merged as `fb9f3c9` and Vercel production served its tested tree. A real public-browser smoke exposed last-fighter/final-KO caption shadowing, fixed on production in `ba58c3d` with a reproducing regression. Post-fix Lab termination passed without new application-origin errors. See [FX_CAPTION_HOTFIX.md](FX_CAPTION_HOTFIX.md).
+
+Dragon Evolved is the next review checkpoint, based on the hotfix: seven registered poses, a repaired four-foot move, shared anatomy scale, full wing/horn/tail framing and mouth-aligned breath cues. Five packs / 35 Evolved combat poses / 120 authored WebPs now exist on the review branch. See [DRAGON_EVOLUTION_REGISTRATION.md](DRAGON_EVOLUTION_REGISTRATION.md). Approved Base files, combat and progression are unchanged. The new Dragon art is not released to main/production; new-head phone visual/FPS gates remain OPEN.
