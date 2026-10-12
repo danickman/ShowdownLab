@@ -1,8 +1,8 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const env={console,Image:class{},window:null};env.window=env;vm.createContext(env);
-for(const f of ['evolved-knight','asset-renderer','camera','combat-staging'])vm.runInContext(fs.readFileSync(`v3/${f}.js`,'utf8'),env);
+for(const f of ['evolved-knight','evolution-rules','asset-renderer','camera','combat-staging'])vm.runInContext(fs.readFileSync(`v3/${f}.js`,'utf8'),env);
 const art=env.FighterAssets;
-for(const level of [1,4,5,9,10]){assert.equal(art.visualForm('knight',level),level>=5?'evolved':'base');assert.equal(art.visualForm('beetank',level),'base')}
+for(const level of [1,2,3,4,5,10]){assert.equal(art.visualForm('knight',level),level>=2?'evolved':'base');assert.equal(art.visualForm('beetank',level),'base')}
 const e=env.KnightEvolvedArt,k=e.scale/e.referenceHeight,envelope=art.visualEnvelope('knight',5);
 for(const p of Object.values(e.poses)){assert(p.anchor.every(Number.isFinite));assert(p.width*p.anchor[0]*k<=envelope.left);assert(p.width*(1-p.anchor[0])*k<=envelope.right);assert(p.height*p.anchor[1]*k<=envelope.above);assert(p.height*(1-p.anchor[1])*k<=envelope.below)}
 let checks=0;

@@ -2,7 +2,7 @@
 
 Updated: 2026-10-12
 
-Current operational checkpoint: see **Assassin Evolved** at the end and `ASSASSIN_EVOLUTION_REGISTRATION.md`. Main has been released with the caption hotfix; Dragon and Assassin are new review-branch work. Earlier sections are historical; current user handoff and latest milestone supersede old art deferrals. Verify actual branch head before editing.
+Current operational checkpoint: see **Five-level progression and Ultimate abilities** at the end and `FIVE_LEVEL_ULTIMATE_MILESTONE.md`. Main has the caption hotfix; Dragon/Assassin art and the newly authorized progression/ability changes are review-branch work. Earlier sections are historical; current user handoff and latest milestone supersede old art deferrals. Verify actual branch head before editing.
 
 Use this as the operational handoff for continuing Showdown Lab in a fresh chat.
 
@@ -555,3 +555,8 @@ Dragon Evolved is the next review checkpoint, based on the hotfix: seven registe
 ## Assassin Evolved — 2026-10-12
 
 See [ASSASSIN_EVOLUTION_REGISTRATION.md](ASSASSIN_EVOLUTION_REGISTRATION.md). Seven registered combat poses plus a portrait preserve the hood, eyes, twin daggers and complete feet/coat tips. Two failed sheet poses are replaced with anatomy-calibrated move/attack repairs; dagger/body cues use existing effect contracts. Six packs / 42 Evolved combat poses / 128 authored WebPs now exist on the review branch. Asset decoding, actual pose/fallback rendering, six-pack equipment envelopes, eight duel/mixed-crowd arena composites and eight dense L5/L10 scenes pass, alongside deterministic and presentation regressions. Mixed melee overlap and exact-head phone motion/FPS remain OPEN. Base art, protected simulation, combat and progression are unchanged. Production remains `ba58c3d`; Dragon and Assassin are review-only. Mole, Turtle, Goblin and Barbarian remain, with Ultimate art absent.
+
+
+## Five-level progression and Ultimate abilities — 2026-10-12
+
+The user explicitly authorized a gameplay milestone and selected the L5 cap. See [FIVE_LEVEL_ULTIMATE_MILESTONE.md](FIVE_LEVEL_ULTIMATE_MILESTONE.md), which supersedes all earlier L1–4 / L5–9 / L10 form boundaries. L2 selects available Evolved art; L3 adds a restrained rim/ground accent. L4 unlocks a role-specific Ultimate ability, and L5 enhances it with a stronger accent; Ultimate art is still absent and falls back honestly to existing forms. HP and damage increase 40% multiplicatively at each upgrade. Mastery/base role stats, terminal safeguards and frozen roster remain. Both player and enemy drafts stop offering upgrades at L5; Lab/API/core inputs enforce the cap. Guide and authored reward previews describe actual abilities and pending art. Ability/progression/determinism/native effect checks are required alongside existing presentation regressions. Review-only; production remains `ba58c3d`. Balance and exact-head phone/FPS acceptance remain open.

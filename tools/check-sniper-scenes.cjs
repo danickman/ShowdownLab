@@ -3,7 +3,7 @@ class AssetImage extends Image{set src(src){try{super.src=fs.readFileSync(src.sp
 const read=file=>fs.readFileSync(file,'utf8');
 async function env(){
  const e={console,Image:AssetImage,CustomEvent:class{},performance:{now:()=>5000},scars:[],spellMarks:[],dispatchEvent(){},spectacleTier:()=> 'full',document:{createElement:()=>createCanvas(1,1)},devicePixelRatio:2};e.window=e;vm.createContext(e);
- for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','asset-renderer','camera','arena-floor-art','arena-art','arena-ambience','battle-theatre','arena-stage','combat-staging'])vm.runInContext(read('v3/'+f+'.js'),e);
+ for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolution-rules','asset-renderer','camera','arena-floor-art','arena-art','arena-ambience','battle-theatre','arena-stage','combat-staging'])vm.runInContext(read('v3/'+f+'.js'),e);
  await new Promise(r=>setTimeout(r,1400));const src=read('v3/v3.js');
  vm.runInContext(src.slice(src.indexOf('function spritePoint('),src.indexOf('function effectScale(')),e);
  vm.runInContext(src.slice(src.indexOf('const ARENAS='),src.indexOf(';const arenaFor='))+';window.themes=ARENAS',e);
@@ -30,10 +30,10 @@ for(let scene=0;scene<4;scene++){
 // Exercise active evolved rendering in ordinary and extreme crowds on every arena.
 for(const count of [24,180])for(const round of [1,2,3,4]){
  const cv=createCanvas(390,844);Object.assign(e,{ctx:cv.getContext('2d'),prev:new Map(),fx:[],defeated:new Map(),comicGate:new Map(),scars:[],spellMarks:[],storyGate:new Set(),shake:0,flash:0,lastImpact:0,cap:t=>t,impactPunch:null,view:{w:390,h:844},staging:e.CombatStaging.create()});
- const units=Array.from({length:count},(_,i)=>({id:i+1,type:i%3===0?'sniper':i%3===1?'knight':'goose',level:i%2?5:10,team:i%2?'red':'blue',x:.1+(i%8)*.1,y:.12+(Math.floor(i/8)%10)*.08,hp:100,maxHp:100,action:'idle',target:(i+1)%count+1}));
+ const units=Array.from({length:count},(_,i)=>({id:i+1,type:i%3===0?'sniper':i%3===1?'knight':'goose',level:i%2?2:5,team:i%2?'red':'blue',x:.1+(i%8)*.1,y:.12+(Math.floor(i/8)%10)*.08,hp:100,maxHp:100,action:'idle',target:(i+1)%count+1}));
  e.FighterAssets.resetPoseMemory();e.state={round,speed:1,tick:1,units};e.cam=e.ShowdownCamera.create(390,844);for(let n=0;n<90;n++){e.cam.focus(units);e.staging.prepare(units,e.cam,n*16)}e.spawnFX(e.state);
  e.state={...e.state,tick:2,units:units.map(u=>({...u,action:u.type==='sniper'?'attack':'idle'}))};e.spawnFX(e.state);e.arena(5050);for(const u of e.state.units)e.drawUnit(u,count,5050);e.drawFX(5050);
  assert.equal(e.ctx.globalAlpha,1);assert(e.fx.length<=94);assert.equal(e.FighterAssets.diagnostics().errors,0);assert.equal(e.FighterAssets.diagnostics().ready,e.FighterAssets.diagnostics().total,'every portrait/pose must finish decoding');
 }
-console.log('PASS: active L5/L10 packs in eight ordinary/dense arena renders; bounded effects and Canvas state');
+console.log('PASS: active L2/L5 packs in eight ordinary/dense arena renders; bounded effects and Canvas state');
 fs.writeFileSync(process.argv[2]||'../sniper-arena-native.png',out.toBuffer('image/png'));console.log('PASS: four native daylight arenas with Evolved Sniper aim/attack, Beetank ram and Knight; aligned FX and balanced Canvas');})();

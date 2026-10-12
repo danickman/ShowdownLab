@@ -1,10 +1,10 @@
 # Evolution design map — current ten fighters
 
-Candidate art direction, not new combat rules. L1–4 Base, L5–9 Evolved, L10 Ultimate. Numeric level and collection Mastery stay separate. Knight, Beetank, Goose, Sniper, Dragon and Assassin Evolved are active branch pilots; all other forms below are design proposals. L10 temporarily uses the best available form; it does not imply Ultimate assets exist.
+Candidate art direction, not new combat rules. L1 Base, L2 Evolved, L3 Tempered effects, L4 Ultimate ability/art, L5 Ascended effects and stronger Ultimate. See `FIVE_LEVEL_ULTIMATE_MILESTONE.md` for the newly authorized mechanics. Numeric level and collection Mastery stay separate. Knight, Beetank, Goose, Sniper, Dragon and Assassin Evolved are active branch pilots; all other forms below are design proposals. L4–5 temporarily use the best available form; Ultimate assets do not yet exist.
 
 Evolution should change readable silhouette and equipment construction while retaining the face, species, role, core colors and original weapon count. Intermediate levels use restrained details within a form. Avoid replacing an entire identity with gold trim, a larger sprite or glowing effects. Use sunny physical materials and clear outlines.
 
-| Fighter | Identity to preserve | Evolved L5–9 | Ultimate L10 | Signature visual direction |
+| Fighter | Identity to preserve | Evolved L2–3 | Ultimate L4–5 | Signature visual direction |
 |---|---|---|---|---|
 | Knight | Closed T visor, blue tabard, one spear and kite shield | Layered brass-edged plate, stepped shield, divided tabard; active pilot | Banner-crest helm, broad shoulder mantle and long tower-shaped kite shield; same spear | Planted brace → controlled shield-led spear charge; stone wake |
 | Beetank | Teal rhino-beetle shell, amber eye, one horn, thick claws | Stepped wing-case dome and reinforced shoulder/forearm plates; active pilot | Broad ridged fortress carapace and reinforced horn with a single larger central tip; no cannon or wheels | Low ram stance → dirt and crushed stone thrown behind feet |
@@ -17,7 +17,7 @@ Evolution should change readable silhouette and equipment construction while ret
 | Goblin | Long ears, expressive face, original short blade | Notched leather shoulder guard, longer scarf and heavier single short blade | Jagged shoulder silhouette and split leather mantle; avoid turning into an orc | Fast foot dirt, short blade arc and close-contact punctuation |
 | Barbarian | Original face/hair, fur/leather, original two-handed axe | Larger fur shoulder outline, layered leather belt and reinforced axe cheek | Mane-like fur mantle and distinct crescent axe head; still one axe | Weighted axe arc, stone chips and brief ground fracture |
 
-These are art contracts. Proposed gameplay differentiators, such as a stronger brace or altered ram behavior, require a separate balance milestone and deterministic regression; none are implemented here.
+These are art contracts. Proposed gameplay differentiators, such as a stronger brace or altered ram behavior, require a separate balance milestone and deterministic regression; L4/L5 ability mechanics are now implemented as a separate authorized milestone; see `FIVE_LEVEL_ULTIMATE_MILESTONE.md`.
 
 ## Production sequence and checks
 
@@ -25,4 +25,4 @@ Complete one fighter at a time: Base reference → Evolved canonical → seven-p
 
 Each seven-pose pack needs idle, move, attack, guard, signature, hit and defeat. Preserve full horns, ears, feet, wings and both weapon ends. Use one scale across a sheet; anchor each pose by its actual ground point. Do not fit every pose into the same square. Store source, exact prompts, foot points, pose QA and generated metadata. Match identity, equipment and pose clarity at 8.5/10 or better, with no critical crop/equipment defects. Manual scores are editorial judgments, not automatic measurements.
 
-Sniper Evolved ranged equipment registration is implemented; see `SNIPER_EVOLUTION_REGISTRATION.md`. Dragon Evolved is now registered on the review branch; see `DRAGON_EVOLUTION_REGISTRATION.md`. Assassin Evolved is registered; see `ASSASSIN_EVOLUTION_REGISTRATION.md`. Six Evolved packs exist; Mole, Turtle, Goblin and Barbarian remain. Review the new Dragon/Assassin head on phone before accelerating those four. Evidence-led crowd/framing/floor polish and device frame pacing remain next review priorities. Ultimate begins with Knight only once its evolved progression feels right; the L10 silhouette should earn its own reveal.
+Sniper Evolved ranged equipment registration is implemented; see `SNIPER_EVOLUTION_REGISTRATION.md`. Dragon Evolved is now registered on the review branch; see `DRAGON_EVOLUTION_REGISTRATION.md`. Assassin Evolved is registered; see `ASSASSIN_EVOLUTION_REGISTRATION.md`. Six Evolved packs exist; Mole, Turtle, Goblin and Barbarian remain. Review the new Dragon/Assassin head on phone before accelerating those four. Evidence-led crowd/framing/floor polish and device frame pacing remain next review priorities. Ultimate begins with Knight only once its evolved progression feels right; the L4 silhouette should earn its own reveal.

@@ -3,7 +3,8 @@ const manifest={
   knight:{scale:1,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/knight/idle.webp'],fps:4},move:{frames:['/v3/assets/knight/move-1.webp','/v3/assets/knight/move-2.webp'],fps:8},attack:{frames:['/v3/assets/knight/attack-1.webp','/v3/assets/knight/attack-2.webp','/v3/assets/knight/attack-3.webp'],fps:12},skill:{frames:['/v3/assets/knight/skill-1.webp','/v3/assets/knight/skill-2.webp'],fps:10},hit:{frames:['/v3/assets/knight/hit.webp'],fps:8},defeat:{frames:['/v3/assets/knight/defeat.webp'],fps:4}}},
   dragon:{scale:1.28,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/dragon/idle.webp'],fps:4},move:{frames:['/v3/assets/dragon/move-1.webp','/v3/assets/dragon/move-2.webp'],fps:7},attack:{frames:['/v3/assets/dragon/attack-1.webp','/v3/assets/dragon/attack-2.webp'],fps:10},skill:{frames:['/v3/assets/dragon/fire-1.webp','/v3/assets/dragon/fire-2.webp','/v3/assets/dragon/fire-3.webp'],fps:12},hit:{frames:['/v3/assets/dragon/hit.webp'],fps:8},defeat:{frames:['/v3/assets/dragon/defeat.webp'],fps:4}}}
 };
-const V='evolved-assassin6';
+const V='evolution-five1';
+const evolution=window.ShowdownEvolution,reduceMotionQuery=window.matchMedia?.('(prefers-reduced-motion: reduce)');
 const authored={
   knight:{presentation:'presentation',scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
   sniper:{scale:1.26,anchor:[.5,.948],presentation:'presentation'},
@@ -23,18 +24,20 @@ for(const [type,spec] of Object.entries(authored)){
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
 const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt,sniper:window.SniperEvolvedArt,dragon:window.DragonEvolvedArt,assassin:window.AssassinEvolvedArt};
-for(const [type,e]of Object.entries(evolutions))if(e){e.urls={};for(const [state,p]of Object.entries(e.poses))e.urls[state]=`/v3/assets/authored/${type}/evolved/${p.file}.webp?v=${V}`;e.presentationUrl=`/v3/assets/authored/${type}/evolved/presentation.webp?v=${V}`}
-function visualForm(type,level=1){return Number(level)>=5&&evolutions[type]?'evolved':'base'}
+const ultimates=Object.fromEntries(Object.keys(authored).map(type=>[type,window[type[0].toUpperCase()+type.slice(1)+'UltimateArt']]));
+for(const [form,packs]of [['evolved',evolutions],['ultimate',ultimates]])for(const [type,e]of Object.entries(packs))if(e){e.urls={};for(const [state,p]of Object.entries(e.poses))e.urls[state]=`/v3/assets/authored/${type}/${form}/${p.file}.webp?v=${V}`;e.presentationUrl=`/v3/assets/authored/${type}/${form}/presentation.webp?v=${V}`}
+function visualForm(type,level=1){return evolution.tier(level)==='ultimate'&&ultimates[type]?'ultimate':evolution.normalize(level)>=2&&evolutions[type]?'evolved':'base'}
+function selectedArt(type,level){const form=visualForm(type,level);return form==='ultimate'?ultimates[type]:form==='evolved'?evolutions[type]:null}
 function cueOffset(type,level,action,role,size,facing=1){
-  if(visualForm(type,level)!=='evolved')return null;
-  const e=evolutions[type],state=e.actions?.[action]||authoredState(type,action),cue=e.poses[state]?.cues?.[role];
+  const e=selectedArt(type,level);if(!e)return null;
+  const state=e.actions?.[action]||authoredState(type,action),cue=e.poses[state]?.cues?.[role];
   if(!cue)return null;
   const k=size*e.scale/e.referenceHeight;return{x:cue[0]*k*facing,y:cue[1]*k};
 }
 function visualEnvelope(type,level=1){
   const f=authored[type],h=(f?.scale||1.36)*(f?.inkBoost||1),a=f?.anchor||[.5,.948];
   if(visualForm(type,level)==='base')return{left:h*.5,right:h*.5,above:h*a[1],below:h*(1-a[1])};
-  const evolved=evolutions[type],e={left:0,right:0,above:0,below:0},k=evolved.scale/evolved.referenceHeight;
+  const evolved=selectedArt(type,level),e={left:0,right:0,above:0,below:0},k=evolved.scale/evolved.referenceHeight;
   for(const p of Object.values(evolved.poses)){e.left=Math.max(e.left,p.width*p.anchor[0]*k);e.right=Math.max(e.right,p.width*(1-p.anchor[0])*k);e.above=Math.max(e.above,p.height*p.anchor[1]*k);e.below=Math.max(e.below,p.height*(1-p.anchor[1])*k)}
   // Equipment and recoil reserve, symmetric for either team facing.
   const side=Math.max(e.left,e.right)+.12;return{left:side,right:side,above:e.above+.08,below:Math.max(.14,e.below+.05)};
@@ -77,7 +80,7 @@ function authoredState(type,action){
 function stateName(action){return action==='kill'?'attack':action==='move'?'move':action==='attack'?'attack':action==='hit'?'hit':action==='skill'?'skill':action==='defeat'?'defeat':'idle'}
 function resolve(type,state){const f=manifest[type];if(!f)return null;return f.states[state]||f.states.attack||f.states.idle}
 function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
-function allAuthoredUrls(){return Object.values(authored).flatMap(f=>[...Object.values(f.urls),...(f.presentationUrl?[f.presentationUrl]:[])]).concat(Object.values(evolutions).filter(Boolean).flatMap(e=>[...Object.values(e.urls),e.presentationUrl]))}
+function allAuthoredUrls(){return Object.values(authored).flatMap(f=>[...Object.values(f.urls),...(f.presentationUrl?[f.presentationUrl]:[])]).concat([...Object.values(evolutions),...Object.values(ultimates)].filter(Boolean).flatMap(e=>[...Object.values(e.urls),e.presentationUrl]))}
 function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
 function drawTeamRing(c,x,y,size,team,ground=y,density=0){
   const col=team==='red'?'#dc5146':'#228fba';
@@ -180,12 +183,27 @@ function motion(type,state,o,size,age=999,hold=0){
   if(o.flip)dx=-dx;
   return{dx,dy,rot:o.flip?-rot:rot,sx,sy};
 }
+function drawLevelAccent(c,img,w,h,ax,ay,size,o){
+  if(!evolution.accent(o.level))return;
+  const level=evolution.normalize(o.level),reduced=reduceMotionQuery?.matches,
+    tier=o.effectTier||'full',dense=(o.density||0)>=24;
+  // One warm material rim under the full sprite. No particles, queues or enlarged silhouette.
+  if(!dense&&tier!=='minimal'){
+    c.save();c.globalAlpha*=level===5?.38:.25;c.shadowColor=level===5?'#f3b752':'#fff0aa';
+    c.shadowBlur=reduced||tier==='reduced'?0:Math.min(5,size*.045);c.shadowOffsetX=0;c.shadowOffsetY=0;
+    c.shadowOffsetX=-1;c.drawImage(img,-w*ax,-h*ay,w,h);c.shadowOffsetX=1;c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();
+  }
+  // Static gold foot chevrons survive dense/reduced modes without blur or animation.
+  if(!o.presentation){c.save();c.strokeStyle=level===5?'#c7862f':'#e3c575';c.globalAlpha*=.8;c.lineWidth=Math.max(1,size*.018);
+    for(let i=0;i<(level===5?2:1);i++){const yy=size*(.035+i*.035);c.beginPath();c.moveTo(-size*.12,yy);c.lineTo(0,yy+size*.025);c.lineTo(size*.12,yy);c.stroke()}c.restore()}
+}
 function drawAuthored(c,type,x,y,size,team,o){
   const fighter=authored[type];if(!fighter)return false;
-  const evolved=visualForm(type,o.level)==='evolved'?evolutions[type]:null;
+  const evolved=selectedArt(type,o.level);
   const requested=o.presentation?'idle':(evolved?.actions?.[o.action]||authoredState(type,o.action)),pose=displayedPose(type,o,requested),state=pose.state;
-  let registration=visualForm(type,o.level)==='evolved'?evolutions[type]:null;
+  let registration=selectedArt(type,o.level);
   let src=registration?(o.presentation?registration.presentationUrl:(registration.urls[state]||registration.urls.idle)):o.presentation&&fighter.presentationUrl?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle),rec=load(src);
+  if(registration&&rec.error){registration=registration===ultimates[type]?(evolutions[type]||null):null;src=registration?(o.presentation?registration.presentationUrl:(registration.urls[state]||registration.urls.idle)):o.presentation?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle);rec=load(src)}
   if(registration&&rec.error){registration=null;src=o.presentation?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle);rec=load(src)}
   // A failed optional high-resolution portrait still has a valid authored idle.
   if(o.presentation&&rec.error&&src===fighter.presentationUrl){src=fighter.urls.idle;rec=load(src)}
@@ -208,6 +226,7 @@ function drawAuthored(c,type,x,y,size,team,o){
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
   }
+  drawLevelAccent(c,img,w,h,ax,ay,size,o);
   c.drawImage(o.presentation?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
@@ -223,7 +242,7 @@ function draw(c,type,x,y,size,team='blue',o={}){
 }
 function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(String(id),{time,strength:Math.max(.3,Math.min(1,strength))});if(hitReactions.size>192)hitReactions.delete(hitReactions.keys().next().value)}
 function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
-function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}if(evolutions[type]){states.evolved={};for(const [state,url]of Object.entries(evolutions[type].urls)){const r=cache.get(url);states.evolved[state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
+function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}for(const [form,packs]of [['evolved',evolutions],['ultimate',ultimates]])if(packs[type]){states[form]={};for(const [state,url]of Object.entries(packs[type].urls)){const r=cache.get(url);states[form][state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
 preload();
 window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();
