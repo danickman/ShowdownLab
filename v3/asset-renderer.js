@@ -3,7 +3,7 @@ const manifest={
   knight:{scale:1,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/knight/idle.webp'],fps:4},move:{frames:['/v3/assets/knight/move-1.webp','/v3/assets/knight/move-2.webp'],fps:8},attack:{frames:['/v3/assets/knight/attack-1.webp','/v3/assets/knight/attack-2.webp','/v3/assets/knight/attack-3.webp'],fps:12},skill:{frames:['/v3/assets/knight/skill-1.webp','/v3/assets/knight/skill-2.webp'],fps:10},hit:{frames:['/v3/assets/knight/hit.webp'],fps:8},defeat:{frames:['/v3/assets/knight/defeat.webp'],fps:4}}},
   dragon:{scale:1.28,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/dragon/idle.webp'],fps:4},move:{frames:['/v3/assets/dragon/move-1.webp','/v3/assets/dragon/move-2.webp'],fps:7},attack:{frames:['/v3/assets/dragon/attack-1.webp','/v3/assets/dragon/attack-2.webp'],fps:10},skill:{frames:['/v3/assets/dragon/fire-1.webp','/v3/assets/dragon/fire-2.webp','/v3/assets/dragon/fire-3.webp'],fps:12},hit:{frames:['/v3/assets/dragon/hit.webp'],fps:8},defeat:{frames:['/v3/assets/dragon/defeat.webp'],fps:4}}}
 };
-const V='evolved-trio3';
+const V='evolved-sniper4';
 const authored={
   knight:{presentation:'presentation',scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
   sniper:{scale:1.26,anchor:[.5,.948],presentation:'presentation'},
@@ -22,9 +22,15 @@ for(const [type,spec] of Object.entries(authored)){
   for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${V}`;
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
-const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt};
+const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt,sniper:window.SniperEvolvedArt};
 for(const [type,e]of Object.entries(evolutions))if(e){e.urls={};for(const [state,p]of Object.entries(e.poses))e.urls[state]=`/v3/assets/authored/${type}/evolved/${p.file}.webp?v=${V}`;e.presentationUrl=`/v3/assets/authored/${type}/evolved/presentation.webp?v=${V}`}
 function visualForm(type,level=1){return Number(level)>=5&&evolutions[type]?'evolved':'base'}
+function cueOffset(type,level,action,role,size,facing=1){
+  if(visualForm(type,level)!=='evolved')return null;
+  const e=evolutions[type],state=e.actions?.[action]||authoredState(type,action),cue=e.poses[state]?.cues?.[role];
+  if(!cue)return null;
+  const k=size*e.scale/e.referenceHeight;return{x:cue[0]*k*facing,y:cue[1]*k};
+}
 function visualEnvelope(type,level=1){
   const f=authored[type],h=(f?.scale||1.36)*(f?.inkBoost||1),a=f?.anchor||[.5,.948];
   if(visualForm(type,level)==='base')return{left:h*.5,right:h*.5,above:h*a[1],below:h*(1-a[1])};
@@ -176,7 +182,8 @@ function motion(type,state,o,size,age=999,hold=0){
 }
 function drawAuthored(c,type,x,y,size,team,o){
   const fighter=authored[type];if(!fighter)return false;
-  const requested=o.presentation?'idle':authoredState(type,o.action),pose=displayedPose(type,o,requested),state=pose.state;
+  const evolved=visualForm(type,o.level)==='evolved'?evolutions[type]:null;
+  const requested=o.presentation?'idle':(evolved?.actions?.[o.action]||authoredState(type,o.action)),pose=displayedPose(type,o,requested),state=pose.state;
   let registration=visualForm(type,o.level)==='evolved'?evolutions[type]:null;
   let src=registration?(o.presentation?registration.presentationUrl:(registration.urls[state]||registration.urls.idle)):o.presentation&&fighter.presentationUrl?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle),rec=load(src);
   if(registration&&rec.error){registration=null;src=o.presentation?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle);rec=load(src)}
@@ -218,5 +225,5 @@ function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(Strin
 function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
 function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}if(evolutions[type]){states.evolved={};for(const [state,url]of Object.entries(evolutions[type].urls)){const r=cache.get(url);states.evolved[state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
 preload();
-window.FighterAssets={manifest,authored,visualForm,visualEnvelope,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
+window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();

@@ -17,7 +17,7 @@ def main():
                      "charge" if fighter == "knight" else "signature"):
             if not (ASSETS / fighter / f"{pose}.webp").is_file():
                 errors.append(f"{fighter}/{pose}.webp: missing")
-    for fighter in ('knight', 'beetank', 'goose'):
+    for fighter in ('knight', 'beetank', 'goose', 'sniper'):
         for pose in ('idle', 'move', 'attack', 'guard', 'hit', 'defeat', 'presentation', 'charge' if fighter == 'knight' else 'signature'):
             if not (ASSETS / fighter / 'evolved' / f'{pose}.webp').is_file():
                 errors.append(f'{fighter}/evolved/{pose}.webp: missing')

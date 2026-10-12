@@ -172,3 +172,5 @@ Specific quality checks derived from the references:
 - Barbarian must dominate vertically as humanoid shoulders + axe.
 
 If authored external art is explored, first compare one asset against the current geometry at **actual battle scale**, not only at card/portrait size.
+
+Current Sniper Evolved contract: approved navy hood and face, tan scarf, split angular coat tails, three-cartridge shoulder roll, one reinforced scoped rifle. Seven registered poses and standing/kneeling muzzle anchors are active on the review branch; see `SNIPER_EVOLUTION_REGISTRATION.md`. This supersedes generic hat/robotic or extra-equipment interpretations. Phone approval remains open.

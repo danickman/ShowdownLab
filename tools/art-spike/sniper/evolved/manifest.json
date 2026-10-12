@@ -1,0 +1,185 @@
+{
+  "fighter": "sniper",
+  "form": "evolved",
+  "status": "branch candidate; phone QA open",
+  "repair_reason": "Original move barrel touches attack coat; combined component rejected.",
+  "source_scale": 0.4,
+  "repair_source_scale": 0.27456258411843876,
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        32,
+        17,
+        355,
+        527
+      ],
+      "source_foot": [
+        180,
+        520
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        138,
+        213
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source": "repair-source.webp",
+      "source_component_bounds": [
+        53,
+        8,
+        720,
+        765
+      ],
+      "source_foot": [
+        420,
+        755
+      ],
+      "extraction_scale": 0.27456258411843876,
+      "alpha_bounds": [
+        5,
+        5,
+        191,
+        216
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source": "repair-source.webp",
+      "source_component_bounds": [
+        1164,
+        18,
+        1965,
+        761
+      ],
+      "source_foot": [
+        1450,
+        755
+      ],
+      "extraction_scale": 0.27456258411843876,
+      "alpha_bounds": [
+        5,
+        5,
+        228,
+        212
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        1133,
+        200,
+        1529,
+        527
+      ],
+      "source_foot": [
+        1290,
+        519
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        167,
+        139
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "signature",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        20,
+        632,
+        572,
+        974
+      ],
+      "source_foot": [
+        210,
+        965
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        229,
+        145
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        529,
+        548,
+        986,
+        979
+      ],
+      "source_foot": [
+        800,
+        970
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        191,
+        181
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        936,
+        812,
+        1523,
+        967
+      ],
+      "source_foot": [
+        1210,
+        961
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        243,
+        71
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}
