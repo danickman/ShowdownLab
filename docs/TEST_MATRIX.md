@@ -437,3 +437,118 @@ Manual device/visual checks remain required after deployment; automated evidence
 - [x] Persistent reward de-duplication run key remains present.
 - [x] Spectacle density tiers, bounded visible spell aftermath, and all four spell render paths are present.
 - [ ] Manual 390×844 iPhone visual/tap QA remains required after production deployment; automated checks cannot certify subjective spectacle quality or touch feel.
+
+
+### Authored Base polish — Sniper / shared framing, 2026-10-07
+
+- [x] `python tools/check-authored-assets.py`: 71 WebPs decode with alpha, nonempty art and all 10 pose packs present.
+- [x] Sniper standing and AIM normalized to 96×96; canonical presentation is 512×512.
+- [x] Sniper complete body/boots/rifle and coherent AIM checked in Canvas renders.
+- [x] All 10 fighters rendered via production draw API at six presentation sizes (60 renders).
+- [x] 180 framing checks for image/ring bounds and narrow/square/wide aspect ratios.
+- [x] Explicit AIM action on a presentation surface still chooses standing canonical.
+- [x] 24 seeded mixed-roster 8-vs-8 10× runs reached match_over; paired seeds produced identical winner and per-unit HP.
+- [x] Throwing adapter listener was contained; match terminated and next RAF remained scheduled.
+- [x] All runtime JS parses, identical root/v3 HTML, clean diff whitespace.
+- [ ] Browser Draft → Ready → Battle → Results and Guide/Upgrade Bay layout/tap smoke: unavailable in this environment (browser missing; download failed; localhost blocked).
+- [ ] Real iPhone: standing/AIM transitions at 1× and full body on Draft/Ready/Bay/Guide/Results.
+- [ ] Real iPhone at ~390×844 and a shorter viewport: no stretched canvas, cropping, horizontal overflow or ring clipping.
+- [ ] Real iPhone dense-fight performance: no regression; no new per-fighter blur/filter cost introduced.
+- [ ] User visual approval → frozen branch head → main merge → one deliberate production deployment.
+
+
+### Presentation Turn 1 — sunny staging / grounding, 2026-10-07
+
+- [x] `node tools/check-presentation.cjs`: 8,220 full-sprite bounds checks at initial and settled camera states.
+- [x] Viewports: 320×568, 375×667, 390×700, 390×844, 768×1024; 2/8/24/60/180 live units; cluster, corner and spread layouts.
+- [x] Camera does not mutate combat units; equipment/head/feet stay inside camera stage bounds.
+- [x] Sniper idle ring centres at its foot point and draws behind the sprite.
+- [x] Native Canvas renders exercise all four daylight arena paths and living-unit shadows/rings.
+- [x] Sampled arc/ellipse/fillRect calls across four six-unit scenes reduced from 3,733 to 236. This is a background-work proxy, not a phone FPS result.
+- [x] Existing 71-asset decode, 180 UI-framing bounds and 60 presentation renders pass.
+- [x] 24 seeded mixed-roster matches terminate with repeatable outcomes; intentional listener exception remains contained with RAF scheduling preserved.
+- [x] Runtime JS parses, HTML entry pages identical, clean diff whitespace; protected simulation/adapter/round-loop/Stage5B files unchanged.
+- [ ] Real iPhone: sunlight/contrast, feet/rings/shadows, initial camera framing, camera tracking and widening through multiple rounds.
+- [ ] Real iPhone: all four arenas and round intro/outro remain bright and readable.
+- [ ] Real iPhone: dense ~180-unit scenes and 10× performance; no subjective pass or FPS claim yet.
+- [ ] Browser layout/tap smoke: environment limitation from the previous turn remains open.
+
+Known remaining debt: sprite stacking and callout/effect placement (Turn 3); authored sky/environment detail (Turn 2 pilot).
+
+
+### Presentation Turn 2 — sunny authored Sunlit Lab pilot
+
+One authored skyline now replaces Sunlit Lab distant scenery only. Floor scorch residue, impact cracks, dirt/dust and flying debris are explicitly preserved with their existing caps and expiration. Other arenas, fighters and combat logic are unchanged. See [ARENA_ART_PILOT.md](ARENA_ART_PILOT.md) for the asset, final generation prompt, checks and phone acceptance. Automated/native renderer checks pass; browser/iPhone visual and performance QA remains open. Branch checkpoint only; no main merge or production release.
+
+
+### Presentation Turn 3 — physical effects and sunny academy UI
+
+Branch implementation adds branching ground fractures, dirt/chips, daylight edges and Dragon char; improves local spell impact hierarchy/crowd budgets and places comic callouts above silhouettes. A shared sunny cream/brass/navy presentation stylesheet now styles menus and battle controls. No new images, combat/progression changes or production release. See [THEATRE_UI_PASS.md](THEATRE_UI_PASS.md) for exact files, evidence, phone acceptance and remaining overlap/performance work. Automated/native checks pass; browser/iPhone layout, touch, visual and performance QA remain open.
+
+
+### Presentation Turn 4 — courtyard floor / crowd rendering
+
+Cached perspective paving connects the floor to the sunny skyline; live physical damage remains separate. Stronger foot-aligned team rings, limited dense-fight health bars, gradual sprite-size reduction above 60 living units and a snapshot target index reduce presentation clutter/work without changing combat positions or targeting. See [FLOOR_CROWD_PASS.md](FLOOR_CROWD_PASS.md) for exact files, cache budget, native comparison and phone acceptance. Tests pass; real phone performance and visual/tap QA remain open. No new art/evolutions, main merge or production release. Address phone findings next before expanding environment/evolution art.
+
+
+### Turn 3/4 release-gate follow-through
+
+Weapon/body effect anchors, short hit recoil, shorter ordinary trails and one prioritized comic callout now refine hierarchy. All four arenas share one authored sunny skyline and distinct cached academy/forge/observatory/garden dressing. Ordinary/dense native checks pass; spacing was evaluated without moving combat positions. Dense overlap remains a phone assessment item. See [RELEASE_PRESENTATION_GATES.md](RELEASE_PRESENTATION_GATES.md) for exact implementation/evidence and the explicitly OPEN phone visual, touch and acceptable-performance gates. Turn labels are not release approval. No main merge/production deployment or evolution work.
+
+
+### Turn 6 staging checks — automated PASS / phone OPEN
+
+Run `node tools/check-combat-staging.cjs`: 9,540 complete sprite boxes across portrait/landscape, 2–180 units and cluster/corner/spread layouts; immutable state, order-stable offsets, caps, settling, dense bypass, defeat/reset and shared cue/ground anchors. Existing camera, theatre, floor-cache, cue/recoil, asset/presentation and seeded terminal checks remain passing. Native six-fighter before/after and 180-fighter scenes inspected; all-arena action and spell matrix checks pass.
+
+Phone: ordinary 1× melee silhouettes/contact, stable feet/rings, aligned hits/signatures, ground cracks/char staying at impact, lethal ARC, QUAKE/fire, round resets and landscape cropping; ordinary and ~180-fighter measured performance. These device gates are not passed by native Canvas tests. No production release until the exact branch head receives phone approval.
+
+
+### Turn 7 — intro / Guide / Turtle / living locations
+
+Run `node tools/check-living-arenas.cjs`: 64 bounded ambient cases, reduced-motion bypass, opening wash gone at 350ms/captions at 900ms, cached ink and Guide content layout structure. Cue/cache checks now cover academy/garden/frontier/siege and three unique preloaded skyline images. All 72 authored assets decode; Turtle move has transparent margins and complete source extraction; Turtle standing uses dedicated 512px presentation. Existing staging/camera/menu/seeded tests pass. Native all-arena actions/spells and all-ten menu ink composites inspected.
+
+Phone remains OPEN: Guide all text/Mastery visible through scroll, opening readability, full Turtle running silhouette, distinct frontier/siege scenery, subtle living atmosphere, existing physical floor aftermath, ordinary/~180-unit FPS and reduced motion. Eight other small menu sources remain quality debt. See [LIVING_ARENAS_PASS.md](LIVING_ARENAS_PASS.md); overall-positive feedback alone is not release approval.
+
+
+## Canonical menu recovery — 2026-10-08
+
+Eight remaining menu canonicals recovered from supplied originals at 512px;
+Sniper/Turtle approved presentations retained. Battle poses untouched.
+See docs/CANONICAL_MENU_RECOVERY.md for provenance, reproduction and QA gates.
+
+
+## Skyline / cropping correction and Knight evolution pilot
+
+See [SKYLINE_CROP_EVOLUTION_PILOT.md](SKYLINE_CROP_EVOLUTION_PILOT.md): complete Beetank ram re-extraction, six supplied standalone menu sources, larger portrait/landscape sky region and cached material/earth detail. Seven Knight Evolved candidate poses and canonical are stored in tools/art-spike/knight/evolved; not active runtime assets. Existing cap/model inspection is documented; gameplay state unchanged. Phone cropping/sky-floor/readability/performance and evolution-design approval remain OPEN. Main/production unchanged.
+
+Full-source audit additionally repairs 19 nominal-grid cuts across Goblin, Mole, Beetank, Goose and Barbarian. Reproduce with `tools/repair-source-boundaries.py`; provenance in `tools/art-sources/boundary-repairs.json`. Native repair contact sheet reviewed; decodes/all-arena actions/seeded regressions pass.
+
+
+## Phone panorama / floor / spacing correction
+
+See [LANDMARKS_FLOOR_SPACING.md](LANDMARKS_FLOOR_SPACING.md): full-width side landmarks with proportional architecture, stronger arena-specific cached floor identity, and body-aware ordinary melee staging up to 60 units with larger viewport-bounded caps. Camera/cues/ground impacts share positions; combat core/outcomes/evolution assets are unchanged. Native/automated checks pass; phone visual/contact/performance remains OPEN. No main merge or production deployment. This supersedes the earlier 14px/6px and 44-unit staging limits.
+
+
+## Knight Evolved branch registration — 2026-10-08
+
+See [KNIGHT_EVOLUTION_REGISTRATION.md](KNIGHT_EVOLUTION_REGISTRATION.md). Seven shared-scale poses now active for Knight L5+, with registered equipment bounds and L10 Evolved fallback. Lab permits L1–10. Automated/native checks pass; phone release gates remain OPEN. This supersedes the prior inactive-spike status. No main merge or production release.
+
+
+## Beetank Evolved and academy floor — 2026-10-09
+
+See [BEETANK_EVOLUTION_ARENA_PASS.md](BEETANK_EVOLUTION_ARENA_PASS.md) for assets, implementation, verification and open phone gates; [EVOLUTION_DESIGN_MAP.md](EVOLUTION_DESIGN_MAP.md) defines candidate directions for all ten. Knight + Beetank Evolved now select at L5+, with L10 fallback. Sunlit Lab gains authored ground, bounded physical rush wakes, level-aware MVP/captions and corrected Beetank facing. Base assets and combat rules are unchanged. Goose, then Sniper are next art priorities after pilot phone review. No main merge or production release.
+
+
+## Goose Evolved and Verdant Ruins — 2026-10-11
+
+See [GOOSE_EVOLUTION_VERDANT_PASS.md](GOOSE_EVOLUTION_VERDANT_PASS.md) for scope and validation. Three active Evolved pilots now include Goose, with seven registered poses and L10 fallback. Verdant gains a dedicated sunny skyline and honk gains a bounded grounded pressure wave with reduced-motion feather suppression. Automated and native render checks pass; exact-head phone gates remain OPEN. Sniper is next. This supersedes the previous two-pilot count. No main merge or production release.
+
+
+## Sniper Evolved registration — 2026-10-11
+
+See [SNIPER_EVOLUTION_REGISTRATION.md](SNIPER_EVOLUTION_REGISTRATION.md) for exact assets, targeted repair, shared anatomy calibration, registered feet and form-specific muzzle/body anchors. Four Evolved pilots (Knight, Beetank, Goose, Sniper) now select at L5+, with L10 fallback; 28 combat poses and 112 authored WebPs overall. Base sources, combat, stats, Mastery, evolution frequency and production remain unchanged. Automated/native checks pass; exact-head phone readability/FPS approval remains OPEN. Incoming Vercel deployment was READY, but live browser inspection was blocked by preview authentication and protected-fetch permissions. Crowd overlap remains visible in native composites. This supersedes the prior three-pilot count and Sniper-next status.
+
+
+## Contact-aware staging and Verdant floor — 2026-10-11
+
+See [CROWD_VERDANT_READABILITY_PASS.md](CROWD_VERDANT_READABILITY_PASS.md). Crowded ranks fan away from nearby opponents, and four bounded allied torso passes improve spacing inside the unchanged 56px/36px and 60-unit limits. Secondary per-unit labels are limited to small fights. Verdant gains a sunny moss/stone illustrated floor with one current image record and procedural fallback; academy art and live physical damage are retained. Actual seeded 1× before/after frames and four-arena native composites were inspected. Automated checks pass; larger melee overlap and exact-head phone motion/FPS approval remain OPEN. Approved Base/Evolved art, combat, progression, main and production are unchanged.

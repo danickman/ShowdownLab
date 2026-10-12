@@ -1,0 +1,98 @@
+/* Shared sunny academy presentation. Loaded after legacy surface styles. */
+:root{
+  --ui-paper:#fff9e8;--ui-stone:#e8dfc4;--ui-ink:#203d46;--ui-muted:#536b70;
+  --ui-brass:#ab8030;--ui-line:#8c845d55;--ui-shadow:0 6px 14px #445a6026;
+}
+.game-shell{color:var(--ui-ink)}
+button:focus-visible{outline:3px solid #2475a3;outline-offset:3px}
+button{transition:transform .12s ease,box-shadow .12s ease}
+button:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 2px 3px #71582c22}
+.eyebrow{color:#876422;font-size:10px;letter-spacing:.13em;font-weight:850}
+.season-badge{display:inline-block;margin-top:12px;padding:5px 10px;border:1px solid #ae873e66;border-radius:6px;color:#70521b;background:#fff6d2d9;font-size:9px;letter-spacing:.14em;font-weight:900}
+.screen-home{padding-top:calc(var(--safeT) + 14px);gap:8px}
+.lab-atmosphere{background:linear-gradient(180deg,#d7edf580,#fff8e4e8 53%,#e6dcc0),url('/v3/assets/arenas/sunlit-lab/skyline.webp?v=1') center top / auto 44% no-repeat}
+.lab-atmosphere:after,.lab-atmosphere i{display:none}
+.brand{padding-top:0}
+.brand h1{font-size:clamp(46px,14vw,66px);line-height:.86;letter-spacing:-.055em;margin:14px 0 10px;text-shadow:0 2px 0 #fff9e8}
+.brand h1 em{color:#a87722}
+.brand p{font-size:13px;line-height:1.45;color:var(--ui-muted);max-width:290px}
+.parts-chip,.sticky-parts{border-radius:7px;background:#fff7d9;border-color:#b6944d66;box-shadow:inset 0 1px #fff;color:#70521b}
+.hero-stage{min-height:200px;margin:0 0 5px;isolation:isolate}
+.hero-stage:before{bottom:12%;height:28%;width:90%;background:radial-gradient(ellipse,#b5a57d55 0 42%,transparent 67%);filter:none;border-bottom:2px solid #a68c4e33}
+.hero-fighter{width:47%;height:100%;max-height:300px;min-height:0;filter:drop-shadow(0 7px 4px #52666b30);transform:none!important}
+.versus,.ready-vs{width:44px;height:44px;border:2px solid #fff8d9;border-radius:12px;background:linear-gradient(#ffe499,#dcae4c);box-shadow:0 3px 0 #9e762c66;color:#543a10;transform:rotate(-4deg);font-size:16px}
+.home-actions{gap:9px}
+.home-actions>button,.primary,.result-actions .primary{border:1px solid #ad8133;border-bottom:3px solid #987126;border-radius:12px;background:linear-gradient(#ffe8a4,#edc66d);box-shadow:inset 0 1px #fff7d8,var(--ui-shadow);color:#493513;padding:13px 16px}
+.home-actions>button strong{font-size:15px;letter-spacing:.035em;font-weight:950}
+.home-actions>button span{font-size:11px;opacity:1;color:#6e5b31;margin-top:5px}
+.home-actions>button:nth-child(2){background:linear-gradient(#fffdf0,#e3e8db);border-color:#7b929066;color:var(--ui-ink);border-bottom:3px solid #91a29a}
+.home-actions>button:nth-child(2) span{color:var(--ui-muted)}
+.minor-actions{gap:7px}
+.minor-actions button,.corner-button,.sheet button,.result-actions button{background:linear-gradient(#fffdf0,#e6e9dc);color:var(--ui-ink);border:1px solid #7b929066;border-bottom:3px solid #91a29a;border-radius:10px;box-shadow:inset 0 1px #fff,var(--ui-shadow);font-weight:850}
+.minor-actions button{font-size:9px;letter-spacing:.025em;min-height:48px}
+.screen-draft,.screen-ready,.screen-results,.scroll-screen,.screen-guide{background:radial-gradient(ellipse at 50% 0,#fff8d4,transparent 55%),linear-gradient(#cce7ef,#f0ead5 58%,#e3d9ba)}
+.screen-head h2{font-size:25px;font-weight:900;letter-spacing:-.035em}
+.screen-head>button,.screen-head.sticky button{width:44px;min-width:44px;border-radius:11px;background:#fff9e8;border:1px solid var(--ui-line);box-shadow:0 2px 0 #8e865b33}
+.screen-head .progress{color:#76531c;background:#fff4cd;border:1px solid #b5954466;border-radius:7px;letter-spacing:.06em}
+.sticky,.screen-draft .screen-head{background:linear-gradient(#fffbedf7,#e9e8d8f7)!important;border-bottom:2px solid #b7954b55;backdrop-filter:none;box-shadow:0 3px 8px #40585d14}
+.fighter-card,.shop-card,.sl-guide-card,.lab-block,.tech-bay{border:1px solid var(--ui-line);border-radius:16px;background:linear-gradient(150deg,#fffbea,#e4ecdf);box-shadow:inset 0 1px #fff,var(--ui-shadow)}
+.fighter-card{padding:8px 10px 12px}
+.fighter-card:before{background:radial-gradient(ellipse at 50% 40%,#d7e8e2,transparent 65%);opacity:.6}
+.fighter-card strong{font-size:17px;letter-spacing:-.025em}
+.fighter-card span{font-size:10px;color:var(--ui-muted);line-height:1.35}
+.fighter-card.selected{border:2px solid #af7e26;transform:translateY(-2px);box-shadow:inset 0 0 0 2px #ffe9ab,0 5px 12px #7863392e}
+.fighter-card.selected:after{border-radius:8px;background:#f4d47b;border-color:#fff4c9;color:#5c4214}
+.art-canvas,.roster-avatar canvas,.ready-team canvas,.hero-fighter,.result-fighter,.sl-guide-art{filter:drop-shadow(0 6px 4px #485c5f30)}
+.army-tray i{background:#fffbed;border:1px dashed #9a956e;border-radius:9px;color:#456069;min-width:48px}
+.screen-draft .draft-footer{background:linear-gradient(#efe9d400,#ede8d5f5 18%,#e2dac1)!important}
+.ready-backdrop{background:linear-gradient(90deg,#569ec41c,transparent 45% 55%,#d77c6320)}
+.ready-title{font-size:clamp(42px,13vw,60px);letter-spacing:-.045em;text-shadow:0 2px 0 #fff;color:#294650}
+.ready-showcase{width:100%;gap:4px;grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)}
+.ready-team{padding:12px 4px;background:#fffbec80;border:1px solid #7c929033;border-radius:15px}
+.ready-team canvas{height:190px;width:100%;max-width:180px}
+.ready-team small{color:var(--ui-muted);font-size:8px;letter-spacing:.12em}
+.ready-team strong{color:var(--ui-ink);line-height:1.4;font-size:11px}
+.ready-tip{background:#fff9e2a8;border:1px solid var(--ui-line);border-radius:10px;color:var(--ui-muted);line-height:1.5}
+.showdown{animation:none;border-bottom-width:4px;min-height:56px}
+.screen-results h2{font-size:clamp(40px,13vw,62px);letter-spacing:-.045em;color:#264a5b;text-shadow:0 2px 0 #fff9e8}
+.result-rays{background:repeating-conic-gradient(#d6ac4520 0 10deg,transparent 10deg 20deg);opacity:.25;animation:none}
+.podium{border:1px solid var(--ui-line);border-radius:20px;background:linear-gradient(#fffbed,#e4eadb);box-shadow:inset 0 1px #fff,var(--ui-shadow)}
+.mvp-badge{border-radius:7px;background:#f5d584;color:#624511;border-color:#fff3cb;box-shadow:0 3px 6px #6b593e22;font-size:9px;letter-spacing:.1em}
+.result-reward{border-radius:9px;background:#fff0bb;color:#6a4d18;border-color:#b9954966;font-size:10px}
+.result-actions button{min-height:52px;font-size:12px;letter-spacing:.045em}
+.bay-wallet{background:linear-gradient(135deg,#fff5d0,#ecd69c);border:1px solid #b38e4866;border-radius:14px;box-shadow:var(--ui-shadow)}
+.bay-wallet small{font-size:11px;line-height:1.5;color:#5c624f}
+.tech-bay-head h3,.lab-block h3{font-size:18px;letter-spacing:-.025em}
+.tech-bay-head>strong,.shop-icon{border-radius:7px;border:1px solid #b3975566;background:#fff3ce;color:#77551b}
+.shop-card{position:relative}
+.shop-card.affordable{border-color:#b38e45;box-shadow:inset 0 1px #fff,0 4px 10px #76623e22}
+.shop-card.affordable:after{top:8px;right:8px;border-radius:5px;font-size:7px;box-shadow:none}
+.shop-copy{padding-right:32px}
+.shop-next{background:#e2eadd;border:1px solid #7b918033;border-radius:7px;line-height:1.45}
+.spell-shop button,.mastery-card button{min-height:44px;border-radius:8px;border-bottom:3px solid #a77e2f;background:linear-gradient(#ffe6a0,#edc365);font-weight:900;letter-spacing:.02em}
+.roster-avatar{background:radial-gradient(ellipse,#fdf6d8,#d1e2d8);border:1px solid #80968933;border-radius:12px}
+.sl-guide-art-wrap{background:radial-gradient(ellipse at 50% 36%,#fffbed,#dae9dd 65%,#cedfd4);border-bottom:2px solid #b59d6266}
+.sl-guide-copy h3{font-size:32px;letter-spacing:-.03em}
+.sl-guide-copy dl div{border-radius:9px;background:#fffbecb0;border-color:#8b956333}
+.sl-guide-copy dt{color:#876021}
+.sl-guide-mastery{border:1px solid #b3985266;border-radius:10px;background:#f4e7bf;color:#54441d}
+.sl-guide-mastery span{color:#7c5b1c}.sl-guide-mastery small{color:#6c6b53}
+.lab-block label{font-size:12px;color:var(--ui-muted)}
+.mini-grid button,.preset-grid button{border:1px solid #8b9b8366;border-bottom:3px solid #a0af99;border-radius:9px;background:#fff9e8;color:var(--ui-ink);font-size:12px}
+.lab-tech,.lab-tech-grid label{border-radius:10px;background:#fffbed;border-color:#8a9a7c44}
+.battle-hud{border:1px solid #a3956b88;border-bottom:3px solid #a99a71;border-radius:13px;background:linear-gradient(#fffbecec,#e3e8dbe8);box-shadow:inset 0 1px #fff,0 3px 8px #40585d22;backdrop-filter:none}
+.team b{font-size:17px;font-weight:950;letter-spacing:.1em}
+.round{border-radius:8px;background:#f9efcf;border-color:#b69a5955}
+.battle-actions{filter:none}
+.spell-rack{border:1px solid #a3956b66;border-radius:12px;background:#f6f0dce8;backdrop-filter:none;box-shadow:0 3px 8px #40585d22}
+.spell-rack .spell,#battleMenu{border-radius:9px;box-shadow:inset 0 1px #fff,0 2px 0 #95886c44;font-weight:900}
+.sheet{border-radius:12px;background:#fff9eaf5;border:1px solid #9d916c88;box-shadow:0 6px 16px #40585d33}
+.ability-callout{border-radius:8px!important;text-shadow:none!important;box-shadow:0 3px 8px #5a60442b!important}
+/* Local impacts carry the spectacle; global screen pulses stay brief and light. */
+@keyframes spellPulseZap{0%{opacity:.42;background:#fff4cf22}100%{opacity:0;background:transparent}}
+@keyframes spellPulseHeal{0%{opacity:.3;background:#edf7cf20}100%{opacity:0;background:transparent}}
+@keyframes spellPulseQuake{0%{opacity:.35;background:#e3c18d20}100%{opacity:0;background:transparent}}
+@keyframes spellPulseAegis{0%{opacity:.3;background:#cde5ef20}100%{opacity:0;background:transparent}}
+@media(max-width:350px){.home-meta .eyebrow{font-size:8px;letter-spacing:.08em}.parts-chip{font-size:9px;padding:6px}.minor-actions button{font-size:8px}.bay-wallet{flex-direction:column;gap:8px}.bay-wallet small{max-width:none}.tech-bay-head{align-items:start}.tech-bay-head h3{font-size:16px}}
+@media(max-height:700px){.screen-home{overflow-y:auto;gap:4px}.season-badge{margin-top:6px;padding:3px 8px}.brand h1{font-size:42px;margin:9px 0}.hero-stage{flex:1 0 155px;min-height:155px;margin:0}.hero-fighter{max-height:175px}.home-actions{gap:6px}.home-actions>button{padding:10px 13px}.home-actions>button span{font-size:10px}.ready-team canvas{height:140px}.screen-results{gap:7px}.result-fighter{width:180px;height:190px}.screen-results h2{font-size:40px}}
+@media(prefers-reduced-motion:reduce){button{transition:none}.hero-fighter,.result-rays,.showdown{animation:none}}

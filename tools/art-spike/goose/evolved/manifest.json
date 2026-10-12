@@ -1,0 +1,168 @@
+{
+  "fighter": "goose",
+  "form": "evolved",
+  "status": "branch candidate; phone QA open",
+  "poses": [
+    {
+      "pose": "idle",
+      "source_component_bounds": [
+        22,
+        50,
+        337,
+        472
+      ],
+      "source_foot": [
+        183,
+        460
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        135,
+        177
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source_component_bounds": [
+        383,
+        73,
+        724,
+        472
+      ],
+      "source_foot": [
+        557,
+        459
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        145,
+        168
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source_component_bounds": [
+        733,
+        187,
+        1188,
+        471
+      ],
+      "source_foot": [
+        945,
+        455
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        191,
+        122
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source_component_bounds": [
+        1186,
+        122,
+        1514,
+        471
+      ],
+      "source_foot": [
+        1343,
+        455
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        140,
+        148
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "signature",
+      "source_component_bounds": [
+        85,
+        503,
+        573,
+        985
+      ],
+      "source_foot": [
+        330,
+        973
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        204,
+        201
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source_component_bounds": [
+        577,
+        566,
+        1014,
+        949
+      ],
+      "source_foot": [
+        838,
+        932
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        183,
+        162
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source_component_bounds": [
+        1048,
+        735,
+        1521,
+        962
+      ],
+      "source_foot": [
+        1320,
+        948
+      ],
+      "alpha_bounds": [
+        5,
+        5,
+        198,
+        99
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}
