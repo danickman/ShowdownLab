@@ -1,0 +1,32 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const e={window:null,Math,performance:{now:()=>0},requestAnimationFrame:()=>1,cancelAnimationFrame(){},console};e.window=e;vm.createContext(e);
+for(const f of ['evolution-rules','ultimate-abilities'])vm.runInContext(fs.readFileSync('v3/'+f+'.js','utf8'),e);
+const U=e.ShowdownUltimates;const close=(a,b)=>assert(Math.abs(a-b)<1e-9,`${a} != ${b}`);
+const unit=(type,level=4,team='blue',id=1,x=.5,y=.5)=>({type,level,team,id,x,y,hp:100,maxHp:100,dmg:100,stun:0,burrow:0,armor:0,dodge:0,guard:0,shell:0,ward:0,action:'attack',knock:0});
+for(const level of [1,2,3])for(const type of Object.keys(U.specs)){
+ const a=unit(type,level),t=unit('mole',level,'red',2);assert.equal(U.rank(a),0);assert.equal(U.outgoing(a,t,100,[a,t],30),100);assert.equal(U.incoming(t,100,[a,t],30),100);assert.equal(U.afterHit(a,t,100,[a,t],30).length,0);assert.equal(U.honk(a,[a,t],30).length,0);assert.equal(a.ultimateTick,undefined);
+}
+for(const level of [4,5]){
+ const rank=level===5?2:1,mole=unit('mole',level);assert.equal(U.incoming(mole,100,[mole],30),rank===2?50:65);
+ const knight=unit('knight',level),ally=unit('goose',1,'blue',2,.55);assert.equal(U.incoming(ally,100,[knight,ally],30),rank===2?70:80);ally.x=.9;assert.equal(U.incoming(ally,100,[knight,ally],45),100);
+ const sniper=unit('sniper',level),t=unit('mole',1,'red',2,.6),behind=unit('turtle',1,'red',3,.68),side=unit('turtle',1,'red',4,.68,.7);t.armor=.5;assert.equal(U.armor(t,sniper),rank===2?0:.2);
+ let hits=U.afterHit(sniper,t,100,[sniper,t,behind,side],30);assert.equal(hits.length,1);assert.equal(hits[0].target.id,3);close(hits[0].damage,rank===2?80:55);
+ sniper.action='buttstroke';assert.equal(U.armor(t,sniper),.5);
+ const dragon=unit('dragon',level);dragon.action='fire';U.afterHit(dragon,t,100,[dragon,t],30);let burn=0;for(let i=0;i<90;i++)burn+=U.burn(t);assert(Math.abs(burn-(rank===2?75:45))<1e-10);assert.equal(U.burn(t),0);
+ U.afterHit(dragon,t,100,[dragon,t],45);t.burrow=90;for(let i=0;i<90;i++)assert.equal(U.burn(t),0);t.burrow=0;
+ const assassin=unit('assassin',level);assassin.action='backstab';t.hp=30;assert.equal(U.outgoing(assassin,t,100,[assassin,t],30),rank===2?220.00000000000003:180);t.hp=90;assert.equal(U.outgoing(assassin,t,100,[assassin,t],50),100);
+ const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);
+ const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,1);close(hits[0].damage,rank===2?18:12);
+ attacker.x=.1;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0);
+ const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
+ const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>h.damage===(rank===2?65:40)));
+ const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);close(hits[0].damage,rank===2?75:45);assert.equal(t.stun,rank===2?32:22);
+}
+// The actual core damage path applies resistance, reflection and splash once.
+let src=fs.readFileSync('v3/legacy-sim-core.js','utf8');src=src.replace('window.LegacySimCore={','window.TestCombat={hurt,step,setUnits:v=>{units=v;bastions=v.filter(u=>u.type==="knight"&&ultimate.rank(u))},getUnits:()=>units};window.LegacySimCore={');vm.runInContext(src,e);
+let mole=unit('mole',4,'red',2),a=unit('sniper',1);e.TestCombat.setUnits([a,mole]);e.TestCombat.hurt(mole,100,a);assert.equal(mole.hp,35);
+let x=unit('turtle',4,'blue'),y=unit('turtle',5,'red',2,.51);e.TestCombat.setUnits([x,y]);e.TestCombat.hurt(y,20,x);assert.equal(y.hp,80);assert.equal(x.hp,91,'reflection does not reflect recursively');
+let sniper=unit('sniper',4),target=unit('goose',1,'red',2,.6),behind=unit('goose',1,'red',3,.68);e.TestCombat.setUnits([sniper,target,behind]);e.TestCombat.hurt(target,20,sniper);assert.equal(target.hp,80);close(behind.hp,45);assert.equal(sniper.ultimateKind,'pierce');
+console.log('PASS: ten role-specific L4 abilities and stronger L5 variants; no L1–3 abilities; actual resistance/reflection/piercing paths, finite splash and burrow-safe burns');
+
+let knight=unit('knight',4),ally=unit('goose',1,'blue',2,.55),enemy=unit('sniper',1,'red',3,.6);e.TestCombat.setUnits([knight,ally,enemy]);e.TestCombat.hurt(ally,100,enemy);assert.equal(ally.hp,20,'actual Bastion protection uses prepared roster');

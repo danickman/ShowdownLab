@@ -3,7 +3,7 @@ const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('ass
 const root=path.resolve(__dirname,'..');
 class ReadyImage{set src(value){this.url=value;if(value.includes('__missing__')){this.onerror?.();return}this.naturalWidth=this.naturalHeight=96;this.onload?.()}}
 const runtime={Image:ReadyImage,CustomEvent:class{},dispatchEvent(){},console};runtime.window=runtime;vm.createContext(runtime);
-for(const file of ['asset-renderer.js','camera.js'])vm.runInContext(fs.readFileSync(path.join(root,'v3',file),'utf8'),runtime);
+for(const file of ['evolution-rules.js','asset-renderer.js','camera.js'])vm.runInContext(fs.readFileSync(path.join(root,'v3',file),'utf8'),runtime);
 const assets=runtime.FighterAssets,types=Object.keys(assets.authored);
 const kindFor=t=>t==='dragon'?'large':['beetank','turtle'].includes(t)?'heavy':['goblin','goose'].includes(t)?'small':'normal';
 let checked=0;

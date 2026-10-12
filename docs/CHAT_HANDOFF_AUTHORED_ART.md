@@ -1,8 +1,8 @@
 # New Chat Handoff — Authored Art, Evolution & Presentation
 
-Updated: 2026-10-11
+Updated: 2026-10-12
 
-Current operational checkpoint: see **Contact-aware staging and Verdant floor** at the end and `CROWD_VERDANT_READABILITY_PASS.md`; Sniper Evolved is preserved. Earlier sections are historical; current user handoff and latest milestone supersede old art deferrals. Verify actual branch head before editing.
+Current operational checkpoint: see **Turtle Evolved** at the end and `TURTLE_EVOLUTION_REGISTRATION.md`, plus `FIVE_LEVEL_ULTIMATE_MILESTONE.md` for the active mechanics. Main has the caption hotfix; Dragon/Assassin/Mole/Turtle art and the newly authorized progression/ability changes are review-branch work. Earlier sections are historical; current user handoff and latest milestone supersede old art deferrals. Verify actual branch head before editing.
 
 Use this as the operational handoff for continuing Showdown Lab in a fresh chat.
 
@@ -543,3 +543,30 @@ See [SNIPER_EVOLUTION_REGISTRATION.md](SNIPER_EVOLUTION_REGISTRATION.md) for exa
 ## Contact-aware staging and Verdant floor — 2026-10-11
 
 See [CROWD_VERDANT_READABILITY_PASS.md](CROWD_VERDANT_READABILITY_PASS.md). Crowded ranks fan away from nearby opponents, and four bounded allied torso passes improve spacing inside the unchanged 56px/36px and 60-unit limits. Secondary per-unit labels are limited to small fights. Verdant gains a sunny moss/stone illustrated floor with one current image record and procedural fallback; academy art and live physical damage are retained. Actual seeded 1× before/after frames and four-arena native composites were inspected. Automated checks pass; larger melee overlap and exact-head phone motion/FPS approval remain OPEN. Approved Base/Evolved art, combat, progression, main and production are unchanged.
+
+
+## Main release, effects hotfix and Dragon Evolved — 2026-10-11
+
+The user authorised main merge of review head `303c51a`; PR #7 merged as `fb9f3c9` and Vercel production served its tested tree. A real public-browser smoke exposed last-fighter/final-KO caption shadowing, fixed on production in `ba58c3d` with a reproducing regression. Post-fix Lab termination passed without new application-origin errors. See [FX_CAPTION_HOTFIX.md](FX_CAPTION_HOTFIX.md).
+
+Dragon Evolved is the next review checkpoint, based on the hotfix: seven registered poses, a repaired four-foot move, shared anatomy scale, full wing/horn/tail framing and mouth-aligned breath cues. Five packs / 35 Evolved combat poses / 120 authored WebPs now exist on the review branch. See [DRAGON_EVOLUTION_REGISTRATION.md](DRAGON_EVOLUTION_REGISTRATION.md). Approved Base files, combat and progression are unchanged. The new Dragon art is not released to main/production; new-head phone visual/FPS gates remain OPEN.
+
+
+## Assassin Evolved — 2026-10-12
+
+See [ASSASSIN_EVOLUTION_REGISTRATION.md](ASSASSIN_EVOLUTION_REGISTRATION.md). Seven registered combat poses plus a portrait preserve the hood, eyes, twin daggers and complete feet/coat tips. Two failed sheet poses are replaced with anatomy-calibrated move/attack repairs; dagger/body cues use existing effect contracts. Six packs / 42 Evolved combat poses / 128 authored WebPs now exist on the review branch. Asset decoding, actual pose/fallback rendering, six-pack equipment envelopes, eight duel/mixed-crowd arena composites and eight dense L5/L10 scenes pass, alongside deterministic and presentation regressions. Mixed melee overlap and exact-head phone motion/FPS remain OPEN. Base art, protected simulation, combat and progression are unchanged. Production remains `ba58c3d`; Dragon and Assassin are review-only. Mole, Turtle, Goblin and Barbarian remain, with Ultimate art absent.
+
+
+## Five-level progression and Ultimate abilities — 2026-10-12
+
+The user explicitly authorized a gameplay milestone and selected the L5 cap. See [FIVE_LEVEL_ULTIMATE_MILESTONE.md](FIVE_LEVEL_ULTIMATE_MILESTONE.md), which supersedes all earlier L1–4 / L5–9 / L10 form boundaries. L2 selects available Evolved art; L3 adds a restrained rim/ground accent. L4 unlocks a role-specific Ultimate ability, and L5 enhances it with a stronger accent; Ultimate art is still absent and falls back honestly to existing forms. HP and damage increase 40% multiplicatively at each upgrade. Mastery/base role stats, terminal safeguards and frozen roster remain. Both player and enemy drafts stop offering upgrades at L5; Lab/API/core inputs enforce the cap. Guide and authored reward previews describe actual abilities and pending art. Ability/progression/determinism/native effect checks are required alongside existing presentation regressions. Review-only; production remains `ba58c3d`. Balance and exact-head phone/FPS acceptance remain open.
+
+
+## Mole Evolved — 2026-10-12
+
+See [MOLE_EVOLUTION_REGISTRATION.md](MOLE_EVOLUTION_REGISTRATION.md). Seven shared-scale poses and a canonical preserve Mole’s face, three claws per hand, full feet and compact anatomy, with broad shovel claws and low bronze/leather shoulder protection. The first extra-claw sheet is excluded; the corrected sheet is registered at L2, with L3 accents and L4/L5 fallback while Ultimate art remains absent. Seven packs / 49 Evolved combat poses / 136 authored WebPs now exist. Mechanics from `624694a`, including Nuclear Carapace 35%/50% resistance, remain unchanged. Native/automated checks pass; mixed melee overlap and phone/FPS gates remain open. Vercel has not reported the mechanics preview, and an exact-SHA preview request returned a team-scope 403; no local Vercel CLI is available. Publish/verify GitHub and check new-head deployment status without retrying that unchanged blocked route. Production remains `ba58c3d`. Turtle, Goblin and Barbarian remain next; all Ultimate art is pending.
+
+
+## Turtle Evolved — 2026-10-12
+
+See [TURTLE_EVOLUTION_REGISTRATION.md](TURTLE_EVOLUTION_REGISTRATION.md). Raised hex shell ridge, thick stepped rim and seven registered poses preserve Turtle’s face, fists, leather equipment and three-toed feet. L2 art, L3 accent and L4/L5 fallback use the existing five-level contract; Ricochet Shell 30%/45% reflection and other mechanics are unchanged. Eight packs / 56 Evolved combat poses / 144 authored WebPs now exist. Native/automated checks pass; phone/FPS and mixed-melee overlap remain open. Mole checkpoint `7cb5732` was verified READY via automatic Git deployment, resolving the previously unreported mechanics preview. Main/production remain `ba58c3d`. Goblin/Barbarian Evolved and all Ultimate art remain. The user explicitly authorized regenerating Dragon Base next; preserve other Base art and Dragon Evolved.

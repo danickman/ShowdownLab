@@ -1,0 +1,184 @@
+{
+  "fighter": "mole",
+  "form": "evolved",
+  "status": "review branch; phone QA open",
+  "repair_reason": "Initial sheet added a fourth claw; excluded from runtime. Corrected sheet preserves three claws per hand.",
+  "source_scale": 0.4,
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        12,
+        72,
+        419,
+        444
+      ],
+      "source_foot": [
+        203,
+        437
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        170,
+        157
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        441,
+        100,
+        836,
+        441
+      ],
+      "source_foot": [
+        641,
+        431
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        165,
+        144
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        831,
+        114,
+        1249,
+        438
+      ],
+      "source_foot": [
+        1043,
+        430
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        175,
+        137
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        35,
+        515,
+        405,
+        873
+      ],
+      "source_foot": [
+        208,
+        864
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        155,
+        150
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "signature",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        422,
+        451,
+        829,
+        873
+      ],
+      "source_foot": [
+        622,
+        865
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        171,
+        176
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        841,
+        520,
+        1245,
+        867
+      ],
+      "source_foot": [
+        1068,
+        859
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        169,
+        146
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source": "corrected-sheet-source.webp",
+      "source_component_bounds": [
+        437,
+        896,
+        871,
+        1213
+      ],
+      "source_foot": [
+        733,
+        1208
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        181,
+        134
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}

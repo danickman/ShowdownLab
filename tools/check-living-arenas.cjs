@@ -13,6 +13,7 @@ for(const dressing of ['academy','garden','frontier','siege'])for(const count of
 motionOff=true;calls=[];r.ArenaAmbience.drawSky(c,390,198,{dressing:'siege'},10,4);r.ArenaAmbience.drawPerimeter(c,390,844,198,{dressing:'siege'},10,4);assert.equal(calls.length,0,'reduced motion disables ambience');
 const src=fs.readFileSync(path.join(root,'v3/v3.js'),'utf8');vm.runInContext(src.slice(src.indexOf('function openingBeat('),src.indexOf('function draw(time)')),r);
 for(let elapsed=0;elapsed<=1200;elapsed+=10){const beat=r.openingBeat(elapsed);assert(beat.wash>=0&&beat.wash<=.18);assert(beat.fade>=0&&beat.fade<=1);if(elapsed>=350)assert.equal(beat.wash,0);if(elapsed>=900)assert.equal(beat.fade,0)}
+vm.runInContext(fs.readFileSync(path.join(root,'v3/evolution-rules.js'),'utf8'),r);
 vm.runInContext(fs.readFileSync(path.join(root,'v3/asset-renderer.js'),'utf8'),r);
 for(const type of Object.keys(r.FighterAssets.authored)){const before=builds;r.FighterAssets.draw(c,type,100,200,100,'blue',{presentation:true});assert.equal(builds,before+2,'ink bitmap built once');r.FighterAssets.draw(c,type,100,200,100,'blue',{presentation:true});assert.equal(builds,before+2,'repeat menu paint reuses ink bitmap')}
 assert.equal(r.FighterAssets.diagnostics().total,80);for(const spec of Object.values(r.FighterAssets.authored))assert(spec.presentationUrl.includes('presentation.webp'),'every menu has a dedicated canonical');assert(r.FighterAssets.authored.turtle.presentationUrl.includes('presentation.webp'));

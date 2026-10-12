@@ -4,7 +4,7 @@ let old=false;const cp=require('child_process'),baseline='00cbdc2c69a7c15ccd668d
 const read=file=>old&&['v3/combat-staging.js','v3/arena-floor-art.js'].includes(file)?cp.execFileSync('git',['show',baseline+':'+file],{encoding:'utf8'}):fs.readFileSync(file,'utf8');
 async function env(){
  const e={console,Image:AssetImage,CustomEvent:class{},performance:{now:()=>5000},scars:[],spellMarks:[],dispatchEvent(){},spectacleTier:()=> 'full',document:{createElement:()=>createCanvas(1,1)},devicePixelRatio:2};e.window=e;vm.createContext(e);
- for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','asset-renderer','camera','arena-floor-art','arena-art','arena-ambience','battle-theatre','arena-stage','combat-staging'])vm.runInContext(read('v3/'+f+'.js'),e);
+ for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolution-rules','asset-renderer','camera','arena-floor-art','arena-art','arena-ambience','battle-theatre','arena-stage','combat-staging'])vm.runInContext(read('v3/'+f+'.js'),e);
  await new Promise(r=>setTimeout(r,1400));const src=read('v3/v3.js');
  vm.runInContext(src.slice(src.indexOf('function spritePoint('),src.indexOf('function effectScale(')),e);
  vm.runInContext(src.slice(src.indexOf('const ARENAS='),src.indexOf(';const arenaFor='))+';window.themes=ARENAS',e);

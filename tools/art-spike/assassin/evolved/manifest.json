@@ -1,0 +1,188 @@
+{
+  "fighter": "assassin",
+  "form": "evolved",
+  "status": "review branch; phone QA open",
+  "repair_reason": "Original move/attack components touched and attack blade lacked edge clearance; both excluded.",
+  "source_scale": 0.4,
+  "repair_source_scales": {
+    "move": 0.25773195876288657,
+    "attack": 0.28901734104046245
+  },
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        42,
+        16,
+        400,
+        501
+      ],
+      "source_foot": [
+        186,
+        489
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        150,
+        201
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source": "move-attack-repair-source.webp",
+      "source_component_bounds": [
+        159,
+        115,
+        956,
+        807
+      ],
+      "source_foot": [
+        610,
+        795
+      ],
+      "extraction_scale": 0.25773195876288657,
+      "alpha_bounds": [
+        5,
+        5,
+        213,
+        186
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source": "move-attack-repair-source.webp",
+      "source_component_bounds": [
+        60,
+        891,
+        1007,
+        1469
+      ],
+      "source_foot": [
+        520,
+        1458
+      ],
+      "extraction_scale": 0.28901734104046245,
+      "alpha_bounds": [
+        5,
+        5,
+        281,
+        174
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        36,
+        509,
+        350,
+        903
+      ],
+      "source_foot": [
+        203,
+        891
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        133,
+        165
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "signature",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        374,
+        585,
+        887,
+        896
+      ],
+      "source_foot": [
+        585,
+        887
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        213,
+        131
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        900,
+        513,
+        1249,
+        903
+      ],
+      "source_foot": [
+        1087,
+        891
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        147,
+        163
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        293,
+        931,
+        942,
+        1239
+      ],
+      "source_foot": [
+        685,
+        1232
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        267,
+        131
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}
