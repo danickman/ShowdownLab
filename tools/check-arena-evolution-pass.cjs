@@ -15,6 +15,14 @@ assert.equal(builds,2,'loaded floor invalidates fallback cache once');
 for(const [w,h]of [[390,550],[320,300],[844,160],[1024,500]])assert(e.ArenaFloorArt.draw(ctx,w,h,'academy'));
 assert.equal(e.ArenaFloorArt.draw(ctx,390,550,'siege'),false);
 e.image.onerror();assert.equal(e.ArenaFloorArt.draw(ctx,390,550,'academy'),false);e.ArenaStage.drawFloor(ctx,390,844,290,theme);assert.equal(builds,3,'decode error returns to procedural floor');
+const academy=e.image;assert.equal(e.ArenaFloorArt.draw(ctx,390,550,'garden'),false,'new arena starts with procedural fallback');
+const garden=e.image;assert.notEqual(garden,academy);garden.naturalWidth=768;garden.naturalHeight=1152;garden.onload();
+for(const [w,h]of [[390,550],[320,300],[844,160],[1024,500]])assert(e.ArenaFloorArt.draw(ctx,w,h,'garden'));
+assert.equal(e.image,garden,'warm garden reuses one image');
+assert.equal(e.ArenaFloorArt.draw(ctx,390,550,'academy'),false,'switch releases prior current image');
+const nextAcademy=e.image,revision=e.ArenaFloorArt.revision;garden.onerror();garden.onload();assert.equal(e.ArenaFloorArt.revision,revision,'stale callbacks cannot invalidate new floor');
+nextAcademy.naturalWidth=768;nextAcademy.naturalHeight=1152;nextAcademy.onload();assert(e.ArenaFloorArt.draw(ctx,390,550,'academy'));assert.equal(depth,0);
+
 for(const tier of ['full','balanced','reduced','minimal'])for(const age of [-1,0,.2,.8,1])for(const facing of [-1,1]){draws=0;const f={x:120,y:400,size:84,heavy:true,seed:3,facing},before=JSON.stringify(f);e.BattleTheatre.drawRush(ctx,f,age,tier);assert.equal(depth,0);assert.equal(JSON.stringify(f),before);assert(draws<=15);if(tier==='minimal'||age<0||age>=1)assert.equal(draws,0)}
 assert.equal(e.BattleTheatre.effectLife('chargeWake','full'),420);
 // Exercise actual emission path, rather than relying on a text-only cap assertion.

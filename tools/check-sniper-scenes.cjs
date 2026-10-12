@@ -16,6 +16,7 @@ async function env(){
 (async()=>{const e=await env();const check=createCanvas(390,550);assert(e.ArenaFloorArt.draw(check.getContext('2d'),390,550,'academy'));const src=fs.readFileSync('v3/v3.js','utf8');vm.runInContext(src.slice(src.indexOf('function effectScale('),src.indexOf('function draw(time)')),e);
 const out=createCanvas(390*4,844),oc=out.getContext('2d');
 for(let scene=0;scene<4;scene++){
+ e.ArenaFloorArt.draw(check.getContext('2d'),390,550,e.themes[scene].dressing);
  await new Promise(r=>setTimeout(r,1400));
  const cv=createCanvas(390,844);Object.assign(e,{ctx:cv.getContext('2d'),prev:new Map(),fx:[],defeated:new Map(),comicGate:new Map(),scars:[],spellMarks:[],storyGate:new Set(),shake:0,flash:0,lastImpact:0,cap:t=>t,impactPunch:null,view:{w:390,h:844},staging:e.CombatStaging.create()});
  const units=Array.from({length:8},(_,i)=>({id:i+1,type:i<4?'sniper':i<6?'beetank':'knight',team:i<4?'blue':'red',x:i<4?.37+(i%2)*.035:.60+(i%2)*.035,y:.31+(i%4)*.14,hp:100,maxHp:100,action:'idle',target:i<4?i+5:i-3,ward:0,level:5}));

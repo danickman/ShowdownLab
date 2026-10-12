@@ -16,22 +16,44 @@
       if(active){entries.sort((a,b)=>a.u.id-b.u.id);for(const e of entries){const key=Math.floor(e.p.x/cellW)+':'+Math.floor(e.p.y/cellH);if(!grid.has(key))grid.set(key,[]);grid.get(key).push(e)}}
       for(const e of entries){
         let dx=0,dy=0;
-        if(active){let lower=0,higher=0,enemies=0;const gx=Math.floor(e.p.x/cellW),gy=Math.floor(e.p.y/cellH);
+        if(active){let lower=0,higher=0,enemies=0,enemyX=0;const gx=Math.floor(e.p.x/cellW),gy=Math.floor(e.p.y/cellH);
           for(let y=gy-1;y<=gy+1;y++)for(let x=gx-1;x<=gx+1;x++){
             const neighbours=grid.get(x+':'+y)||[];
             for(const other of neighbours){if(other===e)continue;const reach=(e.size+other.size)*.36;
               if(Math.abs(e.p.x-other.p.x)>reach||Math.abs(e.p.y-other.p.y)>reach*.80)continue;
-              if(other.u.team!==e.u.team)enemies++;else if(other.u.id<e.u.id)lower++;else higher++;
+              if(other.u.team!==e.u.team){enemies++;enemyX+=other.p.x;}else if(other.u.id<e.u.id)lower++;else higher++;
             }
           }
           if(lower+higher+enemies){
             // Fan crowded same-team ranks across a wider local envelope;
             // stagger feet so rear silhouettes are not on one vertical spine.
             const peers=lower+higher,rank=peers?lower/peers:.5;
-            dx=(rank-.5)*cap.x*1.7+(enemies?(e.u.team==='blue'?-cap.x*.16:cap.x*.16):0);
+            if(enemies){const gap=e.p.x-enemyX/enemies,lastSide=offsets.get(e.u.id)?.contactSide;const direction=Math.abs(gap)<4?(lastSide||(e.u.team==='blue'?-1:1)):Math.sign(gap);e.contactSide=direction;dx=direction*cap.x*(.16+.84*(direction<0?1-rank:rank));}
+            else dx=(rank-.5)*cap.x*1.7;
             dy=peers?((e.u.id%3)-1)*cap.y*.78:0;
           }
         }
+        e.dx=dx;e.dy=dy;
+      }
+      if(active){
+        // Resolve allied torso overlap inside the existing staging budget.
+        // Four bounded passes; opponents retain their original contact relationship.
+        const clampGoal=e=>{const lo=e.contactSide===1?cap.x*.16:-cap.x,hi=e.contactSide===-1?-cap.x*.16:cap.x;e.dx=Math.max(lo,Math.min(hi,e.dx));e.dy=Math.max(-cap.y,Math.min(cap.y,e.dy))};
+        for(let pass=0;pass<4;pass++)for(let i=0;i<entries.length;i++)for(let j=i+1;j<entries.length;j++){
+          const a=entries[i],b=entries[j];if(a.u.team!==b.u.team)continue;
+          const reach=(a.size+b.size)*.70;if(Math.abs(a.p.x-b.p.x)>reach+cap.x*2||Math.abs(a.p.y-b.p.y)>reach+cap.y*2)continue;
+          const x=b.p.x+b.dx-a.p.x-a.dx,y=(b.p.y+b.dy-b.height*.45)-(a.p.y+a.dy-a.height*.45);
+          const overlapX=(a.size+b.size)*.29-Math.abs(x),overlapY=(a.height+b.height)*.35-Math.abs(y);
+          if(overlapX<=0||overlapY<=0)continue;
+          const sx=x===0?(b.u.id>a.u.id?1:-1):Math.sign(x),sy=y===0?(b.u.id>a.u.id?1:-1):Math.sign(y);
+          const freeX=(cap.x-sx*b.dx)+(cap.x+sx*a.dx),freeY=(cap.y-sy*b.dy)+(cap.y+sy*a.dy);
+          if(overlapX<overlapY&&freeX>overlapX||freeY<overlapY&&freeX>0){const push=Math.min(overlapX*.52,freeX*.5);a.dx-=sx*push;b.dx+=sx*push}
+          else{const push=Math.min(overlapY*.52,freeY*.5);a.dy-=sy*push;b.dy+=sy*push}
+          clampGoal(a);clampGoal(b);
+        }
+      }
+      for(const e of entries){
+        const dx=e.dx,dy=e.dy;
         const old=offsets.get(e.u.id)||{dx:0,dy:0},step=dt*.18;
         const approach=(from,to)=>from+Math.max(-step,Math.min(step,(to-from)*blend));
         let nextX=approach(old.dx,dx),nextY=approach(old.dy,dy);
@@ -43,7 +65,7 @@
         // unbounded residual. Dense offsets settle to zero after ~1 second.
         const max=limits(Math.max(2,Math.min(60,alive.length)),camera.arena);
         if(!active&&Math.abs(nextX)<.01)nextX=0;if(!active&&Math.abs(nextY)<.01)nextY=0;
-        offsets.set(e.u.id,{dx:clamp(nextX,-max.x,max.x),dy:clamp(nextY,-max.y,max.y),seen:time});
+        offsets.set(e.u.id,{dx:clamp(nextX,-max.x,max.x),dy:clamp(nextY,-max.y,max.y),contactSide:e.contactSide,seen:time});
       }
       // Preserve a fallen fighter's last offset through its 900ms defeat fade.
       for(const [id,o]of offsets)if(time-o.seen>1000)offsets.delete(id);

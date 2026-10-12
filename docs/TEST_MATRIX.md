@@ -547,3 +547,8 @@ See [GOOSE_EVOLUTION_VERDANT_PASS.md](GOOSE_EVOLUTION_VERDANT_PASS.md) for scope
 ## Sniper Evolved registration — 2026-10-11
 
 See [SNIPER_EVOLUTION_REGISTRATION.md](SNIPER_EVOLUTION_REGISTRATION.md) for exact assets, targeted repair, shared anatomy calibration, registered feet and form-specific muzzle/body anchors. Four Evolved pilots (Knight, Beetank, Goose, Sniper) now select at L5+, with L10 fallback; 28 combat poses and 112 authored WebPs overall. Base sources, combat, stats, Mastery, evolution frequency and production remain unchanged. Automated/native checks pass; exact-head phone readability/FPS approval remains OPEN. Incoming Vercel deployment was READY, but live browser inspection was blocked by preview authentication and protected-fetch permissions. Crowd overlap remains visible in native composites. This supersedes the prior three-pilot count and Sniper-next status.
+
+
+## Contact-aware staging and Verdant floor — 2026-10-11
+
+See [CROWD_VERDANT_READABILITY_PASS.md](CROWD_VERDANT_READABILITY_PASS.md). Crowded ranks fan away from nearby opponents, and four bounded allied torso passes improve spacing inside the unchanged 56px/36px and 60-unit limits. Secondary per-unit labels are limited to small fights. Verdant gains a sunny moss/stone illustrated floor with one current image record and procedural fallback; academy art and live physical damage are retained. Actual seeded 1× before/after frames and four-arena native composites were inspected. Automated checks pass; larger melee overlap and exact-head phone motion/FPS approval remain OPEN. Approved Base/Evolved art, combat, progression, main and production are unchanged.
