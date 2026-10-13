@@ -1,0 +1,185 @@
+{
+  "fighter": "dragon",
+  "form": "base",
+  "status": "user-authorized Base refresh; phone QA open",
+  "repair_reason": "Original defeat hid a fourth foot; excluded. Repair facial frill/snout width 284 px calibrated to 117 px sheet anatomy.",
+  "source_scale": 0.4,
+  "repair_scale": 0.1647887323943662,
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        27,
+        23,
+        483,
+        393
+      ],
+      "source_foot": [
+        286,
+        380
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        189,
+        156
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "move",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        534,
+        63,
+        1029,
+        385
+      ],
+      "source_foot": [
+        801,
+        376
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        205,
+        136
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "attack",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        1050,
+        86,
+        1518,
+        388
+      ],
+      "source_foot": [
+        1328,
+        378
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        195,
+        129
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "guard",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        15,
+        462,
+        478,
+        749
+      ],
+      "source_foot": [
+        275,
+        736
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        192,
+        122
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "signature",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        492,
+        390,
+        1038,
+        753
+      ],
+      "source_foot": [
+        819,
+        737
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        225,
+        153
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "hit",
+      "source": "sheet-source.webp",
+      "source_component_bounds": [
+        1072,
+        428,
+        1526,
+        756
+      ],
+      "source_foot": [
+        1365,
+        743
+      ],
+      "extraction_scale": 0.4,
+      "alpha_bounds": [
+        5,
+        5,
+        189,
+        139
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    },
+    {
+      "pose": "defeat",
+      "source": "defeat-repair-source.webp",
+      "source_component_bounds": [
+        48,
+        207,
+        1504,
+        848
+      ],
+      "source_foot": [
+        819,
+        829
+      ],
+      "extraction_scale": 0.1647887323943662,
+      "alpha_bounds": [
+        5,
+        5,
+        247,
+        113
+      ],
+      "identity": 9,
+      "equipment": 9,
+      "pose_clarity": 8.5,
+      "critical_defects": []
+    }
+  ]
+}
