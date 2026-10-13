@@ -1,2 +1,9 @@
 
 tools/art-spike/**/runtime-export.tmp
+tools/qa/node_modules/
+tools/qa/.runtime/
+
+v3/assets/authored/**/ultimate/*.tmp
+tools/art-spike/**/ultimate/*.tmp
+
+__pycache__/

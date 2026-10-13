@@ -3,7 +3,7 @@ const manifest={
   knight:{scale:1,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/knight/idle.webp'],fps:4},move:{frames:['/v3/assets/knight/move-1.webp','/v3/assets/knight/move-2.webp'],fps:8},attack:{frames:['/v3/assets/knight/attack-1.webp','/v3/assets/knight/attack-2.webp','/v3/assets/knight/attack-3.webp'],fps:12},skill:{frames:['/v3/assets/knight/skill-1.webp','/v3/assets/knight/skill-2.webp'],fps:10},hit:{frames:['/v3/assets/knight/hit.webp'],fps:8},defeat:{frames:['/v3/assets/knight/defeat.webp'],fps:4}}},
   dragon:{scale:1.28,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/dragon/idle.webp'],fps:4},move:{frames:['/v3/assets/dragon/move-1.webp','/v3/assets/dragon/move-2.webp'],fps:7},attack:{frames:['/v3/assets/dragon/attack-1.webp','/v3/assets/dragon/attack-2.webp'],fps:10},skill:{frames:['/v3/assets/dragon/fire-1.webp','/v3/assets/dragon/fire-2.webp','/v3/assets/dragon/fire-3.webp'],fps:12},hit:{frames:['/v3/assets/dragon/hit.webp'],fps:8},defeat:{frames:['/v3/assets/dragon/defeat.webp'],fps:4}}}
 };
-const V='evolved-roster10';
+const V='ultimate-roster10';
 const evolution=window.ShowdownEvolution,reduceMotionQuery=window.matchMedia?.('(prefers-reduced-motion: reduce)');
 const authored={
   knight:{presentation:'presentation',scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
@@ -35,13 +35,15 @@ function cueOffset(type,level,action,role,size,facing=1){
   if(!cue)return null;
   const k=size*e.scale/e.referenceHeight;return{x:cue[0]*k*facing,y:cue[1]*k};
 }
+const envelopeCache=new Map();
 function visualEnvelope(type,level=1){
+  const key=type+':'+visualForm(type,level);if(envelopeCache.has(key))return envelopeCache.get(key);
   const f=authored[type],h=(f?.scale||1.36)*(f?.inkBoost||1),a=f?.anchor||[.5,.948];
-  if(!selectedArt(type,level))return{left:h*.5,right:h*.5,above:h*a[1],below:h*(1-a[1])};
+  if(!selectedArt(type,level)){const box={left:h*.5,right:h*.5,above:h*a[1],below:h*(1-a[1])};envelopeCache.set(key,box);return box}
   const evolved=selectedArt(type,level),e={left:0,right:0,above:0,below:0},k=evolved.scale/evolved.referenceHeight;
   for(const p of Object.values(evolved.poses)){e.left=Math.max(e.left,p.width*p.anchor[0]*k);e.right=Math.max(e.right,p.width*(1-p.anchor[0])*k);e.above=Math.max(e.above,p.height*p.anchor[1]*k);e.below=Math.max(e.below,p.height*(1-p.anchor[1])*k)}
   // Equipment and recoil reserve, symmetric for either team facing.
-  const side=Math.max(e.left,e.right)+.12;return{left:side,right:side,above:e.above+.08,below:Math.max(.14,e.below+.05)};
+  const side=Math.max(e.left,e.right)+.12,box={left:side,right:side,above:e.above+.08,below:Math.max(.14,e.below+.05)};envelopeCache.set(key,box);return box;
 }
 const cache=new Map(),missing=new Set(),reported=new Set(),poseMemory=new Map(),hitReactions=new Map();
 const presentationInkCache=new WeakMap();
@@ -82,7 +84,7 @@ function stateName(action){return action==='kill'?'attack':action==='move'?'move
 function resolve(type,state){const f=manifest[type];if(!f)return null;return f.states[state]||f.states.attack||f.states.idle}
 function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
 function allAuthoredUrls(){return [...new Set(Object.values(authored).flatMap(f=>[...Object.values(f.urls),...(f.presentationUrl?[f.presentationUrl]:[])]).concat([...Object.values(bases),...Object.values(evolutions),...Object.values(ultimates)].filter(Boolean).flatMap(e=>[...Object.values(e.urls),e.presentationUrl])))]}
-function preload(){Object.values(manifest).forEach(f=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
+function preload(){Object.entries(manifest).filter(([type])=>!authored[type]).forEach(([,f])=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
 function drawTeamRing(c,x,y,size,team,ground=y,density=0){
   const col=team==='red'?'#dc5146':'#228fba';
   c.save();
@@ -184,15 +186,34 @@ function motion(type,state,o,size,age=999,hold=0){
   if(o.flip)dx=-dx;
   return{dx,dy,rot:o.flip?-rot:rot,sx,sy};
 }
-function drawLevelAccent(c,img,w,h,ax,ay,size,o){
+const accentInkCache=new WeakMap();
+function accentInk(img,color){
+  let colors=accentInkCache.get(img);if(colors?.has(color))return colors.get(color);
+  let ink=img;
+  try{const mask=window.document?.createElement('canvas'),out=window.document?.createElement('canvas');if(mask&&out){
+    mask.width=out.width=img.naturalWidth;mask.height=out.height=img.naturalHeight;
+    const m=mask.getContext('2d'),c=out.getContext('2d');m.drawImage(img,0,0);m.globalCompositeOperation='source-in';m.fillStyle=color;m.fillRect(0,0,mask.width,mask.height);
+    for(const [x,y]of [[-1.5,0],[1.5,0],[0,-1.5],[0,1.5]])c.drawImage(mask,x,y);ink=out;
+  }}catch{}
+  if(!colors){colors=new Map();accentInkCache.set(img,colors)}colors.set(color,ink);return ink;
+}
+function drawLevelAccent(c,img,w,h,ax,ay,size,o,type){
   if(!evolution.accent(o.level))return;
   const level=evolution.normalize(o.level),reduced=reduceMotionQuery?.matches,
     tier=o.effectTier||'full',dense=(o.density||0)>=24;
-  // One warm material rim under the full sprite. No particles, queues or enlarged silhouette.
+  const roleColor={knight:'#f0c778',dragon:'#ff9a45',barbarian:'#ed8b69',goblin:'#b2c66d',beetank:'#65c9b5',turtle:'#a2cd7c',mole:'#d8ad66',sniper:'#aadbe6',assassin:'#bb9cdc',goose:'#f5d276'}[type]||'#edcf80';
+  // A role-colored ink bitmap is prepared once per pose. No per-fighter shadow blur.
   if(!dense&&tier!=='minimal'){
-    c.save();c.globalAlpha*=level===5?.38:.25;c.shadowColor=level===5?'#f3b752':'#fff0aa';
-    c.shadowBlur=reduced||tier==='reduced'?0:Math.min(5,size*.045);c.shadowOffsetX=0;c.shadowOffsetY=0;
-    c.shadowOffsetX=-1;c.drawImage(img,-w*ax,-h*ay,w,h);c.shadowOffsetX=1;c.drawImage(img,-w*ax,-h*ay,w,h);c.restore();
+    c.save();c.globalAlpha*=level===5?.64:.44;c.drawImage(accentInk(img,roleColor),-w*ax,-h*ay,w,h);c.restore();
+  }
+  // Readable comic power seal: no particle queues, bounded geometry and density fallback.
+  if(!o.presentation&&!dense&&tier!=='minimal'){
+    const ascend=level===5,pulse=reduced||tier==='reduced'?1:1+.035*Math.sin((Number(o.time)||0)*.005+(o.id||0));
+    c.save();c.globalAlpha*=ascend?.82:.62;c.strokeStyle=roleColor;c.lineWidth=Math.max(1.6,size*(ascend?.027:.021));
+    c.beginPath();c.ellipse(0,size*.025,size*.48*pulse,size*.13,0,0,Math.PI*2);c.stroke();
+    if(ascend){c.strokeStyle='#fff5d7';c.lineWidth=Math.max(1,size*.013);c.beginPath();c.ellipse(0,size*.025,size*.36,size*.09,0,0,Math.PI*2);c.stroke()}
+    for(const side of [-1,1]){const x=side*size*.41;c.beginPath();c.moveTo(x-size*.045,size*.025);c.lineTo(x,-size*.025);c.lineTo(x+size*.045,size*.025);c.lineTo(x,size*.075);c.lineTo(x-size*.045,size*.025);c.stroke()}
+    c.restore();
   }
   // Static gold foot chevrons survive dense/reduced modes without blur or animation.
   if(!o.presentation){c.save();c.strokeStyle=level===5?'#c7862f':'#e3c575';c.globalAlpha*=.8;c.lineWidth=Math.max(1,size*.018);
@@ -229,7 +250,7 @@ function drawAuthored(c,type,x,y,size,team,o){
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
   }
-  drawLevelAccent(c,img,w,h,ax,ay,size,o);
+  drawLevelAccent(c,img,w,h,ax,ay,size,o,type);
   c.drawImage(o.presentation?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
@@ -245,7 +266,7 @@ function draw(c,type,x,y,size,team='blue',o={}){
 }
 function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(String(id),{time,strength:Math.max(.3,Math.min(1,strength))});if(hitReactions.size>192)hitReactions.delete(hitReactions.keys().next().value)}
 function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
-function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}for(const [form,packs]of [['base',bases],['evolved',evolutions],['ultimate',ultimates]])if(packs[type]){states[form]={};for(const [state,url]of Object.entries(packs[type].urls)){const r=cache.get(url);states[form][state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,missing:[...missing],byFighter}}
+function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}for(const [form,packs]of [['base',bases],['evolved',evolutions],['ultimate',ultimates]])if(packs[type]){states[form]={};for(const [state,url]of Object.entries(packs[type].urls)){const r=cache.get(url);states[form][state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,loading:urls.filter(u=>!cache.get(u)?.ready&&!cache.get(u)?.error),missing:[...missing],byFighter}}
 preload();
 window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();

@@ -1,0 +1,14 @@
+{
+  "fighter": "sniper",
+  "review": "source boards and native extracted contact sheets inspected",
+  "criteria": [
+    "identity",
+    "limb and hand count",
+    "weapon count",
+    "pose clarity",
+    "complete framing",
+    "shared anatomy scale"
+  ],
+  "deviceApproval": "open",
+  "acceptedRegistration": "registration.json"
+}

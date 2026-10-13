@@ -453,3 +453,7 @@ The user authorized regenerating Dragon Base only; see [DRAGON_BASE_REFRESH.md](
 ## Completed Evolved roster and launch release · 2026-10-13 UTC
 
 Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian complete all ten L2 Evolved packs. Custom PWA/Apple/maskable icons, sunny home duel panel, live Ultimate/evolution Guide, defeated-species sizing and L5 introduction label are included. See `GOBLIN_BARBARIAN_EVOLUTION_RELEASE.md` for source contracts, QA and remaining phone/Ultimate-art gates. Main deployment is authorized by the user; physical-phone FPS/approval remains unverified.
+
+## Ultimate portrait milestone — 2026-10-12 Toronto (after Evolved release)
+
+Branch `ultimate-portrait-polish` begins at main `4d88372`. Ten Ultimate canonicals plus seventy poses are implemented using combined production boards and targeted repairs. Portrait camera composition addresses opening team separation; real Puppeteer/Chromium tests are now available. Six arena treatments, stronger role-specific intermediate seals, Ultimate impact ink and three-form Guide comparisons are implemented. See `ULTIMATE_PORTRAIT_PLAN.md` and `ULTIMATE_PORTRAIT_HANDOFF.md` for exact current tests/release state. Physical-phone FPS and extreme crowd readability remain open. This supersedes earlier all-Ultimate-art-pending entries.

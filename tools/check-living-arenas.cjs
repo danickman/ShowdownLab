@@ -6,7 +6,7 @@ for(const name of ['beginPath','closePath','clip','fill','stroke','rect','ellips
 const r={window:null,console,Image:class{set src(src){this.naturalWidth=this.naturalHeight=src.includes('presentation')?512:96;this.onload?.()}},CustomEvent:class{},dispatchEvent(){},matchMedia:()=>({matches:motionOff}),document:{createElement(){builds++;return{width:0,height:0,getContext:()=>({...c})}}}};r.window=r;vm.createContext(r);
 vm.runInContext(fs.readFileSync(path.join(root,'v3/arena-ambience.js'),'utf8'),r);
 let cases=0;
-for(const dressing of ['academy','garden','frontier','siege'])for(const count of [4,24,60,180])for(const time of [0,100,5000,1000000]){
+for(const dressing of ['academy','garden','frontier','siege','crystal','solar'])for(const count of [4,24,60,180])for(const time of [0,100,5000,1000000]){
  calls=[];r.ArenaAmbience.drawSky(c,390,198,{dressing},time,count);r.ArenaAmbience.drawPerimeter(c,390,844,198,{dressing},time,count);assert.equal(depth,0);assert(calls.length<=180,'bounded scene work');const dense=calls.length;
  if(count===180){calls=[];r.ArenaAmbience.drawSky(c,390,198,{dressing},time,4);r.ArenaAmbience.drawPerimeter(c,390,844,198,{dressing},time,4);assert(calls.length>dense,'dense fights shed atmosphere work')}cases++;
 }
