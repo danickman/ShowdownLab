@@ -32,5 +32,5 @@ assert.equal(JSON.stringify(units),original,'presentation must not alter combat 
 runtime.state.units[1].hp=0;runtime.fx=[];runtime.spellVisual('zap',{target:2},6000,1);
 assert(runtime.fx.some(f=>f.kind==='arcSpell'),'lethal strike presentation');
 const rootHtml=fs.readFileSync(path.join(root,'index.html'),'utf8');assert.equal(rootHtml,fs.readFileSync(path.join(root,'v3/index.html'),'utf8'),'entry point parity');
-assert(rootHtml.includes('presentation.css?v=launch2'));assert(rootHtml.indexOf('battle-theatre.js')<rootHtml.indexOf('/v3/v3.js?v='),'theatre loads before game');
+assert(rootHtml.includes('presentation.css?v=launch3'));assert(rootHtml.indexOf('battle-theatre.js')<rootHtml.indexOf('/v3/v3.js?v='),'theatre loads before game');
 console.log(`PASS: ${checks} geometry/lifecycle cases, stable cracks, crowd/cast bounds, state immutability, lethal ARC and HTML parity`);

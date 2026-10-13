@@ -34,3 +34,10 @@ Two concrete presentation fixes: defeated Goblin/Goose retain small size and Bee
 - Native rendering and automated viewport review do not establish physical-phone FPS or phone approval. Dense melee overlap still merits device review. Dedicated Ultimate art and further balance tuning remain future bounded milestones.
 
 Browser review and deployment receipts are recorded after publication in the handoff/release notes.
+
+
+### Public release receipt and browser follow-up
+
+PR #9 merged tested review head `b055bd868a087932b8b6391dc10d823db79eb84a` as production `c5037b61a3d2ef51e7cbacde5408081c8831321d`; tree `3d7b5be8aa838aeb258082836544b94a1af2f903`. Vercel deployment `dpl_HTjMaAqzvvKbEa6TsozgV8ergijt` reported READY/production with `showdownlab.vercel.app` assigned. Sixteen public HTML, manifest/icon/worker/module/style/art responses byte-matched that tree.
+
+Public browser review verified the 390px sunny launch screen, live Guide text for all ten L4/L5 abilities and progression table, 320×568 home without scrolling/horizontal overflow and all touch targets >=48px, and active Quick combat. Console errors observed were browser-extension metadata errors, not game errors. Landscape review exposed the legacy 430px shell squeezing the two-column home hero; the follow-up widens only the active home shell in landscape and versions the stylesheet. Native scene tests remain separate from physical-device FPS/approval.
