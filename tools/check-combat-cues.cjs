@@ -2,7 +2,7 @@
 const fs=require('fs'),vm=require('vm'),path=require('path'),assert=require('assert'),root=path.resolve(__dirname,'..');
 let decodes=0;class ReadyImage{set src(url){this.url=url;this.naturalWidth=this.naturalHeight=96;decodes++;this.onload?.()}}
 const r={Image:ReadyImage,window:null,CustomEvent:class{},dispatchEvent(){},console};r.window=r;vm.createContext(r);
-for(const name of ['battle-theatre','evolution-rules','asset-renderer','arena-art'])vm.runInContext(fs.readFileSync(path.join(root,'v3',name+'.js'),'utf8'),r);
+for(const name of ['battle-theatre','evolution-rules','base-dragon','asset-renderer','arena-art'])vm.runInContext(fs.readFileSync(path.join(root,'v3',name+'.js'),'utf8'),r);
 const transforms=[],ctx={canvas:{width:390,height:844},save(){},restore(){},beginPath(){},ellipse(){},fill(){},stroke(){},rect(){},clip(){},fillRect(){},createLinearGradient(){return{addColorStop(){}}},drawImage(){},rotate(){},scale(){},translate(...xy){transforms.push(xy)}};
 const count=decodes;for(const arena of ['SUNLIT LAB','VERDANT RUINS','FRONTIER KEEP','SIEGE RUINS'])assert(r.ArenaArt.drawSky(ctx,arena,390,202));assert.equal(decodes,count,'four arenas reuse four preloaded locations');for(const arena of ['SUNLIT LAB','VERDANT RUINS','FRONTIER KEEP','SIEGE RUINS'])r.ArenaArt.drawSky(ctx,arena,390,202);assert.equal(decodes,count,'repeated rounds reuse decoded scenes');assert.equal(r.ArenaArt.drawSky(ctx,'missing',390,202),false);
 for(const type of Object.keys(r.FighterAssets.authored)){

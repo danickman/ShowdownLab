@@ -1,7 +1,7 @@
 // node tools/check-combat-staging.cjs — presentation bounds, settling and shared anchors.
 const fs=require('fs'),vm=require('vm'),path=require('path'),assert=require('assert');
 const root=path.resolve(__dirname,'..'),r={window:null,Image:class{set src(v){this.naturalWidth=this.naturalHeight=96;this.onload?.()}},CustomEvent:class{},dispatchEvent(){},console};r.window=r;vm.createContext(r);
-for(const file of ['evolution-rules','asset-renderer','camera','combat-staging','battle-theatre'])vm.runInContext(fs.readFileSync(path.join(root,'v3',file+'.js'),'utf8'),r);
+for(const file of ['evolution-rules','base-dragon','asset-renderer','camera','combat-staging','battle-theatre'])vm.runInContext(fs.readFileSync(path.join(root,'v3',file+'.js'),'utf8'),r);
 const types=Object.keys(r.FighterAssets.authored),kind=t=>t==='dragon'?'large':['turtle','beetank'].includes(t)?'heavy':['goose','goblin'].includes(t)?'small':'normal';
 let boxes=0;
 for(const [w,h]of [[320,568],[390,844],[430,932],[844,390],[1024,768]])for(const count of [2,8,24,44,60,180])for(const layout of ['cluster','corners','spread']){

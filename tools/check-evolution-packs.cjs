@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const env={console,Image:class{},window:null};env.window=env;vm.createContext(env);
-for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','evolution-rules','asset-renderer','camera','combat-staging'])vm.runInContext(fs.readFileSync(`v3/${f}.js`,'utf8'),env);
+for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','evolution-rules','base-dragon','asset-renderer','camera','combat-staging'])vm.runInContext(fs.readFileSync(`v3/${f}.js`,'utf8'),env);
 const packNames={knight:'KnightEvolvedArt',beetank:'BeetankEvolvedArt',goose:'GooseEvolvedArt',sniper:'SniperEvolvedArt',dragon:'DragonEvolvedArt',assassin:'AssassinEvolvedArt',mole:'MoleEvolvedArt',turtle:'TurtleEvolvedArt'};
 const art=env.FighterAssets;
 for(const level of [1,2,3,4,5,10]){for(const type of Object.keys(packNames))assert.equal(art.visualForm(type,level),level>=2?'evolved':'base');assert.equal(art.visualForm('goblin',level),'base')}
@@ -20,7 +20,7 @@ console.log(`PASS: form boundaries, seven registered equipment envelopes, ${chec
 // Exercise renderer sizing, facing and a failed optional pose fallback.
 let failAttack=false;const drawEnv={window:null,CustomEvent:class{},dispatchEvent(){}};drawEnv.window=drawEnv;
 class ReadyImage{set src(url){this.url=url;const match=url.match(/authored\/(knight|beetank|goose|sniper|dragon|assassin|mole|turtle)\/evolved\/(\w+)\.webp/);if(match){const pack=drawEnv[packNames[match[1]]];const pose=Object.values(pack.poses).find(p=>p.file===match[2]);this.naturalWidth=pose?.width||512;this.naturalHeight=pose?.height||512;if(failAttack&&match[2]==='attack'){this.onerror?.();return}}else this.naturalWidth=this.naturalHeight=96;this.onload?.()}}
-drawEnv.Image=ReadyImage;vm.createContext(drawEnv);for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','evolution-rules','asset-renderer'])vm.runInContext(fs.readFileSync(`v3/${f}.js`,'utf8'),drawEnv);
+drawEnv.Image=ReadyImage;vm.createContext(drawEnv);for(const f of ['evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','evolution-rules','base-dragon','asset-renderer'])vm.runInContext(fs.readFileSync(`v3/${f}.js`,'utf8'),drawEnv);
 const images=[],scales=[],ctx={canvas:{width:390,height:844},save(){},restore(){},beginPath(){},moveTo(){},lineTo(){},ellipse(){},fill(){},stroke(){},translate(){},rotate(){},scale(...xy){scales.push(xy)},drawImage(...args){images.push(args)}};
 for(const [type,actions]of [['knight',['idle','move','attack','guard','charge','hit','defeat']],['beetank',['idle','bulldoze','horn','brace','ram','hit','defeat']],['goose',['idle','waddle','peck','guard','honk','hit','defeat']],['sniper',['idle','move','attack','guard_close','aim','hit','defeat']],['dragon',['idle','stalk','attack','guard_close','fire','hit','defeat']],['assassin',['idle','stalk','backstab','guard','vanish','hit','defeat']],['mole',['idle','scuttle','claw','scrap','erupt','hit','defeat']],['turtle',['idle','trudge','snap','brace','shell_slam','hit','defeat']]])for(const action of actions){images.length=0;scales.length=0;const size=80;drawEnv.FighterAssets.draw(ctx,type,150,400,size,'blue',{level:5,action,time:5000,flip:false});const [img,x,y,w,h]=images.at(-1),pack=drawEnv[packNames[type]];assert(img.url.includes('/evolved/'));if(type==='assassin'){const pose={stalk:'move',backstab:'attack',vanish:'signature'}[action]||action;assert(img.url.includes('/'+pose+'.webp'),'all seven Assassin actions use distinct registered poses')}assert(Math.abs(h/img.naturalHeight-size*pack.scale/pack.referenceHeight)<.03,'all poses share source-pixel scale');assert.equal(scales.at(-1)[0]<0,type==='beetank','native left facing is normalized')}
 // New renderer instance clears preloaded ready records, so failure is observed.
@@ -44,7 +44,7 @@ for(const action of ['fire','fire_windup','claw_swipe']){
  const a=art.cueOffset('dragon',5,action,'weapon',80,1),b=art.cueOffset('dragon',5,action,'weapon',80,-1);assert(a&&a.y<0);assert.equal(a.x,-b.x);assert.equal(a.y,b.y);
  assert(a.x<art.visualEnvelope('dragon',5).right*80);assert(-a.y<art.visualEnvelope('dragon',5).above*80);
 }
-assert.equal(art.cueOffset('dragon',1,'fire','weapon',80),null);
+assert(art.cueOffset('dragon',1,'fire','weapon',80)?.y<0,'refreshed Base has a registered mouth');
 console.log('PASS: Dragon mouth/claw origins mirror inside the complete wing/horn envelope; Base cues retained');
 
 for(const action of ['backstab','vanish']){const a=art.cueOffset('assassin',5,action,'weapon',80,1),b=art.cueOffset('assassin',5,action,'weapon',80,-1);assert(a&&a.y<0);assert.equal(a.x,-b.x);assert.equal(a.y,b.y);const envelope=art.visualEnvelope('assassin',5);assert(a.x<=envelope.right*80&&a.x>=-envelope.left*80);assert(-a.y<=envelope.above*80)}

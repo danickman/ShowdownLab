@@ -2,7 +2,7 @@ const fs=require('fs'),vm=require('vm'),assert=require('assert'),{createCanvas,I
 class AssetImage extends Image{set src(src){try{super.src=fs.readFileSync(src.split('?')[0].replace(/^\//,''))}catch{this.onerror?.()}}get naturalWidth(){return this.width}get naturalHeight(){return this.height}}
 (async()=>{
  let reduced=false;const e={window:null,Image:AssetImage,CustomEvent:class{},dispatchEvent(){},console,matchMedia:()=>({get matches(){return reduced}}),document:{createElement:()=>createCanvas(1,1)}};e.window=e;vm.createContext(e);
- for(const f of ['evolution-rules','ultimate-abilities','ultimate-effects','evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','asset-renderer'])vm.runInContext(fs.readFileSync('v3/'+f+'.js','utf8'),e);
+ for(const f of ['evolution-rules','ultimate-abilities','ultimate-effects','evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','base-dragon','asset-renderer'])vm.runInContext(fs.readFileSync('v3/'+f+'.js','utf8'),e);
  await new Promise(r=>setTimeout(r,1200));
  const cv=createCanvas(1500,1600),c=cv.getContext('2d'),types=['knight','sniper','dragon','assassin','beetank','goose','mole','turtle'],ability={knight:'bastion',sniper:'pierce',dragon:'inferno',assassin:'execution',beetank:'seismic',goose:'thunder',mole:'carapace',turtle:'reflect'};
  c.fillStyle='#ece3c7';c.fillRect(0,0,cv.width,cv.height);

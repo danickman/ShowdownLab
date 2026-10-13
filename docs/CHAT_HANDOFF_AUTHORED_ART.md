@@ -2,7 +2,7 @@
 
 Updated: 2026-10-12
 
-Current operational checkpoint: see **Turtle Evolved** at the end and `TURTLE_EVOLUTION_REGISTRATION.md`, plus `FIVE_LEVEL_ULTIMATE_MILESTONE.md` for the active mechanics. Main has the caption hotfix; Dragon/Assassin/Mole/Turtle art and the newly authorized progression/ability changes are review-branch work. Earlier sections are historical; current user handoff and latest milestone supersede old art deferrals. Verify actual branch head before editing.
+Current operational checkpoint: see **Dragon Base refresh** at the end and `DRAGON_BASE_REFRESH.md`, plus `FIVE_LEVEL_ULTIMATE_MILESTONE.md` for the active mechanics. Main is released at `8cb8e5` with the eight-pack/five-level milestone; Dragon/Assassin/Mole/Turtle art and the newly authorized progression/ability changes are review-branch work. Earlier sections are historical; current user handoff and latest milestone supersede old art deferrals. Verify actual branch head before editing.
 
 Use this as the operational handoff for continuing Showdown Lab in a fresh chat.
 
@@ -570,3 +570,8 @@ See [MOLE_EVOLUTION_REGISTRATION.md](MOLE_EVOLUTION_REGISTRATION.md). Seven shar
 ## Turtle Evolved — 2026-10-12
 
 See [TURTLE_EVOLUTION_REGISTRATION.md](TURTLE_EVOLUTION_REGISTRATION.md). Raised hex shell ridge, thick stepped rim and seven registered poses preserve Turtle’s face, fists, leather equipment and three-toed feet. L2 art, L3 accent and L4/L5 fallback use the existing five-level contract; Ricochet Shell 30%/45% reflection and other mechanics are unchanged. Eight packs / 56 Evolved combat poses / 144 authored WebPs now exist. Native/automated checks pass; phone/FPS and mixed-melee overlap remain open. Mole checkpoint `7cb5732` was verified READY via automatic Git deployment, resolving the previously unreported mechanics preview. Main/production remain `ba58c3d`. Goblin/Barbarian Evolved and all Ultimate art remain. The user explicitly authorized regenerating Dragon Base next; preserve other Base art and Dragon Evolved.
+
+
+## Dragon Base refresh — 2026-10-12
+
+The user authorized regenerating Dragon Base only; see [DRAGON_BASE_REFRESH.md](DRAGON_BASE_REFRESH.md). Portrait and seven clean high-resolution poses preserve four feet, two wings/two head horns and one tail, with a repaired four-foot defeat. Optional Base registration preserves anatomy scale and mouth/ground anchors instead of fitting wings to a square. Other Base and Dragon Evolved assets remain unchanged. Native/automated checks pass; phone/FPS and mixed-melee overlap remain open. Next: Goblin and Barbarian Evolved, focused defect review, full QA and an authorized deployment. Dedicated Ultimate art remains pending.
