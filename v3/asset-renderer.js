@@ -3,7 +3,7 @@ const manifest={
   knight:{scale:1,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/knight/idle.webp'],fps:4},move:{frames:['/v3/assets/knight/move-1.webp','/v3/assets/knight/move-2.webp'],fps:8},attack:{frames:['/v3/assets/knight/attack-1.webp','/v3/assets/knight/attack-2.webp','/v3/assets/knight/attack-3.webp'],fps:12},skill:{frames:['/v3/assets/knight/skill-1.webp','/v3/assets/knight/skill-2.webp'],fps:10},hit:{frames:['/v3/assets/knight/hit.webp'],fps:8},defeat:{frames:['/v3/assets/knight/defeat.webp'],fps:4}}},
   dragon:{scale:1.28,anchor:[.5,.82],states:{idle:{frames:['/v3/assets/dragon/idle.webp'],fps:4},move:{frames:['/v3/assets/dragon/move-1.webp','/v3/assets/dragon/move-2.webp'],fps:7},attack:{frames:['/v3/assets/dragon/attack-1.webp','/v3/assets/dragon/attack-2.webp'],fps:10},skill:{frames:['/v3/assets/dragon/fire-1.webp','/v3/assets/dragon/fire-2.webp','/v3/assets/dragon/fire-3.webp'],fps:12},hit:{frames:['/v3/assets/dragon/hit.webp'],fps:8},defeat:{frames:['/v3/assets/dragon/defeat.webp'],fps:4}}}
 };
-const V='base-dragon2';
+const V='evolved-roster10';
 const evolution=window.ShowdownEvolution,reduceMotionQuery=window.matchMedia?.('(prefers-reduced-motion: reduce)');
 const authored={
   knight:{presentation:'presentation',scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
@@ -23,7 +23,7 @@ for(const [type,spec] of Object.entries(authored)){
   for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${V}`;
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
-const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt,sniper:window.SniperEvolvedArt,dragon:window.DragonEvolvedArt,assassin:window.AssassinEvolvedArt,mole:window.MoleEvolvedArt,turtle:window.TurtleEvolvedArt};
+const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt,sniper:window.SniperEvolvedArt,dragon:window.DragonEvolvedArt,assassin:window.AssassinEvolvedArt,mole:window.MoleEvolvedArt,turtle:window.TurtleEvolvedArt,goblin:window.GoblinEvolvedArt,barbarian:window.BarbarianEvolvedArt};
 const bases={dragon:window.DragonBaseArt};
 const ultimates=Object.fromEntries(Object.keys(authored).map(type=>[type,window[type[0].toUpperCase()+type.slice(1)+'UltimateArt']]));
 for(const [form,packs]of [['base',bases],['evolved',evolutions],['ultimate',ultimates]])for(const [type,e]of Object.entries(packs))if(e){e.urls={};for(const [state,p]of Object.entries(e.poses))e.urls[state]=`/v3/assets/authored/${type}/${form==='base'?'':form+'/'}${p.file}.webp?v=${V}`;e.presentationUrl=`/v3/assets/authored/${type}/${form==='base'?'':form+'/'}presentation.webp?v=${V}`}

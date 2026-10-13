@@ -2,9 +2,9 @@ const fs=require('fs'),vm=require('vm'),assert=require('assert'),{createCanvas,I
 class AssetImage extends Image{set src(src){try{super.src=fs.readFileSync(src.split('?')[0].replace(/^\//,''))}catch{this.onerror?.()}}get naturalWidth(){return this.width}get naturalHeight(){return this.height}}
 (async()=>{
  let reduced=false;const e={window:null,Image:AssetImage,CustomEvent:class{},dispatchEvent(){},console,matchMedia:()=>({get matches(){return reduced}}),document:{createElement:()=>createCanvas(1,1)}};e.window=e;vm.createContext(e);
- for(const f of ['evolution-rules','ultimate-abilities','ultimate-effects','evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','base-dragon','asset-renderer'])vm.runInContext(fs.readFileSync('v3/'+f+'.js','utf8'),e);
+ for(const f of ['evolution-rules','ultimate-abilities','ultimate-effects','evolved-knight','evolved-beetank','evolved-goose','evolved-sniper','evolved-dragon','evolved-assassin','evolved-mole','evolved-turtle','evolved-goblin','evolved-barbarian','base-dragon','asset-renderer'])vm.runInContext(fs.readFileSync('v3/'+f+'.js','utf8'),e);
  await new Promise(r=>setTimeout(r,1200));
- const cv=createCanvas(1500,1600),c=cv.getContext('2d'),types=['knight','sniper','dragon','assassin','beetank','goose','mole','turtle'],ability={knight:'bastion',sniper:'pierce',dragon:'inferno',assassin:'execution',beetank:'seismic',goose:'thunder',mole:'carapace',turtle:'reflect'};
+ const cv=createCanvas(1500,2000),c=cv.getContext('2d'),types=['knight','sniper','dragon','assassin','beetank','goose','mole','turtle','goblin','barbarian'],ability={knight:'bastion',sniper:'pierce',dragon:'inferno',assassin:'execution',beetank:'seismic',goose:'thunder',mole:'carapace',turtle:'reflect',goblin:'pack',barbarian:'cleave'};
  c.fillStyle='#ece3c7';c.fillRect(0,0,cv.width,cv.height);
  for(let row=0;row<types.length;row++)for(let level=1;level<=5;level++){
   const x=(level-1)*300+150,y=row*200+175,type=types[row];c.fillStyle='#27352e';c.font='17px sans-serif';c.fillText(type+' L'+level+' · '+e.ShowdownEvolution.label(level),x-140,row*200+22);

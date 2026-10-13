@@ -448,3 +448,8 @@ See [TURTLE_EVOLUTION_REGISTRATION.md](TURTLE_EVOLUTION_REGISTRATION.md). Raised
 ## Dragon Base refresh — 2026-10-12
 
 The user authorized regenerating Dragon Base only; see [DRAGON_BASE_REFRESH.md](DRAGON_BASE_REFRESH.md). Portrait and seven clean high-resolution poses preserve four feet, two wings/two head horns and one tail, with a repaired four-foot defeat. Optional Base registration preserves anatomy scale and mouth/ground anchors instead of fitting wings to a square. Other Base and Dragon Evolved assets remain unchanged. Native/automated checks pass; phone/FPS and mixed-melee overlap remain open. Next: Goblin and Barbarian Evolved, focused defect review, full QA and an authorized deployment. Dedicated Ultimate art remains pending.
+
+
+## Completed Evolved roster and launch release · 2026-10-13 UTC
+
+Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian complete all ten L2 Evolved packs. Custom PWA/Apple/maskable icons, sunny home duel panel, live Ultimate/evolution Guide, defeated-species sizing and L5 introduction label are included. See `GOBLIN_BARBARIAN_EVOLUTION_RELEASE.md` for source contracts, QA and remaining phone/Ultimate-art gates. Main deployment is authorized by the user; physical-phone FPS/approval remains unverified.
