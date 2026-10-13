@@ -1,0 +1,9 @@
+{
+  "name": "showdownlab-browser-qa",
+  "private": true,
+  "description": "Optional development-only real Puppeteer browser tooling",
+  "dependencies": {
+    "puppeteer": "25.13.0",
+    "@sparticuz/chromium": "153.0.0"
+  }
+}

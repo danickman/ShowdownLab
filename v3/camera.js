@@ -6,7 +6,7 @@ function create(viewW,viewH,o={}){
   let frame={x:.5,y:.5,zoom:.92},density=0,initialized=false;
   const maxScale={normal:1.36,heavy:1.36,large:1.36,small:1.36,boss:1.36};
   for(const [type,spec]of Object.entries(window.FighterAssets?.authored||{})){const k=type==='dragon'?'large':['beetank','turtle'].includes(type)?'heavy':['goose','goblin'].includes(type)?'small':'normal';const e=window.FighterAssets.visualEnvelope?.(type,5);maxScale[k]=Math.max(maxScale[k],(spec.scale||1.36)*(spec.inkBoost||1),e?Math.max(e.above+e.below,2*e.left,2*e.right):0)}
-  const maxSpriteHeight=Math.max(1,Math.min(a.h*.70-12,a.w*.65-16));
+  const maxSpriteHeight=Math.max(1,Math.min(a.h*.70-12,a.w*.40-16));
   const project=(x,y)=>{const d=Math.max(0,Math.min(1,y)),p=.78+d*.28;return{x:.5+(x-.5)*p,y:.16+d*.76}};
   const kindFor=type=>type==='dragon'?'large':type==='beetank'||type==='turtle'?'heavy':type==='goblin'||type==='goose'?'small':'normal';
   function sizeFor(kind,count,zoom){let n=kind==='boss'?132:kind==='large'?112:kind==='heavy'?96:kind==='small'?72:84;if(count>20)n*=.92;if(count>35)n*=.84;if(count>55)n*=.76;n*=Math.min(1.12,Math.sqrt(zoom));const crowdScale=Math.max(.58,1-Math.max(0,count-60)*.0035);return Math.max(1,Math.min(Math.round(Math.max(kind==='large'?68:kind==='heavy'?58:kind==='small'?42:48,n)*crowdScale),maxSpriteHeight/(maxScale[kind]||1.36)))}
@@ -20,8 +20,11 @@ function create(viewW,viewH,o={}){
       // Reserve the maximum supported zoom size, so zoom smoothing cannot clip equipment.
       const size=sizeFor(kind,density,1.28),h=size*scale*ink,stage=window.CombatStaging?.limits(density,a)||{x:0,y:0};
       const e=window.FighterAssets?.visualEnvelope?.(u.type,u.level)||{left:scale*ink*.5,right:scale*ink*.5,above:scale*ink*anchor,below:scale*ink*(1-anchor)};
-      edge=Math.max(edge,size*Math.max(e.left,e.right)+8+stage.x);head=Math.max(head,size*e.above+10+stage.y);foot=Math.max(foot,size*e.below+8+stage.y,size*.14+4);
+      edge=Math.max(edge,size*Math.max(e.left,e.right)+8);head=Math.max(head,size*e.above+10+stage.y);foot=Math.max(foot,size*e.below+8+stage.y,size*.14+4);
     }
+    // Reserve lateral staging only when combat anchors have converged. Reserving the full
+    // 56px spread for distant spawn fronts squeezed both armies into the same center column.
+    edge+=Math.max(0,maxX-minX)<.40?(window.CombatStaging?.limits(density,a)?.x||0):12;
     edge=Math.min(edge,a.w*.45);head=Math.min(head,a.h*.72);foot=Math.min(foot,a.h*.20);
     const spanX=Math.max(.12,maxX-minX),spanY=Math.max(.12,maxY-minY);
     const fit=Math.min((1-edge*2/a.w)/spanX,(1-(head+foot)/a.h)/spanY);

@@ -97,6 +97,20 @@
     }
     ctx.restore();
     }
+    // Two additional sunny locations reuse panoramas but earn distinct cached material layouts.
+    if(theme.dressing==='crystal'||theme.dressing==='solar'){
+      ctx.save();const crystal=theme.dressing==='crystal';
+      ctx.strokeStyle=crystal?'#81a9b5':'#b08036';ctx.fillStyle=crystal?'#d2eff2':'#fff0b3';
+      ctx.globalAlpha=.30;ctx.lineWidth=2;
+      ctx.beginPath();ctx.ellipse(w*.5,h*.58,w*.33,h*.19,0,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.ellipse(w*.5,h*.58,w*.25,h*.14,0,0,Math.PI*2);ctx.stroke();
+      for(let i=0;i<12;i++){const a=i*Math.PI/6,x=w*.5+Math.cos(a)*w*.29,y=h*.58+Math.sin(a)*h*.165;
+        ctx.beginPath();ctx.moveTo(x,y-5);ctx.lineTo(x+5,y);ctx.lineTo(x,y+5);ctx.lineTo(x-5,y);ctx.closePath();ctx.fill()}
+      for(const side of [0,1])for(let i=0;i<5;i++){
+        const x=side?w-rail-12:rail+12,y=h*(.14+i*.16);ctx.globalAlpha=.64;
+        ctx.beginPath();ctx.moveTo(x,y-14);ctx.lineTo(x+7,y);ctx.lineTo(x,y+8);ctx.lineTo(x-7,y);ctx.closePath();ctx.fill();ctx.stroke();
+      }ctx.restore();
+    }
     // Dressed perimeter stones connect the floor to the distant courtyard wall.
     ctx.fillStyle=theme.stone;ctx.fillRect(0,0,rail,h);ctx.fillRect(w-rail,0,rail,h);
     ctx.fillStyle='#fff8de';ctx.globalAlpha=.65;ctx.fillRect(rail,0,2,h);ctx.fillRect(w-rail-2,0,2,h);

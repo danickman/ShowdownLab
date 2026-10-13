@@ -1,0 +1,156 @@
+{
+  "scale": 1.3,
+  "referenceHeight": 141.2,
+  "canonical": {
+    "source": "board-source.webp",
+    "componentPoint": [
+      200,
+      220
+    ]
+  },
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "board-source.webp",
+      "componentPoint": [
+        650,
+        220
+      ],
+      "foot": [
+        655,
+        402
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          650,
+          230
+        ]
+      }
+    },
+    {
+      "pose": "move",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1100,
+        210
+      ],
+      "foot": [
+        1094,
+        407
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1100,
+          220
+        ]
+      }
+    },
+    {
+      "pose": "attack",
+      "source": "attack-repair-source.webp",
+      "componentPoint": [
+        760,
+        520
+      ],
+      "foot": [
+        639,
+        922
+      ],
+      "extractionScale": 0.14,
+      "cues": {
+        "impact": [
+          761,
+          501
+        ],
+        "weapon": [
+          1497,
+          354
+        ]
+      },
+      "alphaThreshold": 200
+    },
+    {
+      "pose": "guard",
+      "source": "board-source.webp",
+      "componentPoint": [
+        200,
+        650
+      ],
+      "foot": [
+        211,
+        846
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          201,
+          681
+        ]
+      }
+    },
+    {
+      "pose": "signature",
+      "source": "board-source.webp",
+      "componentPoint": [
+        670,
+        650
+      ],
+      "foot": [
+        674,
+        851
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          666,
+          647
+        ],
+        "weapon": [
+          490,
+          452
+        ]
+      }
+    },
+    {
+      "pose": "hit",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1100,
+        650
+      ],
+      "foot": [
+        1119,
+        850
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1123,
+          680
+        ]
+      }
+    },
+    {
+      "pose": "defeat",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1550,
+        720
+      ],
+      "foot": [
+        1550,
+        850
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1550,
+          733
+        ]
+      }
+    }
+  ],
+  "review": "Board attack rejected for cropped tip; repair calibrated by helmet/torso anatomy, not full sprite extent. Phone QA open."
+}

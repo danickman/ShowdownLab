@@ -1,0 +1,19 @@
+{
+  "fighter": "assassin",
+  "review": "source boards and native extracted contact sheets inspected",
+  "criteria": [
+    "identity",
+    "limb and hand count",
+    "weapon count",
+    "pose clarity",
+    "complete framing",
+    "shared anatomy scale"
+  ],
+  "deviceApproval": "open",
+  "acceptedRegistration": "registration.json",
+  "rejected": {
+    "board-source.webp: guard": "user identified extra daggers",
+    "repair-1-source.webp": "surplus blade-like shape"
+  },
+  "acceptedRepair": "repair-2-source.webp: two uncrossed daggers"
+}

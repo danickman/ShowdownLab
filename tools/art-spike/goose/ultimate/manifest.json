@@ -1,0 +1,232 @@
+{
+  "fighter": "goose",
+  "form": "ultimate",
+  "status": "integrated; device QA open",
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "board-source.webp",
+      "componentPoint": [
+        635,
+        262
+      ],
+      "foot": [
+        682,
+        427
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          659,
+          266
+        ]
+      },
+      "sourceBounds": [
+        446,
+        80,
+        873,
+        438
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        178,
+        150
+      ]
+    },
+    {
+      "pose": "move",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1135,
+        279
+      ],
+      "foot": [
+        1131,
+        440
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1104,
+          285
+        ]
+      },
+      "sourceBounds": [
+        898,
+        106,
+        1311,
+        452
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        172,
+        145
+      ]
+    },
+    {
+      "pose": "attack",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1369,
+        265
+      ],
+      "foot": [
+        1518,
+        436
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1539,
+          235
+        ],
+        "weapon": [
+          1736,
+          342
+        ]
+      },
+      "sourceBounds": [
+        1308,
+        8,
+        1770,
+        446
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        192,
+        182
+      ]
+    },
+    {
+      "pose": "guard",
+      "source": "board-source.webp",
+      "componentPoint": [
+        147,
+        705
+      ],
+      "foot": [
+        228,
+        842
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          203,
+          697
+        ]
+      },
+      "sourceBounds": [
+        12,
+        527,
+        394,
+        855
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        160,
+        138
+      ]
+    },
+    {
+      "pose": "signature",
+      "source": "board-source.webp",
+      "componentPoint": [
+        866,
+        638
+      ],
+      "foot": [
+        705,
+        859
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          678,
+          657
+        ],
+        "weapon": [
+          752,
+          534
+        ]
+      },
+      "sourceBounds": [
+        407,
+        423,
+        949,
+        874
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        224,
+        187
+      ]
+    },
+    {
+      "pose": "hit",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1005,
+        665
+      ],
+      "foot": [
+        1142,
+        850
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1154,
+          676
+        ]
+      },
+      "sourceBounds": [
+        953,
+        475,
+        1356,
+        863
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        168,
+        162
+      ]
+    },
+    {
+      "pose": "defeat",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1504,
+        743
+      ],
+      "foot": [
+        1550,
+        834
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1550,
+          691
+        ]
+      },
+      "sourceBounds": [
+        1339,
+        520,
+        1762,
+        850
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        176,
+        139
+      ]
+    }
+  ]
+}

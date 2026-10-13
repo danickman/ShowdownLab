@@ -1,0 +1,155 @@
+{
+  "scale": 1.2,
+  "referenceHeight": 141.6,
+  "canonical": {
+    "source": "board-source.webp",
+    "componentPoint": [
+      77,
+      244
+    ]
+  },
+  "poses": [
+    {
+      "pose": "idle",
+      "source": "board-source.webp",
+      "componentPoint": [
+        635,
+        262
+      ],
+      "foot": [
+        682,
+        427
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          659,
+          266
+        ]
+      }
+    },
+    {
+      "pose": "move",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1135,
+        279
+      ],
+      "foot": [
+        1131,
+        440
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1104,
+          285
+        ]
+      }
+    },
+    {
+      "pose": "attack",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1369,
+        265
+      ],
+      "foot": [
+        1518,
+        436
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1539,
+          235
+        ],
+        "weapon": [
+          1736,
+          342
+        ]
+      }
+    },
+    {
+      "pose": "guard",
+      "source": "board-source.webp",
+      "componentPoint": [
+        147,
+        705
+      ],
+      "foot": [
+        228,
+        842
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          203,
+          697
+        ]
+      }
+    },
+    {
+      "pose": "signature",
+      "source": "board-source.webp",
+      "componentPoint": [
+        866,
+        638
+      ],
+      "foot": [
+        705,
+        859
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          678,
+          657
+        ],
+        "weapon": [
+          752,
+          534
+        ]
+      }
+    },
+    {
+      "pose": "hit",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1005,
+        665
+      ],
+      "foot": [
+        1142,
+        850
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1154,
+          676
+        ]
+      }
+    },
+    {
+      "pose": "defeat",
+      "source": "board-source.webp",
+      "componentPoint": [
+        1504,
+        743
+      ],
+      "foot": [
+        1550,
+        834
+      ],
+      "extractionScale": 0.4,
+      "cues": {
+        "impact": [
+          1550,
+          691
+        ]
+      }
+    }
+  ],
+  "review": "Manual source-board anatomy/equipment/framing review; repaired poses share anatomy calibration rather than bounding-box fit. Physical-device approval open."
+}

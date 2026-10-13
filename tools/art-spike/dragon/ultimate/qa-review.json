@@ -1,0 +1,20 @@
+{
+  "fighter": "dragon",
+  "review": "source boards and native extracted contact sheets inspected",
+  "criteria": [
+    "identity",
+    "limb and hand count",
+    "weapon count",
+    "pose clarity",
+    "complete framing",
+    "shared anatomy scale"
+  ],
+  "deviceApproval": "open",
+  "acceptedRegistration": "registration.json",
+  "rejected": {
+    "board-source.webp: defeat": "four feet not clearly readable",
+    "repair-1-source.webp": "five feet",
+    "repair-2-source.webp": "three feet"
+  },
+  "acceptedRepair": "repair-3-source.webp: four visibly countable feet"
+}

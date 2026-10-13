@@ -2,9 +2,10 @@
 (()=>{'use strict';
   const images=new Map();
   const skyline='/v3/assets/arenas/sunlit-lab/skyline.webp?v=1';
+  const variants={'CRYSTAL TERRACE':{source:'SUNLIT LAB',filter:'hue-rotate(12deg) saturate(.72) brightness(1.12)'},'SOLAR COLOSSEUM':{source:'FRONTIER KEEP',filter:'sepia(.28) saturate(1.13) brightness(1.06)'}};
   const scenes={'SUNLIT LAB':skyline,'VERDANT RUINS':'/v3/assets/arenas/verdant/skyline.webp?v=1','FRONTIER KEEP':'/v3/assets/arenas/frontier/skyline.webp?v=1','SIEGE RUINS':'/v3/assets/arenas/siege/skyline.webp?v=1'};
   function load(name){
-    const url=scenes[name];if(!url)return null;
+    const url=scenes[variants[name]?.source||name];if(!url)return null;
     if(images.has(url))return images.get(url);
     const entry={image:new Image(),ready:false};images.set(url,entry);
     entry.image.onload=()=>{entry.ready=entry.image.naturalWidth>0&&entry.image.naturalHeight>0};
@@ -19,7 +20,7 @@
     ctx.save();ctx.beginPath();ctx.rect(0,0,width,height);ctx.clip();
     const extra=Math.max(0,height-dh),skyColour=name==='SIEGE RUINS'?'#337bda':name==='FRONTIER KEEP'?'#478ae5':name==='VERDANT RUINS'?'#579fe9':'#589ee8';
     if(extra){ctx.fillStyle=skyColour;ctx.fillRect(0,0,width,extra+1)}
-    ctx.drawImage(image,0,height-dh,dw,dh);
+    ctx.filter=variants[name]?.filter||'none';ctx.drawImage(image,0,height-dh,dw,dh);ctx.filter='none';
     if(extra){
       // Fade only the top sky edge; architecture and cloud proportions stay intact.
       const fade=ctx.createLinearGradient(0,extra,0,extra+Math.min(24,dh*.14));
