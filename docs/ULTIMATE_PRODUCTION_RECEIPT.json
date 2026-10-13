@@ -1,0 +1,634 @@
+{
+  "commit": "bd6d7c2ae9f8a333c288fe4e6c0e31eb21f13cb6",
+  "tree": "ed6704a2d7983e87d96b5175106e0efe0fd935f7",
+  "url": "https://showdownlab.vercel.app/",
+  "files": [
+    {
+      "path": "v3/ultimate-effects.js",
+      "status": 200,
+      "bytes": 2736,
+      "match": true
+    },
+    {
+      "path": "v3/asset-renderer.js",
+      "status": 200,
+      "bytes": 23409,
+      "match": true
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "bytes": 14310,
+      "match": true
+    },
+    {
+      "path": "v3/camera.js",
+      "status": 200,
+      "bytes": 4237,
+      "match": true
+    },
+    {
+      "path": "v3/v3.js",
+      "status": 200,
+      "bytes": 97982,
+      "match": true
+    },
+    {
+      "path": "v3/round-loop.js",
+      "status": 200,
+      "bytes": 20917,
+      "match": true
+    },
+    {
+      "path": "v3/arena-stage.js",
+      "status": 200,
+      "bytes": 12383,
+      "match": true
+    },
+    {
+      "path": "v3/arena-art.js",
+      "status": 200,
+      "bytes": 2243,
+      "match": true
+    },
+    {
+      "path": "v3/presentation.css",
+      "status": 200,
+      "bytes": 17050,
+      "match": true
+    },
+    {
+      "path": "manifest.webmanifest",
+      "status": 200,
+      "bytes": 767,
+      "match": true
+    },
+    {
+      "path": "v3/index.html",
+      "status": 200,
+      "bytes": 14310,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-barbarian.js",
+      "status": 200,
+      "bytes": 1217,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-goose.js",
+      "status": 200,
+      "bytes": 1229,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-assassin.js",
+      "status": 200,
+      "bytes": 1234,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-sniper.js",
+      "status": 200,
+      "bytes": 1285,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-abilities.js",
+      "status": 200,
+      "bytes": 5240,
+      "match": true
+    },
+    {
+      "path": "sw.js",
+      "status": 200,
+      "bytes": 976,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-goblin.js",
+      "status": 200,
+      "bytes": 1257,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-knight.js",
+      "status": 200,
+      "bytes": 1301,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-turtle.js",
+      "status": 200,
+      "bytes": 1260,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-mole.js",
+      "status": 200,
+      "bytes": 1338,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-dragon.js",
+      "status": 200,
+      "bytes": 1252,
+      "match": true
+    },
+    {
+      "path": "v3/ultimate-beetank.js",
+      "status": 200,
+      "bytes": 1270,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 25038,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 35894,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 83740,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 31434,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/move.webp",
+      "status": 200,
+      "bytes": 29672,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 34100,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 51690,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 34878,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 31952,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/move.webp",
+      "status": 200,
+      "bytes": 34610,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 28004,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goose/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 28550,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 35678,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 35118,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 39038,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 241558,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 27764,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/mole/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 29880,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/move.webp",
+      "status": 200,
+      "bytes": 36496,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 44246,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 33578,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 236012,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 29458,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/knight/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 32794,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 27928,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 32340,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/move.webp",
+      "status": 200,
+      "bytes": 41178,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 37498,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 40710,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 199154,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 34432,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 22248,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 40102,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/turtle/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 33730,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 32652,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/move.webp",
+      "status": 200,
+      "bytes": 33118,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 28260,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 180266,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 38010,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 28138,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/assassin/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 36808,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 20328,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/move.webp",
+      "status": 200,
+      "bytes": 28380,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 28188,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 24224,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 25040,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 146146,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/sniper/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 27322,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/move.webp",
+      "status": 200,
+      "bytes": 31270,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 35468,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 33838,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 27194,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 24984,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 235628,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 36722,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/move.webp",
+      "status": 200,
+      "bytes": 35416,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 35396,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 34018,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 33018,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/goblin/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 37794,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 37944,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 43980,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 39206,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/barbarian/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 254214,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 32668,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 29832,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 42888,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/move.webp",
+      "status": 200,
+      "bytes": 39244,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 37358,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 37262,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 44072,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/beetank/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 270008,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/attack.webp",
+      "status": 200,
+      "bytes": 47486,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/defeat.webp",
+      "status": 200,
+      "bytes": 40286,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/idle.webp",
+      "status": 200,
+      "bytes": 44956,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/move.webp",
+      "status": 200,
+      "bytes": 44456,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/hit.webp",
+      "status": 200,
+      "bytes": 39168,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/presentation.webp",
+      "status": 200,
+      "bytes": 255626,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/guard.webp",
+      "status": 200,
+      "bytes": 44372,
+      "match": true
+    },
+    {
+      "path": "v3/assets/authored/dragon/ultimate/signature.webp",
+      "status": 200,
+      "bytes": 57418,
+      "match": true
+    }
+  ],
+  "allMatch": true,
+  "deploymentStatus": "GitHub Vercel contexts success",
+  "deploymentDashboard": "https://vercel.com/danickmans-projects/showdownlab/DWqiSCYZWEZPBWLg5BH6i5rcpTZG",
+  "liveBrowser": {
+    "guide": "current three-form and L4/L5 text verified",
+    "quickCombat": "active",
+    "applicationConsoleErrors": 0,
+    "excluded": "browser extension metadata errors"
+  }
+}

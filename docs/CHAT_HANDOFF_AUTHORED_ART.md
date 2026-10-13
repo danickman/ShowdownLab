@@ -587,3 +587,8 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 PR #9 merged tested review head `b055bd868a087932b8b6391dc10d823db79eb84a` as production `c5037b61a3d2ef51e7cbacde5408081c8831321d`; tree `3d7b5be8aa838aeb258082836544b94a1af2f903`. Vercel deployment `dpl_HTjMaAqzvvKbEa6TsozgV8ergijt` reported READY/production with `showdownlab.vercel.app` assigned. Sixteen public HTML, manifest/icon/worker/module/style/art responses byte-matched that tree.
 
 Public browser review verified the 390px sunny launch screen, live Guide text for all ten L4/L5 abilities and progression table, 320×568 home without scrolling/horizontal overflow and all touch targets >=48px, and active Quick combat. Console errors observed were browser-extension metadata errors, not game errors. Landscape review exposed the legacy 430px shell squeezing the two-column home hero; the follow-up widens only the active home shell in landscape and versions the stylesheet. Native scene tests remain separate from physical-device FPS/approval.
+
+
+## Ultimate portrait release handoff — 2026-10-12 Toronto
+
+Production main is now `bd6d7c2` (PR #12), with all ten Ultimate canonicals and seventy poses, portrait opening-placement correction, six arena treatments, comic L3/L5 seals and expanded Guide. See `ULTIMATE_PORTRAIT_PLAN.md`, `ULTIMATE_BROWSER_RECEIPT.json` and the latest `ULTIMATE_PORTRAIT_HANDOFF.md`/`ULTIMATE_PRODUCTION_RECEIPT.json` on branch `ultimate-portrait-polish` for final release receipts. Historical pending-Ultimate and Goblin/Barbarian-next notes above are superseded. Real Puppeteer/native QA passed; physical iPhone FPS and extreme crowd acceptance remain open. Do not regenerate already accepted packs without a confirmed defect.
