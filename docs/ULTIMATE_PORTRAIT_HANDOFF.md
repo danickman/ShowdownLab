@@ -39,3 +39,10 @@ Full real Puppeteer run PASSED: five initial-order/containment fixtures, zero pa
 Performance change: per-form bounds cached; L3/L5 silhouette rims now cached role-color bitmaps instead of two live shadow-blurred sprite copies. Affected native tests and optimized real browser Quick/Draft/Lab flows PASSED. Software Chromium ordinary Dragon-pack median interval improved 116.6→66.7ms (~43%); 180-unit extreme remained ~550ms. These are slow software-host measurements, NOT iPhone FPS acceptance. Further extreme-density/phone profiling remains open; no core balancing changes made.
 
 Publication is in progress through verified GitHub blob/tree/commit API. Record exact branch SHA and any deployment receipts when returned.
+
+
+## Dragon clean-sprite hotfix — 2026-10-13
+
+User reported procedural-looking shading/double edges across Dragon forms. Dragon now opts into `cleanSprite`: removed its enlarged black `inkBoost` silhouette, skips L3/L5 colored silhouette bitmap, and displays original canonical portraits without contrast/outline processing. Ground evolution seals, team rings, breath/ability effects and authored assets remain intact. Both HTML entry points version the renderer as `dragon-clean1`.
+
+Validation: `node tools/check-dragon-clean-sprites.cjs` passes 145 render cases across L1–L5, seven poses, both facings, low/high density, and canonical portraits. Existing Dragon Base camera/cues 4,110 cases and Ultimate registration/bounds 8,220 cases pass. Real Puppeteer at 430×932 DPR3 passes cold loading, Guide, Dragon duel sequence, Quick/Draft/Lab/spell/terminal flows, landscape smoke, and no page/asset errors. Physical Safari/FPS acceptance remains open. No new art generated.

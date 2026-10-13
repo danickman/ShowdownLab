@@ -9,7 +9,8 @@ const authored={
   knight:{presentation:'presentation',scale:1.30,anchor:[.5,.918],states:{idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'charge',hit:'hit',defeat:'defeat'}},
   sniper:{scale:1.26,anchor:[.5,.948],presentation:'presentation'},
   goose:{presentation:'presentation',scale:1.20,anchor:[.5,.948]},
-  dragon:{presentation:'presentation',scale:1.36,anchor:[.5,.948],inkBoost:1.065},
+  // Dragon has authored ink already; keep every form free of silhouette/contrast processing.
+  dragon:{presentation:'presentation',scale:1.36,anchor:[.5,.948],cleanSprite:true},
   assassin:{presentation:'presentation',scale:1.28,anchor:[.5,.948]},
   beetank:{facing:-1,presentation:'presentation',scale:1.16,anchor:[.5,.948]},
   mole:{presentation:'presentation',scale:1.20,anchor:[.5,.948]},
@@ -203,7 +204,7 @@ function drawLevelAccent(c,img,w,h,ax,ay,size,o,type){
     tier=o.effectTier||'full',dense=(o.density||0)>=24;
   const roleColor={knight:'#f0c778',dragon:'#ff9a45',barbarian:'#ed8b69',goblin:'#b2c66d',beetank:'#65c9b5',turtle:'#a2cd7c',mole:'#d8ad66',sniper:'#aadbe6',assassin:'#bb9cdc',goose:'#f5d276'}[type]||'#edcf80';
   // A role-colored ink bitmap is prepared once per pose. No per-fighter shadow blur.
-  if(!dense&&tier!=='minimal'){
+  if(!authored[type]?.cleanSprite&&!dense&&tier!=='minimal'){
     c.save();c.globalAlpha*=level===5?.64:.44;c.drawImage(accentInk(img,roleColor),-w*ax,-h*ay,w,h);c.restore();
   }
   // Readable comic power seal: no particle queues, bounded geometry and density fallback.
@@ -251,7 +252,7 @@ function drawAuthored(c,type,x,y,size,team,o){
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
   }
   drawLevelAccent(c,img,w,h,ax,ay,size,o,type);
-  c.drawImage(o.presentation?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true
+  c.drawImage(o.presentation&&!fighter.cleanSprite?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
   if(authored[type]){
