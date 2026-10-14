@@ -35,6 +35,7 @@ const rows=[];for(const n of [20,40,60,80,120,160])for(const seed of [1337,7301,
 }
 const sums=(k,filter=()=>true)=>rows.filter(filter).reduce((n,r)=>n+r[k],0);
 const dense=r=>r.n>60,ratio=sums('candidateOverlap',dense)/Math.max(1,sums('baselineOverlap',dense));
-const accepted=sums('candidateCrop')<=sums('baselineCrop')+20 && sums('candidateDetached',dense)<=sums('baselineDetached',dense)+20 && ratio<1;\nconst receipt={experiment:'staging-only enlarged dense caps 34/23 to 46/30',note:'synthetic fixed positions; bounding proxies, not sprite alpha; candidate not integrated',overlapRatio:ratio,accepted,reason:accepted?'passed geometry gates':'candidate rejected by overlap, clipping, or contact-distance gate',rows};
+const accepted=sums('candidateCrop')<=sums('baselineCrop')+20 && sums('candidateDetached',dense)<=sums('baselineDetached',dense)+20 && ratio<1;
+const receipt={experiment:'staging-only enlarged dense caps 34/23 to 46/30',note:'synthetic fixed positions; bounding proxies, not sprite alpha; candidate not integrated',overlapRatio:ratio,accepted,reason:accepted?'passed geometry gates':'candidate rejected by overlap, clipping, or contact-distance gate',rows};
 if(process.env.QA_STAGE_CANDIDATE_RECEIPT)fs.writeFileSync(process.env.QA_STAGE_CANDIDATE_RECEIPT,JSON.stringify(receipt,null,2));
 console.log((accepted?'ACCEPT':'REJECT')+' staging candidate diagnostics: '+JSON.stringify({overlapRatio:ratio,baselineCrop:sums('baselineCrop'),candidateCrop:sums('candidateCrop'),baselineDetached:sums('baselineDetached',dense),candidateDetached:sums('candidateDetached',dense)}));\nassert.strictEqual(accepted,false,'expanded staging unexpectedly passes: review candidate before changing acceptance contract');
