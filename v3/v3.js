@@ -107,7 +107,17 @@ const frameStart=renderProfiler?performance.now():0;if(!introSnapshot||lastRound
 arena(time);
 const afterArena=renderProfiler?performance.now():0;
 for(const d of defeated.values())drawDefeated(d,time,live.length);
-live.map(u=>({u,p:spritePoint(u)})).sort((a,b)=>a.p.y-b.p.y||a.p.x-b.p.x).forEach(({u})=>drawUnit(u,live.length,time));
+// Dense fights: preserve depth order by 12px foot lanes and paint large
+// silhouettes last *within* each lane. This changes presentation stacking
+// only; world coordinates, collision and hit decisions remain untouched.
+const sortFighters=(a,b)=>{
+  if(live.length<=60)return a.p.y-b.p.y||a.p.x-b.p.x;
+  const laneA=Math.floor(a.p.y/12),laneB=Math.floor(b.p.y/12);
+  if(laneA!==laneB)return laneA-laneB;
+  const prominence=t=>t==='dragon'?3:t==='beetank'||t==='turtle'?2:t==='knight'||t==='barbarian'?1:0;
+  return prominence(a.u.type)-prominence(b.u.type)||a.p.y-b.p.y||a.p.x-b.p.x||a.u.id-b.u.id;
+};
+live.map(u=>({u,p:spritePoint(u)})).sort(sortFighters).forEach(({u})=>drawUnit(u,live.length,time));
 const afterFighters=renderProfiler?performance.now():0;
 drawFX(time);
 const afterFX=renderProfiler?performance.now():0;
