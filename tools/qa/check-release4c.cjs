@@ -54,7 +54,7 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  const active=create({stores});
  await active.event('install');
  assert(stores.has(active.cacheName),'new install must create full bundle');
- assert.equal(active.networkCalls.length,required.length+9,'entire dependency graph including Home art precached');
+ assert.equal(active.networkCalls.length,required.length+8,'canonical root shell, runtime graph and Home art precached');
  active.setOnline(false);
  // The waiting worker has not activated while older tabs remain.
  assert(stores.has('showdown-lab-old'),'waiting worker must not discard previous release');
