@@ -78,6 +78,7 @@
           clampGoal(a);clampGoal(b);
         }
       }
+      const max=alive.length<2?limits(2,camera.arena):cap;
       for(const e of entries){
         const dx=e.dx,dy=e.dy;
         const old=offsets.get(e.u.id)||{dx:0,dy:0},step=dt*.18;
@@ -89,7 +90,6 @@
         nextX=clamp(e.p.x+nextX,left,right)-e.p.x;nextY=clamp(e.p.y+nextY,top,bottom)-e.p.y;
         // Returning to dense/isolated state is smooth, without leaving an
         // unbounded residual. Dense offsets settle to zero after ~1 second.
-        const max=cap;
         if(!active&&Math.abs(nextX)<.01)nextX=0;if(!active&&Math.abs(nextY)<.01)nextY=0;
         offsets.set(e.u.id,{dx:clamp(nextX,-max.x,max.x),dy:clamp(nextY,-max.y,max.y),contactSide:e.contactSide,seen:time});
       }
