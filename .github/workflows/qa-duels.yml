@@ -112,6 +112,30 @@ jobs:
           node tools/qa/check-zone-terminal.cjs
           node tools/qa/check-zone-mirrors.cjs
 
+  engagement-director-spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate isolated director research harness
+        run: node --check tools/qa/check-engagement-director.cjs
+      - name: Test real mixed-role combat without runtime modifications
+        env:
+          QA_ENGAGEMENT_COUNTS: '40,80'
+          QA_ENGAGEMENT_SEEDS: '1337'
+          QA_ENGAGEMENT_RECEIPT: engagement-director-spike.json
+        run: node tools/qa/check-engagement-director.cjs
+      - name: Save experimental evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engagement-director-spike
+          path: engagement-director-spike.json
+          if-no-files-found: warn
+
   wider-front-fast-signal:
     runs-on: ubuntu-latest
     timeout-minutes: 5
