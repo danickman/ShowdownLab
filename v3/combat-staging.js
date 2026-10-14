@@ -17,7 +17,19 @@
       const alive=units.filter(u=>u.hp>0),cap=limits(alive.length,camera.arena),active=cap.x>0,fullResolve=alive.length<=60;
       const dt=previousTime==null?16:Math.max(0,Math.min(50,time-previousTime));previousTime=time;
       const blend=1-Math.exp(-dt/130),grid=new Map(),cellW=100,cellH=80;
-      const entries=alive.map(u=>{const p=camera.worldToScreen(u.x,u.y),size=camera.unitSize(kind(u.type),alive.length),spec=window.FighterAssets?.authored?.[u.type],height=size*(spec?.scale||1.3)*(spec?.inkBoost||1),anchor=spec?.anchor?.[1]||.948;const envelope=window.FighterAssets?.visualEnvelope?.(u.type,u.level)||{left:height/size*.5,right:height/size*.5,above:height/size*anchor,below:height/size*(1-anchor)};return {u,p,size,height,anchor,envelope}});
+      // Unit scale depends on kind, camera and density; authored envelopes on type/level.
+      // Reuse lookups for this frame, never across a camera resize or form change.
+      const sizeByKind=new Map(),envelopeByForm=new Map();
+      const entries=alive.map(u=>{
+        const p=camera.worldToScreen(u.x,u.y),k=kind(u.type);
+        if(!sizeByKind.has(k))sizeByKind.set(k,camera.unitSize(k,alive.length));
+        const size=sizeByKind.get(k),spec=window.FighterAssets?.authored?.[u.type];
+        const height=size*(spec?.scale||1.3)*(spec?.inkBoost||1),anchor=spec?.anchor?.[1]||.948;
+        const key=u.type+':'+(u.level||1);
+        if(!envelopeByForm.has(key))envelopeByForm.set(key,window.FighterAssets?.visualEnvelope?.(u.type,u.level)||{left:height/size*.5,right:height/size*.5,above:height/size*anchor,below:height/size*(1-anchor)});
+        const envelope=envelopeByForm.get(key);
+        return {u,p,size,height,anchor,envelope};
+      });
       // Sorting IDs keeps rank independent of the simulator's array order.
       if(active){entries.sort((a,b)=>a.u.id-b.u.id);for(const e of entries){const key=Math.floor(e.p.x/cellW)+':'+Math.floor(e.p.y/cellH);if(!grid.has(key))grid.set(key,[]);grid.get(key).push(e)}}
       for(const e of entries){
@@ -77,7 +89,7 @@
         nextX=clamp(e.p.x+nextX,left,right)-e.p.x;nextY=clamp(e.p.y+nextY,top,bottom)-e.p.y;
         // Returning to dense/isolated state is smooth, without leaving an
         // unbounded residual. Dense offsets settle to zero after ~1 second.
-        const max=limits(Math.max(2,alive.length),camera.arena);
+        const max=cap;
         if(!active&&Math.abs(nextX)<.01)nextX=0;if(!active&&Math.abs(nextY)<.01)nextY=0;
         offsets.set(e.u.id,{dx:clamp(nextX,-max.x,max.x),dy:clamp(nextY,-max.y,max.y),contactSide:e.contactSide,seen:time});
       }
