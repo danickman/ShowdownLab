@@ -811,3 +811,10 @@ At the time of inspection, all five browser/art/PWA jobs in runs 38607845434, 38
 ### October 14: canvas error investigation
 
 CI run 38615999759 surfaced an intermittent negative-radius canvas error. The likely cause is the lightning particle radius expression `2.1*(1-age)` in `v3/v3.js`; an age greater than one makes the radius negative. A trial clamp was reverted in commit `40a7d21` because the release requires a synchronized integrity digest; repository writes to the offline manifest were blocked. The defect remains OPEN. Preserve existing pinned assets until renderer and manifest can be changed together and release/renderer/browser QA pass. The three-seed Beetank/Turtle profiler in run 38615700147 passed. Do not promote locality or deploy.
+
+
+### October 14 — Beetank charge approach confirmed across three seeds
+
+- Verified completed damage-smoke in [run 38615999759](https://github.com/danickman/ShowdownLab/actions/runs/38615999759): Beetank baseline 1813 sampled ram-pose frames, 1808 approach frames while outside ram-contact range, 287 confirmed contacts. Locality: 2629 pose frames, 2618 approach frames, 285 contacts. Therefore ~99.7% and ~99.6% of ram-pose frames respectively are approach, not contact. This directly supports the user's observation. Does not count distinct activations; 'ram pose' is intended during charge travel under existing core. Prefer presentation improvements distinguishing windup/charge trail/collision/recovery, not damage buffs or locality promotion.
+- Commit `903feef` adds an explicit consistency assertion and reported approach fraction to the QA-only profiler; new results are pending CI validation. Do not modify protected core.
+- Renderer crash remains open: suspect `2.1*(1-age)` radius in lightning FX; active renderer and pinned manifest are byte-consistent because trial fix reverted in `40a7d21`. Updating service worker integrity through the connector was blocked, so a runtime fix cannot be claimed. Maintain no merge/deployment until renderer and digest are updated together and browser/offline CI passes.
