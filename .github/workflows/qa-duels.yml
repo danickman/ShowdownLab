@@ -29,8 +29,8 @@ jobs:
         run: node tools/qa/check-turn3-consistency.cjs
       - name: Turn 4A prioritized sprite loading
         run: node tools/qa/check-streaming.cjs
-      - name: Turn 4B revisioned cache and offline tests
-        run: node tools/qa/check-cache4b.cjs
+      - name: Turn 4C atomic release and offline tests
+        run: node tools/qa/check-release4c.cjs
       - name: Legacy launch guide and SW compatibility
         run: node tools/check-launch-guide.cjs
       - name: Existing Ultimate ability checks
