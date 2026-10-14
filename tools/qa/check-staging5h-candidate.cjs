@@ -7,9 +7,9 @@ assert(base.includes(match));
 const guarded=base.replace(match,'return{x:Math.min(46,arena.w*.135),y:Math.min(30,arena.h*.085)};')
   .replace('if(lower+higher+enemies){', 'if(lower+higher+enemies){')
   .replace('dx=direction*cap.x*(.16+.84*(direction<0?1-rank:rank));',
-    'dx=direction*Math.min(cap.x,34,camera.arena.w*.10)*(.16+.84*(direction<0?1-rank:rank));')
+    'dx=direction*(fullResolve?cap.x:Math.min(cap.x,34,camera.arena.w*.10))*(.16+.84*(direction<0?1-rank:rank));')
   .replace('dy=peers?((e.u.id%3)-1)*cap.y*.78:0;',
-    'dy=peers?((e.u.id%3)-1)*Math.min(cap.y,enemies?23:30,camera.arena.h*(enemies?.07:.085))*.78:0;');
+    'dy=peers?((e.u.id%3)-1)*(fullResolve?cap.y:Math.min(cap.y,enemies?23:30,camera.arena.h*(enemies?.07:.085)))*.78:0;');
 assert.notStrictEqual(guarded,base);
 const envelopes=()=>({left:.65,right:.65,above:1.19,below:.10});
 function load(code){const w={FighterAssets:{authored:{},visualEnvelope:envelopes}};vm.runInNewContext(code,{window:w,Math},{timeout:2000});return w.CombatStaging}
