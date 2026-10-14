@@ -3,6 +3,7 @@
 // Run: node tools/qa/release-hashes.cjs > /tmp/release-hashes.json
 const fs=require('fs'),path=require('path'),crypto=require('crypto');
 const root=path.resolve(__dirname,'../..');
+if(fs.existsSync(path.join(root,'v3/index.html')))throw Error('Duplicate v3/index.html entrypoint is forbidden; use root index.html');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const sw=fs.readFileSync(path.join(root,'sw.js'),'utf8');
 const list=JSON.parse(sw.match(/const RUNTIME=(\[[\s\S]*?\]);/)[1]);
