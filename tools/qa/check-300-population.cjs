@@ -17,6 +17,20 @@ const deployStart=performance.now();
 A.startMatch({blue,red,blueLevels:levels,redLevels:levels,blueLives:2,redLives:2,seed:31337});
 const deployMs=performance.now()-deployStart;
 const s0=A.getState();assert.equal(s0.units.length,300);
+// The full 300-fighter path must include 430x932 portrait camera and bounded
+// presentation offsets, not just simulation state integrity.
+for(const name of ['camera','combat-staging'])vm.runInContext(read(name),env);
+const portraitCamera=env.ShowdownCamera.create(430,932),portraitStage=env.CombatStaging.create();
+const beforePresentation=JSON.stringify(s0.units);
+const cameraStart=performance.now();for(let i=0;i<4;i++)portraitCamera.focus(s0.units);
+const cameraMs=performance.now()-cameraStart;
+const stageStart=performance.now();for(let i=0;i<4;i++)portraitStage.prepare(s0.units,portraitCamera,now+i*16.667);
+const stageMs=performance.now()-stageStart;
+assert.equal(JSON.stringify(s0.units),beforePresentation,'staging cannot mutate real combat');
+let projected=0,outOfBounds=0;
+for(const u of s0.units){const p=portraitStage.point(u,portraitCamera);assert(Number.isFinite(p.x)&&Number.isFinite(p.y));projected++;if(p.x<portraitCamera.arena.x-1||p.y<portraitCamera.arena.y-1||p.x>portraitCamera.arena.x+portraitCamera.arena.w+1||p.y>portraitCamera.arena.y+portraitCamera.arena.h+1)outOfBounds++}
+assert.equal(projected,300);
+
 function step(frames,speed){
  A.setSpeed(speed);let durations=[];
  for(let i=0;i<frames;i++){
@@ -36,7 +50,7 @@ function step(frames,speed){
 }
 const normal=step(18,1),turbo=step(4,10),end=A.getState();
 assert.deepEqual(errors,[]);
-const receipt={population:300,blue:150,red:150,deployMs:+deployMs.toFixed(2),normal,turbo,
+const receipt={population:300,blue:150,red:150,deployMs:+deployMs.toFixed(2),portrait:{width:430,height:932,cameraFocus4Ms:+cameraMs.toFixed(2),staging4Ms:+stageMs.toFixed(2),projected,outOfBounds},normal,turbo,
  surviving:end.units.filter(u=>u.hp>0).length,phase:end.phase,platform:'Node VM synthetic RAF; NOT physical iPhone FPS'};
 console.log('EXTREME 300 POPULATION '+JSON.stringify(receipt));
 if(process.env.QA_300_RECEIPT)fs.writeFileSync(process.env.QA_300_RECEIPT,JSON.stringify(receipt,null,2));
