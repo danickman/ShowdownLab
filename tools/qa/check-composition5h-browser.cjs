@@ -10,7 +10,7 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
 (async()=>{
  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
  const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
- const report={device:'Chromium 430x932 @3x; synthetic stationary fixtures using real authored sprites',cases:[],failures:[]};
+ const report={device:'Chromium 430x932 @3x; synthetic stationary fixtures using real authored sprites, staging, and 5G dense ordering',cases:[],failures:[]};
  try{
  const page=await browser.newPage();page.on('pageerror',e=>report.failures.push(e.message));
  await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
@@ -26,8 +26,7 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
    await Promise.all([...new Set(units.map(u=>u.type))].map(t=>FighterAssets.preloadSpecies(t)));
    const candidateSource=camSource.replace('density>55?.80','density>55?.74');
    if(candidateSource===camSource)throw Error('camera candidate substitution failed');
-   const makeCamera=(src)=>{const scope={};new Function('window',src)(scope);return scope.ShowdownCamera};
-   // The module references window.FighterAssets / CombatStaging. Preserve those reads via proxy.
+     // The module references window.FighterAssets / CombatStaging. Preserve those reads via proxy.
    const make=(src)=>{const windowProxy={FighterAssets,CombatStaging};new Function('window',src)(windowProxy);return windowProxy.ShowdownCamera.create(430,932)};
    const cvs=document.createElement('canvas');cvs.width=860;cvs.height=932;cvs.style.cssText='position:fixed;inset:0;z-index:999999;width:860px;height:932px;max-width:none;pointer-events:none';document.body.append(cvs);
    const ctx=cvs.getContext('2d');const results=[];
@@ -36,7 +35,14 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
     const own=document.createElement('canvas');own.width=430;own.height=932;const c=own.getContext('2d');
     c.fillStyle='#dce7d9';c.fillRect(0,0,430,932);const a=cam.arena;c.fillStyle='#cfbc94';c.fillRect(a.x,a.y,a.w,a.h);
     // Use real authored sprites and the same deterministic coordinates in both views.
-    const ordered=units.map(u=>({u,p:cam.worldToScreen(u.x,u.y)})).sort((a,b)=>a.p.y-b.p.y||a.u.id-b.u.id);
+    const stage=CombatStaging.create();for(let step=0;step<16;step++)stage.prepare(units,cam,step*16);
+    const ordered=units.map(u=>({u,p:stage.point(u,cam)})).sort((a,b)=>{
+      if(count<=60)return a.p.y-b.p.y||a.p.x-b.p.x;
+      const laneA=Math.floor(a.p.y/12),laneB=Math.floor(b.p.y/12);
+      if(laneA!==laneB)return laneA-laneB;
+      const prominence=t=>t==='dragon'?3:t==='beetank'||t==='turtle'?2:t==='knight'||t==='barbarian'?1:0;
+      return prominence(a.u.type)-prominence(b.u.type)||a.p.y-b.p.y||a.p.x-b.p.x||a.u.id-b.u.id;
+    });
     let drawn=0;for(const {u,p} of ordered){const kind=u.type==='dragon'?'large':['turtle','beetank'].includes(u.type)?'heavy':['goblin','goose'].includes(u.type)?'small':'normal';
       const ok=FighterAssets.draw(c,u.type,p.x,p.y,cam.unitSize(kind,count),u.team,{level:u.level,action:'idle',density:count,time:2400,id:u.id});if(ok)drawn++;}
     ctx.drawImage(own,index*430,0);
