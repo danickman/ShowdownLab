@@ -86,3 +86,26 @@ self.addEventListener('fetch',event=>{
   }
  })());
 });
+
+// An explicit, opt-in offline pack for chosen fighter art. Nothing is downloaded
+// unless the user/app requests it; a failed pack is reported, never called ready.
+self.addEventListener('message',event=>{
+ const data=event.data||{};
+ if(data.type!=='CACHE_FIGHTER_PACK')return;
+ const port=event.ports?.[0];if(!port)return;
+ const urls=Array.isArray(data.urls)?data.urls:[];
+ event.waitUntil((async()=>{
+   if(!urls.length||urls.length>48)throw Error('Invalid pack size');
+   const cache=await caches.open(CACHE);
+   for(const raw of urls){
+     if(typeof raw!=='string'||!raw.startsWith('/'))throw Error('Unsafe pack URL');
+     const u=new URL(raw,self.location.origin);
+     if(u.origin!==self.location.origin||!isVersionedImage(u))throw Error('Not a versioned authored image');
+     if(await cache.match(raw))continue;
+     const response=await fetch(raw);
+     if(!response.ok||response.status!==200||response.type==='opaque')throw Error('Unavailable pack asset: '+u.pathname);
+     await cache.put(raw,response);
+   }
+   port.postMessage({ok:true,count:urls.length});
+ })().catch(error=>port.postMessage({ok:false,error:String(error.message||error)})));
+});
