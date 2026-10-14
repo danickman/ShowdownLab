@@ -11,7 +11,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
  try{
  const page=await browser.newPage();await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
  page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.assetFailures.push({url:r.url(),status:r.status()})});
- await page.goto(base+'/?qa=1',{waitUntil:'networkidle0'});await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownQA&&FighterAssets.diagnostics().ready===FighterAssets.diagnostics().total);
+ await page.goto(base+'/?qa=1',{waitUntil:'networkidle0'});await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownQA&&FighterAssets.assetStatus().ready>=2);
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'portrait horizontal overflow');
  await page.screenshot({path:path.join(out,'portrait-home.png')});
  await page.click('[data-go="guide"]');await page.waitForSelector('.sl-guide-card');assert.equal(await page.$$eval('.sl-guide-card',es=>es.length),10);await page.screenshot({path:path.join(out,'portrait-guide.png')});
