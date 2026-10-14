@@ -15,6 +15,16 @@
 - **Other ranged and area attacks:** consistent origin→travel/contact→response logic, depth occlusion, restrained variety, hierarchy and mobile density budgets. Include ARC and other spells in consistency review without unnecessarily regenerating existing approved art. Reserve signature visuals at 80/120+ fighters before generic particles.
 - **Gate:** same-seed iPhone portrait comparison of current vs proposed effects at 1× and 4×, 10/40/80/120 fighters and L1/L4/L5; correct mouth/muzzle/impact anchors, no cropped sprites, clear hitbox expectations, color/contrast under bright arenas, reduced-motion option and no meaningful p95 draw/input penalty. Limit creation to 1–2 authored FX reference/atlas prototypes and require phone-scale acceptance before scaling to full roster. No artwork generated or combat/renderer edits in this feedback-capture turn.
 
+### Role-specialization, swarm coordination and dynamic counters — user feedback, 2026-10-14
+
+**Expanded feature definition:** [Role-aware targeting, swarm intelligence and counterplay](ROLE_COUNTERPLAY_AND_TARGET_ECOLOGY.md). The intelligent target policy must eventually apply to **all ten fighters**, not just Sniper/Assassin. Each role should pursue feasible opportunities and react to the opponent's counter, without fixed class-beats-class bonuses or hard lanes.
+
+- **Tanks:** Knight intercepts enemies threatening protected ranged units; Beetank seeks valuable contact with dangerous large enemies and impactful rams; Turtle remains a hold-the-line anchor. Do not give all three identical 'attack the largest' behavior.
+- **Swarms:** Goblins should coordinate against isolated, individually superior melee units when sufficient allies can arrive together, protect against incoming enemy packs when necessary, and avoid blindly feeding Dragon/Goose/Barbarian AoE. Existing L4/L5 Pack Ambush adjacency and melee engagement slots are central.
+- **Counters:** Draft should expose natural relationships (AoE vs groups, backline attackers vs unescorted ranged, protectors vs flanks, armor piercing vs defenders), while allowing numbers, spells, level and positioning to reverse disadvantaged fights. Keep distinct strengths/weaknesses for all ten.
+- **Performance and QA:** per-role bounded scoring/cached neighborhoods, deterministic two-team snapshot, short releaseable target commitments, 1v1 through 120+ tests; trace pack cohesion, actual damage/ultimate opportunities, counter-specific outcomes, iPhone readability and target-switch churn. Do not implement a massive simultaneous ten-role rewrite.
+- **Sequence:** threat observer → Sniper Dragon-vs-Knight timing fixture → Goblin pack-vs-isolated-heavy / hostile-pack fixture → one heavy-role interception experiment → complete role matrix → commander/ultimate opportunity tests. Separately queued authored ranged FX remains unchanged.
+
 ### Tactical targeting and virtual commander milestone — user feedback, 2026-10-14
 
 **Design specification:** [Threat-aware targeting, opportunistic specials, virtual commander](THREAT_TARGETING_AND_COMMANDER_DESIGN.md). This is queued for controlled QA experiments, not implemented combat code.
