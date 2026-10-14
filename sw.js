@@ -1,10 +1,10 @@
 // Atomically installed shell/runtime: generated from index.html on 2026-10-14.
 // A new worker does not activate until every critical module has been cached.
-const CACHE='showdown-lab-release4d1';
+const CACHE='showdown-lab-release4e1';
 const SHELL=["/","/v3/index.html","/manifest.webmanifest?v=duel1","/icon-192.png?v=duel1","/icon-512.png?v=duel1","/icon-maskable-512.png?v=duel1","/apple-touch-icon.png?v=duel1","/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10","/v3/assets/authored/dragon/presentation.webp?v=ultimate-roster10"];
 const RUNTIME=[
   "/v3/v3.css?v=guide-room2",
-  "/v3/presentation.css?v=turn3-touch1",
+  "/v3/presentation.css?v=offline-ui4e1",
   "/v3/evolution-rules.js?v=five1",
   "/v3/ultimate-abilities.js?v=five1",
   "/v3/legacy-sim-core.js?v=evolution-five1",
@@ -40,7 +40,7 @@ const RUNTIME=[
   "/v3/arena-ambience.js?v=living1",
   "/v3/combat-staging.js?v=contact4",
   "/v3/ultimate-effects.js?v=five1",
-  "/v3/v3.js?v=stream4a1",
+  "/v3/v3.js?v=offline-ui4e1",
   "/v3/stage5b-ui.js?v=package14-upgradefix1",
   "/v3/round-loop.js?v=locations6",
   "/v3/pwa.js?v=launch1"
