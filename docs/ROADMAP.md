@@ -15,6 +15,19 @@
 - **Other ranged and area attacks:** consistent origin→travel/contact→response logic, depth occlusion, restrained variety, hierarchy and mobile density budgets. Include ARC and other spells in consistency review without unnecessarily regenerating existing approved art. Reserve signature visuals at 80/120+ fighters before generic particles.
 - **Gate:** same-seed iPhone portrait comparison of current vs proposed effects at 1× and 4×, 10/40/80/120 fighters and L1/L4/L5; correct mouth/muzzle/impact anchors, no cropped sprites, clear hitbox expectations, color/contrast under bright arenas, reduced-motion option and no meaningful p95 draw/input penalty. Limit creation to 1–2 authored FX reference/atlas prototypes and require phone-scale acceptance before scaling to full roster. No artwork generated or combat/renderer edits in this feedback-capture turn.
 
+
+### Extreme population and tactical draft rewards — implementation 2026-10-14
+
+**QA branch candidate only**, pending full GitHub Actions and iPhone acceptance. Normal Quick/Draft ×2 is offered only if projected combined Blue + Red population after doubling is at most **120**. This is an offer-eligibility ceiling, NOT a game-engine or Ultimate Lab population cap. Ordinary small reinforcement may still grow armies gradually. Bot doubling observes the same rule.
+
+- After ×2 ceases to be eligible, the second choice may become another valid evolution, small specialist reinforcement or a **one-battle enemy disruption**. The variety is deterministic by round/army state, with a losing-side Jam bias; this does not introduce uncontrolled non-replayable randomness.
+- **EVOLUTION JAM:** temporarily lowers an opponent's highest-evolved squad by one effective level for the next fight without deleting its permanent upgrade, stored level or collection Mastery.
+- **THIN THE RANKS:** temporarily sidelines 1–3 members of a large opponent squad for one battle, preserving the original army counts and always keeping at least one fighter from that squad.
+- Both effects are encoded in an adapter pending/active effect state, applied to copies of the next fight's roster/levels, expire at the round end and clear upon match reset or exit. Reward preview shows the affected enemy in red and clearly marks its temporary status.
+- **300-fighter edge:** tools/qa/check-300-population.cjs tests 150 vs 150 RC4 at 1×/10× and 430×932 portrait camera + visual staging. A real staging cache bug was fixed: an absolute 240-offset history capacity evicted active fighters at 300. Retention capacity now scales with active population and allows some defeat-fade headroom.
+- An independent direct V8 smoke passed: 300 valid deployed fighters, all 300 staging offsets retained, 66 ms deploy, 52 ms total over four camera/staging passes, 288 ms for four 1× simulation callbacks, 1043 ms for two 10× callbacks. These are not iPhone frame times; the 10× result highlights a genuine performance concern.
+- **Pending release gates:** GitHub independent population/disruption CI and extreme-300 CI, root offline SHA256 integrity, full native/browser checks, real Safari at 300 for FPS and readable visuals. Prioritize preserving authored silhouettes and ability FX over ambient particles.
+
 ### Paired combat intelligence + comic battle theatre quality gate — 2026-10-14
 
 When implementing smarter combat, **validate the resulting action on screen** at mobile size. Smart target selection without a visible cause or satisfying consequence is a *game-feel failure*, even if simulation statistics improve. The aesthetic north star is a **bright, authored-sprite, fast and punchy comic-book battle**, not generic wireframe particles or photoreal battlefield clutter.
