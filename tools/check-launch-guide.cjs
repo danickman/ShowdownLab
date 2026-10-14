@@ -1,9 +1,9 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const html=fs.readFileSync('index.html','utf8'),css=fs.readFileSync('v3/presentation.css','utf8'),src=fs.readFileSync('v3/v3.js','utf8'),types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
-assert.equal(html,fs.readFileSync('v3/index.html','utf8'));
+assert(!fs.existsSync('v3/index.html'),'obsolete duplicate HTML entrypoint must remain absent');
 const manifest=JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));assert.equal(manifest.start_url,'/');assert(manifest.icons.some(i=>i.purpose==='maskable'));assert(html.includes('rel="manifest"'));assert(html.includes('apple-touch-icon'));assert(html.includes('/v3/pwa.js'));
 const host={innerHTML:''},e={document:{querySelector:()=>host},rosterUnits:types.map(t=>[t,t,'role']),GUIDE:Object.fromEntries(types.map(t=>[t,{role:'fighter',fantasy:'Fantasy',signature:'Signature',strength:'Strength',weak:'Weakness',tip:'Tip'}])),meta:{mastery:{}},masteryCost:()=>35,paintStatic(){}};e.window=e;vm.createContext(e);for(const f of ['evolution-rules','ultimate-abilities'])vm.runInContext(fs.readFileSync('v3/'+f+'.js','utf8'),e);vm.runInContext(src.slice(src.indexOf('const ULTIMATE_TIPS='),src.indexOf('function syncMeta(')),e);e.renderGuide();
 assert.equal((host.innerHTML.match(/data-guide=/g)||[]).length,10);assert.equal((host.innerHTML.match(/data-level="2"/g)||[]).length,10);
 for(const type of types){assert(host.innerHTML.includes(e.ShowdownUltimates.specs[type].name));assert(host.innerHTML.includes(e.ShowdownUltimates.specs[type].l4));assert(host.innerHTML.includes(e.ShowdownUltimates.specs[type].l5))}
 for(const level of [1,2,3,4,5])assert(host.innerHTML.includes('L'+level));assert(host.innerHTML.includes('384.2%'));assert.equal((host.innerHTML.match(/data-level="4"/g)||[]).length,10);assert(host.innerHTML.includes('distinct authored Ultimate form'));assert(host.innerHTML.includes('Mastery is separate'));assert(css.includes('repeat(3,minmax(0,1fr))'));
-console.log('PASS: ten Guide Ultimate abilities, five-level progression, synchronized HTML and PWA hooks; service worker validated by tools/qa/check-release4c.cjs');
+console.log('PASS: ten Guide Ultimate abilities, five-level progression, canonical root HTML and PWA hooks; service worker validated by tools/qa/check-release4c.cjs');
