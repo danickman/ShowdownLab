@@ -1,0 +1,34 @@
+name: Duel and combat regression
+on:
+  push:
+    branches: [qa-turn1-duel-baseline]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  node-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ordered 300-duel sweep
+        env:
+          QA_RECEIPT: duel-receipt.json
+          QA_SHA: ${{ github.sha }}
+        run: node tools/qa/check-duels.cjs
+      - name: Existing evolution and deterministic checks
+        if: success()
+        run: node tools/check-evolution-progression.cjs
+      - name: Existing Ultimate ability checks
+        if: success()
+        run: node tools/check-ultimate-abilities.cjs
+      - name: Upload duel receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: duel-receipt
+          path: duel-receipt.json
+          if-no-files-found: warn
