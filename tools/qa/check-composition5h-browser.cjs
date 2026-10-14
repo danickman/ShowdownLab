@@ -20,11 +20,13 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
  const stageSource=fs.readFileSync(path.join(root,'v3/combat-staging.js'),'utf8');
  const exact=JSON.parse(fs.readFileSync(path.join(out,'formation-exact.json'),'utf8'));
  const exactRows=exact.rows;
- for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120','exact80-early','exact120-early','exact80-mid','exact120-mid']){
-  const count=fixture==='live120'||fixture==='formation120'||String(fixture).startsWith('exact120')?120:String(fixture).startsWith('exact80')?80:fixture,live=fixture==='live120'||fixture==='formation120',formation=fixture==='formation120',exactFixture=String(fixture).startsWith('exact');
-  const exactBase=exactFixture?exactRows.find(r=>r.count===count):null;
+ const zones=JSON.parse(fs.readFileSync(path.join(out,'zones-exact.json'),'utf8'));
+ const zoneRows=zones.rows;
+ for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120','exact80-early','exact120-early','exact80-mid','exact120-mid','zones80','zones120','zones80-early','zones120-early','zones80-mid','zones120-mid']){
+  const count=fixture==='live120'||fixture==='formation120'||String(fixture).startsWith('exact120')||String(fixture).startsWith('zones120')?120:String(fixture).startsWith('exact80')||String(fixture).startsWith('zones80')?80:fixture,live=fixture==='live120'||fixture==='formation120',formation=fixture==='formation120',exactFixture=String(fixture).startsWith('exact')||String(fixture).startsWith('zones'),zoneFixture=String(fixture).startsWith('zones');
+  const exactBase=exactFixture?(zoneFixture?zoneRows:exactRows).find(r=>r.count===count):null;
   const phase=String(fixture).includes('-early')?'early':String(fixture).includes('-mid')?'mid':'deploy';
-  const exactRow=exactBase?{...exactBase,phase}:null;
+  const exactRow=exactBase?{...exactBase,phase,zoneFixture}:null;
   if(exactFixture&&!exactRow)throw Error('missing exact formation fixture '+count);
   const result=await page.evaluate(async({count,camSource,stageSource,live,formation,exactRow})=>{
    const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
@@ -54,7 +56,7 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
    const ctx=cvs.getContext('2d');const results=[];
    for(const [index,source] of [[0,stageSource],[1,candidateStage]]){
     // Exploratory visual-only vertical-stretch proxy; real simulation variant remains isolated in node QA.
-    const shown=exactRow?(index===1?exactRow.versions.vertical75.positions[phase]:exactRow.versions.baseline.positions[phase]):formation&&index===1?units.map(u=>({...u,y:Math.max(.08,Math.min(.92,.5+(u.y-.5)*(.085/.065)))})):units;
+    const shown=exactRow?(index===1?exactRow.versions[exactRow.zoneFixture?'zones32':'vertical75'].positions[phase]:exactRow.versions.baseline.positions[phase]):formation&&index===1?units.map(u=>({...u,y:Math.max(.08,Math.min(.92,.5+(u.y-.5)*(.085/.065)))})):units;
     const cam=make(camSource);for(let frame=0;frame<120;frame++)cam.focus(shown);
     const own=document.createElement('canvas');own.width=430;own.height=932;const c=own.getContext('2d');
     c.fillStyle='#dce7d9';c.fillRect(0,0,430,932);const a=cam.arena;c.fillStyle='#cfbc94';c.fillRect(a.x,a.y,a.w,a.h);
