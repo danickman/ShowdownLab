@@ -112,6 +112,32 @@ jobs:
           node tools/qa/check-zone-terminal.cjs
           node tools/qa/check-zone-mirrors.cjs
 
+  threat-observer-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate pure observer and QA syntax
+        run: |
+          node --check tools/qa/threat-observer.cjs
+          node --check tools/qa/check-threat-observer.cjs
+      - name: Verify Sniper and Goblin decisions plus deterministic combat parity
+        env:
+          QA_THREAT_SIZES: '40,80,120'
+          QA_THREAT_SEEDS: '1337'
+          QA_THREAT_RECEIPT: threat-observer-receipt.json
+        run: node tools/qa/check-threat-observer.cjs
+      - name: Upload read-only observer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: threat-observer-receipt
+          path: threat-observer-receipt.json
+          if-no-files-found: warn
+
   engagement-director-spike:
     runs-on: ubuntu-latest
     timeout-minutes: 6
