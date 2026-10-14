@@ -51,7 +51,7 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
     const own=document.createElement('canvas');own.width=430;own.height=932;const c=own.getContext('2d');
     c.fillStyle='#dce7d9';c.fillRect(0,0,430,932);const a=cam.arena;c.fillStyle='#cfbc94';c.fillRect(a.x,a.y,a.w,a.h);
     // Use real authored sprites and the same deterministic coordinates in both views.
-    const stage=stageFactory(source).create();for(let step=0;step<16;step++)stage.prepare(shown,cam,step*16);
+    const stage=stageFactory(formation?stageSource:source).create();for(let step=0;step<16;step++)stage.prepare(shown,cam,step*16);
     const ordered=shown.map(u=>({u,p:stage.point(u,cam)})).sort((a,b)=>{
       if(count<=60)return a.p.y-b.p.y||a.p.x-b.p.x;
       const laneA=Math.floor(a.p.y/12),laneB=Math.floor(b.p.y/12);
