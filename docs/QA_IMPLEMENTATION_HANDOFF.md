@@ -959,3 +959,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - [CI 38629162562](https://github.com/danickman/ShowdownLab/actions/runs/38629162562): seven standard jobs successful, mandatory five-variant damage-attribution experiment still running at last inspection. No claim of sticky-frontline improvement yet.
 - Commit `db15b57` adds `FRONT OUTCOME COMPARISON`, explicitly contrasting sticky-frontline battle winners against the **same connected-front strong Assassin layout without persistence**, as well as original baseline, for all twelve paired 80/120-unit cases. This separates effects of targeting from formation/stat effects; preserve per-role damage, target churn and 30/60/90 active-front checks before approval. No production core changes, main merge or deployment.
+
+
+### October 14 — blanket persistence rejected; Beetank-only isolation
+
+- [Five-variant CI 38629162562](https://github.com/danickman/ShowdownLab/actions/runs/38629162562) passed. Same strong-Assassin connected fronts versus blanket persistence: frontline target switches 21919→14605; Beetank hits 959→941; Barbarian 232→253; Knight 397→450; Assassin damage 623.51→407.30; active contested sectors at observed frame 90 1.00→0.833. This blanket `.025` current-target bonus is **rejected**: lower churn alone did not preserve role safety or sustained fronts.
+- Commit `45c494d` replaces rejected experimental fifth variant with a **Beetank-only `.025` current-target bonus**, preserving strong Assassin, all other roles and same connected-front layout. Compare this directly against the unchanged strong-Assassin connected-front control; it remains QA VM-only. The historic blanket result remains documented here. Await new CI and assess Beetank ram completion/hits, Assassin effectiveness, target churn, multi-front contacts and winner stability before any promotion. No live core modification, merge or deployment.
