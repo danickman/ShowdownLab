@@ -49,7 +49,12 @@ def build(source, dest):
             output.alpha_composite(figure,((256-figure.width)//2,248-figure.height))
             bounds=output.getchannel('A').getbbox()
             if not bounds or bounds[0]<6 or bounds[2]>250 or bounds[1]<5 or bounds[3]>252: raise RuntimeError(f'Out-of-bounds {name}: {bounds}')
-            ink=np.asarray(output).astype(np.int16)\n            rr,gg,bb=ink[:,:,:3].transpose(2,0,1)\n            visible=ink[:,:,3]>8\n            green=(gg>np.maximum(rr,bb)+20)&(gg>100)&visible\n            if np.count_nonzero(green)>5: raise RuntimeError(f'Green chroma fringe remains in {name}')\n            out=dest/(name+'.webp')
+            ink=np.asarray(output).astype(np.int16)
+            rr,gg,bb=ink[:,:,:3].transpose(2,0,1)
+            visible=ink[:,:,3]>8
+            green=(gg>np.maximum(rr,bb)+20)&(gg>100)&visible
+            if np.count_nonzero(green)>5: raise RuntimeError(f'Green chroma fringe remains in {name}')
+            out=dest/(name+'.webp')
             output.save(out,'WEBP',lossless=True,method=6)
             verify=Image.open(out);verify.load()
             if verify.size!=(256,256): raise RuntimeError('Bad WebP decode size')
