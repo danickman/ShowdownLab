@@ -87,6 +87,10 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
     await page.click('[data-preset="swarm"]');
     await page.click('#labRun');
     await page.waitForFunction(()=>window.ShowdownQA?.snapshot().screen==='battle',{timeout:15000});
+    const cpuSession=await page.createCDPSession();
+    await cpuSession.send('Profiler.enable');
+    await cpuSession.send('Profiler.setSamplingInterval',{interval:1000});
+    await cpuSession.send('Profiler.start');
     const perf=await page.evaluate(async()=>{
       ShowdownQA.clearRenderProfile();
       const times=[],start=performance.now();
@@ -106,6 +110,11 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
       }));
       return{renderPasses,renderSamples:prof.length,width:430,frames:intervals.length,elapsedMs:performance.now()-start,p50IntervalMs:pct(.5),p95IntervalMs:pct(.95),slowFrames:intervals.filter(x=>x>33.3).length,unitCount:snap.units.length,effects:snap.effects,phase:snap.phase};
     });
+    const cpu=await cpuSession.send('Profiler.stop');
+    await cpuSession.detach();
+    fs.writeFileSync(path.join(out,'swarm-cpu-profile.cpuprofile'),JSON.stringify(cpu.profile));
+    const hotspots=(cpu.profile.nodes||[]).filter(n=>n.hitCount>0).sort((a,b)=>b.hitCount-a.hitCount).slice(0,15).map(n=>({function:n.callFrame.functionName,url:n.callFrame.url.split('/').pop(),hits:n.hitCount}));
+    perf.cpuHotspots=hotspots;
     assert(perf.frames===180&&perf.elapsedMs>0,'Swarm frame sample did not complete');
     assert(perf.renderSamples>=90,'Render-pass profiler failed to collect sufficient battle samples');
     report.swarmPerformance=perf;
