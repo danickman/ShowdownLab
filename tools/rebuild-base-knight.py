@@ -36,10 +36,10 @@ def build(source, dest):
             foreground=np.zeros(core.shape,dtype=bool)
             foreground[y0:y1]=labels==index
             # Subpixel fringe only, preserving the original dark canonical ink.
-            alpha=np.clip(gaussian_filter(foreground.astype(np.float32),.65)*255,0,255).astype('uint8')
+            alpha=np.clip(gaussian_filter(foreground.astype(np.float32),.55)*255,0,255).astype('uint8')
             color=pixels.copy()
-            fringe=(alpha>0)&(alpha<250)&(g>np.maximum(r,b)+8)
-            color[:,:,1]=np.where(fringe,np.minimum(g,np.maximum(r,b)+5),g).astype('uint8')
+            fringe=(alpha>0)&(g>np.maximum(r,b)+8)
+            color[:,:,1]=np.where(fringe,np.minimum(g,np.maximum(r,b)+2),g).astype('uint8')
             raw=Image.fromarray(np.dstack([color,alpha]),'RGBA')
             box=raw.getchannel('A').getbbox()
             if not box: raise RuntimeError(f'Empty figure: {name}')
@@ -49,7 +49,7 @@ def build(source, dest):
             output.alpha_composite(figure,((256-figure.width)//2,248-figure.height))
             bounds=output.getchannel('A').getbbox()
             if not bounds or bounds[0]<6 or bounds[2]>250 or bounds[1]<5 or bounds[3]>252: raise RuntimeError(f'Out-of-bounds {name}: {bounds}')
-            out=dest/(name+'.webp')
+            ink=np.asarray(output)\n            rr,gg,bb=ink[:,:,:3].transpose(2,0,1)\n            visible=ink[:,:,3]>8\n            green=(gg>np.maximum(rr,bb)+20)&(gg>100)&visible\n            if np.count_nonzero(green)>5: raise RuntimeError(f'Green chroma fringe remains in {name}')\n            out=dest/(name+'.webp')
             output.save(out,'WEBP',lossless=True,method=6)
             verify=Image.open(out);verify.load()
             if verify.size!=(256,256): raise RuntimeError('Bad WebP decode size')
