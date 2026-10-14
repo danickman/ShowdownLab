@@ -69,6 +69,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: engagement-zones.json
         run: node tools/qa/check-engagement-zones.cjs
+      - name: Zone engagement persistence and damage timing
+        env:
+          QA_LANES_RECEIPT: zone-engagement.json
+        run: node tools/qa/check-zone-engagement.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -102,6 +106,7 @@ jobs:
             formation-spacing.json
             horizontal-formation.json
             engagement-zones.json
+            zone-engagement.json
           if-no-files-found: warn
 
   browser-turn3:
