@@ -31,6 +31,10 @@ jobs:
         env:
           QA_STAGING_RECEIPT: staging5d-receipt.json
         run: node tools/qa/check-staging5d.cjs
+      - name: Turn 5E 61 to 160 fighter dense staging visual bounds
+        env:
+          QA_DENSE_RECEIPT: dense5e-receipt.json
+        run: node tools/qa/check-dense5e.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -55,6 +59,7 @@ jobs:
             duel-receipt.json
             stress5c-receipt.json
             staging5d-receipt.json
+            dense5e-receipt.json
           if-no-files-found: warn
 
   browser-turn3:
