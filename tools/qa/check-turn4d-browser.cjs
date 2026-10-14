@@ -1,0 +1,55 @@
+// Real Chromium PWA install/offline and network measurements. Not a physical Safari certification.
+'use strict';
+const fs=require('fs'),http=require('http'),path=require('path'),assert=require('assert'),puppeteer=require('puppeteer');
+const root=path.resolve(__dirname,'../..'),out=path.resolve(process.env.QA_BROWSER_OUTPUT||'/tmp/showdown-turn4d');
+fs.mkdirSync(out,{recursive:true});
+const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.webp':'image/webp','.png':'image/png','.webmanifest':'application/manifest+json'};
+const server=http.createServer((req,res)=>{
+ const name=decodeURIComponent(new URL(req.url,'http://local').pathname).replace(/\/$/,'/index.html');
+ const file=path.resolve(root,'.'+name);
+ if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end()}
+ try{const data=fs.readFileSync(file);res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.setHeader('Cache-Control','no-store');res.end(data)}
+ catch{res.writeHead(404);res.end()}
+});
+const collect=async(page,label)=>{
+ const resources=await page.evaluate(()=>performance.getEntriesByType('resource').map(x=>({url:x.name.split('?')[0],transfer:x.transferSize||0,decoded:x.decodedBodySize||0,duration:x.duration})));
+ return{label,requests:resources.length,transferBytes:resources.reduce((n,x)=>n+x.transfer,0),decodedBytes:resources.reduce((n,x)=>n+x.decoded,0),
+ authored:resources.filter(x=>x.url.includes('/v3/assets/authored/')).length,
+ moduleRequests:resources.filter(x=>/\/v3\/.*\.(js|css)$/.test(x.url)).length};
+};
+(async()=>{
+ await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
+ const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
+ const report={browser:await browser.version(),mode:'Chromium phone viewport, local server, not Safari',runs:[],errors:[],passed:false};
+ try{
+ const page=await browser.newPage();
+ await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+ page.on('pageerror',err=>report.errors.push(err.message));
+ const url='http://127.0.0.1:'+server.address().port+'/?qa=1';
+ const session=await page.createCDPSession();await session.send('Network.enable');await session.send('Network.setCacheDisabled',{cacheDisabled:true});
+ await page.goto(url,{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:30000});
+ report.runs.push(await collect(page,'cold'));
+ await page.waitForFunction(()=>navigator.serviceWorker?.controller||navigator.serviceWorker?.ready,{timeout:60000});
+ await page.evaluate(()=>navigator.serviceWorker.ready);
+ // First controlled navigation should use the installed release cache even when offline.
+ await session.send('Network.setCacheDisabled',{cacheDisabled:false});
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:30000});
+ assert(await page.evaluate(()=>!!navigator.serviceWorker.controller),'service worker failed to control reloaded page');
+ report.runs.push(await collect(page,'warm'));
+ await page.setOfflineMode(true);
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:30000});
+ assert.equal(await page.evaluate(()=>document.querySelector('.screen-home.active')!==null),true,'offline Home missing');
+ const assets=await page.evaluate(()=>FighterAssets.assetStatus());
+ assert(assets.ready>=2,'Home portraits missing offline');
+ report.runs.push({...await collect(page,'offline'),readyPortraits:assets.ready});
+ await page.screenshot({path:path.join(out,'offline-home.png')});
+ await page.setOfflineMode(false);
+ assert.equal(report.errors.length,0,'application errors in cold/warm/offline runs');
+ assert(report.runs[0].authored<=12,'Home loads too much optional artwork');
+ report.passed=true;
+ console.log('PASS: browser cold/warm/offline controlled PWA boot; request/byte receipt '+JSON.stringify(report.runs));
+ }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
+})().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
