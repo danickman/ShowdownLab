@@ -1002,3 +1002,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - CI 38637470321 showed seven standard checks green while its extended six-variant comparison was still in progress at last check. No verdict on wider fronts yet.
 - Commit b6be286 extends the QA-only wider-front comparison to include active contested sectors at frames 180 and 360 as well as 30/60/90. This assesses whether later engagements remain geographically distributed. No runtime core change, merge, or production deployment.
+
+
+### October 14 — parallel quick-signal CI for wider fronts
+
+- Six-variant full three-seed battles in runs 38637241911/38637470321/38637726715 remained in progress at last inspection; seven standard checks were green in 38637726715. Do not report unobserved medium-front results.
+- Commit `4ca3759` adds an independent `wider-front-fast-signal` CI job on one deterministic seed, running the same whole-roster/active-front profiler while preserving the full three-seed `damage-attribution-smoke` gate. This is an early signal, **not a substitute for full 12-case acceptance**. Await its own CI results. No protected runtime modifications, merge or production deployment.
