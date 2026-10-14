@@ -20,16 +20,19 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
  const stageSource=fs.readFileSync(path.join(root,'v3/combat-staging.js'),'utf8');
  const exact=JSON.parse(fs.readFileSync(path.join(out,'formation-exact.json'),'utf8'));
  const exactRows=exact.rows;
- for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120']){
-  const count=fixture==='live120'||fixture==='formation120'||fixture==='exact120'?120:fixture==='exact80'?80:fixture,live=fixture==='live120'||fixture==='formation120',formation=fixture==='formation120',exactFixture=String(fixture).startsWith('exact');
-  const exactRow=exactFixture?exactRows.find(r=>r.count===count):null;
+ for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120','exact80-early','exact120-early','exact80-mid','exact120-mid']){
+  const count=fixture==='live120'||fixture==='formation120'||String(fixture).startsWith('exact120')?120:String(fixture).startsWith('exact80')?80:fixture,live=fixture==='live120'||fixture==='formation120',formation=fixture==='formation120',exactFixture=String(fixture).startsWith('exact');
+  const exactBase=exactFixture?exactRows.find(r=>r.count===count):null;
+  const phase=String(fixture).includes('-early')?'early':String(fixture).includes('-mid')?'mid':'deploy';
+  const exactRow=exactBase?{...exactBase,phase}:null;
   if(exactFixture&&!exactRow)throw Error('missing exact formation fixture '+count);
   const result=await page.evaluate(async({count,camSource,stageSource,live,formation,exactRow})=>{
    const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
    let rng=1337;const rand=()=>{rng=(Math.imul(1664525,rng)+1013904223)>>>0;return rng/4294967296};
    let units=Array.from({length:count},(_,i)=>({id:i+1,type:types[i%10],team:i%2?'red':'blue',level:1+i%5,hp:100,
     x:.5+(i%2?.08:-.08)+(rand()-.5)*.20,y:.24+rand()*.55}));
-   if(exactRow){units=exactRow.versions.baseline.positions.deploy;}
+   const phase=String(exactRow?.phase||'deploy');
+   if(exactRow){units=exactRow.versions.baseline.positions[phase];}
    if(live){
     ShowdownAdapter.setSpeed(1);
     ShowdownAdapter.startMatch({blue:{knight:20,goose:20,sniper:20},red:{beetank:20,goblin:20,barbarian:20},blueLives:1,redLives:1,seed:7301});
@@ -51,7 +54,7 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
    const ctx=cvs.getContext('2d');const results=[];
    for(const [index,source] of [[0,stageSource],[1,candidateStage]]){
     // Exploratory visual-only vertical-stretch proxy; real simulation variant remains isolated in node QA.
-    const shown=exactRow?(index===1?exactRow.versions.vertical75.positions.deploy:exactRow.versions.baseline.positions.deploy):formation&&index===1?units.map(u=>({...u,y:Math.max(.08,Math.min(.92,.5+(u.y-.5)*(.085/.065)))})):units;
+    const shown=exactRow?(index===1?exactRow.versions.vertical75.positions[phase]:exactRow.versions.baseline.positions[phase]):formation&&index===1?units.map(u=>({...u,y:Math.max(.08,Math.min(.92,.5+(u.y-.5)*(.085/.065)))})):units;
     const cam=make(camSource);for(let frame=0;frame<120;frame++)cam.focus(shown);
     const own=document.createElement('canvas');own.width=430;own.height=932;const c=own.getContext('2d');
     c.fillStyle='#dce7d9';c.fillRect(0,0,430,932);const a=cam.arena;c.fillStyle='#cfbc94';c.fillRect(a.x,a.y,a.w,a.h);
@@ -88,14 +91,17 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
       opaqueTotal+=total;visibleTotal+=visible;
       if(total>=12){if(visible/total>=.45)visibleBodies++;if(visible/total<.15)mostlyHidden++;}
     }
-    results.push({mode:index?'candidate':'baseline',drawn,zoom:cam.zoom,arena:a,alphaVisibilityRatio:+(visibleTotal/Math.max(1,opaqueTotal)).toFixed(4),recognizableProxy:visibleBodies,mostlyHidden});
+    const pts=shown.map(u=>cam.worldToScreen(u.x,u.y));
+    const range=(axis)=>Math.max(...pts.map(p=>p[axis]))-Math.min(...pts.map(p=>p[axis]));
+    const occupiedWidth=range('x'),occupiedHeight=range('y');
+    results.push({occupiedWidth:+occupiedWidth.toFixed(1),occupiedHeight:+occupiedHeight.toFixed(1),arenaWidth:a.w,arenaHeight:a.h,mode:index?'candidate':'baseline',drawn,zoom:cam.zoom,arena:a,alphaVisibilityRatio:+(visibleTotal/Math.max(1,opaqueTotal)).toFixed(4),recognizableProxy:visibleBodies,mostlyHidden});
    }
    // Save pixels rather than relying on CSS viewport clipping.
    const png=cvs.toDataURL('image/png');cvs.remove();return {count,results,png};
   },{count,camSource,stageSource,live,formation,exactRow});
   assert(result.results.every(x=>x.drawn===count),'authored fighter draw missing for '+count+': '+JSON.stringify(result.results));
   fs.writeFileSync(path.join(out,'composition-'+fixture+'.png'),Buffer.from(result.png.split(',')[1],'base64'));
-  report.cases.push({count,fixture,note:exactFixture?'exact baseline and revised deployment positions from identical VM simulator seed':formation?'visual-only y stretch proxy, not actual candidate simulation positions':undefined,results:result.results.map(({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden})=>({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden}))});
+  report.cases.push({count,fixture,note:exactFixture?'exact baseline and revised deployment positions from identical VM simulator seed':formation?'visual-only y stretch proxy, not actual candidate simulation positions':undefined,results:result.results.map(({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden,occupiedWidth,occupiedHeight,arenaWidth,arenaHeight})=>({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden,occupiedWidth,occupiedHeight,arenaWidth,arenaHeight}))});
  }
  await page.close();assert.deepStrictEqual(report.failures,[]);
  report.passed=true;console.log('PASS: paired authored-sprite composition screenshots at 20/40/60/80/120 fighters plus one fixed real-combat snapshot (baseline vs guarded staging)');
