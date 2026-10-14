@@ -77,6 +77,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: zone-locality.json
         run: node tools/qa/check-zone-locality.cjs
+      - name: Bounded locality full-match comparison
+        env:
+          QA_LANES_RECEIPT: zone-terminal.json
+        run: node tools/qa/check-zone-terminal.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -112,6 +116,7 @@ jobs:
             engagement-zones.json
             zone-engagement.json
             zone-locality.json
+            zone-terminal.json
           if-no-files-found: warn
 
   browser-turn3:
