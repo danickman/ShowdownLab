@@ -692,3 +692,10 @@ At the time of inspection, all five browser/art/PWA jobs in runs 38607845434, 38
 - Commit `87f9e3f` updates `tools/qa/check-release4c.cjs`: precache request assertion now derives its expected count from parsed `SHELL` + HTML-derived `RUNTIME`, rather than the brittle `required.length+8` assumption. It explicitly guards that root `/` is present and duplicate `/v3/index.html` absent in the service-worker shell. Existing install rollback, hash checking, offline navigation, and optional image tests remain intact.
 - Commit `2248a8e` updates `tools/qa/check-turn3-consistency.cjs` success output: it no longer falsely describes the root-only app as having mirrored HTML entrypoints. The actual absence assertion already existed.
 - Earlier runs 38607845434, 38608192663, 38608236082 had five browser/art/PWA jobs successful but Node remained `in_progress` at the time of this turn's check. The new changes are **committed but not yet CI-validated**. Verify full Node job and service-worker tests before green release designation. No main merge/deploy; protected core unchanged.
+
+
+### Root-only release validation isolation — October 14
+
+- Added a separate five-minute `root-release-gate` CI job in `.github/workflows/qa-duels.yml`, commit `81b44bf`. This is a mandatory independent check for the canonical `index.html`, absence of `v3/index.html`, pinned SHA-256 manifest, consistency, atomic service-worker precache/rollback, selective Home image streaming, and launch-guide/PWA hooks. It avoids waiting for the lengthy research-heavy `node-regressions` job to answer basic single-entrypoint release safety questions, without removing existing Node or browser gates.
+- At initial check, five browser/art/offline/upgrade jobs passed for run 38608983842 while Node remained in progress; run 38609044523 was queued. Neither is an all-green release signoff. The new root-release-gate must execute and pass on the new commit before confirming the hardening.
+- Damage attribution remains unresolved/out of scope, no runtime combat edits. No merge or production deployment.
