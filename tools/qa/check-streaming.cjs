@@ -18,6 +18,9 @@ assert(requests.some(x=>x.includes('/knight/attack.webp')),'Base Knight combat p
 assert(requests.some(x=>x.includes('/dragon/ultimate/attack.webp')),'Ultimate Dragon combat pose requested');
 assert(!requests.some(x=>x.includes('/turtle/evolved/attack.webp')),'irrelevant form not fetched');
 assert(requests.length<75,'selected battle must not eagerly load all authored art');
+const offline=art.offlinePackUrls('turtle',4);
+assert(offline.length>=7&&offline.every(url=>url.includes('/turtle/')&&url.includes('?v=')),'offline pack must be explicit revisioned fighter art');
+assert(!offline.some(url=>url.includes('/evolved/')),'L4 must select Ultimate pack, not Evolved pack');
 const before=requests.length;art.preloadBattle({knight:2},{dragon:1},{knight:1},{dragon:4});assert.equal(requests.length,before,'idempotent preload');
 assert.strictEqual(art.visualForm('dragon',4),'ultimate');
 assert(first.total>=200,'full roster count preserved');
