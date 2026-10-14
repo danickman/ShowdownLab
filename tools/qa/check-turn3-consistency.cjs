@@ -17,4 +17,4 @@ assert(!src.includes('Aim your ram into a group'), 'cannot aim ram manually');
 assert(milestone.includes('60 ticks/sec'), 'milestone duration estimate stale');
 for(const selector of ['[data-screen="lab"] .lab-block input[type="range"]','[data-screen="lab"] .lab-block label:has(input[type="checkbox"])','[data-screen="roster"] button[data-upgrade-unit]'])assert(css.includes(selector), 'touch rule missing: '+selector);
 assert(css.includes('height:48px')&&css.includes('min-height:48px'), 'touch targets too small');
-console.log('PASS: 5% mastery copy, 60Hz timing descriptions, Guide tactics, 48px Lab/shop controls and mirrored entrypoints');
+console.log('PASS: 5% mastery copy, 60Hz timing descriptions, Guide tactics, 48px Lab/shop controls and single root entrypoint');
