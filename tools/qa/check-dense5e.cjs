@@ -16,11 +16,11 @@ function countOverlap(units,stage){let overlaps=0,occlusion=0;
  if(dx<27&&dy<37)occlusion++;
  }return{overlaps,occlusion};}
 const rows=[];for(const n of [61,80,100,120,160])for(const seed of [1337,7301,27919]){
- const units=fixture(n,seed),original=make(baseline).create(),current=make(source).create(),copies=[original,current],time=[0,0],maxOffset=0,offscreen=0;
+ const units=fixture(n,seed),original=make(baseline).create(),current=make(source).create(),copies=[original,current],cap=make(source).limits(n,camera.arena),time=[0,0];let maxOffset=0,offscreen=0;
  for(let f=0;f<28;f++){
   const moved=units.map(u=>({...u,x:u.x+Math.sin(f*.13+u.id)*.002,y:u.y+Math.cos(f*.09+u.id)*.002}));
   for(let k=0;k<2;k++){const t=performance.now();copies[k].prepare(moved,camera,f*16.667);time[k]+=performance.now()-t;}
-  for(const u of moved){const o=current.offset(u.id),lim=make(source).limits(n,camera.arena);maxOffset=Math.max(maxOffset,Math.abs(o.dx),Math.abs(o.dy));assert(Math.abs(o.dx)<=lim.x+1e-6&&Math.abs(o.dy)<=lim.y+1e-6,'offset exceeded dense staging budget');const p=current.point(u,camera);if(p.x<-1||p.x>431||p.y<-1||p.y>521)offscreen++;}
+  for(const u of moved){const o=current.offset(u.id),lim=cap;maxOffset=Math.max(maxOffset,Math.abs(o.dx),Math.abs(o.dy));assert(Math.abs(o.dx)<=lim.x+1e-6&&Math.abs(o.dy)<=lim.y+1e-6,'offset exceeded dense staging budget');const p=current.point(u,camera);if(p.x<-1||p.x>431||p.y<-1||p.y>521)offscreen++;}
   if(f===27){const b=countOverlap(moved,original),a=countOverlap(moved,current);rows.push({n,seed,oldOverlap:b.overlaps,newOverlap:a.overlaps,oldOcclusion:b.occlusion,newOcclusion:a.occlusion,baselineMs:+time[0].toFixed(2),denseMs:+time[1].toFixed(2),maxOffset:+maxOffset.toFixed(2),offscreen});}
  }
 }
