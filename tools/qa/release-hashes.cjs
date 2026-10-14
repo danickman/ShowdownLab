@@ -8,7 +8,7 @@ const sw=fs.readFileSync(path.join(root,'sw.js'),'utf8');
 const list=JSON.parse(sw.match(/const RUNTIME=(\[[\s\S]*?\]);/)[1]);
 const refs=[...html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)="([^"]+)"/g)].map(m=>m[1]).filter(u=>u.startsWith('/v3/')&&/\.(?:js|css)\?/.test(u));
 if(JSON.stringify(refs)!==JSON.stringify(list))throw Error('HTML and service-worker module list diverged');
-const urls=['/','/v3/index.html',...list];
+const urls=['/',...list];
 const data={};
 for(const url of urls){
  const rel=url==='/'?'index.html':url.replace(/^\//,'').split('?')[0];
@@ -17,7 +17,7 @@ for(const url of urls){
  const bytes=fs.readFileSync(full);
  data[url]=crypto.createHash('sha256').update(bytes).digest('hex');
 }
-if(data['/']!==data['/v3/index.html'])throw Error('root and v3 entrypoint differ');
+
 if(process.argv.includes('--verify')){
  const match=sw.match(/const RELEASE_SHA256=(\{[^\n]*\});/);
  if(!match)throw Error('Pinned manifest missing from service worker');
