@@ -996,3 +996,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - [CI 38637241911](https://github.com/danickman/ShowdownLab/actions/runs/38637241911) had all seven standard jobs green when inspected; the six-variant three-seed damage/active-front smoke remained in progress. No verified verdict for wider fronts yet.
 - Commit `4c1050b` adds direct `WIDER FRONT ACCEPTANCE` comparisons of medium (+/-0.24) vs connected (+/-0.20) squad centers with identical strong Assassin and Beetank-only persistence: Beetank/Barbarian hits, Assassin damage/hits, actively contested sectors at frames 30/60/90, and differing winners. This avoids drawing conclusions from deployment width alone. The experimental combat core remains QA-only. No merge or deployment.
+
+
+### October 14 — late-front verification
+
+- CI 38637470321 showed seven standard checks green while its extended six-variant comparison was still in progress at last check. No verdict on wider fronts yet.
+- Commit b6be286 extends the QA-only wider-front comparison to include active contested sectors at frames 180 and 360 as well as 30/60/90. This assesses whether later engagements remain geographically distributed. No runtime core change, merge, or production deployment.
