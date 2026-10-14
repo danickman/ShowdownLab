@@ -23,6 +23,10 @@ jobs:
           QA_RECEIPT: duel-receipt.json
           QA_SHA: ${{ github.sha }}
         run: node tools/qa/check-duels.cjs
+      - name: Turn 5C paired 80 and 120 fighter deterministic stress
+        env:
+          QA_STRESS_RECEIPT: stress5c-receipt.json
+        run: node tools/qa/check-stress5c.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -43,7 +47,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: duel-receipt
-          path: duel-receipt.json
+          path: |
+            duel-receipt.json
+            stress5c-receipt.json
           if-no-files-found: warn
 
   browser-turn3:
