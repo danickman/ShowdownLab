@@ -112,6 +112,44 @@ jobs:
           node tools/qa/check-zone-terminal.cjs
           node tools/qa/check-zone-mirrors.cjs
 
+  population-and-disruption:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate draft source and QA syntax
+        run: |
+          node --check v3/evolution-rules.js
+          node --check v3/simulation-adapter.js
+          node --check v3/round-loop.js
+          node --check tools/qa/check-population-draft.cjs
+      - name: Verify projected cap and one-round nonpermanent sabotage
+        run: node tools/qa/check-population-draft.cjs
+  extreme-300-fighters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate 300 fighter edge harness
+        run: node --check tools/qa/check-300-population.cjs
+      - name: Run 300 fighter 1x and 10x extreme stress
+        env:
+          QA_300_RECEIPT: extreme-300-receipt.json
+        run: node tools/qa/check-300-population.cjs
+      - name: Upload 300 fighter performance receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extreme-300-receipt
+          path: extreme-300-receipt.json
+          if-no-files-found: warn
+
   threat-observer-parity:
     runs-on: ubuntu-latest
     timeout-minutes: 6
