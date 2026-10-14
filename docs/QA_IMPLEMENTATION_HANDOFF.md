@@ -138,3 +138,25 @@ Runtime cache busting: `v3/asset-renderer.js` assigns `?v=knight-base256b` **onl
 **Gate status:** Turn 3.5 implementation/automated QA PASS; subjective iPhone Safari sharpness approval and full seven-pose improvement remain PARTIAL (the distinct defeat pose remains its original ~80px export, deliberately preserved pending a validated separate high-resolution defeat source). Gameplay still requires physical phone acceptance. Turn 4 asset-streaming/caching remains NOT IMPLEMENTED. PR #14 stays DRAFT, no merge to main or production deployment authorized.
 
 **Next action:** Original Turn 4 only: measure Home transferred bytes; implement selected-form streaming and safe revisioned cache policy, with cold/warm/offline/failed optional bundle gates. Preserve 10-fighter freeze, L5, Dragon clean sprite and revised Knight poses. Check source/main head before further modifications; branch CI will continue to provide receipts.
+
+## Turn 4A — bounded prioritized artwork loading (2026-10-13)
+Scope: initial request prioritization ONLY. Do not equate this with the complete Turn 4 caching/offline acceptance gate.
+
+Implementation commits:
+- `0c4def8` `v3/asset-renderer.js`: startup `preloadHome()` requests only approved Knight and Dragon Base portraits, replacing unconditional eager `preload()` of every authored form/pose. Added explicit `preloadRoster()`, `preloadSpecies()`, `preloadBattle()`, `assetStatus()`; `preload()` stays available as explicit all-art operation, not startup default.
+- `aab3c4b` `v3/v3.js`: request portraits on Draft/Lab/Guide/Upgrade Bay navigation; request chosen L1 pack when Ready and actual chosen army/levels before battle start.
+- `ef62999` `tools/check-phone-browser.cjs`: replace obsolete all-240-loaded Home wait with mandatory initial art readiness.
+- `75fbf82` `tools/qa/check-streaming.cjs`: Node runtime request counter verifies 2 Home assets; roster portraits, chosen form/pose preloading, no duplicate network image requests, no unrelated eager form downloads, full roster manifest preserved.
+- `da25076` `.github/workflows/qa-duels.yml`: add streaming assertions.
+- `c32a8e1` `tools/qa/check-turn3-browser.cjs`: measure actual initial Home art request count at three mobile emulated sizes.
+- `294c1be` `v3/asset-renderer.js`: when later form image is pending, use a *decoded* lower authored image rather than an arbitrary procedural silhouette.
+- `d0176dd`, `7b37e33` root and v3 index: synchronized module revisions `stream4a1`. No changes to art binary or approved Knight/Dragon visual contracts.
+
+Evidence:
+- [Actions run 38508473223](https://github.com/danickman/ShowdownLab/actions/runs/38508473223), on earlier Turn 4A commit `da25076`: **SUCCESS** in node-regressions (300/300 ordered duels, deterministic evolutions, Ultimate abilities, Turn 3 assertions and streaming request-count test), browser-turn3 and Knight art candidate jobs.
+- [Actions run 38508576768](https://github.com/danickman/ShowdownLab/actions/runs/38508576768), on final HTML synchronization head `7b37e33`: **QUEUED** at handoff write, not yet certified. Must inspect final run before merge.
+- No measured byte budget or cold/warm/slow/offline network receipts yet. Browser snapshots are software Chromium, not physical iPhone Safari. No production release.
+
+**Remaining critical Turn 4:** properly revisioned consistent modules, cache-first immutable image/assets with HTML/network revalidation, no old/new mixed shell, optional-asset retry, mandatory-module interruption handling, explicit offline selected-bundle readiness, cold/warm/slow/offline/partial-failure tests and real iPhone performance. Current `sw.js` network-first and global Vercel `no-store` remain unchanged intentionally; changing caching prematurely may produce mixed releases. Avoid treating Turn 4A as done for entire packet. Next evaluate network byte evidence, standalone offline bundle test, and stateful cache update strategy before Turn 4B.
+
+All changes are on draft PR #14 feature branch. Main/production untouched. Require explicit release authorization before merging/deploying.
