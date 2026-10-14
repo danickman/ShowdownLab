@@ -57,6 +57,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: formation-variants.json
         run: node tools/qa/check-formation-variants.cjs
+      - name: Vertical and depth formation variants
+        env:
+          QA_LANES_RECEIPT: formation-spacing.json
+        run: node tools/qa/check-formation-spacing.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -87,6 +91,7 @@ jobs:
             staging5h-candidate.json
             formation-density.json
             formation-variants.json
+            formation-spacing.json
           if-no-files-found: warn
 
   browser-turn3:
