@@ -8,14 +8,29 @@ const accent=level=>[3,5].includes(normalize(level));
 const names=['','Base','Evolved','Tempered','Ultimate','Ascended'];
 const label=level=>names[normalize(level)];
 const canUpgrade=level=>normalize(level)<MAX_LEVEL;
+// Soft combined-army ×2 eligibility. The simulation/Lab is intentionally uncapped.
+const MULTIPLY_POPULATION_LIMIT=120;
+const population=s=>['blue','red'].reduce((sum,team)=>sum+Object.values(s.armies?.[team]||{}).reduce((n,v)=>n+Math.max(0,Math.floor(Number(v)||0)),0),0);
+function canMultiply(s,team,type,mult=2){
+ const count=Math.max(0,Math.floor(Number(s.armies?.[team]?.[type])||0));
+ const extra=Math.max(0,Math.round(count*Math.max(1.25,Number(mult)||2))-count);
+ return count>0&&population(s)<MULTIPLY_POPULATION_LIMIT&&population(s)+extra<=MULTIPLY_POPULATION_LIMIT;
+}
 function draftChoices(s,counts){
   const own=Object.keys(s.armies.blue).filter(t=>s.armies.blue[t]>0),all=Object.keys(counts),round=s.round;
   const reinforce=all[(round*3+s.blueLives)%all.length],mult=own[(round+s.redLives)%own.length]||reinforce;
   const candidates=own.filter(t=>canUpgrade(s.levels.blue[t]||1));
   const up=candidates[(round*2+1)%candidates.length],amount=(counts[reinforce]||2)+Math.max(0,s.redLives-s.blueLives);
-  const choices=[{kind:'add',type:reinforce,amount},{kind:'mult',type:mult,mult:2}];
+  // Preserve three meaningful choices: after the population reaches the ×2
+  // threshold, favor a distinct evolution or a small specialist reinforcement.
+  const secondUp=candidates.find(type=>type!==up);
+  const specialist=all.find((type,i)=>i>=(round+s.redLives)%all.length&&type!==reinforce)||all.find(type=>type!==reinforce)||reinforce;
+  const alternate=canMultiply(s,'blue',mult,2)?{kind:'mult',type:mult,mult:2}:
+    secondUp?{kind:'up',type:secondUp,amount:1,level:normalize((s.levels.blue[secondUp]||1)+1),specialist:true}:
+    {kind:'add',type:specialist,amount:Math.min(2,counts[specialist]||2),specialist:true};
+  const choices=[{kind:'add',type:reinforce,amount},alternate];
   if(up)choices.push({kind:'up',type:up,amount:1,level:normalize((s.levels.blue[up]||1)+1)});
   return choices;
 }
-window.ShowdownEvolution=Object.freeze({MAX_LEVEL,STEP,normalize,multiplier,tier,accent,label,canUpgrade,draftChoices});
+window.ShowdownEvolution=Object.freeze({MAX_LEVEL,STEP,normalize,multiplier,tier,accent,label,canUpgrade,population,canMultiply,MULTIPLY_POPULATION_LIMIT,draftChoices});
 })();
