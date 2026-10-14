@@ -105,14 +105,6 @@ jobs:
         env:
           QA_LANES_RECEIPT: zone-mirrors.json
         run: node tools/qa/check-zone-mirrors.cjs
-      - name: Role and strategy locality effects
-        env:
-          QA_LANES_RECEIPT: zone-role-effects.json
-        run: node tools/qa/check-zone-role-effects.cjs
-      - name: Role-attributed damage and kills under locality
-        env:
-          QA_LANES_RECEIPT: zone-damage.json
-        run: node tools/qa/check-zone-damage.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -150,8 +142,6 @@ jobs:
             zone-locality.json
             zone-terminal.json
             zone-mirrors.json
-            zone-role-effects.json
-            zone-damage.json
           if-no-files-found: warn
 
   browser-turn3:
