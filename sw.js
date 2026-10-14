@@ -1,7 +1,7 @@
 // Atomically installed shell/runtime: generated from index.html on 2026-10-14.
 // A new worker does not activate until every critical module has been cached.
 const CACHE='showdown-lab-release4c1';
-const SHELL=["/","/v3/index.html","/manifest.webmanifest?v=duel1","/icon-192.png?v=duel1","/icon-512.png?v=duel1","/icon-maskable-512.png?v=duel1","/apple-touch-icon.png?v=duel1"];
+const SHELL=["/","/v3/index.html","/manifest.webmanifest?v=duel1","/icon-192.png?v=duel1","/icon-512.png?v=duel1","/icon-maskable-512.png?v=duel1","/apple-touch-icon.png?v=duel1","/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10","/v3/assets/authored/dragon/presentation.webp?v=ultimate-roster10"];
 const RUNTIME=[
   "/v3/v3.css?v=guide-room2",
   "/v3/presentation.css?v=turn3-touch1",
@@ -72,6 +72,8 @@ self.addEventListener('fetch',event=>{
    // Any missing critical installed module is a hard failure; never mix releases.
    return Response.error();
   }
+  // Never fetch a module outside the validated installation set.
+  if(u.pathname.startsWith('/v3/')&&/\.(?:js|css)$/i.test(u.pathname))return Response.error();
   if(isVersionedImage(u)){
    const hit=await cache.match(req);if(hit)return hit;
   }
