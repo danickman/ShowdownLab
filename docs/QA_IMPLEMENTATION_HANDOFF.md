@@ -865,3 +865,8 @@ CI run 38615999759 surfaced an intermittent negative-radius canvas error. The li
 
 - Completed smoke job successfully. Baseline vs locality across 12 matched experimental scenarios: living Assassin frames 2070 vs 2132; target within nominal reach 28 vs 3 (1.35% vs 0.14%); stalking frames 1898 vs 1957; hits 11 vs 3; effective fighter-attributed damage 1326.66 vs 185.57. Nearly all observed targets are backline units. This strongly indicates insufficient pursuit/contact rather than raw attack power in the locality candidate. The live-target distance mean in this earlier run divided by living frames, not valid-target frames; commit `91d9dd1` corrects the denominator, pending new CI.
 - Zero sampled backstab frames despite credited hits indicates that rendered-frame action sampling can miss fast combat events. Do not infer zero backstab events from that metric; prefer direct source/hurt instrumentation for successful hit accounting. No combat changes or promotion yet.
+
+
+### October 14: isolated Assassin vanish reach candidate
+
+CI 38619374891 passed all required jobs. Valid target acquisition was near 100 percent for both variants, while in-range samples fell from 28 to 3. Commit b1ff42b adds a VM-only experimental locality candidate which tests earlier Assassin vanish activation at distance 0.70 rather than 0.42. No runtime combat changes. This candidate requires its own CI, matched damage and contact measurements, and outcome review before consideration. No merge or deployment.
