@@ -59,7 +59,25 @@ const collect=async(page,label)=>{
  await page.setOfflineMode(false);
  assert.equal(report.errors.length,0,'application errors in cold/warm/offline runs');
  assert(report.runs[0].authored<=12,'Home loads too much optional artwork');
+ // Isolated new browser context so the first view has no installed worker or warm cache.
+ const slowContext=await browser.createBrowserContext();
+ try{
+  const slow=await slowContext.newPage();
+  await slow.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+  const slowSession=await slow.createCDPSession();
+  await slowSession.send('Network.enable');
+  await slowSession.send('Network.setCacheDisabled',{cacheDisabled:true});
+  await slowSession.send('Network.emulateNetworkConditions',{offline:false,latency:140,downloadThroughput:180000,uploadThroughput:100000,connectionType:'cellular3g'});
+  const start=Date.now();
+  await slow.goto(url,{waitUntil:'domcontentloaded',timeout:90000});
+  await slow.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:90000});
+  const elapsedMs=Date.now()-start;
+  const net=await collect(slow,'throttled-first-view');
+  report.slow={...net,elapsedMs,latencyMs:140,downloadBytesPerSec:180000,profile:'synthetic Chromium CDP throttle'};
+  assert(elapsedMs<90000,'throttled initial view exceeded 90s');
+  await slow.screenshot({path:path.join(out,'throttled-home.png')});
+ }finally{await slowContext.close()}
  report.passed=true;
- console.log('PASS: browser cold/warm/offline controlled PWA boot; request/byte receipt '+JSON.stringify(report.runs));
+ console.log('PASS: browser cold/warm/offline controlled PWA boot; request/byte receipt request/byte receipt '+JSON.stringify(report.runs));
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
