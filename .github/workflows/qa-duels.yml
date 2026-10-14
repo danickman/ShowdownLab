@@ -65,3 +65,23 @@ jobs:
           name: turn3-browser
           path: ${{ runner.temp }}/turn3-browser
           if-no-files-found: warn
+
+  knight-art-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install extraction dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy scipy
+      - name: Generate six larger Base Knight pose candidates
+        run: python tools/rebuild-base-knight.py
+      - name: Upload proposed Knight assets and contact sheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knight-base-256-candidate
+          path: tools/qa/.generated-knight
+          if-no-files-found: error
