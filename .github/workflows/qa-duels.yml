@@ -27,6 +27,8 @@ jobs:
       - name: Turn 3 Guide mastery and touch consistency
         if: success()
         run: node tools/qa/check-turn3-consistency.cjs
+      - name: Turn 4A prioritized sprite loading
+        run: node tools/qa/check-streaming.cjs
       - name: Existing Ultimate ability checks
         if: success()
         run: node tools/check-ultimate-abilities.cjs
