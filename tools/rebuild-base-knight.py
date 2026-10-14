@@ -49,6 +49,14 @@ def build(source, dest):
             output.alpha_composite(figure,((256-figure.width)//2,248-figure.height))
             bounds=output.getchannel('A').getbbox()
             if not bounds or bounds[0]<6 or bounds[2]>250 or bounds[1]<5 or bounds[3]>252: raise RuntimeError(f'Out-of-bounds {name}: {bounds}')
+            # Remove JPEG-key green after the final Lanczos resize, which can
+            # reintroduce a few green pixels at opaque shield/armor edges.
+            final=np.asarray(output).copy()
+            channels=final[:,:,:3].astype(np.int16)
+            rr0,gg0,bb0=channels.transpose(2,0,1)
+            green_spill=(final[:,:,3]>8)&(gg0>np.maximum(rr0,bb0)+18)
+            final[:,:,1]=np.where(green_spill,np.minimum(gg0,np.maximum(rr0,bb0)+4),gg0).astype(np.uint8)
+            output=Image.fromarray(final,'RGBA')
             ink=np.asarray(output).astype(np.int16)
             rr,gg,bb=ink[:,:,:3].transpose(2,0,1)
             visible=ink[:,:,3]>8
