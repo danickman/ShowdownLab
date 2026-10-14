@@ -17,6 +17,10 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
    await page.setViewport({width,height,deviceScaleFactor:3,isMobile:true,hasTouch:true});
    await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.FighterAssets&&window.ShowdownAdapter,{timeout:90000});
+   const homeAssets=await page.evaluate(()=>FighterAssets.assetStatus());
+   assert(homeAssets.requested<=4,'Home requested unnecessary authored forms: '+JSON.stringify(homeAssets));
+   assert(homeAssets.total>=200,'full roster manifest unexpectedly reduced');
+   report.screens.push({width,height,homeAssets});
    await page.click('[data-go="lab"]');
    const lab=await page.evaluate(()=>{
     const measure=selector=>[...document.querySelectorAll(selector)].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return {tag:e.tagName,id:e.id,width:r.width,height:r.height}});
