@@ -408,3 +408,10 @@ An image-pixel comparison of the 430x932 side-by-side PNGs using the known flat 
 - `0195f0a` adjusts the *experimental test* to report a rejected candidate as a successful diagnostic, preserving strict explicit rejection (`accepted === false`) until redesigned. It does not relax production checks or enable the rejected movement range. Follow-up run: https://github.com/danickman/ShowdownLab/actions/runs/38534324244 (check status before claiming full pass).
 - **Decision:** reject naïve increase of dense visual offsets. Larger differences between rendered sprites and true combat positions risk floating/disconnected melee contact. The correct follow-up is to investigate formation/spawn distribution and team-aware compositional treatment with preserved opponent proximity before making runtime changes.
 - No changes to `v3/combat-staging.js`, `v3/camera.js`, the simulation, sprites, or service-worker integrity manifest. No merge or production deployment.
+
+### Turn 5H experiment final verified receipt
+
+- Corrected accidental literal newline escapes in diagnostic script with commits `078df69` and `bc6774c`; no runtime changes.
+- **Final verified [CI run 38534545512](https://github.com/danickman/ShowdownLab/actions/runs/38534545512)**: **6/6 jobs SUCCESS**, including 300-duel, Ultimate/evolution, browser comparisons, offline recovery and integrity.
+- Experimental dense cap expansion result, across fixed synthetic 20–160 body comparisons: **close overlap ratio 0.8907** (about 10.9% reduction), but **visually detached close-opponent pairs increased from 92 to 361**. Cropped envelope counts remained 0/0 in this fixture. This fails the stronger melee-contact visual safety criterion despite an overlap improvement; rejected candidate is explicitly marked `accepted:false` in machine-readable artifact.
+- **Decision remains reject.** Do not integrate larger presentation offsets. Next explore formation distribution or opponent-pair constrained screen staging and actual alpha-silhouette metrics, not a larger arbitrary cap. Last CI-verified executable QA commit `bc6774c`. Production/PR merge untouched.
