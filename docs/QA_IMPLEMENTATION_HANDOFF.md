@@ -1008,3 +1008,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - Six-variant full three-seed battles in runs 38637241911/38637470321/38637726715 remained in progress at last inspection; seven standard checks were green in 38637726715. Do not report unobserved medium-front results.
 - Commit `4ca3759` adds an independent `wider-front-fast-signal` CI job on one deterministic seed, running the same whole-roster/active-front profiler while preserving the full three-seed `damage-attribution-smoke` gate. This is an early signal, **not a substitute for full 12-case acceptance**. Await its own CI results. No protected runtime modifications, merge or production deployment.
+
+
+### October 14 — conclusive wide-front rejection, next phase
+
+- [Full CI 38638035815](https://github.com/danickman/ShowdownLab/actions/runs/38638035815) passed both full three-seed and independent one-seed smoke, plus standard release/browser regressions. Across 12 matched 80/120-fighter cases, narrow ±0.20 connected-front/Beetank-only persistence versus wider ±0.24: Assassin attributed damage **836 vs 160**, hits **13 vs 2**; Beetank hits **1050 vs 931**; Barbarian hits **269 vs 220**; Knight hits **357 vs 457**. Active contested bands frame 90 **1.083 vs 1.000**, frame 180 **0.250 vs 0.333**, frame 360 **0 vs 0**. Broader spacing severely starves Assassin and reduces key melee activity without achieving durable multiple fronts. **Reject ±0.24.**
+- Carry forward ±0.20 connected-front with Beetank-only persistence and experimental Assassin HP132/damage31/dodge24%/vanish0.70 as *research lead only*. The next focus is actual multi-front orchestration/targeting coherence and integrated browser visual QA, not more unconditional spacing or role-specific buff cycling. Preserve combat architecture, role-specific abilities and root release integrity; no core promotion/merge/deploy until a role-safe candidate demonstrates sustained distributed combat.
