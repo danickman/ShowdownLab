@@ -23,7 +23,7 @@ function observe(state,previous=null){
  const alive=units.filter(u=>u.hp>0&&Number.isFinite(u.x)&&Number.isFinite(u.y));
  const byTeam={blue:[],red:[]};
  for(const u of alive)if(byTeam[u.team])byTeam[u.team].push(u);
- const decisions=[],scans={candidates:0,packComparisons:0,threatComparisons:0};
+ const decisions=[],scans={candidates:0,packComparisons:0,threatComparisons:0},threatCache=new Map();
  for(const u of alive){
   if(!ATTACKERS.has(u.type))continue;
   const foes=byTeam[u.team==='blue'?'red':'blue'];
@@ -37,9 +37,12 @@ function observe(state,previous=null){
   candidates.sort((a,b)=>a.d-b.d||a.v.id-b.v.id);
   // Capped candidate set; distant high-value targets cannot monopolize tactical thought.
   const short=candidates.slice(0,8);
+  const localPack=u.type==='goblin'?friends.filter(a=>a.type==='goblin'&&distance(a,u)<=.11):null;
   const ranked=short.map(({v,d})=>{
    scans.candidates++;
-   let danger=threat(v,friends);
+   const cacheKey=u.team+':'+v.id;
+   let danger=threatCache.get(cacheKey);
+   if(danger===undefined){danger=threat(v,friends);threatCache.set(cacheKey,danger);scans.threatComparisons+=friends.length}
    let score=danger*.38-d*5;
    const note={danger:+danger.toFixed(3)};
    if(u.type==='assassin'){
@@ -58,7 +61,7 @@ function observe(state,previous=null){
     note.heavy=HEAVIES.has(v.type);
    }
    if(u.type==='goblin'){
-    const pack=friends.filter(a=>a.type==='goblin'&&distance(a,u)<=.11);
+    const pack=localPack;
     const arriving=pack.filter(a=>distance(a,v)<.19).length;
     const guards=foes.filter(e=>e.id!==v.id&&distance(e,v)<.10).length;
     scans.packComparisons+=friends.length+foes.length;
@@ -68,14 +71,13 @@ function observe(state,previous=null){
     score-=v.type==='dragon'&&arriving>=3?2:0; // Recognize AoE exposure, not immunity.
     note.pack=arriving;note.isolated=isolated;
    }
-   scans.threatComparisons+=friends.length;
    return{targetId:v.id,targetType:v.type,score,distance:d,note};
   });
   ranked.sort((a,b)=>b.score-a.score||a.distance-b.distance||a.targetId-b.targetId);
   let choice=ranked[0],urgent=false,reason='feasible-threat-role';
   if(u.type==='sniper'){
     const danger=short.filter(q=>CLOSE_ATTACK.has(q.v.type)).map(({v,d})=>{
-      const old=prevById.get(v.id),previousDistance=old?distance(u,old):d;
+      const old=prevById.get(v.id),oldSelf=prevById.get(u.id),previousDistance=old?distance(oldSelf||u,old):d;
       const closing=(previousDistance-d)/dt;
       const activeCharge=['charge','ram','rage_charge','rush'].includes(v.action);
       const estimatedClosing=Math.max(0,closing,activeCharge?finite(v.spd,1)*1.3/1200:0);
