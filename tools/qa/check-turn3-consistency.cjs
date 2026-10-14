@@ -5,7 +5,7 @@ const css=fs.readFileSync('v3/presentation.css','utf8');
 const core=fs.readFileSync('v3/legacy-sim-core.js','utf8');
 const milestone=fs.readFileSync('docs/FIVE_LEVEL_ULTIMATE_MILESTONE.md','utf8');
 const html=fs.readFileSync('index.html','utf8');
-assert.strictEqual(html,fs.readFileSync('v3/index.html','utf8'),'root and v3 entrypoints must match');
+assert(!fs.existsSync('v3/index.html'),'legacy duplicate v3 HTML must stay removed');
 assert(core.includes('while(acc>=16.666)'), 'do not silently change combat clock');
 assert(src.includes('Math.round((lvl+1)*2.5)')===false, 'obsolete 2.5% mastery toast');
 assert(src.includes('${(lvl+1)*5}% HP & DAMAGE'), 'purchase toast must match 5% mastery');
