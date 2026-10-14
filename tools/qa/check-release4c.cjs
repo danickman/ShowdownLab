@@ -45,7 +45,7 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  const active=create({stores});
  await active.event('install');
  assert(stores.has(active.cacheName),'new install must create full bundle');
- assert.equal(active.networkCalls.length,required.length+7,'entire dependency graph precached');
+ assert.equal(active.networkCalls.length,required.length+JSON.parse(sw.match(/const SHELL=(\\[[^\\n]+\\]);/)[1]).length,'entire dependency graph precached');
  active.setOnline(false);
  // The waiting worker has not activated while older tabs remain.
  assert(stores.has('showdown-lab-old'),'waiting worker must not discard previous release');
@@ -53,6 +53,7 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  assert(!stores.has('showdown-lab-old'),'old release removed only after activation');
  assert(stores.has('unrelated-app'),'unrelated app cache untouched');
  assert.equal(await(await active.event('fetch',request('/v3/v3.js?v=stream4a1'))).text(),'installed:/v3/v3.js?v=stream4a1');
+ assert.equal(await(await active.event('fetch',request('/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10'))).text(),'installed:/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10','Home Knight must remain offline');
  assert.equal(await(await active.event('fetch',request('/home','navigate'))).text(),'installed:/');
  assert.equal(await(await active.event('fetch',request('/v3/','navigate'))).text(),'installed:/v3/index.html');
  const image=request('/v3/assets/authored/knight/idle.webp?v=knight-base256b');
