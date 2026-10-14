@@ -162,7 +162,7 @@ button:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 2px 3p
 @media(prefers-reduced-motion:reduce){.reward-evolve .rd-evolve.show{animation:none}}
 
 /* Turn 3 mobile touch acceptance: generous interactive boxes without adding blank visual chrome. */
-.screen-lab .lab-block input[type="range"]{
+[data-screen="lab"] .lab-block input[type="range"]{
   display:block;
   width:100%;
   height:48px;
@@ -172,22 +172,22 @@ button:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 2px 3p
   box-sizing:border-box;
   touch-action:pan-x;
 }
-.screen-lab .lab-block input[type="checkbox"]{
+[data-screen="lab"] .lab-block input[type="checkbox"]{
   width:24px;
   height:24px;
   min-width:24px;
   min-height:24px;
   accent-color:#bd861a;
 }
-.screen-lab .lab-block label:has(input[type="checkbox"]){
+[data-screen="lab"] .lab-block label:has(input[type="checkbox"]){
   min-height:48px;
   align-items:center;
   padding:8px 0;
   box-sizing:border-box;
 }
-.screen-roster button[data-upgrade-unit],
-.screen-roster button[data-upgrade-spell],
-.screen-roster button[data-buy-spell]{
+[data-screen="roster"] button[data-upgrade-unit],
+[data-screen="roster"] button[data-upgrade-spell],
+[data-screen="roster"] button[data-buy-spell]{
   min-height:48px;
   touch-action:manipulation;
 }
