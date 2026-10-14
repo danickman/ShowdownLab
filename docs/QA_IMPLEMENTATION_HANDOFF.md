@@ -881,3 +881,8 @@ CI 38619374891 passed all required jobs. Valid target acquisition was near 100 p
 ### October 14 — Assassin vanish candidate decision
 
 CI 38620768110 emitted complete three-seed metrics although the damage research job was cancelled. Experimental locality Assassin at vanish threshold 0.42 recorded damage 185.57, 3 hits, 2132 alive frames. Threshold 0.50 recorded damage 167.2, 3 hits, 1549 alive frames. Threshold 0.70 recorded damage 229.57, 4 hits, 875 alive frames. Neither restored original baseline (damage 1326.66, 11 hits). Reject both thresholds for promotion. Seven standard CI jobs passed. Continue exploring role-preserving target access/formation, not damage buffs. No merge or deployment.
+
+
+### October 14 — Assassin survivability versus reach hypothesis
+
+User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Existing tests do not support promoting either outright: vanish70 alone increased contacts but sharply reduced survival, while vanish50 failed to increase total damage. Base Assassin stats inspected: HP96, damage27, speed1.5, dodge0.18, armor0.06, range24, cooldown32. A modest HP-only candidate (96 to 112, about +16.7%) paired with vanish70 was added to the **QA VM-only** locality comparison in commit ae75bd8. Damage, speed, dodge, cooldown and live runtime remain unchanged. The candidate is exploratory, not approved; new CI and outcome/survival review required. Avoid stacking broad multi-stage buffs until role-preserving movement and post-teleport survival are demonstrated.
