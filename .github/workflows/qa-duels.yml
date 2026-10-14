@@ -61,50 +61,6 @@ jobs:
         run: node tools/qa/check-staging5f.cjs
       - name: Turn 5G dense depth ordering
         run: node tools/qa/check-depth5g.cjs
-      - name: Turn 5H matched camera composition A/B diagnostic
-        env:
-          QA_COMPOSITION_RECEIPT: composition5h-receipt.json
-        run: node tools/qa/check-composition5h.cjs
-      - name: Turn 5H expanded staging experiment
-        env:
-          QA_STAGE_CANDIDATE_RECEIPT: staging5h-candidate.json
-        run: node tools/qa/check-staging5h-candidate.cjs
-      - name: Formation density across actual simulation phases
-        env:
-          QA_FORMATION_RECEIPT: formation-density.json
-        run: node tools/qa/check-formation-density.cjs
-      - name: Isolated deployment lane variants
-        env:
-          QA_LANES_RECEIPT: formation-variants.json
-        run: node tools/qa/check-formation-variants.cjs
-      - name: Vertical and depth formation variants
-        env:
-          QA_LANES_RECEIPT: formation-spacing.json
-        run: node tools/qa/check-formation-spacing.cjs
-      - name: Horizontal formation alternatives
-        env:
-          QA_LANES_RECEIPT: horizontal-formation.json
-        run: node tools/qa/check-horizontal-formation.cjs
-      - name: Three-zone distributed engagement prototype
-        env:
-          QA_LANES_RECEIPT: engagement-zones.json
-        run: node tools/qa/check-engagement-zones.cjs
-      - name: Zone engagement persistence and damage timing
-        env:
-          QA_LANES_RECEIPT: zone-engagement.json
-        run: node tools/qa/check-zone-engagement.cjs
-      - name: Locality-aware target selection experiment
-        env:
-          QA_LANES_RECEIPT: zone-locality.json
-        run: node tools/qa/check-zone-locality.cjs
-      - name: Bounded locality full-match comparison
-        env:
-          QA_LANES_RECEIPT: zone-terminal.json
-        run: node tools/qa/check-zone-terminal.cjs
-      - name: Mirrored full-match locality candidates
-        env:
-          QA_LANES_RECEIPT: zone-mirrors.json
-        run: node tools/qa/check-zone-mirrors.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -131,18 +87,30 @@ jobs:
             staging5d-receipt.json
             dense5e-receipt.json
             staging5f-receipt.json
-            composition5h-receipt.json
-            staging5h-candidate.json
-            formation-density.json
-            formation-variants.json
-            formation-spacing.json
-            horizontal-formation.json
-            engagement-zones.json
-            zone-engagement.json
-            zone-locality.json
-            zone-terminal.json
-            zone-mirrors.json
           if-no-files-found: warn
+
+  exploratory-formations:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run optional staging and formation experiments
+        run: |
+          node tools/qa/check-composition5h.cjs
+          node tools/qa/check-staging5h-candidate.cjs
+          node tools/qa/check-formation-density.cjs
+          node tools/qa/check-formation-variants.cjs
+          node tools/qa/check-formation-spacing.cjs
+          node tools/qa/check-horizontal-formation.cjs
+          node tools/qa/check-engagement-zones.cjs
+          node tools/qa/check-zone-engagement.cjs
+          node tools/qa/check-zone-locality.cjs
+          node tools/qa/check-zone-terminal.cjs
+          node tools/qa/check-zone-mirrors.cjs
 
   browser-turn3:
     runs-on: ubuntu-latest
