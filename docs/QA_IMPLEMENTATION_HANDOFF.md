@@ -886,3 +886,10 @@ CI 38620768110 emitted complete three-seed metrics although the damage research 
 ### October 14 — Assassin survivability versus reach hypothesis
 
 User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Existing tests do not support promoting either outright: vanish70 alone increased contacts but sharply reduced survival, while vanish50 failed to increase total damage. Base Assassin stats inspected: HP96, damage27, speed1.5, dodge0.18, armor0.06, range24, cooldown32. A modest HP-only candidate (96 to 112, about +16.7%) paired with vanish70 was added to the **QA VM-only** locality comparison in commit ae75bd8. Damage, speed, dodge, cooldown and live runtime remain unchanged. The candidate is exploratory, not approved; new CI and outcome/survival review required. Avoid stacking broad multi-stage buffs until role-preserving movement and post-teleport survival are demonstrated.
+
+
+### October 14 — Role-preserving connected fronts experiment
+
+- User requested continuing actual battlefield distribution while retaining the *experimental* Assassin HP 112 and vanish threshold 0.70 for the upcoming role tests. Do not apply the buff to live combat before measurements.
+- Commit `f1c9106` introduces `connected-fronts-assassin-hp112` in QA-only `check-zone-damage.cjs`. Relative to the extreme three-lane locality candidate (squad centers +/-0.32, compact within-squad spacing factor 0.35), new variant uses centers +/-0.20 and factor 0.65, retaining cross-lane target pressure and Assassin HP112/vanish70. Compare baseline/locality/isolated Assassin HP candidate and connected-fronts for deployed fighter occupancy, contact and role-normalized damage, Assassin survival and winners; do not infer success solely from arena area used.
+- CI 38622426921 queued at the time of documentation; new candidate not yet validated. Continue on QA branch only, no production merge/deploy, protect deterministic core and root-only SHA-pinned PWA.
