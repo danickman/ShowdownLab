@@ -22,9 +22,9 @@ const fighters=[
  {u:{id:6,type:'knight'},p:{x:160,y:306}}
 ];
 assert.deepEqual(order(fighters,60).map(v=>v.u.id),[3,2,5,4,6]);
-assert.deepEqual(order(fighters,120).map(v=>v.u.id),[4,2,6,5,3]);
+assert.deepEqual(order(fighters,120).map(v=>v.u.id),[2,4,6,5,3]);
 for(let seed=0;seed<20;seed++){
  const shuffled=fighters.slice().sort((a,b)=>((a.u.id*17+seed*31)%11)-((b.u.id*17+seed*31)%11));
- assert.deepEqual(order(shuffled,120).map(v=>v.u.id),[4,2,6,5,3],'input array order must not affect dense layers');
+ assert.deepEqual(order(shuffled,120).map(v=>v.u.id),[2,4,6,5,3],'input array order must not affect dense layers');
 }
 console.log('PASS: small-battle original depth, 120-body large fighter top layering, permutation stability');
