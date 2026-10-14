@@ -13,15 +13,20 @@ for(const level of [1,4,5])for(const blue of types)for(const red of types){
   A.resetMatch(); // Preserve the core's scheduled RAF; it owns callback lifecycle.
   A.startMatch({blue:{[blue]:1},red:{[red]:1},blueLevels:{[blue]:level},redLevels:{[red]:level},blueLives:1,redLives:1,seed:1337});
   A.setSpeed(10);
-  let frames=0;
+  let frames=0,mirrorCrossed=false,mirrorDamaged=false;
   while(A.getState().phase!=='match_over'&&frames<1200){
     now+=16.667;const callbacks=[...queue.values()];queue.clear();
     for(const callback of callbacks)callback(now);
+    if(blue==='turtle'&&red==='turtle'){
+      const mirrored=A.getState().units, b=mirrored.find(u=>u.team==='blue'),r=mirrored.find(u=>u.team==='red');
+      if(b&&r){if(b.x>r.x+1e-9)mirrorCrossed=true;if(b.hp<b.maxHp||r.hp<r.maxHp)mirrorDamaged=true}
+    }
     frames++;
   }
-  const s=A.getState(),pass=s.phase==='match_over'&&!!s.winner;
+  const s=A.getState(),mirror=blue==='turtle'&&red==='turtle',
+    pass=s.phase==='match_over'&&!!s.winner&&(!mirror||(!mirrorCrossed&&mirrorDamaged));
   results.push({blue,red,level,seed:1337,frames,phase:s.phase,winner:s.winner||null,pass,
-    remaining:s.units.filter(u=>u.hp>0).map(u=>({team:u.team,type:u.type,hp:u.hp,x:u.x,action:u.action}))});
+    mirrorCrossed:mirror?mirrorCrossed:null,mirrorDamaged:mirror?mirrorDamaged:null,remaining:s.units.filter(u=>u.hp>0).map(u=>({team:u.team,type:u.type,hp:u.hp,x:u.x,action:u.action}))});
 }
 const failures=results.filter(x=>!x.pass);
 const receipt={baseSha:process.env.QA_SHA||'0cb1a7db330017193d69d3ab63525ed9cdaca12e',rulesVersion:'v3',seed:1337,speed:10,frameMs:16.667,maxFrames:1200,matchups:results.length,passed:results.length-failures.length,failed:failures.length,failures,errors};
