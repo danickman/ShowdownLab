@@ -12,7 +12,7 @@ from scipy.ndimage import label, gaussian_filter
 
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE=ROOT/'tools/art-sources/knight-base-sheet.jpg'
-POSES=('idle','move','attack','guard','signature','hit')
+POSES=('idle','move','attack','guard','charge','hit')
 ROWS=((70,388),(627,937))
 def build(source, dest):
     pixels=np.asarray(Image.open(source).convert('RGB'))
