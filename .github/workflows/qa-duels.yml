@@ -24,6 +24,9 @@ jobs:
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
+      - name: Turn 3 Guide mastery and touch consistency
+        if: success()
+        run: node tools/qa/check-turn3-consistency.cjs
       - name: Existing Ultimate ability checks
         if: success()
         run: node tools/check-ultimate-abilities.cjs
