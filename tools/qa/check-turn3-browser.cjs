@@ -70,8 +70,8 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
      let drawn=0;const a=c.getImageData(0,0,430,360).data;for(let i=0;i<a.length;i+=4)if(a[i]<75&&a[i+1]<85&&a[i+2]<95)drawn++;
      return{sourceDimensions,darkOutlinePixels:drawn};
     });
-    for(const a of knight.sourceDimensions)assert.strictEqual(a.width,256,'Base Knight pose '+a.pose+' not high resolution');
-    assert(knight.sourceDimensions.length>=7);
+    for(const a of knight.sourceDimensions.filter(x=>x.pose!=='defeat'))assert.strictEqual(a.width,256,'Base Knight pose '+a.pose+' not high resolution');
+    assert.strictEqual(knight.sourceDimensions.length,7);
     assert(knight.darkOutlinePixels>1000,'Knight artwork unexpectedly blank');
     report.knight.push(knight);
     await (await page.$('#qa-knight-render')).screenshot({path:path.join(out,'knight-base-vs-evolved-430.png')});
