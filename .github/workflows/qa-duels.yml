@@ -124,7 +124,7 @@ jobs:
         run: node --check tools/qa/check-zone-damage.cjs
       - name: Paired attributed damage smoke test
         env:
-          QA_DAMAGE_SEEDS: '1337'
+          QA_DAMAGE_SEEDS: '1337,7301,8675309'
           QA_LANES_RECEIPT: zone-damage-smoke.json
         run: node tools/qa/check-zone-damage.cjs
       - name: Upload attributed damage smoke receipt
