@@ -1,11 +1,11 @@
 'use strict';
-const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),crypto=require('node:crypto').webcrypto;
 const sw=fs.readFileSync('sw.js','utf8');
 const html=fs.readFileSync('index.html','utf8');
 const required=[...html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)="([^"]+)"/g)].map(x=>x[1]).filter(x=>x.startsWith('/v3/')&&/\.(js|css)\?/.test(x));
 const dependencyList=JSON.parse(sw.match(/const RUNTIME=(\[[\s\S]*?\]);/)[1]);
 assert.deepEqual(dependencyList,required,'service-worker runtime dependencies must match current HTML');
-function create({failure=null,stores=new Map()}={}){
+function create({failure=null,tamper=null,stores=new Map()}={}){
  const actions={},deleted=[],networkCalls=[],origin='https://showdownlab.vercel.app';
  let online=true;
  function key(q){return typeof q==='string'?q:new URL(q.url).pathname+new URL(q.url).search}
@@ -15,14 +15,19 @@ function create({failure=null,stores=new Map()}={}){
    if(!stores.has(name))stores.set(name,new Map());
    const store=stores.get(name);
    return{
-    addAll:async urls=>{for(const url of urls){networkCalls.push(url);if(failure===url)throw Error('network refused '+url);store.set(url,new Response('installed:'+url))}},
+    addAll:async urls=>{for(const url of urls){
+      networkCalls.push(url);if(failure===url)throw Error('network refused '+url);
+      const name=url==='/'?'index.html':url.slice(1).split('?')[0];
+      const bytes=tamper===url?Buffer.from('wrong version with HTTP 200'):fs.readFileSync(name);
+      store.set(url,new Response(bytes));
+    }},
     put:async(req,response)=>{store.set(key(req),response.clone())},
     match:async req=>store.get(key(req))?.clone()
    }},
   keys:async()=>[...stores.keys()],
   delete:async name=>{deleted.push(name);return stores.delete(name)}
  };
- const obj={self:{location:{origin},addEventListener:(k,fn)=>actions[k]=fn,clients:{claim:async()=>{}}},URL,Response,caches,
+ const obj={crypto,self:{location:{origin},addEventListener:(k,fn)=>actions[k]=fn,clients:{claim:async()=>{}}},URL,Response,caches,
  fetch:async req=>{networkCalls.push(key(req));if(!online)throw Error('offline');return new Response('live:'+key(req))}};
  vm.createContext(obj);vm.runInContext(sw,obj,{filename:'sw.js'});
  async function event(type,request){
@@ -42,6 +47,10 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  await assert.rejects(broken.event('install'));
  assert(stores.has('showdown-lab-old'),'failed update must leave old app');
  assert(!stores.has(broken.cacheName),'failed staged cache must be discarded');
+ const corrupt=create({tamper:required[2],stores});
+ await assert.rejects(corrupt.event('install'),/integrity mismatch/);
+ assert(stores.has('showdown-lab-old'),'hash mismatch evicted old release');
+ assert(!stores.has(corrupt.cacheName),'tampered staging cache survived');
  const active=create({stores});
  await active.event('install');
  assert(stores.has(active.cacheName),'new install must create full bundle');
@@ -52,10 +61,10 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  await active.event('activate');
  assert(!stores.has('showdown-lab-old'),'old release removed only after activation');
  assert(stores.has('unrelated-app'),'unrelated app cache untouched');
- assert.equal(await(await active.event('fetch',request('/v3/v3.js?v=offline-ui4e1'))).text(),'installed:/v3/v3.js?v=offline-ui4e1');
- assert.equal(await(await active.event('fetch',request('/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10'))).text(),'installed:/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10','Home Knight must remain offline');
- assert.equal(await(await active.event('fetch',request('/home','navigate'))).text(),'installed:/');
- assert.equal(await(await active.event('fetch',request('/v3/','navigate'))).text(),'installed:/v3/index.html');
+ assert((await(await active.event('fetch',request('/v3/v3.js?v=offline-ui4e1'))).text()).includes('ShowdownAdapter'),'verified core module not served');
+ assert((await active.event('fetch',request('/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10'))).ok,'Home Knight must remain offline');
+ assert((await(await active.event('fetch',request('/home','navigate'))).text()).includes('assetGuard'),'verified Home shell not served');
+ assert((await(await active.event('fetch',request('/v3/','navigate'))).text()).includes('assetGuard'),'verified /v3 shell not served');
  const image=request('/v3/assets/authored/knight/idle.webp?v=knight-base256b');
  assert.equal((await active.event('fetch',image)).status,0,'uncached optional image must not masquerade as ready offline');
  active.setOnline(true);
