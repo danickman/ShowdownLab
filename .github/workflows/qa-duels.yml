@@ -35,6 +35,10 @@ jobs:
         env:
           QA_DENSE_RECEIPT: dense5e-receipt.json
         run: node tools/qa/check-dense5e.cjs
+      - name: Turn 5F staging lookup caching parity
+        env:
+          QA_STAGING5F_RECEIPT: staging5f-receipt.json
+        run: node tools/qa/check-staging5f.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -60,6 +64,7 @@ jobs:
             stress5c-receipt.json
             staging5d-receipt.json
             dense5e-receipt.json
+            staging5f-receipt.json
           if-no-files-found: warn
 
   browser-turn3:
