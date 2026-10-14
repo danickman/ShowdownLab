@@ -52,7 +52,7 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  await active.event('activate');
  assert(!stores.has('showdown-lab-old'),'old release removed only after activation');
  assert(stores.has('unrelated-app'),'unrelated app cache untouched');
- assert.equal(await(await active.event('fetch',request('/v3/v3.js?v=stream4a1'))).text(),'installed:/v3/v3.js?v=stream4a1');
+ assert.equal(await(await active.event('fetch',request('/v3/v3.js?v=offline-ui4e1'))).text(),'installed:/v3/v3.js?v=offline-ui4e1');
  assert.equal(await(await active.event('fetch',request('/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10'))).text(),'installed:/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10','Home Knight must remain offline');
  assert.equal(await(await active.event('fetch',request('/home','navigate'))).text(),'installed:/');
  assert.equal(await(await active.event('fetch',request('/v3/','navigate'))).text(),'installed:/v3/index.html');
