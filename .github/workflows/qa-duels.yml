@@ -8,6 +8,26 @@ on:
 permissions:
   contents: read
 jobs:
+  root-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify canonical root-only entry and pinned integrity
+        run: |
+          test -f index.html
+          test ! -e v3/index.html
+          node tools/qa/release-hashes.cjs --verify
+          node tools/qa/check-turn3-consistency.cjs
+      - name: Verify offline precache graph and rollback
+        run: node tools/qa/check-release4c.cjs
+      - name: Verify Home art streaming
+        run: node tools/qa/check-streaming.cjs
+      - name: Verify launch guide and PWA hooks
+        run: node tools/check-launch-guide.cjs
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
