@@ -81,6 +81,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: zone-terminal.json
         run: node tools/qa/check-zone-terminal.cjs
+      - name: Mirrored full-match locality candidates
+        env:
+          QA_LANES_RECEIPT: zone-mirrors.json
+        run: node tools/qa/check-zone-mirrors.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -117,6 +121,7 @@ jobs:
             zone-engagement.json
             zone-locality.json
             zone-terminal.json
+            zone-mirrors.json
           if-no-files-found: warn
 
   browser-turn3:
