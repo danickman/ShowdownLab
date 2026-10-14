@@ -1033,3 +1033,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 ### October 14 — implemented eligibility-aware late engagement summaries
 
 - Commit `c8bc1c8` changes QA-only `KNIGHT SPEED ACCEPTANCE` and `TEN ROLE BALANCE GATE` reports to include late-stage active-front **mean / eligible match count / missing match count**, with `null` for means when no match survived to the sample frame. This fixes false zeroes caused by treating already-finished battles as empty observed engagement. Re-validate in CI; current prior runs used misleading zero denominators at frame 360. No live combat/renderer edits.
+
+
+### October 14 — interruption recovery, lifespan-normalized active engagement QA
+
+- The high-effort architecture/design document was committed as `docs/BATTLEFIELD_ENGAGEMENT_AND_CANVAS_DESIGN_2026-10-14.md` (`d3be589`) and linked to this handoff (`1d01636`). It explicitly recommends soft engagement ownership, tactical role exceptions, deterministic contact groups, canvas composition and profile-first mobile optimizations; it rejects indiscriminate spread and blanket persistence.
+- Commit `d43cc4c` corrects the QA-only fixed-frame sector summaries to exclude observations missing because the match has already ended. It also samples contested sectors at **25%, 50%, and 75% of each match's own observed duration**, outputting `LIFESPAN FRONT OCCUPANCY` with eligible sample counts and frequency of >=2 active sectors. These are still simple horizontal bands (not yet world-space contact components); do not equate them with genuine independent local battles. Full/quick CI pending at commit time. Experimental combat core and runtime untouched; no merge or deploy.
