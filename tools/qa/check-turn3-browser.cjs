@@ -80,6 +80,27 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
     report.knight.push(knight);
     await (await page.$('#qa-knight-render')).screenshot({path:path.join(out,'knight-base-vs-evolved-430.png')});
    }
+   if(width===430){
+    await page.click('[data-screen="guide"] [data-go="home"]');
+    await page.click('[data-go="lab"]');
+    await page.click('[data-preset="swarm"]');
+    await page.click('#labRun');
+    await page.waitForFunction(()=>window.ShowdownQA?.snapshot().screen==='battle',{timeout:15000});
+    const perf=await page.evaluate(async()=>{
+      const times=[],start=performance.now();
+      await new Promise(resolve=>{
+       const run=now=>{times.push(now);if(times.length>=181)resolve();else requestAnimationFrame(run)};
+       requestAnimationFrame(run);
+      });
+      const intervals=times.slice(1).map((t,i)=>t-times[i]).sort((a,b)=>a-b);
+      const pct=p=>intervals[Math.min(intervals.length-1,Math.floor((intervals.length-1)*p))];
+      const snap=ShowdownQA.snapshot();
+      return{width:430,frames:intervals.length,elapsedMs:performance.now()-start,p50IntervalMs:pct(.5),p95IntervalMs:pct(.95),slowFrames:intervals.filter(x=>x>33.3).length,unitCount:snap.units.length,effects:snap.effects,phase:snap.phase};
+    });
+    assert(perf.frames===180&&perf.elapsedMs>0,'Swarm frame sample did not complete');
+    report.swarmPerformance=perf;
+    await page.screenshot({path:path.join(out,'swarm-430.png')});
+   }
    await page.close();
   }
   assert.deepStrictEqual(report.errors,[],'JavaScript errors');
