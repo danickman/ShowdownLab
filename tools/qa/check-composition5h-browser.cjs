@@ -20,7 +20,7 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
  const stageSource=fs.readFileSync(path.join(root,'v3/combat-staging.js'),'utf8');
  const exact=JSON.parse(fs.readFileSync(path.join(out,'formation-exact.json'),'utf8'));
  const exactRows=exact.rows;
- for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120'){
+ for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120']){
   const count=fixture==='live120'||fixture==='formation120'||fixture==='exact120'?120:fixture==='exact80'?80:fixture,live=fixture==='live120'||fixture==='formation120',formation=fixture==='formation120',exactFixture=String(fixture).startsWith('exact');
   const exactRow=exactFixture?exactRows.find(r=>r.count===count):null;
   if(exactFixture&&!exactRow)throw Error('missing exact formation fixture '+count);
