@@ -152,6 +152,10 @@ jobs:
         run: |
           mkdir -p "${{ runner.temp }}/turn5h-browser"
           node tools/qa/check-formation-visual-snapshots.cjs
+      - name: Capture exact tri-zone combat snapshots
+        env:
+          QA_LANES_RECEIPT: ${{ runner.temp }}/turn5h-browser/zones-exact.json
+        run: node tools/qa/check-zones-visual-snapshots.cjs
       - name: Matched authored sprite camera screenshots
         env:
           NODE_PATH: tools/qa/node_modules
