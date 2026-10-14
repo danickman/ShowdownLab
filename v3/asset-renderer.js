@@ -248,6 +248,17 @@ function drawAuthored(c,type,x,y,size,team,o){
   }
   // A failed optional high-resolution portrait still has a valid authored idle.
   if(o.presentation&&rec.error&&src===fighter.presentationUrl){src=fighter.urls.idle;rec=load(src)}
+  // While a later form is still downloading, use an already decoded lower authored form.
+  // Never substitute a procedural silhouette or block combat on optional art.
+  if(!rec.ready&&registration){
+    const lower=registration===ultimates[type]?[evolutions[type],bases[type],null]:registration===evolutions[type]?[bases[type],null]:[null];
+    for(const pack of lower){
+      const url=pack?(o.presentation?pack.presentationUrl:(pack.urls[state]||pack.urls.idle)):(o.presentation?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle));
+      if(!url)continue;
+      const fallback=cache.get(url);
+      if(fallback?.ready){registration=pack;src=url;rec=fallback;break}
+    }
+  }
   if(rec.error||missing.has(src))return false;
   if(!rec.ready){if(o.presentation){const f=presentationFrame(o.presentationBounds||{width:c.canvas.width,height:c.canvas.height});drawTeamRing(c,f.ringX,0,f.ringSize,team,f.ringY)}else drawTeamRing(c,x,y,size,team,y,o.density||0);return 'loading'}
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
