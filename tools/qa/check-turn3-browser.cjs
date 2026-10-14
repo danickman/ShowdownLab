@@ -18,7 +18,7 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
    await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.FighterAssets&&window.ShowdownAdapter,{timeout:90000});
    const homeAssets=await page.evaluate(()=>FighterAssets.assetStatus());
-   assert(homeAssets.requested<=4,'Home requested unnecessary authored forms: '+JSON.stringify(homeAssets));
+   assert(homeAssets.requested<=4,'Home requested unnecessary authored forms: '+JSON.stringify(homeAssets)+' '+JSON.stringify(await page.evaluate(()=>performance.getEntriesByType('resource').filter(x=>x.name.includes('/assets/authored/')).map(x=>x.name))));
    assert(homeAssets.total>=200,'full roster manifest unexpectedly reduced');
    report.screens.push({width,height,homeAssets});
    await page.click('[data-go="lab"]');
