@@ -9,7 +9,7 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
 (async()=>{
  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
  const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
- const report={browser:await browser.version(),note:'Chromium emulation only; not physical iPhone Safari',screens:[],dragon:[],errors:[],failedResponses:[],passed:false};
+ const report={browser:await browser.version(),note:'Chromium emulation only; not physical iPhone Safari',screens:[],dragon:[],knight:[],errors:[],failedResponses:[],passed:false};
  try{
   for(const [width,height] of [[430,932],[390,844],[375,667]]){
    const page=await browser.newPage();
@@ -53,12 +53,34 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
      const canvas=await page.$('.sl-guide-card[data-guide="dragon"] canvas.sl-guide-art');
      await canvas.screenshot({path:path.join(out,'dragon-guide-L'+level+'.png')});
     }
+    const knight=await page.evaluate(async()=>{
+     const urls=Object.entries(FighterAssets.authored.knight.urls);
+     const sourceDimensions=[];
+     for(const [pose,url] of urls){
+      const img=new Image();img.src=url;await img.decode();
+      sourceDimensions.push({pose,width:img.naturalWidth,height:img.naturalHeight,url});
+     }
+     const cv=document.createElement('canvas');cv.width=430;cv.height=360;cv.id='qa-knight-render';
+     cv.style.cssText='position:fixed;left:0;top:0;z-index:999999;width:430px;height:360px';
+     document.body.appendChild(cv);
+     const c=cv.getContext('2d');c.fillStyle='#f7f1dd';c.fillRect(0,0,430,360);
+     for(const [level,x,y] of [[1,110,155],[2,315,155],[4,110,330],[5,315,330]]){
+      if(!FighterAssets.draw(c,'knight',x,y,88,'blue',{level,action:'idle',density:2,time:2500,id:100+level}))throw Error('Missing Knight render L'+level);
+     }
+     let drawn=0;const a=c.getImageData(0,0,430,360).data;for(let i=0;i<a.length;i+=4)if(a[i]<75&&a[i+1]<85&&a[i+2]<95)drawn++;
+     return{sourceDimensions,darkOutlinePixels:drawn};
+    });
+    for(const a of knight.sourceDimensions)assert.strictEqual(a.width,256,'Base Knight pose '+a.pose+' not high resolution');
+    assert(knight.sourceDimensions.length>=7);
+    assert(knight.darkOutlinePixels>1000,'Knight artwork unexpectedly blank');
+    report.knight.push(knight);
+    await (await page.$('#qa-knight-render')).screenshot({path:path.join(out,'knight-base-vs-evolved-430.png')});
    }
    await page.close();
   }
   assert.deepStrictEqual(report.errors,[],'JavaScript errors');
   assert.deepStrictEqual(report.failedResponses,[],'asset errors');
   report.passed=true;
-  console.log('PASS: browser touch geometry at three iPhone portrait viewports; Dragon L1-L5 nonblank authored presentation and screenshots');
+  console.log('PASS: browser touch geometry at three iPhone portrait viewports; Dragon L1-L5 and 256px Base Knight form comparisons');
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
