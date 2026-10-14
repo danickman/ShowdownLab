@@ -20,6 +20,7 @@ jobs:
       - name: Attribute damage by fighter type across baseline and locality
         env:
           QA_LANES_RECEIPT: zone-damage.json
+          QA_DAMAGE_SEEDS: '1337,7301,8675309'
         run: node tools/qa/check-zone-damage.cjs
       - name: Upload attributable damage receipt
         if: always()
