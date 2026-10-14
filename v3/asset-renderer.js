@@ -100,6 +100,24 @@ function preloadSpecies(type,level=1){
 function preloadBattle(blue={},red={},blueLevels={},redLevels={}){
  for(const [army,levels] of [[blue,blueLevels],[red,redLevels]])for(const [type,count] of Object.entries(army||{}))if(count>0)preloadSpecies(type,levels?.[type]||1)
 }
+function offlinePackUrls(type,level=1){
+ if(!authored[type])return [];
+ const base=authored[type],form=selectedArt(type,level);
+ return [...new Set([base.urls.idle,...Object.values((form||base).urls)])];
+}
+async function prepareOffline(type,level=1){
+ const urls=offlinePackUrls(type,level);
+ if(!urls.length)throw Error('Unknown fighter');
+ if(!navigator?.serviceWorker?.controller)throw Error('Open this game online and reload once to enable offline downloads');
+ const channel=new MessageChannel();
+ const result=new Promise((resolve,reject)=>{
+   channel.port1.onmessage=e=>{channel.port1.close();e.data?.ok?resolve(e.data):reject(Error(e.data?.error||'Offline artwork unavailable'))};
+ });
+ navigator.serviceWorker.controller.postMessage({type:'CACHE_FIGHTER_PACK',urls},[channel.port2]);
+ await result;
+ // Readiness is granted only after the worker has confirmed every cache write.
+ return {fighter:type,level,count:urls.length,ready:true};
+}
 function assetStatus(){const urls=allAuthoredUrls();return{requested:urls.filter(u=>cache.has(u)).length,ready:urls.filter(u=>cache.get(u)?.ready).length,errors:urls.filter(u=>cache.get(u)?.error).length,total:urls.length}}
 
 function drawTeamRing(c,x,y,size,team,ground=y,density=0){
@@ -296,5 +314,5 @@ function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(Strin
 function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
 function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}for(const [form,packs]of [['base',bases],['evolved',evolutions],['ultimate',ultimates]])if(packs[type]){states[form]={};for(const [state,url]of Object.entries(packs[type].urls)){const r=cache.get(url);states[form][state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,loading:urls.filter(u=>!cache.get(u)?.ready&&!cache.get(u)?.error),missing:[...missing],byFighter}}
 preloadHome();
-window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,preloadHome,preloadRoster,preloadSpecies,preloadBattle,assetStatus,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
+window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,preloadHome,preloadRoster,preloadSpecies,preloadBattle,assetStatus,offlinePackUrls,prepareOffline,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();
