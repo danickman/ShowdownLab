@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '22'
       - name: Verify pinned SHA256 release manifest
-        run: node tools/qa/release-hashes.cjs
+        run: node tools/qa/release-hashes.cjs --verify
       - name: Ordered 300-duel sweep
         env:
           QA_RECEIPT: duel-receipt.json
