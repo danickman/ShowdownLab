@@ -79,6 +79,7 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
     assert(knight.darkOutlinePixels>1000,'Knight artwork unexpectedly blank');
     report.knight.push(knight);
     await (await page.$('#qa-knight-render')).screenshot({path:path.join(out,'knight-base-vs-evolved-430.png')});
+    await page.evaluate(()=>document.querySelector('#qa-knight-render')?.remove());
    }
    if(width===430){
     await page.click('[data-screen="guide"] [data-go="home"]');
