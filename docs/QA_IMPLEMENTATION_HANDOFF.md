@@ -113,3 +113,8 @@ Files and commits:
 The original Base idle was ~80px; new 256px poses provide more source detail at phone battle scale. Source sheet has no distinct seventh high-resolution defeat pose, so the existing approved defeat image is explicitly preserved, not silently cloned from hit. No new art generation calls and no combat/stat changes.
 
 **Promotion requested by this handoff commit:** wait for the one-time GitHub Actions job to finish and verify its exact resulting commit SHA. Follow-up branch CI/browser regression is required before declaring runtime improvement shipped to the QA branch. Raw frame subjective visual acceptance and physical iPhone Safari remain open. No merge to main or production publish authorized. Original Turn 4 loading/caching remains unchanged.
+
+## Turn 3.5 revised chroma-edge export — second QA promotion
+First branch promotion succeeded as `777168ad2854dc4095c363625bea051502bdb3fc`, replacing exactly six Base Knight poses with 256×256 WebPs. Browser and combat CI subsequently passed on feature branch; source images visibly sharper.
+Direct inspection of GitHub's exported WebPs revealed a narrow green-key fringe, not visible in simple decode/bounds QA. Repair commits `b77b0bb` and `55ddb3b` update the *extraction* to desaturate all remaining matte pixels and add a signed-arithmetic threshold check (avoid uint8 overflow) for unexpected chroma.
+This checkpoint commits a second targeted re-export of the *same* six approved poses only. Do not touch defeat/presentation or Evolved/Ultimate. Re-run asset decode and browser form comparison after promotion. Original Turn 4 remains deferred.
