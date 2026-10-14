@@ -118,4 +118,13 @@ console.log('ENGAGEMENT SPIKE PAIRS '+JSON.stringify(rows.map(r=>({count:r.count
  control:r.versions.control.winner,candidate:r.versions['soft-engagement'].winner,
  frameDelta:r.versions['soft-engagement'].frames-r.versions.control.frames}))));
 if(process.env.QA_ENGAGEMENT_RECEIPT)fs.writeFileSync(process.env.QA_ENGAGEMENT_RECEIPT,JSON.stringify({rows},null,2));
+const total=(key,fn)=>rows.reduce((n,row)=>n+fn(row.versions[key]),0);
+const divergence=rows.filter(row=>row.versions.control.winner!==row.versions['soft-engagement'].winner).length;
+const roleRegressions=roles.map(role=>{const old=total('control',v=>v.byRole[role].damage),newValue=total('soft-engagement',v=>v.byRole[role].damage);return{role,old:Math.round(old),candidate:Math.round(newValue),retention:old>0?+(newValue/old).toFixed(3):null}})
+ .filter(x=>x.old>=500&&x.retention<.85);
+const oldCells=total('control',v=>v.occupiedHitCells),newCells=total('soft-engagement',v=>v.occupiedHitCells);
+const verdict={decision:divergence||roleRegressions.length||newCells<oldCells*1.10?'REJECT_OR_REDESIGN':'REVIEW_MORE',
+ reason:'Exploratory four-case gate, not acceptance of visual fun or long-run performance',
+ winnerDivergences:divergence,roleRegressions,hitCellGain:oldCells?+(newCells/oldCells-1).toFixed(3):null};
+console.log('ENGAGEMENT PROTOTYPE DECISION '+JSON.stringify(verdict));
 console.log('PASS: soft engagement spike tested against unchanged live-core geometry; QA only');
