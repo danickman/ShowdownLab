@@ -17,12 +17,21 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
  await page.goto('http://127.0.0.1:'+server.address().port+'/index.html?qa=1',{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.FighterAssets&&window.ShowdownCamera&&document.body.classList.contains('assets-ok'),{timeout:90000});
  const camSource=fs.readFileSync(path.join(root,'v3/camera.js'),'utf8');
- for(const count of [20,40,60,80,120]){
-  const result=await page.evaluate(async({count,camSource})=>{
+ for(const fixture of [20,40,60,80,120,'live120']){
+  const count=fixture==='live120'?120:fixture,live=fixture==='live120';
+  const result=await page.evaluate(async({count,camSource,live})=>{
    const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
    let rng=1337;const rand=()=>{rng=(Math.imul(1664525,rng)+1013904223)>>>0;return rng/4294967296};
-   const units=Array.from({length:count},(_,i)=>({id:i+1,type:types[i%10],team:i%2?'red':'blue',level:1+i%5,hp:100,
+   let units=Array.from({length:count},(_,i)=>({id:i+1,type:types[i%10],team:i%2?'red':'blue',level:1+i%5,hp:100,
     x:.5+(i%2?.08:-.08)+(rand()-.5)*.20,y:.24+rand()*.55}));
+   if(live){
+    ShowdownAdapter.setSpeed(1);
+    ShowdownAdapter.startMatch({blue:{knight:20,goose:20,sniper:20},red:{beetank:20,goblin:20,barbarian:20},blueLives:1,redLives:1,seed:7301});
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const snapshot=ShowdownQA.snapshot();
+    if(snapshot.units.length!==120)throw Error('live combat snapshot not 120 units: '+snapshot.units.length);
+    units=snapshot.units.map(u=>({id:u.id,type:u.type,team:u.team,level:u.level,hp:100,x:u.x,y:u.y}));
+   }
    await Promise.all([...new Set(units.map(u=>u.type))].map(t=>FighterAssets.preloadSpecies(t)));
    const candidateSource=camSource.replace('density>55?.80','density>55?.74');
    if(candidateSource===camSource)throw Error('camera candidate substitution failed');
@@ -50,12 +59,12 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
    }
    // Save pixels rather than relying on CSS viewport clipping.
    const png=cvs.toDataURL('image/png');cvs.remove();return {count,results,png};
-  },{count,camSource});
+  },{count,camSource,live});
   assert(result.results.every(x=>x.drawn===count),'authored fighter draw missing for '+count+': '+JSON.stringify(result.results));
-  fs.writeFileSync(path.join(out,'composition-'+count+'.png'),Buffer.from(result.png.split(',')[1],'base64'));
-  report.cases.push({count,results:result.results.map(({mode,drawn,zoom})=>({mode,drawn,zoom}))});
+  fs.writeFileSync(path.join(out,'composition-'+fixture+'.png'),Buffer.from(result.png.split(',')[1],'base64'));
+  report.cases.push({count,fixture,results:result.results.map(({mode,drawn,zoom})=>({mode,drawn,zoom}))});
  }
  await page.close();assert.deepStrictEqual(report.failures,[]);
- report.passed=true;console.log('PASS: paired authored-sprite composition screenshots at 20/40/60/80/120 fighters');
+ report.passed=true;console.log('PASS: paired authored-sprite composition screenshots at 20/40/60/80/120 fighters plus one fixed real-combat snapshot');
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2));await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
