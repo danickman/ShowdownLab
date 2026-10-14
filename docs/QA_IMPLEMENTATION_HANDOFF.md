@@ -170,3 +170,16 @@ All changes are on draft PR #14 feature branch. Main/production untouched. Requi
 - Original image count at startup was 240 authored packs. Current traced startup requests are 12; this is a request-count observation, **not** verified transfer byte, first-paint time, Safari FPS or offline performance.
 - Existing `sw.js` and `vercel.json` unchanged. No bundled cache-consistency design delivered yet. Turn 4B remains blocked on designing/testing revisioned JS/HTML and offline install/update recovery; don't merge based on Turn 4A alone.
 - Production has not been authorized or deployed. PR #14 remains DRAFT.
+
+## Turn 4B bounded cache checkpoint — 2026-10-14
+This packet introduces a revision-aware **image cache only**, not a claim of atomic offline application releases.
+
+Changed files / commits:
+- `290d412` `sw.js`: cache namespace `showdown-lab-stream4b1`. Cache-first **only** same-origin `/v3/assets/**` WebP/PNG/JPEG with explicit `?v=` revision. HTML, modules, other requests remain network-first. Cache only HTTP 200 successful responses, never failed/partial responses; offline previously cached same-version image/modules/navigation fallback; previous Showdown Lab cache namespaces deleted on activation. Existing shell remains mandatory at install.
+- `09887d7` `tools/check-launch-guide.cjs`: scoped CacheStorage test mock updated for new service worker.
+- `1fa9734` `tools/qa/check-cache4b.cjs`: VM service worker runtime tests for cache-first versioned image, revision change/new URL fetch, network-first JS, offline cached JS/navigation, no caching 404, failed mandatory install, previous-namespace cleanup.
+- `bbf818f` `.github/workflows/qa-duels.yml`: execute cache 4B and launch-guide compatibility checks in CI.
+
+GitHub Actions [run 38513313594](https://github.com/danickman/ShowdownLab/actions/runs/38513313594) on tested head `bbf818f0f87de6d0bc25e74453e03e8fd37cbe30`: **SUCCESS** for node-regressions (300 ordered duels + Turn 4A stream + Turn 4B cache + legacy Guide/SW + evolution/Ultimate) and browser-turn3 (Chromium viewport/Dragon/Knight/phone touch). Independent Knight candidate art job was not required for cache acceptance and was in progress at the time of verification.
+
+Open high-risk conditions: `skipWaiting`/activation deletes prior cache, and executable modules are fetched individually. Therefore no atomic shell+module consistency guarantee exists across interrupted deployment, active old clients, or offline upgrade. Do not claim Turn 4 is fully complete; atomic/versioned release bundle, interrupted upgrade, explicit offline readiness per selected fighter pack, slow network and memory/device metrics require a separate packet and additional QA. Global `vercel.json` no-store was deliberately **not** changed. No production deployment, no main merge, PR #14 DRAFT. Do not deploy without release authorization.
