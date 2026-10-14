@@ -77,11 +77,11 @@ jobs:
       - name: Install extraction dependencies
         run: python -m pip install --disable-pip-version-check pillow numpy scipy
       - name: Generate six larger Base Knight pose candidates
-        run: python tools/rebuild-base-knight.py
+        run: python tools/rebuild-base-knight.py --dest tools/qa/knight-candidate
       - name: Upload proposed Knight assets and contact sheet
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: knight-base-256-candidate
-          path: tools/qa/.generated-knight
+          path: tools/qa/knight-candidate
           if-no-files-found: error
