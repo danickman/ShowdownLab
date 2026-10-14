@@ -62,14 +62,35 @@ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http:
     let drawn=0;for(const {u,p} of ordered){const kind=u.type==='dragon'?'large':['turtle','beetank'].includes(u.type)?'heavy':['goblin','goose'].includes(u.type)?'small':'normal';
       const ok=FighterAssets.draw(c,u.type,p.x,p.y,cam.unitSize(kind,count),u.team,{level:u.level,action:'idle',density:count,time:2400,id:u.id});if(ok)drawn++;}
     ctx.drawImage(own,index*430,0);
-    results.push({mode:index?'candidate':'baseline',drawn,zoom:cam.zoom,arena:a});
+    // Alpha-aware occlusion: paint each real authored sprite in isolation and
+    // count opaque pixels not covered by any subsequently drawn sprite.
+    // Sample every 3rd screen pixel for bounded Chromium QA cost.
+    const maskCanvas=document.createElement('canvas');maskCanvas.width=430;maskCanvas.height=932;
+    const maskCtx=maskCanvas.getContext('2d',{willReadFrequently:true});
+    const occupied=new Uint8Array(Math.ceil(430/3)*Math.ceil(932/3));
+    let visibleBodies=0,mostlyHidden=0,opaqueTotal=0,visibleTotal=0;
+    for(let i=ordered.length-1;i>=0;i--){
+      const {u,p}=ordered[i],kind=u.type==='dragon'?'large':['turtle','beetank'].includes(u.type)?'heavy':['goblin','goose'].includes(u.type)?'small':'normal';
+      maskCtx.clearRect(0,0,430,932);
+      FighterAssets.draw(maskCtx,u.type,p.x,p.y,cam.unitSize(kind,count),u.team,{level:u.level,action:'idle',density:count,time:2400,id:u.id});
+      const rgba=maskCtx.getImageData(0,0,430,932).data;let total=0,visible=0;
+      for(let y=0,iy=0;y<932;y+=3,iy++)for(let x=0,ix=0;x<430;x+=3,ix++){
+        const pixel=(y*430+x)*4;if(rgba[pixel+3]<96)continue;
+        total++;const bin=iy*Math.ceil(430/3)+ix;
+        if(!occupied[bin])visible++;
+        occupied[bin]=1;
+      }
+      opaqueTotal+=total;visibleTotal+=visible;
+      if(total>=12){if(visible/total>=.45)visibleBodies++;if(visible/total<.15)mostlyHidden++;}
+    }
+    results.push({mode:index?'candidate':'baseline',drawn,zoom:cam.zoom,arena:a,alphaVisibilityRatio:+(visibleTotal/Math.max(1,opaqueTotal)).toFixed(4),recognizableProxy:visibleBodies,mostlyHidden});
    }
    // Save pixels rather than relying on CSS viewport clipping.
    const png=cvs.toDataURL('image/png');cvs.remove();return {count,results,png};
   },{count,camSource,stageSource,live,formation});
   assert(result.results.every(x=>x.drawn===count),'authored fighter draw missing for '+count+': '+JSON.stringify(result.results));
   fs.writeFileSync(path.join(out,'composition-'+fixture+'.png'),Buffer.from(result.png.split(',')[1],'base64'));
-  report.cases.push({count,fixture,note:formation?'visual-only y stretch proxy, not actual candidate simulation positions':undefined,results:result.results.map(({mode,drawn,zoom})=>({mode,drawn,zoom}))});
+  report.cases.push({count,fixture,note:formation?'visual-only y stretch proxy, not actual candidate simulation positions':undefined,results:result.results.map(({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden})=>({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden}))});
  }
  await page.close();assert.deepStrictEqual(report.failures,[]);
  report.passed=true;console.log('PASS: paired authored-sprite composition screenshots at 20/40/60/80/120 fighters plus one fixed real-combat snapshot (baseline vs guarded staging)');
