@@ -876,3 +876,8 @@ CI 38619374891 passed all required jobs. Valid target acquisition was near 100 p
 
 - [CI 38619889886](https://github.com/danickman/ShowdownLab/actions/runs/38619889886) passed all required jobs including 3-seed research. Experimental locality assassin vanish trigger at 0.70 vs existing 0.42 improved effective damage 185.57 to 229.57, hits 3 to 4, in-range samples 3 to 17, but total observed Assassin living frames declined from 2132 to 875 (59% less), while original baseline delivered 1326.66 damage. This is NOT acceptable evidence to promote vanish70; likely exposes Assassins earlier. No runtime changes.
 - Commits `3f22f3a` and `d68f331` add a more conservative **VM-only** vanish50 candidate and print both candidate outcomes, exposure and normalized damage; CI pending. Never confuse source-instrumented candidates with production fixes. Next compare reach, credited damage, lifespan and winners; prioritize contact **and** survivability. No merge/deployment.
+
+
+### October 14 — Assassin vanish candidate decision
+
+CI 38620768110 emitted complete three-seed metrics although the damage research job was cancelled. Experimental locality Assassin at vanish threshold 0.42 recorded damage 185.57, 3 hits, 2132 alive frames. Threshold 0.50 recorded damage 167.2, 3 hits, 1549 alive frames. Threshold 0.70 recorded damage 229.57, 4 hits, 875 alive frames. Neither restored original baseline (damage 1326.66, 11 hits). Reject both thresholds for promotion. Seven standard CI jobs passed. Continue exploring role-preserving target access/formation, not damage buffs. No merge or deployment.
