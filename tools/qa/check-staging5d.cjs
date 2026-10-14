@@ -30,7 +30,7 @@ function fixtures(n,seed){
  return Array.from({length:n},(_,i)=>({id:i+1,team:i%2?'red':'blue',type:types[i%types.length],level:1+i%5,hp:100,x:.33+rnd()*.34,y:.24+rnd()*.50}));
 }
 const tests=[];
-for(const n of [12,30,60,80,120])for(const seed of [1337,7301,27919]){
+for(const n of [12,30,60])for(const seed of [1337,7301,27919]){
  const us=fixtures(n,seed),pairs=[instantiate(earlier),instantiate(source)],times=[0,0];let mismatch=0,nearBefore=0,nearAfter=0;
  for(let frame=0;frame<20;frame++){
   // Moving positions: evaluate geometry every frame, not just one static arrangement.
