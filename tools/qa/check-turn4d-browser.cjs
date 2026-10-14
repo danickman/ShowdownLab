@@ -38,6 +38,12 @@ const collect=async(page,label)=>{
  await page.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:30000});
  assert(await page.evaluate(()=>!!navigator.serviceWorker.controller),'service worker failed to control reloaded page');
  report.runs.push(await collect(page,'warm'));
+ await page.click('[data-go="roster"]');
+ await page.select('#offlineFormLevel','4');
+ await page.click('[data-offline-fighter="turtle"]');
+ await page.waitForFunction(()=>document.querySelector('[data-offline-fighter="turtle"]')?.dataset.ready==='true',{timeout:30000});
+ assert((await page.$eval('[data-offline-fighter="turtle"]',el=>el.textContent)).includes('OFFLINE READY'),'Offline UI did not confirm preparation');
+ await page.click('[data-screen="roster"] [data-go="home"]');
  const prepared=await page.evaluate(()=>FighterAssets.prepareOffline('turtle',4));
  assert(prepared.ready&&prepared.count>=7,'Ultimate Turtle offline pack failed preparation');
  report.offlinePack=prepared;
