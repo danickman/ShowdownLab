@@ -929,3 +929,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - At inspection, [CI 38625916946](https://github.com/danickman/ShowdownLab/actions/runs/38625916946) had all seven standard integrity/browser/PWA/Node/art checks passed; extended three-seed active-front job was still in progress. Do not claim that active combat is distributed until the sector result is available.
 - Commit `12737c7` adds QA-only `FRONTLINE ROLE EXPOSURE` comparison for Beetank, Barbarian, Turtle and Knight: effective damage, hits, living frames, damage received and hits received, with damage normalized by living frames across baseline and connected-front candidates. This distinguishes reduced engagement from shortened survival before targeting a heavy role buff or changing simulation movement. This new diagnostic requires its own CI. Preserve experimental strong Assassin and protected runtime; no merge or deployment.
+
+
+### October 14 — verified active battle fronts
+
+- [CI 38625916946](https://github.com/danickman/ShowdownLab/actions/runs/38625916946) fully passed. Mean actively contested bands across 12 matched scenarios at frames 30/60/90: baseline **3.00/2.083/1.083**, wide locality **2.833/1.750/1.417**, connected fronts with strong Assassin **3.00/2.00/1.00**, connected fronts with HP112 **3.00/1.667/1.167**. Thus connected fronts spread initial deployment (spanY ~0.784 vs baseline ~0.590) and restore Assassin participation, but **do not sustain multiple combat fronts**. Do not promote on deployment spread alone.
+- Added frontline exposure profiler in commit `12737c7` (Knight, Beetank, Turtle, Barbarian damage/hits and received damage/hits normalized to living frames); later run needed for this specific instrumentation. Next investigate target retention/engagement cross-front drift, likely preserve per-front locality without starving melee/Assassin. No changes to runtime core, merge or deployment.
