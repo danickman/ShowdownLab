@@ -135,3 +135,15 @@ FX budget should be **event-weighted**, not only density cutoff; reserve capacit
 - Preserve as research baseline: ±0.20 connected fronts, Beetank-only narrow persistence, experimental Assassin HP132/dmg31/dodge24%/vanish0.70.
 - Prioritize: meaningful engagement behavior, correct metrics, stable camera composition, role readability, performance headroom, in-game spectacle tied to real mechanics.
 - Do not infer production readiness from passing Node VM experiments alone.
+
+
+## Independent research cross-check (source-verified)
+
+1. **Reynolds, *Steering Behaviors for Autonomous Characters* (GDC 1999)** — https://www.red3d.com/cwr/papers/1999/gdc99steer.html. Distinguishes goal-setting/strategy, steering and locomotion; separation is a local collision behavior, not a whole-battle objective. Applied here to distinguish engagement assignment from unit-specific attacks and avoidance.
+2. **Gorniak & Davis, *SquadSmart — Hierarchical Planning and Coordinated Plan Execution for Squads of Characters* (AIIDE 2007)** — https://ojs.aaai.org/index.php/AIIDE/article/view/18775. Demonstrates group coordination layered over individual agents with bounded real-time planning. A full HTN is unnecessary for this project, but provides published precedent for a light engagement director instead of each fighter independently chasing the nearest enemy.
+3. **Van den Berg et al., *Reciprocal n-body Collision Avoidance* (ORCA)** — https://gamma.cs.unc.edu/ORCA/publications/ORCA.pdf. Shows multi-agent collision avoidance; it does not supply engagement strategy or roles. Treat as a future engineering reference only if bounded slots + grid separation fail measured visual and runtime tests.
+4. **Riot Games, *League's VFX Style Guide* (2017)** — https://nexus.leagueoflegends.com/en-us/2017/10/dev-leagues-vfx-style-guide/; and *Clarity in League* (2021) — https://www.leagueoflegends.com/en-us/news/dev/clarity-in-league/. Effects should communicate actual hitbox, power, source, action timing and hierarchy without overwhelming silhouettes. Apply to Dragon cones, Beetank contact, Goose stun, spells and ultimate cues, especially in crowd scenarios.
+5. **MDN, *Optimizing canvas*** — https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas. Supports static pre-rendering, selective layered canvases, avoiding costly per-frame image scaling and minimizing canvas state changes; benchmark first because allocating too many high-DPR buffers can increase iPhone memory pressure.
+6. **Apple, *Design for Safari 15* (WWDC21)** — https://developer.apple.com/videos/play/wwdc2021/10029/. Dynamic safe-area insets must inform battle controls and portrait/landscape layout. They cannot be assumed away based on a fixed canvas height.
+
+**Inference boundary:** These sources provide established *principles* for coordination, readability and performance. They do not validate the exact values (2–3 fronts, target-score weights, desired viewport percentages, or Knight guard multipliers) proposed for Showdown Lab. Those remain falsifiable game-specific hypotheses requiring instrumented browser and deterministic simulation tests.
