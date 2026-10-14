@@ -1,0 +1,24 @@
+'use strict';
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const files=['evolution-rules','base-dragon',...['knight','beetank','goose','sniper','dragon','assassin','mole','turtle','goblin','barbarian'].map(x=>'evolved-'+x),...['knight','dragon','barbarian','goblin','beetank','turtle','mole','sniper','assassin','goose'].map(x=>'ultimate-'+x),'asset-renderer'];
+const requests=[];
+class Image{set src(url){this.url=url;requests.push(url);this.naturalWidth=256;this.naturalHeight=256;this.onload?.()}}
+const ctx={Image,CustomEvent:class{},dispatchEvent(){},console,matchMedia:()=>({matches:false})};ctx.window=ctx;vm.createContext(ctx);
+for(const name of files)vm.runInContext(fs.readFileSync('v3/'+name+'.js','utf8'),ctx,{filename:name});
+const art=ctx.FighterAssets,first=art.assetStatus();
+assert.equal(requests.length,2,'only two Home portraits should be requested at initialization');
+assert(first.requested===2&&first.ready===2,'Home pack readiness');
+assert(requests.some(x=>x.includes('/knight/presentation.webp'))&&requests.some(x=>x.includes('/dragon/presentation.webp')),'Home character identity');
+const initialCount=requests.length;
+art.preloadRoster();
+const rosterCount=requests.length;
+assert(rosterCount>initialCount&&rosterCount<30,'roster navigation requests limited to presentation portraits');
+art.preloadBattle({knight:2},{dragon:1},{knight:1},{dragon:4});
+assert(requests.some(x=>x.includes('/knight/attack.webp')),'Base Knight combat pose requested');
+assert(requests.some(x=>x.includes('/dragon/ultimate/attack.webp')),'Ultimate Dragon combat pose requested');
+assert(!requests.some(x=>x.includes('/turtle/evolved/attack.webp')),'irrelevant form not fetched');
+assert(requests.length<75,'selected battle must not eagerly load all authored art');
+const before=requests.length;art.preloadBattle({knight:2},{dragon:1},{knight:1},{dragon:4});assert.equal(requests.length,before,'idempotent preload');
+assert.strictEqual(art.visualForm('dragon',4),'ultimate');
+assert(first.total>=200,'full roster count preserved');
+console.log('PASS: two mandatory Home assets; roster portraits; selected combat form demand; no irrelevant forms or duplicate requests; full roster unchanged');
