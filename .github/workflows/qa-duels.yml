@@ -112,6 +112,21 @@ jobs:
           node tools/qa/check-zone-terminal.cjs
           node tools/qa/check-zone-mirrors.cjs
 
+  wider-front-fast-signal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate six-variant battle test syntax
+        run: node --check tools/qa/check-zone-damage.cjs
+      - name: Single-seed early formation signal
+        env:
+          QA_DAMAGE_SEEDS: '1337'
+        run: node tools/qa/check-zone-damage.cjs
+
   damage-attribution-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 8
