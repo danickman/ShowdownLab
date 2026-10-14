@@ -1,6 +1,6 @@
 // Atomically installed shell/runtime: generated from index.html on 2026-10-14.
 // A new worker does not activate until every critical module has been cached.
-const CACHE='showdown-lab-release5e1';
+const CACHE='showdown-lab-release5f1';
 const SHELL=["/","/v3/index.html","/manifest.webmanifest?v=duel1","/icon-192.png?v=duel1","/icon-512.png?v=duel1","/icon-maskable-512.png?v=duel1","/apple-touch-icon.png?v=duel1","/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10","/v3/assets/authored/dragon/presentation.webp?v=ultimate-roster10"];
 const RUNTIME=[
   "/v3/v3.css?v=guide-room2",
@@ -38,7 +38,7 @@ const RUNTIME=[
   "/v3/arena-floor-art.js?v=garden2",
   "/v3/arena-stage.js?v=locations6",
   "/v3/arena-ambience.js?v=living1",
-  "/v3/combat-staging.js?v=dense5e1",
+  "/v3/combat-staging.js?v=cache5f1",
   "/v3/ultimate-effects.js?v=five1",
   "/v3/v3.js?v=perf5b1",
   "/v3/stage5b-ui.js?v=package14-upgradefix1",
