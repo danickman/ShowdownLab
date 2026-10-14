@@ -71,8 +71,9 @@ const collect=async(page,label)=>{
   const start=Date.now();
   await slow.goto(url,{waitUntil:'domcontentloaded',timeout:90000});
   await slow.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:90000});
+  await slow.waitForFunction(()=>FighterAssets.assetStatus().ready>=2,{timeout:90000});
   const elapsedMs=Date.now()-start;
-  const net=await collect(slow,'throttled-first-view');
+  const net=await collect(slow,'throttled-portraits-ready');
   report.slow={...net,elapsedMs,latencyMs:140,downloadBytesPerSec:180000,profile:'synthetic Chromium CDP throttle'};
   assert(elapsedMs<90000,'throttled initial view exceeded 90s');
   await slow.screenshot({path:path.join(out,'throttled-home.png')});
