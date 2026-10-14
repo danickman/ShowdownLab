@@ -21,7 +21,7 @@ const authored={
 for(const [type,spec] of Object.entries(authored)){
   if(!spec.states)spec.states={idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'signature',hit:'hit',defeat:'defeat'};
   spec.urls={};
-  for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${type==='knight'?'knight-base256':V}`;
+  for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${type==='knight'?'knight-base256b':V}`;
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
 const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt,sniper:window.SniperEvolvedArt,dragon:window.DragonEvolvedArt,assassin:window.AssassinEvolvedArt,mole:window.MoleEvolvedArt,turtle:window.TurtleEvolvedArt,goblin:window.GoblinEvolvedArt,barbarian:window.BarbarianEvolvedArt};
