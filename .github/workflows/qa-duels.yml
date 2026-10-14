@@ -102,6 +102,34 @@ jobs:
           path: ${{ runner.temp }}/turn3-browser
           if-no-files-found: warn
 
+  browser-composition5h:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: npm install --prefix tools/qa --no-audit --no-fund
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Matched authored sprite camera screenshots
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_VISUAL_OUTPUT: ${{ runner.temp }}/turn5h-browser
+        run: node tools/qa/check-composition5h-browser.cjs
+      - name: Upload A/B sprite contact sheets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn5h-composition
+          path: ${{ runner.temp }}/turn5h-browser
+          if-no-files-found: warn
+
   browser-turn4d:
     runs-on: ubuntu-latest
     timeout-minutes: 15
