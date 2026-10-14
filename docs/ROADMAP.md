@@ -1,3 +1,34 @@
+# Current operating priorities — 2026-10-14 (supersedes older milestone assumptions)
+
+**Read first:** [Battlefield engagement, canvas and whole-roadmap design review](BATTLEFIELD_ENGAGEMENT_AND_CANVAS_DESIGN_2026-10-14.md), especially "Second-pass decision review", and [QA implementation handoff](QA_IMPLEMENTATION_HANDOFF.md). The historical roadmap below is retained for traceability, **not a specification to reintroduce L10 levels, generate the entire roster anew, or reinstate a second HTML entrypoint**.
+
+**Current implementation state:** Ten authored Base/Evolved/Ultimate fighters, **five** active levels (L1 Base, L2 Evolved, L3 accent, L4 Ultimate ability, L5 enhanced Ultimate), six arena treatments and Quick/Draft/Ultimate Lab are present at different completion/release states. The user's **Choose Your Enemies** Ultimate Lab subpage has been implemented and browser-tested on QA branch. The canonical application entrypoint is root \`index.html\`; \`v3/index.html\` was intentionally removed. Preserve pinned PWA offline asset digests and the RC4 combat core. Never equate QA-branch capabilities with production release.
+
+### Updated north star
+
+**Strategically entertaining, visually readable and reliably fast auto-battles on iPhone 15 Pro Max, with authentic multiple local engagements in large armies.** Combat isn't made good by arbitrary separation, unconditional stickiness, extra HP or bigger VFX. Protect core character personality, player strategic choices, four spell interventions and dramatic battle outcomes.
+
+**Evidence correction:** Full seeded lifespan-normalized QA [38641118684](https://github.com/danickman/ShowdownLab/actions/runs/38641118684) did **not** prove connected-front ±0.20 is superior spatially to original baseline: original averaged 2.50/1.083/0.417 contested horizontal bands at 25/50/75% match life vs connected/strong-Assassin/Beetank-stick 1.833/0.833/0.333. This is a coarse band proxy, not true local contact groups. Preserve both reference baselines. Raw Knight speed 0.72→1.18 improved Knight hits but harmed Assassin/Beetank and overall midbattle contact; **do not promote**. Test role-aware Knight effective guarded movement instead.
+
+### Priority tracks and shippable boundaries
+
+| Priority | Work | Delivery test |
+|---|---|---|
+| P0 | Preserve terminal/replay/core safety, root-only PWA offline/upgrade integrity, input responsiveness, iPhone 80/120/180 benchmark | Deterministic same-seed/mirrored matches; Terminal/Turtle-v-Turtle; offline cold/warm/bad-update rollback; portrait touch and fps |
+| P1 | Correct battle metrics, investigate world-space contact components and local engagement intentions | Original vs connected vs tactical candidates; 10-fighter L1/L4/L5 QA, true separated fights + correct battle pacing |
+| P1 | Optimize per-tick shared target pressure, proximity and collision only as needed for CPU headroom | Profiling-guided parity; no 10× starvation, UI stalls, or unbounded agent-wide scans |
+| P1 | Camera / authored stage / FX coherence, true contact-led theatre and readable silhouettes | Same-seed iPhone portrait captures across small, 80, 120 and 180 fighters; effect tiers preserve signatures |
+| P1 | Make Draft, Quick and Ultimate Lab loops meaningfully strategic, fun and differentiated | Reinforce vs upgrade decisions; opponent AI variation; custom enemy selector exact rosters; spells useful; short replayable rounds |
+| P2 | Complete professional polish: sound/haptics (optional/muted and user-activated), onboarding, Guide, rewards, accessibility, settings | iOS touch and reduced motion; accurate abilities and results; readable UI |
+| P2 | Replay & longevity: saved armies, versioned seed/battle codes, Daily Challenge, genuine Boss Hunt or honest rename, richer arena identities | Replay deterministic/versioned; challenge/reward correctness, no return-to-home errors |
+| P3 | 26-unit roster, L10 progression, full engine/worker rewrite, network play | Defer; do not block current game's quality on future expansion |
+
+**Sequencing:** metrics and iPhone baseline → performance headroom → isolated tactical experiment with kill switch → character-wise balancing (Knight movement identity, Assassin flank access, Beetank ram contact, no blanket buffs) → canvas/theatre branch QA → Draft/AI/Lab experience polish → device and PWA hardening → user-approved single merge/deploy. Presentation-only improvements may run in parallel and release separately if isolated and fully gated. Do not let exploratory five/six-variant CI block an independent root release gate. One change hypothesis per experimental comparison; hard-gate promotion with contact, role, performance, watchability and terminal metrics.
+
+**Release rule:** all work stays on \`qa-turn1-duel-baseline\` until user authorizes promotion; do not merge/deploy without explicit consent. Update handoff with actual tests and commit SHAs after each turn.
+
+---
+
 ## Package 16 — Spectacle Overdrive RC
 Status: **RC candidate**. Five build turns are complete: spell choreography, persistent spell aftermath, combat spectacle, progression theatre, and cohesion/performance/mobile polish. Automated RC evidence is recorded in `docs/TEST_MATRIX.md`. Manual iPhone visual/tap QA remains post-deploy.
 
