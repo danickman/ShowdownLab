@@ -107,6 +107,6 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
   assert.deepStrictEqual(report.errors,[],'JavaScript errors');
   assert.deepStrictEqual(report.failedResponses,[],'asset errors');
   report.passed=true;
-  console.log('PASS: browser touch geometry at three iPhone portrait viewports; Dragon L1-L5 and 256px Base Knight form comparisons');
+  console.log('PASS: mobile viewport/Dragon/Knight and 180-frame swarm benchmark '+JSON.stringify(report.swarmPerformance));
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
