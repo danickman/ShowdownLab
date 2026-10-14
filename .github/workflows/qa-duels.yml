@@ -39,6 +39,8 @@ jobs:
         env:
           QA_STAGING5F_RECEIPT: staging5f-receipt.json
         run: node tools/qa/check-staging5f.cjs
+      - name: Turn 5G dense depth ordering
+        run: node tools/qa/check-depth5g.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
