@@ -45,6 +45,10 @@ jobs:
         env:
           QA_COMPOSITION_RECEIPT: composition5h-receipt.json
         run: node tools/qa/check-composition5h.cjs
+      - name: Turn 5H expanded staging experiment
+        env:
+          QA_STAGE_CANDIDATE_RECEIPT: staging5h-candidate.json
+        run: node tools/qa/check-staging5h-candidate.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -72,6 +76,7 @@ jobs:
             dense5e-receipt.json
             staging5f-receipt.json
             composition5h-receipt.json
+            staging5h-candidate.json
           if-no-files-found: warn
 
   browser-turn3:
