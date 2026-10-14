@@ -19,13 +19,18 @@ const deployMs=performance.now()-deployStart;
 const s0=A.getState();assert.equal(s0.units.length,300);
 // The full 300-fighter path must include 430x932 portrait camera and bounded
 // presentation offsets, not just simulation state integrity.
-for(const name of ['camera','combat-staging'])vm.runInContext(read(name),env);
+vm.runInContext(read('camera'),env);
+// Instrument cache size in QA only. Do not add debug UI/API in production.
+const stagingSource=read('combat-staging');
+assert(stagingSource.includes('return{prepare,point,offset,reset};'));
+vm.runInContext(stagingSource.replace('return{prepare,point,offset,reset};','return{prepare,point,offset,reset,qaCacheSize:()=>offsets.size};'),env);
 const portraitCamera=env.ShowdownCamera.create(430,932),portraitStage=env.CombatStaging.create();
 const beforePresentation=JSON.stringify(s0.units);
 const cameraStart=performance.now();for(let i=0;i<4;i++)portraitCamera.focus(s0.units);
 const cameraMs=performance.now()-cameraStart;
 const stageStart=performance.now();for(let i=0;i<4;i++)portraitStage.prepare(s0.units,portraitCamera,now+i*16.667);
 const stageMs=performance.now()-stageStart;
+assert.equal(portraitStage.qaCacheSize(),300,'all 300 living fighters must retain staging history');
 assert.equal(JSON.stringify(s0.units),beforePresentation,'staging cannot mutate real combat');
 let projected=0,outOfBounds=0;
 for(const u of s0.units){const p=portraitStage.point(u,portraitCamera);assert(Number.isFinite(p.x)&&Number.isFinite(p.y));projected++;if(p.x<portraitCamera.arena.x-1||p.y<portraitCamera.arena.y-1||p.x>portraitCamera.arena.x+portraitCamera.arena.w+1||p.y>portraitCamera.arena.y+portraitCamera.arena.h+1)outOfBounds++}
