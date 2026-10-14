@@ -88,6 +88,7 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
     await page.click('#labRun');
     await page.waitForFunction(()=>window.ShowdownQA?.snapshot().screen==='battle',{timeout:15000});
     const perf=await page.evaluate(async()=>{
+      ShowdownQA.clearRenderProfile();
       const times=[],start=performance.now();
       await new Promise(resolve=>{
        const run=now=>{times.push(now);if(times.length>=181)resolve();else requestAnimationFrame(run)};
@@ -96,9 +97,17 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
       const intervals=times.slice(1).map((t,i)=>t-times[i]).sort((a,b)=>a-b);
       const pct=p=>intervals[Math.min(intervals.length-1,Math.floor((intervals.length-1)*p))];
       const snap=ShowdownQA.snapshot();
-      return{width:430,frames:intervals.length,elapsedMs:performance.now()-start,p50IntervalMs:pct(.5),p95IntervalMs:pct(.95),slowFrames:intervals.filter(x=>x>33.3).length,unitCount:snap.units.length,effects:snap.effects,phase:snap.phase};
+      const prof=ShowdownQA.renderProfile().slice(-180);
+      const keys=['total','setup','arena','fighters','effects','overlay'];
+      const renderPasses=Object.fromEntries(keys.map(k=>{
+       const sorted=prof.map(x=>x[k]).sort((a,b)=>a-b);
+       const pct=v=>sorted[Math.floor((sorted.length-1)*v)]||0;
+       return[k,{p50Ms:pct(.5),p95Ms:pct(.95),maxMs:sorted[sorted.length-1]||0}];
+      }));
+      return{renderPasses,renderSamples:prof.length,width:430,frames:intervals.length,elapsedMs:performance.now()-start,p50IntervalMs:pct(.5),p95IntervalMs:pct(.95),slowFrames:intervals.filter(x=>x>33.3).length,unitCount:snap.units.length,effects:snap.effects,phase:snap.phase};
     });
     assert(perf.frames===180&&perf.elapsedMs>0,'Swarm frame sample did not complete');
+    assert(perf.renderSamples>=90,'Render-pass profiler failed to collect sufficient battle samples');
     report.swarmPerformance=perf;
     await page.screenshot({path:path.join(out,'swarm-430.png')});
    }
