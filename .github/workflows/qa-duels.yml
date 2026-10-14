@@ -27,6 +27,10 @@ jobs:
         env:
           QA_STRESS_RECEIPT: stress5c-receipt.json
         run: node tools/qa/check-stress5c.cjs
+      - name: Turn 5D staging geometry and performance parity
+        env:
+          QA_STAGING_RECEIPT: staging5d-receipt.json
+        run: node tools/qa/check-staging5d.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -50,6 +54,7 @@ jobs:
           path: |
             duel-receipt.json
             stress5c-receipt.json
+            staging5d-receipt.json
           if-no-files-found: warn
 
   browser-turn3:
