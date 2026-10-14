@@ -4,6 +4,9 @@ const sw=fs.readFileSync('sw.js','utf8');
 const html=fs.readFileSync('index.html','utf8');
 const required=[...html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)="([^"]+)"/g)].map(x=>x[1]).filter(x=>x.startsWith('/v3/')&&/\.(js|css)\?/.test(x));
 const dependencyList=JSON.parse(sw.match(/const RUNTIME=(\[[\s\S]*?\]);/)[1]);
+const shellList=JSON.parse(sw.match(/const SHELL=(\[[^\n]*\]);/)[1]);
+assert(shellList.includes('/'),'canonical root page must be precached');
+assert(!shellList.some(url=>url.split('?')[0]==='/v3/index.html'),'duplicate HTML must never return to offline shell');
 assert.deepEqual(dependencyList,required,'service-worker runtime dependencies must match current HTML');
 function create({failure=null,tamper=null,stores=new Map()}={}){
  const actions={},deleted=[],networkCalls=[],origin='https://showdownlab.vercel.app';
@@ -54,7 +57,7 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  const active=create({stores});
  await active.event('install');
  assert(stores.has(active.cacheName),'new install must create full bundle');
- assert.equal(active.networkCalls.length,required.length+8,'canonical root shell, runtime graph and Home art precached');
+ assert.equal(active.networkCalls.length,required.length+shellList.length,'canonical root shell, runtime graph and Home art precached');
  active.setOnline(false);
  // The waiting worker has not activated while older tabs remain.
  assert(stores.has('showdown-lab-old'),'waiting worker must not discard previous release');
