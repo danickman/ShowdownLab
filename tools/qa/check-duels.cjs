@@ -10,7 +10,7 @@ for(const f of ['evolution-rules','ultimate-abilities','legacy-sim-core','simula
 const A=ctx.ShowdownAdapter,types=Object.keys(A.BASE_COUNTS),results=[];
 assert.equal(types.length,10,'ten fighter freeze');
 for(const level of [1,4,5])for(const blue of types)for(const red of types){
-  A.resetMatch();queue.clear();now=0;
+  A.resetMatch(); // Preserve the core's scheduled RAF; it owns callback lifecycle.
   A.startMatch({blue:{[blue]:1},red:{[red]:1},blueLevels:{[blue]:level},redLevels:{[red]:level},blueLives:1,redLives:1,seed:1337});
   A.setSpeed(10);
   let frames=0;
