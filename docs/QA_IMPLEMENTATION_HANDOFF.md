@@ -250,3 +250,20 @@ Source-only draft PR #14 checkpoint; no main merge or production deploy.
 Integrity qualification: complete shell and 41 dependency bytes verified against pinned SHA-256 at SW installation. This guards against staggered content changes *during* staged install, even when server returns status 200. It is **not** full content-addressed/immutable object retention at the CDN and does not cryptographically authenticate the SW script itself. Physical Safari iPhone 15 Pro Max device acceptance and live Vercel/CDN deployment rollback remain open. Future updates MUST regenerate hashes and change the release cache revision; CI now fails if a required source changes without matching pinned hashes. No production deployment authorized.
 
 Recommended next: keep Turn 4 as implementation-complete with environment/device signoff pending, then create isolated Turn 5 renderer instrumentation/perf packet. Do not assert real iPhone acceptance until tested.
+
+## Turn 5A — battle-rendering optimization and first heavy-swarm benchmark — 2026-10-14
+
+**Implementation on draft PR #14, no main merge or production deploy:**
+- `a32b43f` `v3/v3.js`: memoize static fighter canvas raster signature (fighter, team, level, pixel size, presentation surface) in a WeakMap so repeated ResizeObserver/redraw requests do not reset/repaint unchanged Guide/Upgrade Bay/hero canvases. A `showdown:artready` event forces refresh when new authored imagery finishes loading, preserving correct lazy-art appearance. Battle daylight vignette gradient is reused by canvas size and density tier (≤6, 7–18, >18 live fighters), eliminating unnecessary CanvasGradient creation each frame while preserving its existing color/opacity.
+- `8ff3841`, `7aafae2`: root and v3 HTML entrypoints synchronized to `v3.js?v=perf5a1`.
+- `8f5bfdd` `sw.js`: staged runtime references `perf5a1` and release namespace `showdown-lab-release5a1`.
+- `99b8f73` `sw.js`: recomputed and pinned the two HTML SHA-256 digests plus changed runtime module SHA-256, leaving all unchanged module digests intact.
+- `a033f9e` `tools/qa/check-release4c.cjs`: current staged module revision expected.
+- `1108fb5` `.github/workflows/qa-duels.yml`: mandatory release-hash `--verify` guard restored. The temporary digest-generation workflow was a nonrelease intermediate; the succeeding CI passes pinned hash verification.
+- `7528cbe`, `4c3685f`, `efad639` `tools/qa/check-turn3-browser.cjs`: real Chromium portrait viewport swarm benchmark starts Lab swarm preset, samples 180 requestAnimationFrame intervals, and writes p50/p95, frame gaps >33.3ms, live units and effects into receipt and CI log. Removes the pre-existing fixed-position Knight QA screenshot overlay before interaction to avoid blocking taps.
+
+**Verified:** [GitHub Actions run 38520270283](https://github.com/danickman/ShowdownLab/actions/runs/38520270283), code head `efad6390d4d12cdaed13593bbecbd1cc9aff4ad0`: **5/5 jobs SUCCESS**: pinned SHA-256 verification, 300/300 seeded duels, evolution/Ultimate/Guide/stream/offline integrity, mobile Chromium art and controls, cached offline Turtle UI pack, interrupted HTTP-200 update rollback, and Knight candidate job.
+
+**Swarm profile receipt:** 430px portrait Chromium, 180 frames over ~3005.6ms; `p50IntervalMs=16.7`, `p95IntervalMs=16.7`, 0 >33.3ms intervals, **37 live fighters**, **27 rendered effects**, battle ongoing. This measures requestAnimationFrame cadence in CI, **not** isolated render CPU time, GPU busy time, a comparative before/after benchmark, or physical Safari FPS. No source-backed claim of percentage performance improvement. Screenshots and receipt in browser-turn3 artifact.
+
+**Next Turn 5B:** Add per-frame actual `draw()` duration profiler with conditional opt-in only under `?qa=1`; run side-by-side same-seed heavy-combat CI branch baseline vs optimized receipt. Profile `arena()`, `drawUnit()`, and `drawFX()` individually, then optimize the most expensive confirmed subpass. Maintain 1× default, combat determinism, and unchanged authored silhouettes/evolution powers. External iPhone 15 Pro Max Safari acceptance remains required before main merge/deploy.
