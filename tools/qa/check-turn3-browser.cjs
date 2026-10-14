@@ -146,6 +146,18 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
     assert(crowded.count>=80,'large battle did not render enough active fighters');
     report.denseBattle=crowded;
     await page.screenshot({path:path.join(out,'dense120-430.png')});
+    report.denseTiming=await page.evaluate(async()=>{
+      ShowdownQA.clearRenderProfile();
+      const timestamps=[];
+      await new Promise(resolve=>{
+        const onFrame=t=>{timestamps.push(t);if(timestamps.length>=91)resolve();else requestAnimationFrame(onFrame)};
+        requestAnimationFrame(onFrame);
+      });
+      const intervals=timestamps.slice(1).map((t,i)=>t-timestamps[i]).sort((a,b)=>a-b);
+      const draw=ShowdownQA.renderProfile().slice(-90).map(x=>x.total).sort((a,b)=>a-b);
+      return{frames:90,units:ShowdownQA.snapshot().units.length,frameP50Ms:intervals[44],frameP95Ms:intervals[85],slowFrames:intervals.filter(x=>x>33.3).length,drawP95Ms:draw[Math.floor(draw.length*.95)]||0};
+    });
+
 
    }
    await page.close();
@@ -153,6 +165,6 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
   assert.deepStrictEqual(report.errors,[],'JavaScript errors');
   assert.deepStrictEqual(report.failedResponses,[],'asset errors');
   report.passed=true;
-  console.log('PASS: mobile viewport/Dragon/Knight and 180-frame swarm benchmark '+JSON.stringify({swarm:report.swarmPerformance,dense:report.denseBattle}));
+  console.log('PASS: mobile viewport/Dragon/Knight and 180-frame swarm benchmark '+JSON.stringify({swarm:report.swarmPerformance,dense:report.denseBattle,denseTiming:report.denseTiming}));
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
