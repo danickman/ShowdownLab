@@ -119,12 +119,40 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
     assert(perf.renderSamples>=90,'Render-pass profiler failed to collect sufficient battle samples');
     report.swarmPerformance=perf;
     await page.screenshot({path:path.join(out,'swarm-430.png')});
+    await page.evaluate(()=>{
+      ShowdownAdapter.setSpeed(1);
+      ShowdownAdapter.startMatch({
+        blue:{knight:20,goose:20,sniper:20},
+        red:{beetank:20,goblin:20,barbarian:20},
+        blueLives:1,redLives:1,seed:7301
+      });
+    });
+    await page.waitForFunction(()=>ShowdownQA.snapshot().units.length>=100,{timeout:15000});
+    await new Promise(resolve=>setTimeout(resolve,800));
+    const crowded=await page.evaluate(()=>{
+      const snap=ShowdownQA.snapshot(),units=snap.units.filter(x=>x.box),arena=snap.arena;
+      let clipped=0,closeOverlap=0,boxesIntersect=0;
+      for(let i=0;i<units.length;i++){
+        const a=units[i].box;
+        if(a.left<arena.x-2||a.right>arena.x+arena.w+2||a.top<arena.y-2||a.bottom>arena.y+arena.h+2)clipped++;
+        for(let j=i+1;j<units.length;j++){
+          const b=units[j].box;if(units[i].team!==units[j].team)continue;
+          if(Math.abs(units[i].screenX-units[j].screenX)<20&&Math.abs(units[i].screenY-units[j].screenY)<26)closeOverlap++;
+          if(Math.min(a.right,b.right)>Math.max(a.left,b.left)&&Math.min(a.bottom,b.bottom)>Math.max(a.top,b.top))boxesIntersect++;
+        }
+      }
+      return{count:units.length,clipped,closeOverlap,boxesIntersect,arena};
+    });
+    assert(crowded.count>=80,'large battle did not render enough active fighters');
+    report.denseBattle=crowded;
+    await page.screenshot({path:path.join(out,'dense120-430.png')});
+
    }
    await page.close();
   }
   assert.deepStrictEqual(report.errors,[],'JavaScript errors');
   assert.deepStrictEqual(report.failedResponses,[],'asset errors');
   report.passed=true;
-  console.log('PASS: mobile viewport/Dragon/Knight and 180-frame swarm benchmark '+JSON.stringify(report.swarmPerformance));
+  console.log('PASS: mobile viewport/Dragon/Knight and 180-frame swarm benchmark '+JSON.stringify({swarm:report.swarmPerformance,dense:report.denseBattle}));
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
