@@ -905,3 +905,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - User requested a stronger Assassin candidate alongside battlefield distribution and checks on other fighter roles. Commit `3b610b2` replaces the overlong six-variant mandatory damage-smoke matrix (previous run 38623128022 was cancelled before output) with four targeted variants: original baseline, wide locality, connected-front HP112/vanish70, and connected-front stronger Assassin **HP132, damage31, dodge24%, vanish70** (versus base HP96/damage27/dodge18%). All buffs remain QA VM-only, not production. All other role behavior and protected combat source unchanged.
 - Research acceptance: obtain completed three-seed CI in four-minute budget; compare role performance (Knight, Sniper, Dragon, Beetank, Turtle and all roster), Assassin damage/hits/survival, deployment span and sector occupancy, match outcomes. Promotion only if broad-front playability and roles hold up. No merge/deploy.
+
+
+### October 14 — connected fronts all-role scorecard
+
+- [CI 38624434899](https://github.com/danickman/ShowdownLab/actions/runs/38624434899): all seven standard browser/release/PWA/Node/art checks passed; three-seed four-variant balance job was still in progress at last inspection, so no stronger Assassin verdict yet.
+- Commit `7e9e36b` adds QA-only `CONNECTED FRONT ROLE SCORECARD` for all ten fighter types (baseline, connected fronts HP112 and connected fronts stronger Assassin HP132/damage31/dodge24%/vanish70), including credited damage, hits, deployment and damage per living-frame exposure. This helps ensure a stronger Assassin doesn't obscure collapsing ranged/tank participation. Requires new CI; core remains untouched, no merge/deployment.
