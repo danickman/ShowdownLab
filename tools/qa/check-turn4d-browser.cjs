@@ -38,13 +38,23 @@ const collect=async(page,label)=>{
  await page.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:30000});
  assert(await page.evaluate(()=>!!navigator.serviceWorker.controller),'service worker failed to control reloaded page');
  report.runs.push(await collect(page,'warm'));
+ const prepared=await page.evaluate(()=>FighterAssets.prepareOffline('turtle',4));
+ assert(prepared.ready&&prepared.count>=7,'Ultimate Turtle offline pack failed preparation');
+ report.offlinePack=prepared;
+ const packUrls=await page.evaluate(()=>FighterAssets.offlinePackUrls('turtle',4));
+ const stored=await page.evaluate(async urls=>{
+   const keys=await caches.keys(),stores=keys.filter(x=>x.startsWith('showdown-lab-release'));
+   let found=0;for(const u of urls){for(const key of stores){const c=await caches.open(key);if(await c.match(u)){found++;break}}}
+   return found;
+ },packUrls);
+ assert.strictEqual(stored,packUrls.length,'offline selected pack not fully stored');
  await page.setOfflineMode(true);
  await page.reload({waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.body.classList.contains('assets-ok'),{timeout:30000});
  assert.equal(await page.evaluate(()=>document.querySelector('.screen-home.active')!==null),true,'offline Home missing');
  const assets=await page.evaluate(()=>FighterAssets.assetStatus());
  assert(assets.ready>=2,'Home portraits missing offline');
- report.runs.push({...await collect(page,'offline'),readyPortraits:assets.ready});
+ report.runs.push({...await collect(page,'offline'),readyPortraits:assets.ready,offlinePackCached:stored});
  await page.screenshot({path:path.join(out,'offline-home.png')});
  await page.setOfflineMode(false);
  assert.equal(report.errors.length,0,'application errors in cold/warm/offline runs');
