@@ -3,6 +3,14 @@
 **Status:** User feedback and architecture/design specification. Deferred prototype; NOT a gameplay, AI, spell, renderer or production change.  
 **Related:** [Battlefield review](BATTLEFIELD_ENGAGEMENT_AND_CANVAS_DESIGN_2026-10-14.md), [active roadmap](ROADMAP.md), [QA handoff](QA_IMPLEMENTATION_HANDOFF.md).
 
+## Scope extension: ALL fighters should have role-aware tactical judgment
+
+**New user feedback (2026-10-14):** Threat and opportunity targeting should apply to specific infantry as well as ranged/Assassin. Tanks should engage valuable heavy opponents when feasible, but preserve protective duties. Swarms should counter enemy swarms when necessary and combine against isolated individual melee threats that would defeat one swarm unit. Every unit should have a distinct need/gap and counter on the opposing side, expressed dynamically through tools, position, level and support—not hard-coded win/loss relationships.
+
+**Canonical companion specification:** [Role-aware targeting, swarm intelligence, and counterplay](ROLE_COUNTERPLAY_AND_TARGET_ECOLOGY.md), including all ten unit identities, realistic target eligibility, current L4/L5 mechanics, Goblin pack-vs-heavy / pack-vs-pack behavior, conditional weaknesses, QA fixtures and performance boundaries.
+
+**Target selection policy update:** Do not assume `ranged + Assassin` are the only intelligent roles. The longer-term goal is shared **danger-to-allies + role-fit + urgency + practical reach** with role-specific scoring and hard safety exceptions. Avoid global 'attack highest DPS' orders that abandon allied Snipers, make Goblins feed into Dragon fire or cause everyone to focus one giant enemy. Preserve the virtual commander as a **spell policy**, not a spawned unit. The first tactical-center scoring prototype was rejected: prefer targeted, auditable per-role experiments with one hypothesis at a time.
+
 ## Intent and UX
 
 The user wants a **smart but reactive army** without introducing an actual commander fighter:
