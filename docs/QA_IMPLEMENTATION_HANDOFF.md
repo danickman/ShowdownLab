@@ -870,3 +870,9 @@ CI run 38615999759 surfaced an intermittent negative-radius canvas error. The li
 ### October 14: isolated Assassin vanish reach candidate
 
 CI 38619374891 passed all required jobs. Valid target acquisition was near 100 percent for both variants, while in-range samples fell from 28 to 3. Commit b1ff42b adds a VM-only experimental locality candidate which tests earlier Assassin vanish activation at distance 0.70 rather than 0.42. No runtime combat changes. This candidate requires its own CI, matched damage and contact measurements, and outcome review before consideration. No merge or deployment.
+
+
+### October 14 — Assassin vanish70 candidate failed survivability trade-off
+
+- [CI 38619889886](https://github.com/danickman/ShowdownLab/actions/runs/38619889886) passed all required jobs including 3-seed research. Experimental locality assassin vanish trigger at 0.70 vs existing 0.42 improved effective damage 185.57 to 229.57, hits 3 to 4, in-range samples 3 to 17, but total observed Assassin living frames declined from 2132 to 875 (59% less), while original baseline delivered 1326.66 damage. This is NOT acceptable evidence to promote vanish70; likely exposes Assassins earlier. No runtime changes.
+- Commits `3f22f3a` and `d68f331` add a more conservative **VM-only** vanish50 candidate and print both candidate outcomes, exposure and normalized damage; CI pending. Never confuse source-instrumented candidates with production fixes. Next compare reach, credited damage, lifespan and winners; prioritize contact **and** survivability. No merge/deployment.
