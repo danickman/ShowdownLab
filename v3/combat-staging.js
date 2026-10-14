@@ -39,9 +39,17 @@
         // Resolve allied torso overlap inside the existing staging budget.
         // Four bounded passes; opponents retain their original contact relationship.
         const clampGoal=e=>{const lo=e.contactSide===1?cap.x*.16:-cap.x,hi=e.contactSide===-1?-cap.x*.16:cap.x;e.dx=Math.max(lo,Math.min(hi,e.dx));e.dy=Math.max(-cap.y,Math.min(cap.y,e.dy))};
-        for(let pass=0;pass<4;pass++)for(let i=0;i<entries.length;i++)for(let j=i+1;j<entries.length;j++){
+        // Candidate eligibility depends only on original screen points and static size.
+        // Build it once; keep original i/j iteration order across all four passes.
+        const pairs=[];
+        for(let i=0;i<entries.length;i++)for(let j=i+1;j<entries.length;j++){
           const a=entries[i],b=entries[j];if(a.u.team!==b.u.team)continue;
-          const reach=(a.size+b.size)*.70;if(Math.abs(a.p.x-b.p.x)>reach+cap.x*2||Math.abs(a.p.y-b.p.y)>reach+cap.y*2)continue;
+          const reach=(a.size+b.size)*.70;
+          if(Math.abs(a.p.x-b.p.x)>reach+cap.x*2||Math.abs(a.p.y-b.p.y)>reach+cap.y*2)continue;
+          pairs.push([i,j]);
+        }
+        for(let pass=0;pass<4;pass++)for(const [i,j] of pairs){
+          const a=entries[i],b=entries[j];
           const x=b.p.x+b.dx-a.p.x-a.dx,y=(b.p.y+b.dy-b.height*.45)-(a.p.y+a.dy-a.height*.45);
           const overlapX=(a.size+b.size)*.29-Math.abs(x),overlapY=(a.height+b.height)*.35-Math.abs(y);
           if(overlapX<=0||overlapY<=0)continue;
