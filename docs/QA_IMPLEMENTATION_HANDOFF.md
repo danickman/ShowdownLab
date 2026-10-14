@@ -971,3 +971,10 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - [CI 38634294745](https://github.com/danickman/ShowdownLab/actions/runs/38634294745) had browser-composition, browser-upgrade, root-release-gate, art, and additional browser checks green when inspected; role-damage research and node-regressions were still running, so Beetank-only persistence has no validated outcome yet.
 - Commit `ef57636` adds `BEETANK RAM EFFICIENCY` to the isolated five-variant QA runner: actual ram contacts, ram approach/special frames, Beetank attributed hits/damage, and Beetank target switches, compared directly against same connected-front strong Assassin layout without Beetank persistence. This checks whether fewer switches convert to real ram impact rather than merely altering targeting. Await CI results; protected live combat source unchanged, no merge/deployment.
+
+
+### October 14 — broadened role-preserving QA (not Beetank-only)
+
+- User explicitly requested holistic battle improvements rather than spending successive turns on Beetank. Preserve ten-fighter gameplay balance, role-specific abilities and 80/120-unit multi-front coverage as acceptance criteria. Beetank-only persistence remains just one narrow experimental control, not the program's focus.
+- Latest [CI 38634294745](https://github.com/danickman/ShowdownLab/actions/runs/38634294745): seven standard checks green; extended five-variant battle attribution still running at inspection. No candidate promotion based on incomplete research.
+- Commit `129e9cf` adds `TEN ROLE BALANCE GATE` comparing original baseline, strong-Assassin connected fronts and Beetank-only persistence: credited damage, hits, damage per 1000 alive observation frames across **all ten fighters**, 90-frame active contested sectors and terminal results. This is QA-only and needs CI confirmation. Future candidates should be driven by balanced improvements to overall battlefield staging, active fronts and combat clarity—not overfitted to one fighter. No runtime edits, merge or deployment.
