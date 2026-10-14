@@ -78,6 +78,6 @@ const collect=async(page,label)=>{
   await slow.screenshot({path:path.join(out,'throttled-home.png')});
  }finally{await slowContext.close()}
  report.passed=true;
- console.log('PASS: browser cold/warm/offline controlled PWA boot; request/byte receipt request/byte receipt '+JSON.stringify(report.runs));
+ console.log('PASS: PWA browser cold/warm/offline and throttled first view '+JSON.stringify({runs:report.runs,slow:report.slow,offlinePack:report.offlinePack}));
  }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
