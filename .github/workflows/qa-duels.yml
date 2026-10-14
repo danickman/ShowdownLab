@@ -73,6 +73,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: zone-engagement.json
         run: node tools/qa/check-zone-engagement.cjs
+      - name: Locality-aware target selection experiment
+        env:
+          QA_LANES_RECEIPT: zone-locality.json
+        run: node tools/qa/check-zone-locality.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -107,6 +111,7 @@ jobs:
             horizontal-formation.json
             engagement-zones.json
             zone-engagement.json
+            zone-locality.json
           if-no-files-found: warn
 
   browser-turn3:
