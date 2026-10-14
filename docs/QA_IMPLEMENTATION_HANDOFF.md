@@ -935,3 +935,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - [CI 38625916946](https://github.com/danickman/ShowdownLab/actions/runs/38625916946) fully passed. Mean actively contested bands across 12 matched scenarios at frames 30/60/90: baseline **3.00/2.083/1.083**, wide locality **2.833/1.750/1.417**, connected fronts with strong Assassin **3.00/2.00/1.00**, connected fronts with HP112 **3.00/1.667/1.167**. Thus connected fronts spread initial deployment (spanY ~0.784 vs baseline ~0.590) and restore Assassin participation, but **do not sustain multiple combat fronts**. Do not promote on deployment spread alone.
 - Added frontline exposure profiler in commit `12737c7` (Knight, Beetank, Turtle, Barbarian damage/hits and received damage/hits normalized to living frames); later run needed for this specific instrumentation. Next investigate target retention/engagement cross-front drift, likely preserve per-front locality without starving melee/Assassin. No changes to runtime core, merge or deployment.
+
+
+### October 14 — frontline target-switch and cross-lane pursuit diagnostic
+
+- New QA-only commit `cad81f8` measures observed target switches and frames spent targeting opponents more than 0.22 normalized vertical distance away for frontline and Assassin units, across original, extreme locality, and connected-front stronger Assassin variants. The deterministic combat core is unchanged. Do not interpret an observed target switch as the cause of movement until measured results confirm that hypothesis.
+- CI 38626431216: standard browser/combat/art/root integrity checks passed, but browser-upgrade reported `failed candidate staged cache was not discarded`; this is an unresolved release gate failure pending investigation/re-run. The longer research job was still running during inspection. Do not merge or deploy.
