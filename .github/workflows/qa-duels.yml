@@ -65,6 +65,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: horizontal-formation.json
         run: node tools/qa/check-horizontal-formation.cjs
+      - name: Three-zone distributed engagement prototype
+        env:
+          QA_LANES_RECEIPT: engagement-zones.json
+        run: node tools/qa/check-engagement-zones.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -97,6 +101,7 @@ jobs:
             formation-variants.json
             formation-spacing.json
             horizontal-formation.json
+            engagement-zones.json
           if-no-files-found: warn
 
   browser-turn3:
