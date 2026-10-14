@@ -136,6 +136,12 @@ jobs:
         run: npm install --prefix tools/qa --no-audit --no-fund
       - name: Prepare Chromium
         run: node tools/qa/setup-browser.cjs
+      - name: Capture exact formation snapshots
+        env:
+          QA_LANES_RECEIPT: ${{ runner.temp }}/turn5h-browser/formation-exact.json
+        run: |
+          mkdir -p "${{ runner.temp }}/turn5h-browser"
+          node tools/qa/check-formation-visual-snapshots.cjs
       - name: Matched authored sprite camera screenshots
         env:
           NODE_PATH: tools/qa/node_modules
