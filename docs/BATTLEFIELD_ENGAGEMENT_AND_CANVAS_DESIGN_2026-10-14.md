@@ -147,3 +147,89 @@ FX budget should be **event-weighted**, not only density cutoff; reserve capacit
 6. **Apple, *Design for Safari 15* (WWDC21)** — https://developer.apple.com/videos/play/wwdc2021/10029/. Dynamic safe-area insets must inform battle controls and portrait/landscape layout. They cannot be assumed away based on a fixed canvas height.
 
 **Inference boundary:** These sources provide established *principles* for coordination, readability and performance. They do not validate the exact values (2–3 fronts, target-score weights, desired viewport percentages, or Knight guard multipliers) proposed for Showdown Lab. Those remain falsifiable game-specific hypotheses requiring instrumented browser and deterministic simulation tests.
+
+
+## Second-pass decision review — performance, fun, and complete roadmap (2026-10-14)
+
+### Major correction: connected fronts are a role-safe research candidate, NOT a proven spatial winner
+
+The **completed** [CI 38641118684](https://github.com/danickman/ShowdownLab/actions/runs/38641118684), including its 12-case, 3-seed/80+120/mirrored comparison, reports eligible samples rather than zero-filling already-terminal matches. Active contested *horizontal bands*, averaged by observed match lifetime:
+
+| Variant | 25% | 50% | 75% |
+|---|---:|---:|---:|
+| Original live-core geometry baseline | **2.500** | **1.083** | **0.417** |
+| Connected-front ±0.20 + experimental strong Assassin + Beetank persistence | 1.833 | 0.833 | 0.333 |
+| Connected-front + raw Knight speed 1.18 | 2.250 | 0.583 | 0.083 |
+
+All 12 matched cases are present at these **relative** fractions. These metrics are not counts of independent contact components, do not prove why fronts merge, and do not by themselves determine enjoyability, but **invalidate any prior claim that the connected-front proposal is objectively superior at sustaining spatial fronts**. Preserve **both original baseline and connected research candidate** until a verified world-space engagement graph and captured same-seed mobile playback choose a winner. Preserve live core. Keep raw Knight speed experiment unpromoted.
+
+### Performance analysis
+
+1. **Engine baseline is already nontrivial**: per-step nearest enemy and same-team pressure scans; slotPoint filters/sorts attackers for each advancing melee fighter; separation resolves all living pairs in 3–4 passes. This is O(N²) or worse under dense crowd/slot sort costs. 80/120-fighter cost must be measured *separately* from draw/frame cadence.
+2. **Existing meaningful optimization evidence already exists**: handoff Turn 5C found deterministic-parity hot-path optimizations averaging 762→418 ms over 90 synthetic callback samples at 80 fighters and 2056→883 ms at 120 in GitHub Node VM. This is not iPhone FPS and should be profiled again on the latest branch before adding an Engagement Director.
+3. **Budget rule**: an engagement planner should replace repeated global target scans or remain approximately below 5–10% incremental 120-fighter per-tick CPU as a *proposed acceptance threshold*, with no worsening p95 browser input latency; if over budget, optimize spatial hashing/cache first. Update strategic goals roughly every 8–12 logical ticks and immediately for kills, target invalidation, local engagement dissolving and major stuns, rather than full replan for all characters every step.
+4. **Consistent tick snapshot**: cache living target indexes, team pressure, spatial bucket lists, and commitment state once per logical tick/decision epoch. Stable ID sorting and seeded tie-breaks ensure deterministic replay; no order-dependent allocations that privilege blue or low-id units.
+5. **Collision**: reuse grid staging concepts for *real* physics only after exact collision and end-state comparisons; keep existing hard separation fallback for cramped groups. Do not reuse visual-only staging offsets for hit, range, knockback or target selection.
+6. **Avoid accidental cost increases**: don't add ORCA, A*, crowd nav meshes, actor-per-worker messaging, full 2D particle physics, or per-frame hundreds-of-agent path search. Do not introduce a new fullscreen canvas layer without benchmarking memory/CPU; target device canvas DPR is capped at 2. At 430×932 CSS, one DPR2 RGBA surface is ~6.41 MB of pixels before browser/texture duplication; three equal layers would be ~19.2 MB before sprite decoding and caching.
+7. **Scheduling**: rendering may skip frames when busy, but never skip deterministic combat ticks to pretend a speed mode completed. Preserve terminal/last-hit and 10× behavior, and measure input-to-spell visual response at 1×/4×/10×. Avoid an unbounded catch-up loop after Safari background resume: clamp and make pause/resume behavior explicit.
+8. **Performance gates proposed, not measured claims**: 10–40 fighters should approach smooth 60Hz target on iPhone 15 Pro Max; 80–120 target consistently responsive >=30fps under load if 60fps is not sustainable; huge Lab battles degrade ambience then minor FX, never character silhouettes, hit feedback or input handling. Track p50/p95 frame time and max frame spikes, sim-step CPU, staging time, allocated buffers, max resident memory where available, and input latency. Test portrait **430×932**, compact portrait, landscape, 80/120/180, L1/L4/L5, and speed 1×/10×. CI Chromium metrics are proxies only; physical iOS Safari is a required release gate.
+
+### Fun and pacing risk register
+
+| Risk | How the design could fail | Safeguard and acceptance observation |
+|---|---|---|
+| Regimented, predictable battles | Hard lanes lock both teams into rote pairings | Engagement assignments soft/releasable, visible cross-front flanks and legitimate reinforcement |
+| Battles become too slow | Defenders hold ground after local threats have gone | Immediate release/nearest hostile fallback; measure first contact, no-hit intervals, battle duration and clutch tail |
+| Combat becomes less strategic | Smart AI cleans up poor compositions automatically | Preserve real counters and mistakes in draft; player composition, levels, spells and enemy choices meaningfully change outcomes |
+| Assassin loses opportunities | Target locality blocks rear access | Cross-engagement backline pursuit exemption and exposure-to-backstab metrics; no universal distance tax |
+| Goblin/Goose/Dragon AOE weakens | Spreading removes pack/honk/cone opportunities | Keep naturally formed small clusters; reassess target opportunity, proc counts and hit shape, not just damage stats |
+| Knight turns into lone sprinter | High base speed and charge outrun allies | Compare effective guard travel to Barbarian march, protective Bastion uptime and ally distances; initial trial Knight stat 1.12 / guard multiplier 1.04 / charge multiplier 1.5 (hypothesis only) |
+| Turtle causes stalemate | Fixed defense position delays last contact | Auto release once sector clear, Turtle-v-Turtle across levels, enforced legitimate terminal state not forced kill |
+| 3 fights overwhelm phone view | Even perfect spatial dynamics make sprites too small | 2–3 concurrent fronts only when naturally viable; prioritization, feet/weapon silhouette QA and optional spectator focus; no fake screen-space combat |
+| Spells feel unresponsive | Event backlog delays click and feedback | Input-to-on-screen cue budget, sampled interaction latency, immediate legal cast feedback; unchanged actual spell mechanics |
+| Ultimates lose spectacle | Crowd FX gates suppress L4/L5 role defining powers | Reserve per-engagement premium cues based on mechanical importance and confirmed activation; no fabricated hit FX |
+| Non-determinism breaks replay | Dynamic zone assignment/tie-breaks depend on array order | Fixed seeded ordering, mirrored paired runs, battle trace hashes, versioned rules for future battle codes |
+| Strategic balance overfits 120-unit Lab | Design tuned to three-front mega-swarms | 1v1, 4v4, 10/20/40, 80/120/180 role compositions; small battles should *not* be required to split |
+
+**Enjoyability principle:** battles should have naturally emerging (1) first clashes, (2) local breakthroughs and reversals, (3) rapidly converging endgame; do not script phases or force combat to last longer. Show team protection, stun, heal, rage and ultimates *as they really happen*. Keep the chaotic personality of Goose/Goblin/Assassin; disciplined formations should not take over the arcade identity.
+
+### Roadmap integration and supersession audit
+
+Current ROADMAP.md mixes *historical* M3 Level 10 design with the **October 12 approved five-level system**. The latter is authoritative: L1 Base, L2 Evolved, L3 prestige accent, L4 Ultimate ability + Ultimate art, L5 empowered Ultimate. Remove L10 from **active** planning; leave early rationale as archived history. All ten forms, six arena treatments and six-word multi-mode UX exist at some stage, so do not spend another content cycle regenerating 10×7 art assets. Do not expand to the 26-unit backlog yet.
+
+Preserve completed / committed work: custom Ultimate Lab **Choose Your Enemies** subpage and actual counts; root-only index, deleted v3/index.html, SHA-pinned SW offline rollout, team HUD, Quick/Draft/Lab distinctions and five-level guides. The **Ultimate Lab enemy picker is built and browser-tested on this branch** but remains unreleased; don't rebuild or overcrowd Lab UI. Existing broken/pending cases should be audited as separate release blockers rather than being rediscovered through the tactical overhaul.
+
+Roadmap revisions:
+- **P0 reliability and performance**: deterministic/terminal tests, Turtle-v-Turtle, root-only PWA digests/cold-warm-offline upgrade, iOS input response, measurable 80/120/180 performance. No combat migration until these gates.
+- **P1 one compelling combat prototype**: baseline and connected candidate plus new soft-engagement director A/B/C, identical seeded armies, duration-normalized genuine world-space contact components, ten-role L1/L4/L5 safety. Abandon or scale down director if marginal.
+- **P1 canvas/combat theatre in parallel**: audit camera horizon (~29% portrait top) and 96px bottom reserve, safe area, stable stage, sprite envelopes, dynamic effects budgets, impact/ultimate readability, animation timing, brighter arena identity; presentation-only improvements can ship independently after release gates.
+- **P1 strategy and immediate fun**: meaningful Quick choices and pacing, Draft upgrade-vs-reinforce trade-offs, better opponent AI that varies appropriately, clear ability tooltips and contextual last-round outcomes. Reinforce spell agency at breakthrough moments. This work is just as important as combat engineering.
+- **P2 user-facing polish**: audio/haptics as optional user-activated mobile enhancement; onboarding/Guide clarity, accessibility and settings, actual phone QA, meaningful result recap and rewards.
+- **P2 content/replay and modes**: Boss Hunt must become a true boss ruleset *or be honestly renamed*; saved armies, seed/battle codes, daily challenges, replay/versioned trace can add strong return-value. Delay heavy arena mechanics until basic engagement readability is proven.
+- **P3 expansion**: 26-unit roster, L10, multiplayer, full simulation worker rewrite, engine migration and expensive new art generation are explicitly out of near-term scope.
+
+### Proposed interlocked delivery sequence (bounded and shippable)
+
+| Turn group | Scope | Deliverable / hard decision |
+|---|---|---|
+| A: 1–2 turns | Correct role and world-space contact-cluster metrics; expose per-phase target reach, battle duration and early terminal handling | Compare actual independent contact clusters, not just y bands; decide whether original remains better for spatial occupancy |
+| B: 1–2 | Dedicated iPhone portrait canvas/frame/event profiler and same-seed screenshot/capture baseline | Quantitative picture of camera crop, occlusion and real input latency; choose canvas-only quick wins |
+| C: 2–3 | Cache per-tick target pressure and local buckets, remove duplicated scans with golden traces | 80/120/180 throughput and exact invariants preserved; room for director |
+| D: 2–3 | QA-only soft director spike A/B/C: no director vs soft anchors vs anchors+role exceptions | Accept only on genuine engagement, role balance, duration and watchability; have a kill switch |
+| E: 1–2 | Knight guarded-movement/charge identity and risk-based other role tuning | Knight effectively faster than Barbarian without suppressing Assassin/Beetank; no blanket stat power creep |
+| F: 2–3 | Stable camera and combat theatre, VFX clarity per actual contacts, compact safe-area HUD | Same-seed portrait videos, battle screenshots, performance, correct feet/ultimate hitbox cues |
+| G: 2–4 | Draft choices, opponent behavior, Lab modes including new enemy picker, onboarding, progression, result recap | Game loop more replayable, enjoyable and interpretable; avoid duplicate features |
+| H: 2–3 | Complete device, PWA/offline, snapshot/determinism, accessibility and deliberate release gate | One user-authorized merge and deploy after acceptance |
+
+These are work packages, not scheduling commitments; parallelize only independent presentation and simulation experiments. Use source-linked evidence at each checkpoint. No main merge, no deployment until user approval. Maintain documentation and QA with each turn.
+
+### Research cross-check supporting these recommendations
+
+- Craig Reynolds steering hierarchy: https://www.red3d.com/cwr/papers/1999/gdc99steer.html
+- Riot TFT Game Analysis Team emphasizes satisfying, exciting, intelligible combat and diverse viable choices: https://teamfighttactics.leagueoflegends.com/en-us/news/dev/talking-tactics-game-analysis-team-gat/
+- Riot TFT Rise of the Elements Learnings notes invisible AoE, variance from unpredictable targeting and board clutter: https://teamfighttactics.leagueoflegends.com/en-us/news/dev/dev-tft-rise-of-the-elements-learnings/
+- Riot TFT Galaxies Learnings emphasizes visible spell travel, recognizable key fighters and flexible trait synergies: https://teamfighttactics.leagueoflegends.com/en-us/news/dev/dev-teamfight-tactics-galaxies-learnings/
+- Riot TFT October 13, 2026 post acknowledges targeting, character motion, visual clarity, input response and performance as game-feel risks in an engine migration. This is a cautionary analogy **not** an endorsement of any particular Showdown Lab technical change: https://teamfighttactics.leagueoflegends.com/en-us/news/dev/tldw-follow-the-fix-update/
+- Riot VFX clarity and hierarchy: https://www.leagueoflegends.com/en-us/news/dev/clarity-in-league/
+- MDN canvas performance patterns: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
+- MDN Long Animation Frame instrumentation **only where supported**: https://developer.mozilla.org/en-US/docs/Web/API/Performance_API/Long_animation_frame_timing
