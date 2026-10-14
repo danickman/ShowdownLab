@@ -911,3 +911,9 @@ User proposed stage-wide Assassin stat buffs and vanish activation at 0.70. Exis
 
 - [CI 38624434899](https://github.com/danickman/ShowdownLab/actions/runs/38624434899): all seven standard browser/release/PWA/Node/art checks passed; three-seed four-variant balance job was still in progress at last inspection, so no stronger Assassin verdict yet.
 - Commit `7e9e36b` adds QA-only `CONNECTED FRONT ROLE SCORECARD` for all ten fighter types (baseline, connected fronts HP112 and connected fronts stronger Assassin HP132/damage31/dodge24%/vanish70), including credited damage, hits, deployment and damage per living-frame exposure. This helps ensure a stronger Assassin doesn't obscure collapsing ranged/tank participation. Requires new CI; core remains untouched, no merge/deployment.
+
+
+### October 14 — extended role-comparison CI execution budget
+
+- Four-variant/three-seed role research in CI 38624434899 and scorecard CI 38624657145 exceeded earlier normal turnaround; all seven standard browser, integrity, PWA, art and Node checks had passed when inspected, while damage-attribution-smoke was still in progress. Do not infer balance outcomes from incomplete logs.
+- Commit `521f3cb` increases only the exploratory `damage-attribution-smoke` workflow job timeout from four to eight minutes, preserving three-seed coverage and four comparison variants. This does not alter production behavior or source. Once results complete, examine spatial coverage, all ten role scorecards, Assassin HP132/damage31/dodge24%/vanish0.70, winner divergence and actual contact before any rollout. No merge/deploy.
