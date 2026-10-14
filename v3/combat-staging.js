@@ -95,7 +95,10 @@
       }
       // Preserve a fallen fighter's last offset through its 900ms defeat fade.
       for(const [id,o]of offsets)if(time-o.seen>1000)offsets.delete(id);
-      while(offsets.size>240)offsets.delete(offsets.keys().next().value);
+      // 300+ rare Lab battles must not evict living fighters from the visual
+      // offset history every frame. Keep a bounded 15% margin for defeat fades.
+      const cacheLimit=Math.max(240,Math.ceil(alive.length*1.15)+32);
+      while(offsets.size>cacheLimit)offsets.delete(offsets.keys().next().value);
     }
     return{prepare,point,offset,reset};
   }
