@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Syntax-check isolated attribution profiler
+        run: node --check tools/qa/check-zone-damage.cjs
       - name: Attribute damage by fighter type across baseline and locality
         env:
           QA_LANES_RECEIPT: zone-damage.json
