@@ -61,6 +61,10 @@ jobs:
         env:
           QA_LANES_RECEIPT: formation-spacing.json
         run: node tools/qa/check-formation-spacing.cjs
+      - name: Horizontal formation alternatives
+        env:
+          QA_LANES_RECEIPT: horizontal-formation.json
+        run: node tools/qa/check-horizontal-formation.cjs
       - name: Existing evolution and deterministic checks
         if: success()
         run: node tools/check-evolution-progression.cjs
@@ -92,6 +96,7 @@ jobs:
             formation-density.json
             formation-variants.json
             formation-spacing.json
+            horizontal-formation.json
           if-no-files-found: warn
 
   browser-turn3:
