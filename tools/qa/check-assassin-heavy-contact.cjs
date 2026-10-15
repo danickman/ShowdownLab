@@ -91,10 +91,18 @@ for(const mode of ['tankVsAssassin','mixedHeavy','allRoles','noWide']){
   reflectBefore:sum('before','reflectionDamage'),reflectAfter:sum('after','reflectionDamage'),
   frontsBefore:sum('before','separated'),frontsAfter:sum('after','separated'),
   persistedBefore:sum('before','persistent'),persistedAfter:sum('after','persistent'),
-  terminalChanges:a.filter(x=>x.before.winner!==x.after.winner).length};
+  terminalChanges:a.filter(x=>x.before.winner!==x.after.winner).length,
+  completedDefenderEarlier:a.filter(x=>!x.before.winner&&x.after.winner===(x.c.mirror?'blue':'red')).length,
+  winnerReversals:a.filter(x=>x.before.winner&&x.before.winner!==x.after.winner).length};
  if(mode==='tankVsAssassin'||mode==='mixedHeavy'){
   assert(summary[mode].hitsAfter>summary[mode].hitsBefore,'armored target should be damageable in actual squads');
-  assert.equal(summary[mode].terminalChanges,0,'sampled heavy-squad terminal winner changed, inspect balance first');
+  assert.equal(summary[mode].winnerReversals,0,'an established terminal victor changed or stopped winning');
+  if(mode==='tankVsAssassin'){
+   assert(a.every(x=>x.after.winner!==(x.c.mirror?'red':'blue')),'an Assassin-only army unexpectedly defeated its armored guards');
+   const changed=a.filter(x=>x.before.winner!==x.after.winner);
+   assert(changed.every(x=>!x.before.winner&&x.after.winner===(x.c.mirror?'blue':'red')),
+    'new terminal state must only be an earlier heavy-defender victory');
+  }else assert.equal(summary[mode].terminalChanges,0,'mixed-heavy terminal response changed unexpectedly');
  }else assert.equal(summary[mode].hitsAfter,summary[mode].hitsBefore,'unaffected matchup changed heavy hit counts');
 }
 for(const count of [80,120,300])for(const speed of [1,10]){

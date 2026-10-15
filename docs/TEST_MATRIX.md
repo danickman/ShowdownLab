@@ -613,3 +613,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 24 heavy-army, 24 mixed-heavy matched cases measured hit damage and counters without fake zone counts; snapshot/terminal limitations recorded.
 - [ ] New-head CI, dedicated source-state/counterplay, offline PWA rollback, uncapped 300, 430×932 DPR3 browser and all existing role tests.
 - [ ] Actual iPhone Safari manual animation, visibility and performance confirmation; do not claim Chromium = real device.
+
+
+### Oct 15 — Heavy-contact test runner discrepancy follow-up
+- [x] Reproduce 4 pending→heavy victory cases at 80 bodies (L1 seed1337 both mirrors, L4 seed1337 nonmirror, L5 seed9917 mirror): all defender victories, no Assassin wins/reversals.
+- [x] Refine permanent CI to reject established winner reversal and any Assassin-only victory against armored guard; permit only censored unresolved→defender terminal transition.
+- [ ] Rerun full 35-job new-head matrix; preserve independent core PWA, Chrome, 300 and source attributable damage regression.
