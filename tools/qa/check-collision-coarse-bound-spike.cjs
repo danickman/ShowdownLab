@@ -1,18 +1,21 @@
 'use strict';
-// QA-only: universal collision-radius coarse guard before accessing per-pair
+// QA regression for shipped universal collision-radius coarse guard, before per-pair
 // team, radii or y geometry. All true candidate collisions use the EXACT
-// original RC4 collision resolution and fighter visit order. No game import.
+// original RC4 collision resolution and fighter visit order. Compare current shipped runtime against exact previous target-bound1 control.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
-const base=read('legacy-sim-core');
+const shipped=read('legacy-sim-core');
 const setup='function separate(initial=false){const alive=units.filter(u=>u.hp>0&&u.burrow<=0),passes=initial?10:alive.length>32?4:3,radii=alive.map(visualSpacingRadius);';
 const setupFast=setup.slice(0,-1)+',globalBound=2*Math.max(...radii)*1.14;';
 const pair='const a=alive[i],b=alive[j],dx=b.x-a.x,dy=b.y-a.y,same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(dx>=min||dx<=-min||dy>=min||dy<=-min)continue;';
 const guarded='const a=alive[i],b=alive[j],dx=b.x-a.x;if(dx>=globalBound||dx<=-globalBound)continue;const dy=b.y-a.y;if(dy>=globalBound||dy<=-globalBound)continue;const same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(dx>=min||dx<=-min||dy>=min||dy<=-min)continue;';
-assert.equal(base.split(setup).length,2,'sim collision setup anchor changed');
-assert.equal(base.split(pair).length,2,'sim collision pair anchor changed');
-const optimized=base.replace(setup,setupFast).replace(pair,guarded);
+assert.equal(shipped.split(setupFast).length,2,'shipped global reach guard has changed');
+assert.equal(shipped.split(guarded).length,2,'shipped coarse pair rejection has changed');
+const base=shipped.replace(setupFast,setup).replace(guarded,pair);
+const optimized=shipped;
+assert.equal(base.split(setup).length,2,'reconstructed original collision scan missing');
+assert.equal(base.split(pair).length,2,'reconstructed original per-pair math missing');
 function scenario(code,count,seed,mirror,speed,frames){
  let now=0,latest=null,next=0,errors=[],q=new Map();
  const env={window:null,Math,performance:{now:()=>now},
@@ -83,7 +86,7 @@ for(const count of [2,4,10,20])for(const seed of [1337,9917])for(const mirror of
  assert.deepEqual(proposed.traces,control.traces,'small-duel radius changed combat '+count+' seed '+seed+' mirror '+mirror);
  smallParity.push({count,seed,mirror,frames:control.samples,winner:control.winner,parity:true});
 }
-const receipt={status:'QA-only coarse universal radius pair pruning, not loaded into game',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
+const receipt={status:'QA collision coarse-bound shipped source versus original target-bound1 pair scan',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
  warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not full Canvas renderer. Require meaningful repeatable gains, role counterplay and 300-duel QA before promoting.',
  scenarios:rows,summary,lateParity,smallParity};
 console.log('COLLISION COARSE SPIKE '+JSON.stringify(receipt));
