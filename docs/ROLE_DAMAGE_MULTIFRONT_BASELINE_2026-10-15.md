@@ -39,6 +39,13 @@ These results suggest that the **direction of vanish**, more than the distance o
 
 A distinct six-case *same-direction but closer* test improved Assassin damage in five matched cases and left one unchanged. That supports reach as a secondary factor, but the rear-direction-only candidate is cleaner for attributing cause.
 
+## Additional role watchpoints from the short direct probes
+
+- **Mole frequently dealt the largest early fighter-attributed damage** in the sampled mixed teams (hundreds of HP while several other types landed no recorded hit). This might reflect its burrow/rear-access mechanic and time-to-first-hit advantage, not inherently overpowered damage. Do not nerf based on six to eight short battles; rank damage per *alive and valid-target tick*, team strength and level before comparing roles.
+- **Sniper** sometimes spent dozens of sampled ticks aiming while producing zero or one actual shot. Count shot opportunity, aim interruption/retreat, line of attack and forced melee fallback separately from HP damage. **Dragon** likewise spent much time stalking/winding up despite some real cone hits. Actual ranged impact may connect geographically distant fighters and is counted at the victim location, not attacker foot position.
+- **Beetank, Barbarian, Goblin and defensive tanks** also showed intermittent low damage in early 40/80 mixed cases, but their protection, knockback, stun, charge, mitigation or swarm role must be assessed before any generic DPS buff. L4/L5 must change tactical success materially.
+- A quick improvement in one role's output might simply redirect damage or kill opportunities away from another role. Every later variant must track **both teams' remaining HP, match winners, casualties, control value and multi-front continuity**, and display in-game readable counterplay.
+
 ## Reproducible B3 design experiment and next acceptance gate
 
 [tools/qa/check-assassin-rear-study.cjs](../tools/qa/check-assassin-rear-study.cjs), commit [`3c8e9d9`](https://github.com/danickman/ShowdownLab/commit/3c8e9d955e57647a80a1b8a4965f983c1bff20f6), independent `assassin-rear-opportunity-research` job [`ce09b69`](https://github.com/danickman/ShowdownLab/commit/ce09b69707f6f0edde103094b7a0eca43fc9a86e). Tests the three alternate placements against unchanged Assassin, using 40/80/120 fighters, mixed/Assassin-access/ranged families, mirrors, two seeds where practical, L1–L5, per-role damage share, credited hits, kills, vanish→field-rear/attack-range feasibility, backstab actions, both teams' live bodies/HP and winner/censored status. An instrumented control must produce **bitwise-identical** callback traces to untouched RC4. All gameplay-changing candidate executions remain isolated to QA.
