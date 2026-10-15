@@ -64,7 +64,9 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  await active.event('activate');
  assert(!stores.has('showdown-lab-old'),'old release removed only after activation');
  assert(stores.has('unrelated-app'),'unrelated app cache untouched');
- assert((await(await active.event('fetch',request('/v3/v3.js?v=depth5g1'))).text()).includes('ShowdownAdapter'),'verified core module not served');
+ const rendererPath=required.filter(url=>url.startsWith('/v3/v3.js?v='));
+ assert.equal(rendererPath.length,1,'canonical PWA renderer must be declared once');
+ assert((await(await active.event('fetch',request(rendererPath[0]))).text()).includes('ShowdownAdapter'),'verified current renderer module not served');
  assert((await active.event('fetch',request('/v3/assets/authored/knight/presentation.webp?v=ultimate-roster10'))).ok,'Home Knight must remain offline');
  assert((await(await active.event('fetch',request('/home','navigate'))).text()).includes('assetGuard'),'verified Home shell not served');
  assert((await(await active.event('fetch',request('/v3/','navigate'))).text()).includes('assetGuard'),'verified /v3 shell not served');
