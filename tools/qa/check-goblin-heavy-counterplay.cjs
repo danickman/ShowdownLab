@@ -37,7 +37,7 @@ function trial(code,cfg,audit=true){
  const hash=crypto.createHash('sha256');
  const env={window:null,Math,performance:{now:()=>t},requestAnimationFrame(fn){const id=++next;q.set(id,fn);return id},cancelAnimationFrame(id){q.delete(id)},console:{error:(...args)=>errors.push(args.join(' '))}};
  env.window=env;env.__qaHit=h=>hits.push(h);env.__qaTick=(tick,units)=>{
-  for(const u of units)if(u.hp>0&&aliveTicks[u.type]!==undefined)aliveTicks[u.type]++;
+  for(const u of units)if(u.hp>0&&u.team===(cfg.mirror?'red':'blue')&&aliveTicks[u.type]!==undefined)aliveTicks[u.type]++;
  };
  vm.createContext(env);
  for(const dep of ['evolution-rules','ultimate-abilities'])vm.runInContext(read(dep),env,{filename:dep+'.js'});
@@ -53,9 +53,9 @@ function trial(code,cfg,audit=true){
  }
  assert.deepEqual(errors,[],'Goblin study core error '+JSON.stringify(cfg));
  const digest=hash.digest('hex');if(!audit)return{digest};
- const goblin=hits.filter(x=>x.role==='goblin');
+ const goblin=hits.filter(x=>x.role==='goblin'&&x.team===(cfg.mirror?'red':'blue'));
  const byRole=Object.fromEntries(FULL.map(role=>{
-  const item=hits.filter(h=>h.role===role);return[role,{damage:+item.reduce((n,x)=>n+x.damage,0).toFixed(1),hits:item.length}];
+  const item=hits.filter(h=>h.role===role&&h.team===(cfg.mirror?'red':'blue'));return[role,{damage:+item.reduce((n,x)=>n+x.damage,0).toFixed(1),hits:item.length}];
  }));
  const defenders=last.units.filter(u=>u.team===(cfg.mirror?'blue':'red'));
  const attackSide=cfg.mirror?'red':'blue';
