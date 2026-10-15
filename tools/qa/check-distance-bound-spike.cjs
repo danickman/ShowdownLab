@@ -1,16 +1,18 @@
 'use strict';
-// QA-only conservative lower-bound distance skip, no gameplay change.
+// QA parity/perf regression for promoted conservative nearest bound.
 // Since target pressure penalty is non-negative, candidates farther than
 // current winning score cannot beat it; retain Math.hypot for feasible foes.
 // 1e-12 additive margin prevents floating-point boundary misclassification.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
-const base=read('legacy-sim-core');
+const shipped=read('legacy-sim-core');
 const old='for(const v of pool){const d=Math.hypot(v.x-u.x,v.y-u.y),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035;if(s<score){score=s;bd=d;best=v}}';
 const changed='for(const v of pool){const dx=v.x-u.x,dy=v.y-u.y,bound=score+1e-12;if(dx*dx+dy*dy>=bound*bound)continue;const d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035;if(s<score){score=s;bd=d;best=v}}';
-assert.equal(base.split(old).length,2,'nearest score anchor moved; inspect targeting before testing');
-const optimized=base.replace(old,changed);
+assert.equal(shipped.split(changed).length,2,'shipped nearest-bound guard moved; inspect semantics');
+const base=shipped.replace(changed,old);
+const optimized=shipped;
+assert.equal(base.split(old).length,2,'reconstructed RC4 control missing');
 function scenario(code,count,seed,mirror,speed,frames){
  let now=0,latest=null,next=0,errors=[],q=new Map();
  const env={window:null,Math,performance:{now:()=>now},
