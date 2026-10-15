@@ -143,10 +143,13 @@ const cases=[];
 for(const count of (process.env.QA_ROLE_COUNTS||'20,40,80,120,180,300').split(',').map(Number)){
  assert([20,40,80,120,180,300].includes(count),'unsupported count');
  const all=count<=120?Object.keys(modes):['mixed'];
- const seeds=count<=120?[1337]:[1337];
- for(const mode of all)for(const seed of seeds)for(const mirror of [false,true]){
-  const speed=count>=180?1:4,frames=count===300?14:count===180?24:count===120?48:count===80?60:72;
-  cases.push({count,mode,mirror,seed,speed,frames});
+ for(const mode of all){
+  // Two independent seeds for the baseline mixture and the Assassin access case.
+  const seeds=count<=120&&['mixed','assassinAccess'].includes(mode)?[1337,9917]:[1337];
+  for(const seed of seeds)for(const mirror of [false,true]){
+   const speed=count>=180?1:4,frames=count===300?14:count===180?24:count===120?48:count===80?60:72;
+   cases.push({count,mode,mirror,seed,speed,frames});
+  }
  }
 }
 const receipt={status:'read-only B1+B2 baseline, no balancing or runtime patches',
