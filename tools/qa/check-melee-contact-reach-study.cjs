@@ -1,9 +1,13 @@
 'use strict';
 // B3 QA-only: check attack reach against actual RC4 visual collision spacing.
-// No runtime import. One role at a time, with explicit unchanged small-duel
+// Only Knight reach has been shipped on QA. Other roles remain study-only.
 // parity controls and opponent survival/damage. Censored matches are labeled.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8'),source=read('legacy-sim-core');
+const previousKnight="function knightStep(u,t,d){u.guard=Math.max(0,u.guard-1);const r=u.range/500;";
+const shippedKnight="function knightStep(u,t,d){u.guard=Math.max(0,u.guard-1);const r=Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22+.002);";
+assert.equal(source.split(shippedKnight).length,2,'shipped Knight contact reach changed: update study');
+const baseline=source.replace(shippedKnight,previousKnight);
 const hitAnchor='const dealt=Math.min(t.hp,dmg);';
 assert.equal(source.split(hitAnchor).length,2,'positive damage observation anchor moved');
 const defs=source.match(/const DEF=(\{[\s\S]*?\});const BACK=/);
@@ -19,23 +23,23 @@ const gaps=roles.map(role=>({role,nominalReach:+(DEF[role].range/500).toFixed(5)
  opponents:opponents.map(target=>({target,adjustedCollisionGap:+contactGap(role,target).toFixed(5),
    reachDeficit:+Math.max(0,contactGap(role,target)-DEF[role].range/500).toFixed(5),
    specialTurtleCorrection:role==='turtle'}))}));
-assert(contactGap('knight','beetank')>DEF.knight.range/500,'Knight should currently lack settled Beetank contact reach');
+assert(contactGap('knight','beetank')>DEF.knight.range/500,'Nominal Knight range shorter than raw standing Beetank collision reach');
 assert(contactGap('goblin','beetank')>DEF.goblin.range/500,'Goblin should currently lack settled Beetank contact reach');
 const helper="function meleeContactReach(u,t){return Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22+.002)}";
 const insertion='function knightStep(';
 assert.equal(source.split(insertion).length,2,'combat insertion moved');
-const injected=source.replace(insertion,helper+insertion);
+const injected=baseline.replace(insertion,helper+insertion);
 const changes={
- knight:["function knightStep(u,t,d){u.guard=Math.max(0,u.guard-1);const r=u.range/500;","function knightStep(u,t,d){u.guard=Math.max(0,u.guard-1);const r=meleeContactReach(u,t);"],
  goblin:["function goblinStep(u,t,d){const r=u.range/500;","function goblinStep(u,t,d){const r=meleeContactReach(u,t);"],
  beetank:["function beetankStep(u,t,d){const r=u.range/500;","function beetankStep(u,t,d){const r=meleeContactReach(u,t);"]
 };
-const variants={baseline:source};
+// Knight source is the real QA game, not a reconstructed helper-based version.
+const variants={baseline,knight:source};
 for(const [role,[old,newCode]] of Object.entries(changes)){
  assert.equal(injected.split(old).length,2,'role step changed '+role);
  variants[role]=injected.replace(old,newCode);
 }
-let combined=injected;
+let combined=source.replace(insertion,helper+insertion);
 for(const [role,[old,newCode]] of Object.entries(changes)){assert.equal(combined.split(old).length,2,'combined anchor '+role);combined=combined.replace(old,newCode)}
 variants.combined=combined;
 const observe=s=>s.replace(hitAnchor,hitAnchor+
@@ -78,7 +82,8 @@ function simulate(code,{attacker,target,level,seed,mirror,frames=85,count=2,mode
   teams};
 }
 const smoke={attacker:'knight',target:'goblin',level:1,seed:1337,mirror:false};
-assert.equal(simulate(source,smoke,false).hash,simulate(source,smoke,true).hash,'Damage observer must not alter original simulation');
+assert.equal(simulate(baseline,smoke,false).hash,simulate(baseline,smoke,true).hash,'Damage observer must not alter previous Knight simulator');
+assert.equal(simulate(source,smoke,false).hash,simulate(source,smoke,true).hash,'Damage observer must not alter shipped Knight simulator');
 const pairs=[['knight','beetank'],['knight','turtle'],['knight','dragon'],
  ['goblin','beetank'],['goblin','turtle'],['goblin','dragon'],
  ['beetank','beetank'],['beetank','turtle'],['beetank','dragon'],
@@ -86,7 +91,7 @@ const pairs=[['knight','beetank'],['knight','turtle'],['knight','dragon'],
 const duels=[];
 for(const [attacker,target] of pairs)for(const level of [1,4,5])for(const seed of [1337,9917])for(const mirror of [false,true]){
  const cfg={attacker,target,level,seed,mirror};
- const control=simulate(source,cfg),relevant=['knight','goblin','beetank'].includes(attacker)?attacker:null;
+ const control=simulate(baseline,cfg),relevant=['knight','goblin','beetank'].includes(attacker)?attacker:null;
  const variant=relevant?simulate(variants[relevant],cfg):control;
  if((attacker==='knight'&&target==='knight')||(attacker==='goblin'&&target==='goblin')||(attacker==='beetank'&&target==='goblin')){
   assert.equal(variant.hash,control.hash,'unaffected light melee must remain exact state parity '+JSON.stringify(cfg));
@@ -99,7 +104,7 @@ for(const [attacker,target] of pairs)for(const level of [1,4,5])for(const seed o
 const armies=[];
 for(const count of [40,80,120])for(const mode of ['mixed','heavy'])for(const seed of [1337,9917])for(const mirror of [false,true]){
  const cfg={attacker:'knight',target:'beetank',level:1,seed,mirror,count,mode,frames:count===120?18:44};
- const a=simulate(source,cfg),v=simulate(variants.combined,cfg);
+ const a=simulate(baseline,cfg),v=simulate(variants.combined,cfg);
  const trim=x=>({tick:x.tick,winner:x.winner,actorDamage:x.actorDamage,opponentDamage:x.opponentDamage,
   teams:x.teams,byRole:x.byRole,censored:x.censored});
  armies.push({count,mode,mirror,seed,baseline:trim(a),candidate:trim(v)});
@@ -111,7 +116,7 @@ const summary=Object.fromEntries(['knight','goblin','beetank'].map(role=>{
   duelsImproved:rows.filter(x=>x.candidate.damage>x.baseline.damage).length,
   duelsWorsened:rows.filter(x=>x.candidate.damage<x.baseline.damage).length}];
 }));
-const report={status:'QA-only contact reach A/B; game runtime entirely unchanged',geometry:gaps,duels,armies,summary,
+const report={status:'Shipped QA Knight contact reach vs reconstructed original; Goblin/Beetank are isolated research only',geometry:gaps,duels,armies,summary,
  caveats:'Collision settle geometry is a reach warning, not proof a fighter cannot strike. Censored duels must not be interpreted as wins. Candidate expands only effective melee reach against large target spacing, never sprite geometry, HP, damage, cooldown or formation. All role changes are proposed and separated; combined mixed-army trial is research only. Workload is synthetic Node VM, not actual iPhone Safari.',
  baselineInstrumentationParity:true};
 if(process.env.QA_MELEE_RECEIPT)fs.writeFileSync(process.env.QA_MELEE_RECEIPT,JSON.stringify(report,null,2)+'\n');
