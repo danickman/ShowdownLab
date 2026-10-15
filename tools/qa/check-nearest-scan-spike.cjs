@@ -10,7 +10,7 @@ const start=base.indexOf('function nearest(u,preferBack=false){'),end=base.index
 assert(start>0&&end>start&&base.indexOf('function nearest(u,preferBack=false){',start+1)<0,'target source anchor must be unique');
 const original=base.slice(start,end);
 assert(original.includes('units.filter')&&original.includes('pressureByTarget')&&original.includes('BACK.has'),'protected pressure/backline targeting semantics changed');
-const candidate=`function nearest(u,preferBack=false){
+const candidate=`function nearest(u,preferBack=false){const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;
  const pressureByTarget=new Map();
  for(const a of units)if(a.team===u.team&&a.hp>0)pressureByTarget.set(a.target,(pressureByTarget.get(a.target)||0)+1);
  let requireBack=false;
@@ -22,7 +22,7 @@ const candidate=`function nearest(u,preferBack=false){
  let best=null,score=Infinity,bd=Infinity;
  for(const v of units){
   if(v.team===u.team||v.hp<=0||v.burrow>0||!Number.isFinite(v.x)||!Number.isFinite(v.y)||(requireBack&&!BACK.has(v.type)))continue;
-  const d=Math.hypot(v.x-u.x,v.y-u.y),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035;
+  const dx=v.x-u.x,dy=v.y-u.y,d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);
   if(s<score){score=s;bd=d;best=v}
  }
  return[best,bd];
