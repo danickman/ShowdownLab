@@ -4,14 +4,17 @@
 // by 60 deployed units (dead units remain in RC4 array, so it never reactivates).
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const shipped=read('v3/legacy-sim-core.js'),frontQA=read('tools/qa/check-role-fronts-baseline.cjs');
-const anchor='s=d+Math.max(0,pressure-2)*.035;';
-assert.equal(shipped.split(anchor).length,2,'nearest() anchor changed: review tactical feasibility');
+const current=read('v3/legacy-sim-core.js'),frontQA=read('tools/qa/check-role-fronts-baseline.cjs');
+const anchor="s=d+Math.max(0,pressure-2)*.035;";
 const targetReplacement="s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);";
-const nearestAnchor='function nearest(u,preferBack=false){';
-assert.equal(shipped.split(nearestAnchor).length,2,'nearest() declaration drift');
-const candidate=shipped.replace(nearestAnchor,'function nearest(u,preferBack=false){const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;').replace(anchor,targetReplacement);
-assert.notEqual(shipped,candidate,'candidate must differ');
+const nearestAnchor="function nearest(u,preferBack=false){";
+const shippedOpening="function nearest(u,preferBack=false){const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;";
+assert.equal(current.split(shippedOpening).length,2,'shipped local-lane policy changed; revalidate population gates');
+assert.equal(current.split(targetReplacement).length,2,'shipped tactical score changed');
+const shipped=current.replace(shippedOpening,nearestAnchor).replace(targetReplacement,anchor);
+assert.equal(shipped.split(anchor).length,2,'original RC4 targeting could not be reconstructed');
+const candidate=current;
+assert.notEqual(shipped,candidate,'original and shipped trial must differ');
 const graphStart=frontQA.indexOf('const cell='),graphEnd=frontQA.indexOf('// Synthetic truth fixtures',graphStart);
 assert(graphStart>=0&&graphEnd>graphStart,'real damage-front measurement source moved');
 const damageFronts=vm.runInNewContext(frontQA.slice(graphStart,graphEnd)+';damageFronts',{Math});
@@ -111,7 +114,7 @@ for(const n of [2,20,40,60,80,120,300]){
   allExactTraceParity:rowsAt.every(r=>r.exactTraceParity)
  };
 }
-const receipt={status:'QA-only small-battle soft-lane research; never imported by game',
+const receipt={status:'Shipped QA soft-lane policy versus reconstructed original RC4; pending release CI',
  caveats:'Not an Engagement Director or fixed lane; no spawn, speed, target lock or DPS change. Target preference is local, frontliners only, softly faded from 40 to 60 deployed units, off above 60. One-on-one and >=60 must retain exact original state traces. Censored matches not win rates. 300 test deliberately early.',
  summary,rows};
 if(process.env.QA_FRONT_LANE_RECEIPT)fs.writeFileSync(process.env.QA_FRONT_LANE_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
