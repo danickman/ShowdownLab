@@ -74,9 +74,18 @@ for(const [count,speed,frames] of [[40,10,75],[80,4,65],[120,4,55]])
   assert.deepEqual(proposed.traces,control.traces,'late coarse radius changed combat '+count+' seed '+seed+' mirror '+mirror);
   lateParity.push({count,speed,seed,mirror,frames:control.samples,tick:control.tick,parity:true});
  }
+// Preserve duel and small-squad rules; high population is not an excuse to
+// regress low-count Knight/Goose or melee edge cases.
+const smallParity=[];
+for(const count of [2,4,10,20])for(const seed of [1337,9917])for(const mirror of [false,true]){
+ const control=scenario(base,count,seed,mirror,4,80);
+ const proposed=scenario(optimized,count,seed,mirror,4,80);
+ assert.deepEqual(proposed.traces,control.traces,'small-duel radius changed combat '+count+' seed '+seed+' mirror '+mirror);
+ smallParity.push({count,seed,mirror,frames:control.samples,winner:control.winner,parity:true});
+}
 const receipt={status:'QA-only coarse universal radius pair pruning, not loaded into game',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
  warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not full Canvas renderer. Require meaningful repeatable gains, role counterplay and 300-duel QA before promoting.',
- scenarios:rows,summary,lateParity};
+ scenarios:rows,summary,lateParity,smallParity};
 console.log('COLLISION COARSE SPIKE '+JSON.stringify(receipt));
 if(process.env.QA_COARSE_RECEIPT)fs.writeFileSync(process.env.QA_COARSE_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('PASS: coarse radius pair rejection exact per-callback RC4 parity; perf directional only');
