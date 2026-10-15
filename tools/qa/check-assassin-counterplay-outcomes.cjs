@@ -2,11 +2,13 @@
 // Isolated B3 counterplay test, unchanged shipped RC4 vs sign-only rear vanish.
 // This is design research and NEVER changes production or QA runtime behavior.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'../..'),read=x=>fs.readFileSync(path.join(root,'v3',x+'.js'),'utf8'),base=read('legacy-sim-core');
+const root=path.resolve(__dirname,'../..'),read=x=>fs.readFileSync(path.join(root,'v3',x+'.js'),'utf8'),rear=read('legacy-sim-core');
 const before="u.x=clamp(t.x+(u.team==='blue'?-.075:.075));u.y=clamp(t.y+(rnd()-.5)*.10);";
 const after="u.x=clamp(t.x+(u.team==='blue'?.075:-.075));u.y=clamp(t.y+(rnd()-.5)*.10);";
-assert.equal(base.split(before).length,2,'Assassin source anchor changed, review game implementation');
-const rear=base.replace(before,after),hit='const dealt=Math.min(t.hp,dmg);',step='}separate(false)}function winner(){';
+assert.equal(rear.split(after).length,2,'Shipped rear-entry Assassin changed, review matchups');
+const base=rear.replace(after,before);
+assert.equal(base.split(before).length,2,'Reconstructed old Assassin entry missing');
+const hit='const dealt=Math.min(t.hp,dmg);',step='}separate(false)}function winner(){';
 const observe=code=>{
  assert.equal(code.split(hit).length,2,'damage attribution anchor changed');
  assert.equal(code.split(step).length,2,'tick measurement anchor changed');
@@ -83,6 +85,8 @@ function duel(code,test,observer=true){
 for(const cfg of [{count:20,mode:'mixed',seed:1337,mirror:false,frames:70},
  {count:40,mode:'heavyGuard',seed:9917,mirror:true,frames:20}]){
  const a=duel(base,cfg,false),b=duel(base,cfg,true);assert.equal(a.hash,b.hash,'baseline observer changed actual RC4 simulator');
+ const originalRear=duel(rear,cfg,false),instrumentedRear=duel(rear,cfg,true);
+ assert.equal(originalRear.hash,instrumentedRear.hash,'shipped rear-entry observer changed actual RC4 simulator');
 }
 const counts=(process.env.QA_ASSASSIN_FAIR_COUNTS||'20,40,80').split(',').map(Number);
 assert(counts.length>0&&counts.every(n=>[20,40,80].includes(n)));
