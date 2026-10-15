@@ -93,6 +93,12 @@ for(const [attacker,target] of pairs)for(const level of [1,4,5])for(const seed o
  const cfg={attacker,target,level,seed,mirror};
  const control=simulate(baseline,cfg),relevant=['knight','goblin','beetank'].includes(attacker)?attacker:null;
  const variant=relevant?simulate(variants[relevant],cfg):control;
+ // Guard the original user-visible defect: Knight visibly closes to a heavy
+ // target but never lands even one L1 attack under previous visual spacing.
+ if(attacker==='knight'&&['beetank','turtle','dragon'].includes(target)&&level===1&&seed===1337){
+  assert.equal(control.actorPositiveHits,0,'regression fixture baseline unexpectedly changed '+target);
+  assert(variant.actorPositiveHits>=2,'shipped Knight cannot land heavy-contact hits '+target);
+ }
  if((attacker==='knight'&&target==='knight')||(attacker==='goblin'&&target==='goblin')||(attacker==='beetank'&&target==='goblin')){
   assert.equal(variant.hash,control.hash,'unaffected light melee must remain exact state parity '+JSON.stringify(cfg));
  }
