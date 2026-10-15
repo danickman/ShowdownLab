@@ -45,6 +45,8 @@ function draftChoices(s,counts){
     {kind:'add',type:specialist,amount:Math.min(2,counts[specialist]||2),specialist:true};
   const choices=[{kind:'add',type:reinforce,amount},alternate];
   if(up)choices.push({kind:'up',type:up,amount:1,level:normalize((s.levels.blue[up]||1)+1)});
+  else {const reserve=all.find(type=>type!==reinforce&&type!==alternate.type)||specialist;
+    choices.push({kind:'add',type:reserve,amount:Math.min(2,counts[reserve]||2),specialist:true});}
   return choices;
 }
 window.ShowdownEvolution=Object.freeze({MAX_LEVEL,STEP,normalize,multiplier,tier,accent,label,canUpgrade,population,canMultiply,MULTIPLY_POPULATION_LIMIT,disruptionOffer,draftChoices});
