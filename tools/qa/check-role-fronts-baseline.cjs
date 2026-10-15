@@ -42,8 +42,23 @@ function damageFronts(hits,maxTick,windowTicks=30){
  let persistence=0;
  for(let i=1;i<windows.length;i++){const before=windows[i-1],after=windows[i];
   if(!before.separatedPairs||!after.separatedPairs)continue;
-  const matching=after.groups.filter(g=>before.groups.some(h=>Math.hypot(g.x-h.x,g.y-h.y)<.16&&g.members.some(id=>h.members.includes(id))));
-  if(matching.length>=2&&Math.hypot(matching[0].x-matching[1].x,matching[0].y-matching[1].y)>=.18)persistence++;
+  // Do not let two new damage groups descended from one old group count as
+  // two persistent fronts: require distinct one-to-one ancestor components.
+  const links=[];
+  for(let a=0;a<before.groups.length;a++)for(let b=0;b<after.groups.length;b++){
+   const earlier=before.groups[a],later=after.groups[b],distance=Math.hypot(earlier.x-later.x,earlier.y-later.y);
+   if(distance>=.16)continue;
+   const overlap=later.members.filter(id=>earlier.members.includes(id)).length;
+   if(overlap>0)links.push({a,b,overlap,distance});
+  }
+  links.sort((a,b)=>b.overlap-a.overlap||a.distance-b.distance||a.a-b.a||a.b-b.b);
+  const seenBefore=new Set(),seenAfter=new Set(),matches=[];
+  for(const link of links){if(seenBefore.has(link.a)||seenAfter.has(link.b))continue;
+   seenBefore.add(link.a);seenAfter.add(link.b);matches.push(link)}
+  if(matches.some((a,i)=>matches.slice(i+1).some(b=>{
+   const oldA=before.groups[a.a],oldB=before.groups[b.a],newA=after.groups[a.b],newB=after.groups[b.b];
+   return Math.hypot(oldA.x-oldB.x,oldA.y-oldB.y)>=.18&&Math.hypot(newA.x-newB.x,newA.y-newB.y)>=.18;
+  })))persistence++;
  }
  return{windowTicks,totalWindows:windows.length,damageWindows:windows.filter(w=>w.hits>0).length,
   windowsWithTwoGeographicallySeparatedDamageComponents:windows.filter(w=>w.separatedPairs>0).length,
@@ -59,6 +74,27 @@ const independent=[{tick:1,attacker:1,target:2,team:'blue',role:'sniper',damage:
 assert.equal(damageFronts(independent,30).windowsWithTwoGeographicallySeparatedDamageComponents,1,'two separate damage fronts fixture');
 assert.equal(damageFronts(independent.slice(0,2),30).windowsWithTwoGeographicallySeparatedDamageComponents,0,'one real fight is not two fronts');
 assert.equal(damageFronts([],30).windowsWithTwoGeographicallySeparatedDamageComponents,0,'threat-only is not real battle');
+const splitFromOne=[
+ {tick:1,attacker:1,target:2,team:'blue',role:'knight',damage:10,x:.20,y:.3},
+ {tick:2,attacker:1,target:2,team:'blue',role:'knight',damage:10,x:.20,y:.3},
+ {tick:3,attacker:1,target:3,team:'blue',role:'knight',damage:10,x:.20,y:.3},
+ {tick:4,attacker:1,target:3,team:'blue',role:'knight',damage:10,x:.20,y:.3},
+ {tick:5,attacker:4,target:5,team:'red',role:'goose',damage:10,x:.80,y:.7},
+ {tick:6,attacker:4,target:5,team:'red',role:'goose',damage:10,x:.80,y:.7},
+ {tick:31,attacker:1,target:2,team:'blue',role:'knight',damage:10,x:.20,y:.3},
+ {tick:32,attacker:1,target:2,team:'blue',role:'knight',damage:10,x:.20,y:.3},
+ {tick:33,attacker:3,target:6,team:'red',role:'dragon',damage:10,x:.80,y:.7},
+ {tick:34,attacker:3,target:6,team:'red',role:'dragon',damage:10,x:.80,y:.7}
+];
+assert.equal(damageFronts(splitFromOne,60).consecutivePersistentMultiFrontWindows,0,'one earlier fight cannot count as two continuing fronts');
+const twoPersisting=[
+ ...independent,
+ {tick:31,attacker:1,target:2,team:'blue',role:'sniper',damage:9,x:.15,y:.3},
+ {tick:32,attacker:1,target:2,team:'blue',role:'sniper',damage:9,x:.15,y:.3},
+ {tick:33,attacker:3,target:4,team:'red',role:'dragon',damage:14,x:.80,y:.7},
+ {tick:34,attacker:3,target:4,team:'red',role:'dragon',damage:14,x:.80,y:.7}
+];
+assert.equal(damageFronts(twoPersisting,60).consecutivePersistentMultiFrontWindows,1,'two stable separate damaging engagements should persist');
 const modes={
  mixed:{blue:types,red:types.slice().reverse()},
  swarm:{blue:['goblin','goose','assassin','goblin','knight','barbarian','mole','sniper','goblin','goose'],
