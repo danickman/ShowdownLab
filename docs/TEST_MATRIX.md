@@ -589,3 +589,11 @@ The user authorized regenerating Dragon Base only; see [DRAGON_BASE_REFRESH.md](
 ## Completed Evolved roster and launch release · 2026-10-13 UTC
 
 Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian complete all ten L2 Evolved packs. Custom PWA/Apple/maskable icons, sunny home duel panel, live Ultimate/evolution Guide, defeated-species sizing and L5 introduction label are included. See `GOBLIN_BARBARIAN_EVOLUTION_RELEASE.md` for source contracts, QA and remaining phone/Ultimate-art gates. Main deployment is authorized by the user; physical-phone FPS/approval remains unverified.
+
+
+### Oct 15 custom enemy chooser QA
+- [x] Preserve ten roles, existing nested Lab screen and +1/−1 single adjustment.
+- [x] Add reachable role-specific +5 control; exercise real event handler in Node.
+- [x] Cap tests: 0→5, 58→60, 60→60; exact mixed custom enemy counts.
+- [ ] New-head full GH Actions including portrait, offline rollback and 300 body stress must finish green.
+- [ ] iPhone 15 Pro Max Safari device visual/tap review still open.

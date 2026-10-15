@@ -131,10 +131,13 @@ jobs:
           node --check v3/simulation-adapter.js
           node --check v3/round-loop.js
           node --check tools/qa/check-population-draft.cjs
+          node --check tools/qa/check-lab-enemy-batch.cjs
       - name: Verify projected cap and one-round nonpermanent sabotage
         run: node tools/qa/check-population-draft.cjs
       - name: Verify round winner, losing-side lives and mirrored match results
         run: node tools/qa/check-round-winner-lives.cjs
+      - name: Verify Lab batch enemy types, single counts and cap
+        run: node tools/qa/check-lab-enemy-batch.cjs
   extreme-300-fighters:
     runs-on: ubuntu-latest
     timeout-minutes: 8
