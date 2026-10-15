@@ -16,6 +16,11 @@ for(const total of [100,119,120,180,300]){
  assert.equal(offered.some(o=>o.kind==='mult'),total===100,'×2 only while projected army population stays <=120, current '+total);
  assert(offered.some(o=>o.kind==='disrupt'||o.kind==='up'));
 }
+const maxed=sample({knight:30,sniper:20},{dragon:40,barbarian:35},6,2,4,{blue:{knight:5,sniper:5},red:{dragon:5,barbarian:5}});
+const maxedOffers=E.draftChoices(maxed,A.BASE_COUNTS);
+assert.equal(maxedOffers.length,3,'max-evolved crowded armies still need three meaningful choices');
+assert(maxedOffers.every(o=>o.kind!=='mult'&&o.kind!=='up'));
+assert.equal(new Set(maxedOffers.map(o=>o.kind+':'+o.type+':'+(o.effect||''))).size,3,'no duplicate reward cards');
 const can=sample({goblin:10},{knight:40},2,3,4,{blue:{goblin:1},red:{knight:2}});
 assert(E.canMultiply(can,'blue','goblin',2));
 assert(!E.canMultiply(sample({goblin:80},{knight:40}),'blue','goblin',2));
