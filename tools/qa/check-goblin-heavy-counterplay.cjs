@@ -97,6 +97,24 @@ for(const cfg of scenarios){
  }
  rows.push({cfg,baseline:oldResult,candidate:newResult});
 }
+// Product invariants: a Goblin physically in heavy-body contact must no
+// longer be incapable of damaging Beetank/Turtle, while armored counters survive.
+for(const target of ['beetank','turtle']){
+ const one=rows.filter(x=>x.cfg.mode==='duel'&&x.cfg.target===target&&x.cfg.level===1&&x.cfg.seed===1337);
+ assert.equal(one.length,2,'missing mirrored Goblin-vs-'+target+' duel');
+ for(const x of one){
+  assert.equal(x.baseline.goblinHits,0,'legacy zero-contact fixture changed '+target);
+  assert(x.candidate.goblinHits>=1,'shipped Goblin must actually strike '+target);
+  assert.equal(x.baseline.winner,x.candidate.winner,'Goblin must not overturn single heavy defender at L1 '+target);
+ }
+ const pack=rows.filter(x=>x.cfg.mode==='swarm'&&x.cfg.count===12&&x.cfg.target===target&&x.cfg.level===1&&x.cfg.seed===1337);
+ assert.equal(pack.length,2,'missing mirrored six-on-six '+target+' counterplay');
+ for(const x of pack){
+  assert.equal(x.baseline.goblinHits,0,'legacy pack had unexpected large-body hits');
+  assert(x.candidate.goblinHits>0,'Goblin pack still cannot hit heavy defender '+target);
+  assert.equal(x.candidate.defenderAlive,6,'contact-only Goblin pack overpowered '+target+' counter');
+ }
+}
 const fold=items=>({cases:items.length,
  damageFrom:+items.reduce((n,x)=>n+x.baseline.goblinDamage,0).toFixed(1),
  damageTo:+items.reduce((n,x)=>n+x.candidate.goblinDamage,0).toFixed(1),
