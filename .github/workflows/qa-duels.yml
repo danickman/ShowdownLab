@@ -209,6 +209,28 @@ jobs:
           path: assassin-counterplay-outcomes.json
           if-no-files-found: warn
 
+  assassin-heavy-contact-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Beetank Turtle contact regression syntax
+        run: node --check tools/qa/check-assassin-heavy-contact.cjs
+      - name: Exercise seeded true-damage counterplay and Turtle reflection
+        env:
+          QA_ASSASSIN_HEAVY_RECEIPT: assassin-heavy-contact.json
+        run: node tools/qa/check-assassin-heavy-contact.cjs
+      - name: Upload hit, winner, HP-reflection and real-front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-heavy-contact
+          path: assassin-heavy-contact.json
+          if-no-files-found: warn
+
   assassin-dragon-contact-counterplay:
     runs-on: ubuntu-latest
     timeout-minutes: 16

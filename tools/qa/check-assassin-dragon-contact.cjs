@@ -1,14 +1,16 @@
 'use strict';
 // Permanent source-level Assassin-vs-Dragon true-hit regression and counterplay.
 // Compare shipped RC4 to identical pre-contact behavior, seeded and mirrored.
-// The only permitted change is attack reach when the selected target is Dragon.
+// Reconstruct the earlier Dragon-only release to guard its previously verified outcomes after later armored-body changes.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=f=>fs.readFileSync(path.join(root,f),'utf8');
 const shipped=read('v3/legacy-sim-core.js');
 const before="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;const r=u.range/500;";
-const after="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;/* The Dragon's wide standing collider otherwise prevents any close backstab. Keep armored tank counters unchanged. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;";
+const after="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;/* Match attack reach to the untraversable standing collider, not an artificial melee DPS boost. Dragon retains its verified +.002 access margin; armored defenders retain their armor and shell counters. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):(t.type==='beetank'||t.type==='turtle')?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)):u.range/500;";
+const oldDragon="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;/* The Dragon's wide standing collider otherwise prevents any close backstab. Keep armored tank counters unchanged. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;";
 assert.equal(shipped.split(after).length,2,'review any changes to Dragon-only Assassin contact correction');
-const original=shipped.replace(after,before);
+const previousDragon=shipped.replace(after,oldDragon);
+const original=previousDragon.replace(oldDragon,before);
 assert.equal(original.split(before).length,2);
 const hit='const dealt=Math.min(t.hp,dmg);';
 const observe=src=>{assert.equal(src.split(hit).length,2);return src.replace(hit,hit+"if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,role:a.type,targetType:t.type,damage:dealt,x:t.x,y:t.y,team:a.team});")};
@@ -52,13 +54,13 @@ function test(src,c,observer=true){
 }
 for(const cfg of [{mode:'mixed',count:20,seed:1337,mirror:false,frames:50},
  {mode:'mixed',count:80,seed:9917,mirror:true,frames:18}]){
- assert.equal(test(shipped,cfg,true).hash,test(shipped,cfg,false).hash,'read-only hit observation changed shipped physical state');
+ assert.equal(test(previousDragon,cfg,true).hash,test(previousDragon,cfg,false).hash,'read-only hit observation changed previous Dragon-only state');
  assert.equal(test(original,cfg,true).hash,test(original,cfg,false).hash,'read-only hit observation changed control physical state');
 }
 const duels=[];
 for(const opponent of ['dragon','beetank','turtle','sniper','goose','knight','goblin'])for(const level of [1,4,5])for(const mirror of [false,true]){
  const cfg={duel:['assassin',opponent],level,mirror,seed:1337,frames:145};
- const base=test(original,cfg),trial=test(shipped,cfg);
+ const base=test(original,cfg),trial=test(previousDragon,cfg);
  if(opponent==='dragon'){
   assert.equal(base.dragonHits,0,'control must show the Dragon contact bug');
   assert(trial.dragonHits>0,'Dragon should receive real Assassin hits at L1/L4/L5 from both sides');
@@ -70,7 +72,7 @@ for(const opponent of ['dragon','beetank','turtle','sniper','goose','knight','go
 }
 const groups=[],summaries={};
 for(const count of [20,40,80])for(const mode of ['mixed','heavy','ranged'])for(const seed of [1337,9917])for(const mirror of [false,true]){
- const cfg={count,mode,seed,mirror,frames:count===20?115:count===40?78:37},base=test(original,cfg),trial=test(shipped,cfg);
+ const cfg={count,mode,seed,mirror,frames:count===20?115:count===40?78:37},base=test(original,cfg),trial=test(previousDragon,cfg);
  groups.push({cfg,control:base,trial});
 }
 for(const count of [20,40,80]){
@@ -85,11 +87,11 @@ for(const count of [20,40,80]){
 }
 for(const count of [80,120,300])for(const speed of [1,10]){
  const cfg={mode:'noDragon',count,speed,seed:1337,mirror:true,frames:count===300?12:20};
- assert.equal(test(original,cfg).hash,test(shipped,cfg).hash,'no-Dragon high-density state must remain identical '+JSON.stringify(cfg));
+ assert.equal(test(original,cfg).hash,test(previousDragon,cfg).hash,'original Dragon-only high-density state must remain identical '+JSON.stringify(cfg));
 }
 const report={status:'QA Dragon-only Assassin geometric contact fix, combat-changing variant',
  caveats:'Mirrored seed-controlled source A/B; 20/40/80 snapshots censored. No global win rate, no Safari frame time. Dragon remains winner in six solo L1/L4/L5 fixtures; Beetank/Turtle/light controls bitwise identical.',
  duels,summaries,groups};
 if(process.env.QA_ASSASSIN_DRAGON_RECEIPT)fs.writeFileSync(process.env.QA_ASSASSIN_DRAGON_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('ASSASSIN DRAGON CONTACT '+JSON.stringify(summaries));
-console.log('PASS: real backstabs against Dragon, preserved counters, 80/120/300 no-Dragon complete state parity and original observer conservation');
+console.log('PASS: reconstructed earlier Dragon-only release retains true Dragon hits, solo counterplay, and previous no-Dragon full-state parity');

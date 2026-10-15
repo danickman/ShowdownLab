@@ -605,3 +605,11 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Seed/mirrored 20/40/80 group probes measured true attributed damage and persistent geographic fronts rather than proximity-only contacts; outcomes are censored.
 - [ ] Complete *new-head* GitHub Actions including dedicated Dragon contact test and exact physical-state/300-offline/portrait gates.
 - [ ] iPhone 15 Pro Max Safari real-device battle/readability and long completed matches; Chromium is only a proxy.
+
+
+### October 15 — Assassin reaches Beetank and Turtle at true body contact
+- [x] Candidate source A/B: six mirrored L1/L4/L5 solos per armored defender; baseline 0 hits, exact contact 35 total, heavy counters retain 12/12 wins.
+- [x] Turtle L4/L5 reflection verified under direct melee; existing Dragon rule and other solo roles unaffected.
+- [x] 24 heavy-army, 24 mixed-heavy matched cases measured hit damage and counters without fake zone counts; snapshot/terminal limitations recorded.
+- [ ] New-head CI, dedicated source-state/counterplay, offline PWA rollback, uncapped 300, 430×932 DPR3 browser and all existing role tests.
+- [ ] Actual iPhone Safari manual animation, visibility and performance confirmation; do not claim Chromium = real device.
