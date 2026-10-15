@@ -597,3 +597,11 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Cap tests: 0→5, 58→60, 60→60; exact mixed custom enemy counts.
 - [ ] New-head full GH Actions including portrait, offline rollback and 300 body stress must finish green.
 - [ ] iPhone 15 Pro Max Safari device visual/tap review still open.
+
+
+### Oct 15 — Assassin authentic Dragon-contact regression
+- [x] Source A/B six seeded mirrored L1/L4/L5 Assassin-Dragon duels: baseline 0 actual hits; conditional contact restored real attacks, Dragon still won.
+- [x] Source A/B 36 non-Dragon L1/L4/L5 solo duels bitwise-unchanged; Beetank/Turtle tank counters remain.
+- [x] Seed/mirrored 20/40/80 group probes measured true attributed damage and persistent geographic fronts rather than proximity-only contacts; outcomes are censored.
+- [ ] Complete *new-head* GitHub Actions including dedicated Dragon contact test and exact physical-state/300-offline/portrait gates.
+- [ ] iPhone 15 Pro Max Safari real-device battle/readability and long completed matches; Chromium is only a proxy.

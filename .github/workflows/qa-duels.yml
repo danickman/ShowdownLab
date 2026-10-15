@@ -209,6 +209,28 @@ jobs:
           path: assassin-counterplay-outcomes.json
           if-no-files-found: warn
 
+  assassin-dragon-contact-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Dragon-only Assassin reach QA syntax
+        run: node --check tools/qa/check-assassin-dragon-contact.cjs
+      - name: Verify actual Dragon hits, unchanged tank counters and real fight fronts
+        env:
+          QA_ASSASSIN_DRAGON_RECEIPT: assassin-dragon-contact.json
+        run: node tools/qa/check-assassin-dragon-contact.cjs
+      - name: Upload measured Dragon Assassin matchup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-dragon-contact
+          path: assassin-dragon-contact.json
+          if-no-files-found: warn
+
   assassin-rear-opportunity-research:
     runs-on: ubuntu-latest
     timeout-minutes: 15
