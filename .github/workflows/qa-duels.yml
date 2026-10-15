@@ -178,6 +178,29 @@ jobs:
           path: threat-observer-receipt.json
           if-no-files-found: warn
 
+  effective-engagement-observer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check effective engagement measurement syntax
+        run: node --check tools/qa/check-effective-engagement.cjs
+      - name: Observe real hit, ranged threat and pursuit without combat intervention
+        env:
+          QA_EFFECTIVE_COUNTS: '40,80,120,180,300'
+          QA_EFFECTIVE_RECEIPT: effective-engagement-receipt.json
+        run: node tools/qa/check-effective-engagement.cjs
+      - name: Upload engagement evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: effective-engagement-receipt
+          path: effective-engagement-receipt.json
+          if-no-files-found: warn
+
   engagement-director-spike:
     runs-on: ubuntu-latest
     timeout-minutes: 6
