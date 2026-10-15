@@ -255,6 +255,29 @@ jobs:
           path: ${{ runner.temp }}/density-browser
           if-no-files-found: warn
 
+  pressure-cache-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check cached-pressure research syntax
+        run: node --check tools/qa/check-pressure-cache-spike.cjs
+      - name: Compare exact RC4 target pressure at 1x and 10x
+        env:
+          QA_PRESSURE_COUNTS: '40,80,120,180,300'
+          QA_PRESSURE_RECEIPT: pressure-cache-spike.json
+        run: node tools/qa/check-pressure-cache-spike.cjs
+      - name: Upload mirrored combat parity and directional CPU results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pressure-cache-spike
+          path: pressure-cache-spike.json
+          if-no-files-found: warn
+
   collision-separation-research:
     runs-on: ubuntu-latest
     timeout-minutes: 8
