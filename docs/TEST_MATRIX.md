@@ -628,3 +628,6 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Changed Fighter Guide to actual game duration and preserved original Dragon 90-tick/1.5s Inferno explanation.
 - [ ] New-head unit+dedicated Goose source-counterplay CI, 42 offline SHA pins, 430×932 DPR3 browser, 300-fighter throughput and source-attribution full run.
 - [ ] Actual iPhone 15 Pro Max Safari performance/frame-readability and completed many-round win-rate study before production promotion.
+
+- [x] Update legacy `check-turn3-consistency.cjs` duration assertions to **enforce new L4 44/L5 64 Goose Guide** (not delete timing checks).
+- [ ] Complete all post-test-fix CI jobs including source-linked honk true-stun and duel QA.

@@ -11,8 +11,8 @@ assert(src.includes('Math.round((lvl+1)*2.5)')===false, 'obsolete 2.5% mastery t
 assert(src.includes('${(lvl+1)*5}% HP & DAMAGE'), 'purchase toast must match 5% mastery');
 assert(src.includes('Next M${next}: +${next*5}%'), 'Guide mastery rank display mismatch');
 assert(src.includes('90 ticks (about 1.5 seconds)'), 'Guide Dragon timing');
-assert(src.includes('22 ticks (about 0.37 seconds)'), 'Guide Goose timing');
-assert(src.includes('32 ticks (about 0.53 seconds)'), 'Guide Goose L5 timing');
+assert(src.includes('44 ticks (about 0.73 seconds)'), 'Guide Goose L4 actual Ultimate stun');
+assert(src.includes('64 ticks (about 1.07 seconds)'), 'Guide Goose L5 actual Ultimate stun');
 assert(!src.includes('Aim your ram into a group'), 'cannot aim ram manually');
 assert(milestone.includes('60 ticks/sec'), 'milestone duration estimate stale');
 for(const selector of ['[data-screen="lab"] .lab-block input[type="range"]','[data-screen="lab"] .lab-block label:has(input[type="checkbox"])','[data-screen="roster"] button[data-upgrade-unit]'])assert(css.includes(selector), 'touch rule missing: '+selector);
