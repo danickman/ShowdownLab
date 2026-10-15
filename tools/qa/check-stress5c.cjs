@@ -9,12 +9,17 @@ const optimizedNearest='const pressureByTarget=new Map();for(const a of units)if
 const baselineNearest='';
 const optimizedPressure='pressure=pressureByTarget.get(v.id)||0';
 const baselinePressure='pressure=units.reduce((n,a)=>n+(a.team===u.team&&a.hp>0&&a.target===v.id?1:0),0)';
-const optimizedRadii='passes=initial?10:alive.length>32?4:3,radii=alive.map(visualSpacingRadius);';
-const baselineRadii='passes=initial?10:alive.length>32?4:3;';
+// RC4's later universal collision bound requires this radius array in BOTH
+// benchmark variants. Compare 5C's original per-pair radius computation and
+// pressure-counting logic without deleting the live broadphase dependency.
+const optimizedRadii='passes=initial?10:alive.length>32?4:3,radii=alive.map(visualSpacingRadius),globalBound=2*Math.max(...radii)*1.14;';
+const baselineRadii=optimizedRadii;
 const optimizedMin='min=(radii[i]+radii[j])*(same?1.14:1.00)';
 const baselineMin='min=(visualSpacingRadius(a)+visualSpacingRadius(b))*(same?1.14:1.00)';
 for(const part of [optimizedNearest,optimizedPressure,optimizedRadii,optimizedMin])assert(optimized.includes(part),'optimized source anchor changed');
-const baseline=optimized.replace(optimizedNearest,baselineNearest).replace(optimizedPressure,baselinePressure).replace(optimizedRadii,baselineRadii).replace(optimizedMin,baselineMin);
+const baseline=optimized.replace(optimizedNearest,baselineNearest).replace(optimizedPressure,baselinePressure).replace(optimizedMin,baselineMin);
+assert.equal((optimized.match(/globalBound=2\*Math\.max\(\.\.\.radii\)\*1\.14/g)||[]).length,1,'universal collision guard changed');
+assert(baseline.includes(optimizedRadii),'both variants must share current collision broadphase');
 assert(baseline!==optimized,'baseline reconstruction unsuccessful');
 const variants=[['original-algorithm',baseline],['optimized-algorithm',optimized]];
 const typeSet=['knight','goose','assassin','sniper','dragon','beetank','mole','turtle','goblin','barbarian'];
@@ -57,7 +62,7 @@ for(const number of [80,120])for(const seed of [1337,7301,27919]){
  assert.equal(results['original-algorithm'].endTick,results['optimized-algorithm'].endTick,'tick mismatch');
  rows.push({units:number,seed,baseline:results['original-algorithm'],optimized:results['optimized-algorithm'],speedup:results['original-algorithm'].totalMs/results['optimized-algorithm'].totalMs});
 }
-const receipt={method:'paired vm RAF at 1x, 90 frames, identical source except two micro-optimizations; wall-clock measurements include JS VM cost; not a physical iPhone benchmark',rows};
+const receipt={method:'paired VM RAF at 1x, 90 frames; reconstructed original 5C pressure scans and pairwise spacing-radius calculations, preserving the later shipped universal coarse-radius broadphase on BOTH variants. Times include JS VM cost, not iPhone/browser FPS',rows};
 const out=process.env.QA_STRESS_RECEIPT;
 if(out)fs.writeFileSync(out,JSON.stringify(receipt,null,2)+'\n');
 console.log('PASS: exact deterministic snapshots for 80/120-unit matches, six matched scenarios');
