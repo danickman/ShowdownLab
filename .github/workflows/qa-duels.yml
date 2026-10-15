@@ -7,6 +7,11 @@ on:
     branches: [main]
 permissions:
   contents: read
+# Only the newest QA push per ref needs expensive stress/browser jobs.
+# Protect PR runs on distinct refs; cancel superseded work without weakening tests.
+concurrency:
+  group: showdown-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   root-release-gate:
     runs-on: ubuntu-latest
