@@ -73,3 +73,19 @@ Initial read-only front observer allowed a false continuity case: **one** earlie
 Repeated GitHub pushes launched expensive 21–24-job matrices and left old workflows queued. Added workflow-level per-ref concurrency and `cancel-in-progress: true` in [`4264033`](https://github.com/danickman/ShowdownLab/commit/4264033080ae0ef2c046e3784a5202acfddd905b) to retain the **latest QA run** and cancel superseded pushes; this does not relax any assertion or disable jobs. The latest full-run checks, including the shipped `coarse-bound1` collision change, remain pending on GitHub. Until they pass, **no main merge or production deployment**.
 
 **Current decision:** Keep Assassin sign correction in the isolated testing harness. Next: read CI evidence, confirm support/control value per role, diagnose failed backstab reach, and run isolated B2 formation/target-pressure choices for persistent real fronts. Any eventual Assassin behavior change must preserve opponent counterplay and match readiness; if chosen, first ship on QA with all 42 offline integrity SHA pins and full battle/browser tests.
+
+
+### Recomputed current-core direct samples using corrected persistent-front logic
+
+The corrected one-to-one matching fixture was evaluated directly on the **unchanged current QA RC4** with positive hit edges, 30-tick windows, 4× simulation, 1 seed per family plus mirrored teams. This is a **short, censored direct V8 sample**, not GitHub Actions completion or physical browser validation.
+
+| Trial | Simultaneous separated damage fronts | Correctly persistent multi-front windows | Total windows |
+|---|---:|---:|---:|
+| 40 mixed, normal mirror | 4 | 0 | 10 |
+| 40 mixed, reversed mirror | 5 | 1 | 10 |
+| 80 mixed, normal mirror | 6 | 4 | 9 |
+| 80 mixed, reversed mirror | 6 | 0 | 9 |
+| 40 heavy, normal mirror | 2 | 0 | 10 |
+| 40 heavy, reversed mirror | 2 | 1 | 10 |
+
+Thus, multiple independent **actual damaging** fights do occur; continuity swings from **4** to **0** even in paired 80-fighter mirrored compositions. Larger steady fixtures, other seeds, area coverage, ability activations and per-role attacks are needed before deciding spawn/target policy changes. The experiment supports the user's request to improve *fight persistence, accessibility and reward*, not merely distribution of sprites across the floor. Censored cases must not be presented as complete-battle win rates.
