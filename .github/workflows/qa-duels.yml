@@ -273,6 +273,28 @@ jobs:
           path: melee-contact-reach.json
           if-no-files-found: warn
 
+  goose-honk-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check renderer honk signal test syntax
+        run: node --check tools/qa/check-goose-honk-cue.cjs
+      - name: Detect real Goose honks at 1x 4x and 10x without modifying RC4
+        env:
+          QA_HONK_RECEIPT: goose-honk-cue.json
+        run: node tools/qa/check-goose-honk-cue.cjs
+      - name: Upload actual cast, visible cue and duplicate-prevention receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-honk-cue-sampling
+          path: goose-honk-cue.json
+          if-no-files-found: warn
+
   local-front-lane-research:
     runs-on: ubuntu-latest
     timeout-minutes: 18
