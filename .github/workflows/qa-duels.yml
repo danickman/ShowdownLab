@@ -295,6 +295,28 @@ jobs:
           path: sniper-shot-cue.json
           if-no-files-found: warn
 
+  beetank-charge-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real charge wind-up cue study syntax
+        run: node --check tools/qa/check-beetank-charge-cue.cjs
+      - name: Match real Beetank charge starts to rendered evidence at 1x 4x 10x
+        env:
+          QA_RAM_RECEIPT: beetank-charge-cue.json
+        run: node tools/qa/check-beetank-charge-cue.cjs
+      - name: Upload true charges, active wakes and no-phantom-impact receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-charge-cue-sampling
+          path: beetank-charge-cue.json
+          if-no-files-found: warn
+
   goose-honk-cue-sampling:
     runs-on: ubuntu-latest
     timeout-minutes: 10
