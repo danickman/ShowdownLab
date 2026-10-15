@@ -229,6 +229,28 @@ jobs:
           path: assassin-rear-opportunity.json
           if-no-files-found: warn
 
+  goblin-heavy-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original and candidate Goblin source study
+        run: node --check tools/qa/check-goblin-heavy-counterplay.cjs
+      - name: Compare Goblin swarms, armored defenders and light-duel parity
+        env:
+          QA_GOBLIN_RECEIPT: goblin-heavy-counterplay.json
+        run: node tools/qa/check-goblin-heavy-counterplay.cjs
+      - name: Upload Goblin per-side actual hits and defender-survival receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-heavy-counterplay
+          path: goblin-heavy-counterplay.json
+          if-no-files-found: warn
+
   melee-contact-reach-research:
     runs-on: ubuntu-latest
     timeout-minutes: 15
