@@ -128,6 +128,8 @@ jobs:
           node --check tools/qa/check-population-draft.cjs
       - name: Verify projected cap and one-round nonpermanent sabotage
         run: node tools/qa/check-population-draft.cjs
+      - name: Verify round winner, losing-side lives and mirrored match results
+        run: node tools/qa/check-round-winner-lives.cjs
   extreme-300-fighters:
     runs-on: ubuntu-latest
     timeout-minutes: 8
