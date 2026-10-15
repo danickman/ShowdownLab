@@ -1,6 +1,6 @@
 # Showdown Lab — melee contact-reach and actual battle participation
 
-**Research date:** 2026-10-15. **Status:** New independently testable game-balance hypothesis; contact-reach candidate **NOT implemented in game**. Branch `qa-turn1-duel-baseline`, no production deployment. Assassins' sign-only rear teleport is independently integrated for QA behind its own gates.
+**Research date:** 2026-10-15. **Status:** **Knight contact reach integrated on QA branch only**; Goblin, Beetank and other candidates remain **research-only**. Branch `qa-turn1-duel-baseline`, no production deployment. Assassins' sign-only rear teleport is independently integrated for QA behind its own gates.
 
 ## Finding: authored visual spacing and physical attack reach do not always meet
 
@@ -70,3 +70,20 @@ Slash-separated counts are mirror 1 and 2, respectively. The inconsistent Beetan
 4. Add player-visible comic impacts, readable multi-front action, Ultimates and rewards **after** real role opportunity improves. This is an action game; successful local engagements must be both tactically meaningful and visually comprehensible.
 
 **Release boundary:** All above is QA branch work; `main`/production remain unchanged until explicit user authorization.
+
+
+## October 15 later turn: Knight-only access fix implemented on QA, no other melee buffs
+
+**Source:** `v3/legacy-sim-core.js` [`9cf6263`](https://github.com/danickman/ShowdownLab/commit/9cf62635b98e9ce64281d888b90edb1341693db8). Only Knight's effective attack-reach calculation changes from `r=u.range/500` to `r=Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22+.002)` inside `knightStep()`. Same body positions, collision impulses, team roles, armor, damage, ability multipliers, cooldowns, and Knight charge/guard rules. For targets already inside Knight's nominal range, the rule is unchanged.
+
+**Browser/offline assets:** `index.html` now references `/v3/legacy-sim-core.js?v=knight-contact1` ([`9815c07`](https://github.com/danickman/ShowdownLab/commit/9815c07e6d6de74262a4be6e22d28257ec3deb35)); `sw.js` cache is `showdown-lab-release-knightcontact1` with all **42 SHA-256 entries** verified/recomputed from the prior root/core ([`75c7a28`](https://github.com/danickman/ShowdownLab/commit/75c7a28650728184b58aaabb3a830b4fdca09f90)). Root HTML's exact runtime scripts matched the new SW RUNTIME list. `main` untouched.
+
+**Direct V8 candidate validation before promotion:**
+- 30 mirrored L1/L4/L5 Knight duels, 900-tick cap: Knight-vs-Beetank, Turtle and Dragon baseline normal hits **0** in every tested mirror/level; with corrected reach Knight hit **3–15 times**, varying by foe/level. Knight-vs-Knight and Knight-vs-Goblin were **exactly unchanged** in all tested sample outcomes.
+- 10 representative 40/80/120 (mixed/heavy/swarm) mirrored direct 152–850-tick probes showed early large armies sometimes entirely unchanged, while 40-heavy later trials showed Knight attack opportunity improving; others had less change.
+- A further **16 matched 40/80 mixed/heavy scenarios**, two seeds and both team mirrors at **470–850 logical ticks**, had aggregate fighter-attributed Knight damage **6,957.2 baseline → 7,779.9 candidate** (about +11.8% for THIS selected sample). **5** cases improved, **2** decreased and others unchanged. Corrected persistent damage-positive multi-front windows summed **67 → 71**, with **3** cases improving separate fight windows and **2** worsening. This is emergent match timing; not a guarantee of stronger Knight across all matches or persistent front stability.
+- 12 separate direct simulation smokes at 120/180/300 fighters, 1× and 10×, two mirrors: all simulation positions/HP were finite; 300 at 10× progressed 50 ticks in a short bounded smoke. Directional Node V8 callback timings were mixed and are not physical iPhone Safari results.
+
+**Release tests:** `tools/qa/check-melee-contact-reach-study.cjs` [`9061f41`](https://github.com/danickman/ShowdownLab/commit/9061f418dcd436b87b79f0923dc2ce7262d105d6) now asserts that the **real shipped Knight implementation** is present, reconstructs the previous nominal Knight reach as control, and leaves Goblin/Beetank variants isolated. Added explicit defect regression [`53fb5c1`](https://github.com/danickman/ShowdownLab/commit/53fb5c16c4668834d6b2af1892e3baedd100a0b5): L1 Knight-versus-Beetank/Turtle/Dragon must go from **zero** baseline positive hits to **two or more** within 850 ticks, plus exact unaffected light-duel trace parity. Full current GitHub Actions suite (including browser PWA/offline integrity, extreme 300, role-effective damage and control, and Assassin fair matchups) **still queued or cancelled as superseded** at this checkpoint; **not green** and absolutely not cleared for merge or production.
+
+**Next combat turn:** Establish independent CI success and portrait browser performance. Then evaluate Goblin reach separately, particularly that a **swarm of Goblins must not trivialize Beetank/Turtle/Dragon**, while handling Mole, Goose and Assassin with role-specific counters rather than granting a blanket universal melee buff. In parallel, aim to improve **persistent actual damage-positive engagements**, not just separated positional sprites, then theatrical hit feedback and mode reward choices. Do not reintroduce rejected global engagement-steering logic.
