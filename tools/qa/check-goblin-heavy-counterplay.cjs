@@ -4,7 +4,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
 const shipped=read('legacy-sim-core'),old="function goblinStep(u,t,d){const r=u.range/500;";
-const correction="function goblinStep(u,t,d){const r=Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22+.002);";
+const correction="function goblinStep(u,t,d){const gap=visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22,r=gap>u.range/500?gap+.002:u.range/500;";
 assert.equal(shipped.split(old).length,2,'Goblin source moved, re-evaluate melee reach');
 const candidate=shipped.replace(old,correction);
 const damageAnchor='const dealt=Math.min(t.hp,dmg);',tickAnchor='}separate(false)}function winner(){';
