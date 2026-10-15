@@ -178,6 +178,29 @@ jobs:
           path: threat-observer-receipt.json
           if-no-files-found: warn
 
+  assassin-rear-opportunity-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check rear-access research syntax
+        run: node --check tools/qa/check-assassin-rear-study.cjs
+      - name: A/B Assassin rear entry and counterplay over matched seeds
+        env:
+          QA_ASSASSIN_COUNTS: '40,80,120'
+          QA_ASSASSIN_RECEIPT: assassin-rear-opportunity.json
+        run: node tools/qa/check-assassin-rear-study.cjs
+      - name: Archive original and rear-side candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-rear-opportunity-study
+          path: assassin-rear-opportunity.json
+          if-no-files-found: warn
+
   role-multifront-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 17
