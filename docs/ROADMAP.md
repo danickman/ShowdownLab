@@ -1,5 +1,8 @@
 # Current operating priorities — 2026-10-14 (supersedes older milestone assumptions)
 
+**Active blocker (2026-10-14, QA branch only):** A takeover audit found and corrected incorrect losing-side life accounting in `simulation-adapter.js` (red lives deducted regardless of winner). Mirrored three-round and instant-final regression added, runtime asset version and 42 worker SHA pins refreshed; verify the new CI run and offline browser upgrade before further combat changes. Never infer correctness from duel terminality alone. **Still unreleased.**
+
+
 **Read first:** [Battlefield engagement, canvas and whole-roadmap design review](BATTLEFIELD_ENGAGEMENT_AND_CANVAS_DESIGN_2026-10-14.md), especially "Second-pass decision review", and [QA implementation handoff](QA_IMPLEMENTATION_HANDOFF.md). The historical roadmap below is retained for traceability, **not a specification to reintroduce L10 levels, generate the entire roster anew, or reinstate a second HTML entrypoint**.
 
 **Current implementation state:** Ten authored Base/Evolved/Ultimate fighters, **five** active levels (L1 Base, L2 Evolved, L3 accent, L4 Ultimate ability, L5 enhanced Ultimate), six arena treatments and Quick/Draft/Ultimate Lab are present at different completion/release states. The user's **Choose Your Enemies** Ultimate Lab subpage has been implemented and browser-tested on QA branch. The canonical application entrypoint is root \`index.html\`; \`v3/index.html\` was intentionally removed. Preserve pinned PWA offline asset digests and the RC4 combat core. Never equate QA-branch capabilities with production release.
