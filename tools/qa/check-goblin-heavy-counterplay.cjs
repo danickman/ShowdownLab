@@ -5,8 +5,10 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cryp
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
 const shipped=read('legacy-sim-core'),old="function goblinStep(u,t,d){const r=u.range/500;";
 const correction="function goblinStep(u,t,d){const gap=visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22,r=gap>u.range/500?gap+.002:u.range/500;";
-assert.equal(shipped.split(old).length,2,'Goblin source moved, re-evaluate melee reach');
-const candidate=shipped.replace(old,correction);
+assert.equal(shipped.split(correction).length,2,'QA-shipped Goblin contact changed: review study');
+const baseline=shipped.replace(correction,old);
+const candidate=shipped;
+assert.equal(baseline.split(old).length,2,'reconstructed previous Goblin contact source missing');
 const damageAnchor='const dealt=Math.min(t.hp,dmg);',tickAnchor='}separate(false)}function winner(){';
 const instrument=code=>{
  assert.equal(code.split(damageAnchor).length,2,'damage anchor moved');
@@ -73,7 +75,7 @@ function trial(code,cfg,audit=true){
 }
 for(const c of [{mode:'duel',target:'beetank',count:2,level:1,seed:1337,mirror:false,speed:10,frames:65},
  {mode:'counter',target:'beetank',count:40,level:1,seed:9917,mirror:true,speed:4,frames:30}]){
- assert.equal(trial(shipped,c,false).digest,trial(shipped,c,true).digest,'QA hit observer changed original core');
+ assert.equal(trial(baseline,c,false).digest,trial(baseline,c,true).digest,'QA hit observer changed reconstructed original core');
  assert.equal(trial(candidate,c,false).digest,trial(candidate,c,true).digest,'QA hit observer changed candidate core');
 }
 const scenarios=[];
@@ -88,7 +90,7 @@ for(const count of [40,80,120])for(const mode of ['heavy','light','counter'])for
 }
 const rows=[];
 for(const cfg of scenarios){
- const o=trial(shipped,cfg),c=trial(candidate,cfg);
+ const o=trial(baseline,cfg),c=trial(candidate,cfg);
  const {digest:baselineDigest,...oldResult}=o,{digest:candidateDigest,...newResult}=c;
  if((cfg.mode==='duel'||cfg.mode==='swarm')&&['knight','goblin'].includes(cfg.target)){
   assert.equal(candidateDigest,baselineDigest,'Goblin-vs-small body should remain strictly unchanged '+JSON.stringify(cfg));
@@ -118,7 +120,7 @@ const summary={
  army80:fold(rows.filter(r=>r.cfg.count===80)),
  army120:fold(rows.filter(r=>r.cfg.count===120)),
 };
-const report={status:'QA-only, no Goblin game change',summary,rows,baselineObserverExactParity:true,
+const report={status:'Current QA Goblin contact vs reconstructed prior source; full release tests required, main unchanged',summary,rows,baselineObserverExactParity:true,
  caveats:'Only short source-level synthetic simulations, not full match equilibrium or Safari performance. Goblin vs armored defenders has strong mitigation; per-target and per-alive-tick effects are essential. These results do not establish normalized role fitness or fair 20+ Goblin swarms. Counterplay and persistent fronts need independent evidence before runtime change.'};
 if(process.env.QA_GOBLIN_RECEIPT)fs.writeFileSync(process.env.QA_GOBLIN_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('GOBLIN HEAVY COUNTERPLAY '+JSON.stringify(summary));
