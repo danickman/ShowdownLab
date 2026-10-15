@@ -4,11 +4,13 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
-const base=read('legacy-sim-core');
+const shipped=read('legacy-sim-core');
 const original='const a=alive[i],b=alive[j],dx=b.x-a.x,dy=b.y-a.y,d0=Math.hypot(dx,dy),same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(d0>=min)continue;';
 const candidate='const a=alive[i],b=alive[j],dx=b.x-a.x,dy=b.y-a.y,same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(dx>=min||dx<=-min||dy>=min||dy<=-min)continue;const d0=Math.hypot(dx,dy);if(d0>=min)continue;';
-assert.equal(base.split(original).length,2,'exact separation guard changed, review algorithm before modifying');
-const optimized=base.replace(original,candidate);
+assert.equal(shipped.split(candidate).length,2,'shipped fast-reject guard moved, review collision algorithm');
+const base=shipped.replace(candidate,original);
+const optimized=shipped;
+assert.equal(base.split(original).length,2,'restored unchanged RC4 control mismatch');
 // Mathematically safe: any |dx| or |dy| >= min => Euclidean d>=min,
 // no collision response, no RNG, no new spatial buckets/stale neighbor history.
 function scenario(code,count,seed,mirror,speed,frames){
