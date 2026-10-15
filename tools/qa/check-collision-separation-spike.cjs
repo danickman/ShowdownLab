@@ -66,5 +66,5 @@ const receipt={status:'QA source-swap research only; separation axis-bound filte
  warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not full Canvas renderer. Require meaningful repeatable gains, role counterplay and 300-duel QA before promoting.',
  scenarios:rows,summary};
 console.log('COLLISION SEPARATION SPIKE '+JSON.stringify(receipt));
-if(process.env.QA_COLLISION_RECEIPT)fs.writeFileSync(process.env.QA_NEAREST_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
+if(process.env.QA_COLLISION_RECEIPT)fs.writeFileSync(process.env.QA_COLLISION_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('PASS: separation pair pruning exact per-callback RC4 parity; perf directional only');
