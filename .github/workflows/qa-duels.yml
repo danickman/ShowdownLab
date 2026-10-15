@@ -178,6 +178,29 @@ jobs:
           path: threat-observer-receipt.json
           if-no-files-found: warn
 
+  role-multifront-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify role/front diagnostic syntax
+        run: node --check tools/qa/check-role-fronts-baseline.cjs
+      - name: Inspect actual role damage, pursuit and independent live fronts at 20–300
+        env:
+          QA_ROLE_COUNTS: '20,40,80,120,180,300'
+          QA_ROLE_RECEIPT: role-fronts-baseline.json
+        run: node tools/qa/check-role-fronts-baseline.cjs
+      - name: Upload deterministic role-damage and real-front baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: role-multifront-baseline
+          path: role-fronts-baseline.json
+          if-no-files-found: warn
+
   effective-engagement-observer:
     runs-on: ubuntu-latest
     timeout-minutes: 8
