@@ -229,6 +229,28 @@ jobs:
           path: assassin-rear-opportunity.json
           if-no-files-found: warn
 
+  melee-contact-reach-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source-anchored geometry research syntax
+        run: node --check tools/qa/check-melee-contact-reach-study.cjs
+      - name: Evaluate live spacing gaps and isolated role melee reach at L1 L4 L5
+        env:
+          QA_MELEE_RECEIPT: melee-contact-reach.json
+        run: node tools/qa/check-melee-contact-reach-study.cjs
+      - name: Upload mirrored duel and mixed-army real-hit receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: melee-contact-reach-research
+          path: melee-contact-reach.json
+          if-no-files-found: warn
+
   role-multifront-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 17
