@@ -273,6 +273,28 @@ jobs:
           path: melee-contact-reach.json
           if-no-files-found: warn
 
+  sniper-shot-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Sniper shot cooldown cue study syntax
+        run: node --check tools/qa/check-sniper-shot-cue.cjs
+      - name: Match real Sniper shot calls to sampled FX at 1x 4x and 10x
+        env:
+          QA_SNIPER_RECEIPT: sniper-shot-cue.json
+        run: node tools/qa/check-sniper-shot-cue.cjs
+      - name: Upload sampled rifle fire and no-phantom-fx evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sniper-shot-cue-sampling
+          path: sniper-shot-cue.json
+          if-no-files-found: warn
+
   goose-honk-cue-sampling:
     runs-on: ubuntu-latest
     timeout-minutes: 10
