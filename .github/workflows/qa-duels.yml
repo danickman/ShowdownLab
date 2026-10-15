@@ -224,6 +224,29 @@ jobs:
           path: nearest-scan-spike.json
           if-no-files-found: warn
 
+  collision-separation-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check safe collision pair-reject syntax
+        run: node --check tools/qa/check-collision-separation-spike.cjs
+      - name: Compare exact RC4 collision response at 1x and 10x
+        env:
+          QA_COLLISION_COUNTS: '40,80,120,180,300'
+          QA_COLLISION_RECEIPT: collision-separation-spike.json
+        run: node tools/qa/check-collision-separation-spike.cjs
+      - name: Upload collision response parity and timing evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collision-separation-spike
+          path: collision-separation-spike.json
+          if-no-files-found: warn
+
   engagement-director-spike:
     runs-on: ubuntu-latest
     timeout-minutes: 6
