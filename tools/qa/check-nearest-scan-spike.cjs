@@ -58,11 +58,21 @@ const rows=[];
 for(const count of populations){
  const variants=count===300?[[1,14],[10,3]]:count===180?[[1,20],[10,4]]:count===120?[[1,32],[10,6]]:[[1,42],[10,7]];
  for(const mirror of [false,true])for(const [speed,frames] of variants){
+  // ABBA: reduce systematic run-order bias (still a noisy Node/VM estimate).
   const source=scenario(base,count,1337,mirror,speed,frames);
   const lean=scenario(optimized,count,1337,mirror,speed,frames);
-  assert.deepEqual(lean.traces,source.traces,'nearest target behavior changed '+count+' fighters '+speed+'x mirror '+mirror);
-  const ratio=+(lean.totalMs/source.totalMs).toFixed(3);
-  rows.push({count,mirror,speed,frames:source.samples,tick:source.tick,baseline:{p50Ms:source.p50Ms,p95Ms:source.p95Ms,totalMs:source.totalMs},candidate:{p50Ms:lean.p50Ms,p95Ms:lean.p95Ms,totalMs:lean.totalMs},ratio,exactTraceParity:true});
+  const leanAgain=scenario(optimized,count,1337,mirror,speed,frames);
+  const sourceAgain=scenario(base,count,1337,mirror,speed,frames);
+  for(const [label,trial] of [['candidate A',lean],['candidate B',leanAgain],['control B',sourceAgain]]){
+    assert.deepEqual(trial.traces,source.traces,'nearest target behavior changed '+label+' '+count+' fighters '+speed+'x mirror '+mirror);
+  }
+  const avg=(a,b)=>+(0.5*(a+b)).toFixed(2);
+  const reference=avg(source.totalMs,sourceAgain.totalMs),trial=avg(lean.totalMs,leanAgain.totalMs);
+  const ratio=+(trial/reference).toFixed(3);
+  rows.push({count,mirror,speed,frames:source.samples,tick:source.tick,
+    baseline:{p50Ms:avg(source.p50Ms,sourceAgain.p50Ms),p95Ms:avg(source.p95Ms,sourceAgain.p95Ms),totalMs:reference,runsMs:[source.totalMs,sourceAgain.totalMs]},
+    candidate:{p50Ms:avg(lean.p50Ms,leanAgain.p50Ms),p95Ms:avg(lean.p95Ms,leanAgain.p95Ms),totalMs:trial,runsMs:[lean.totalMs,leanAgain.totalMs]},
+    ratio,exactTraceParity:true});
  }
 }
 const summary=populations.map(count=>{
@@ -70,7 +80,7 @@ const summary=populations.map(count=>{
  return{count,medianRatio:cases.map(x=>x.ratio).sort((a,b)=>a-b)[Math.floor(cases.length/2)],worstRatio:Math.max(...cases.map(x=>x.ratio))};
 });
 const receipt={status:'QA source-swap research only; allocation-free nearest not in game runtime',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
- warnings:'Sequential baseline->candidate can be biased by JIT/VM scheduling and few samples. Benchmarked step+state emission, not full Canvas renderer. Never promote without rebalanced repetitions, role counters and full 300-duel QA.',
+ warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not full Canvas renderer. Require meaningful repeatable gains, role counterplay and 300-duel QA before promoting.',
  scenarios:rows,summary};
 console.log('NEAREST SCAN SPIKE '+JSON.stringify(receipt));
 if(process.env.QA_NEAREST_RECEIPT)fs.writeFileSync(process.env.QA_NEAREST_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
