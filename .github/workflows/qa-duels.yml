@@ -255,6 +255,29 @@ jobs:
           path: ${{ runner.temp }}/density-browser
           if-no-files-found: warn
 
+  distance-bound-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check deterministic distance-bound QA syntax
+        run: node --check tools/qa/check-distance-bound-spike.cjs
+      - name: Mirror and stress 40–300 fighter distance-bound alternatives
+        env:
+          QA_DISTANCE_COUNTS: '40,80,120,180,300'
+          QA_DISTANCE_RECEIPT: distance-bound-spike.json
+        run: node tools/qa/check-distance-bound-spike.cjs
+      - name: Archive A/B seeded traces and CPU evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: distance-bound-spike
+          path: distance-bound-spike.json
+          if-no-files-found: warn
+
   pressure-cache-research:
     runs-on: ubuntu-latest
     timeout-minutes: 9
