@@ -88,6 +88,40 @@ const server=http.createServer((req,res)=>{
     console.log('DENSITY BROWSER '+JSON.stringify({count,speed,frames:result.frames,p95IntervalMs:result.p95IntervalMs,renderP95Ms:result.timings.total.p95Ms,alive:result.aliveOrDrawn,clipped:result.clippedSpriteBoxes,censored:result.censored}));
    }
   }
+  // Profile *after* timing the density sweep: CDP sampling otherwise skews
+  // frame budget measurement. Attribution identifies the next real bottleneck.
+  await page.evaluate(()=>{
+   const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
+   const large=Object.fromEntries(types.map(t=>[t,15]));
+   const stages=Object.fromEntries(types.map((t,i)=>[t,[1,4,5][i%3]]));
+   ShowdownAdapter.startMatch({blue:large,red:large,blueLevels:stages,redLevels:stages,blueLives:1,redLives:1,seed:81337});
+   ShowdownAdapter.setSpeed(1);
+  });
+  const cpuSession=await page.createCDPSession();
+  await cpuSession.send('Profiler.enable');
+  await cpuSession.send('Profiler.setSamplingInterval',{interval:1000});
+  await cpuSession.send('Profiler.start');
+  const cpuStart=Date.now();
+  await page.evaluate(()=>new Promise(resolve=>{
+   let frames=0;
+   const onFrame=()=>{if(++frames>=16)resolve();else requestAnimationFrame(onFrame)};
+   requestAnimationFrame(onFrame);
+  }));
+  const {profile}=await cpuSession.send('Profiler.stop');
+  await cpuSession.detach();
+  fs.writeFileSync(path.join(out,'density-300-1x.cpuprofile'),JSON.stringify(profile));
+  const names=new Map();
+  for(const node of profile.nodes||[]){
+   const key=node.callFrame?.functionName||'(anonymous)',url=(node.callFrame?.url||'').split('/').pop();
+   if(!node.hitCount)continue;
+   const label=url+':'+key;
+   names.set(label,(names.get(label)||0)+node.hitCount);
+  }
+  const hotspots=[...names].map(([name,hits])=>({name,hits})).sort((a,b)=>b.hits-a.hits).slice(0,20);
+  report.cpuProfile={population:300,speed:1,frames:16,elapsedMs:Date.now()-cpuStart,
+   samples:profile.samples?.length||0,topSelfSamples:hotspots,note:'CDP V8 profiler, sampled after density timing; includes JS and profiler overhead. Not Safari.'};
+  assert(report.cpuProfile.samples>0,'Chromium V8 CPU profile contains no samples');
+  console.log('DENSITY CPU HOTSPOTS '+JSON.stringify(report.cpuProfile));
   assert.deepEqual(report.failures,[]);
   report.passed=true;
   console.log('PASS: Chromium density snapshot/frame-budget diagnostic; performance remains advisory until physical Safari validation');
