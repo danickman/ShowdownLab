@@ -201,6 +201,29 @@ jobs:
           path: effective-engagement-receipt.json
           if-no-files-found: warn
 
+  nearest-scan-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check exact-state perf spike syntax
+        run: node --check tools/qa/check-nearest-scan-spike.cjs
+      - name: Compare allocation-lean nearest scan to RC4 at 1x and 10x
+        env:
+          QA_NEAREST_COUNTS: '40,80,120,180,300'
+          QA_NEAREST_RECEIPT: nearest-scan-spike.json
+        run: node tools/qa/check-nearest-scan-spike.cjs
+      - name: Upload matched traces and directional timing summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nearest-scan-spike
+          path: nearest-scan-spike.json
+          if-no-files-found: warn
+
   engagement-director-spike:
     runs-on: ubuntu-latest
     timeout-minutes: 6
