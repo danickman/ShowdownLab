@@ -224,6 +224,37 @@ jobs:
           path: nearest-scan-spike.json
           if-no-files-found: warn
 
+  browser-density-portrait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: npm install --prefix tools/qa --no-audit --no-fund
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify density test syntax
+        run: node --check tools/qa/check-density-browser.cjs
+      - name: Capture portrait L1/L4/L5 density and 10x stress frames
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_DENSITY_OUTPUT: ${{ runner.temp }}/density-browser
+          QA_DENSITY_COUNTS: '40,80,120,180,300'
+        run: node tools/qa/check-density-browser.cjs
+      - name: Upload real Chromium receipts and 430x932 screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: density-portrait-evidence
+          path: ${{ runner.temp }}/density-browser
+          if-no-files-found: warn
+
   collision-separation-research:
     runs-on: ubuntu-latest
     timeout-minutes: 8
