@@ -1,14 +1,17 @@
 'use strict';
 // QA-only B3 research: Assassin vanish coordinates and real backstab conversion.
-// Tests a single-variable rearward sign change separately from closer landing.
+// Checks shipped sign-only rear placement against reconstructed original and two nearer variants.
 // NEVER imported into the PWA; DO NOT promote from this script's result alone.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8'),base=read('legacy-sim-core');
+const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8'),shipped=read('legacy-sim-core');
 const orig="u.x=clamp(t.x+(u.team==='blue'?-.075:.075));u.y=clamp(t.y+(rnd()-.5)*.10);";
-assert.equal(base.split(orig).length,2,'vanish anchor changed: review attack direction before experiments');
+const rearSign="u.x=clamp(t.x+(u.team==='blue'?.075:-.075));u.y=clamp(t.y+(rnd()-.5)*.10);";
+assert.equal(shipped.split(rearSign).length,2,'shipped Assassin rear landing changed: review role balance');
+const base=shipped.replace(rearSign,orig);
+assert.equal(base.split(orig).length,2,'reconstructed original front placement missing');
 const variants={
  original:base,
- rearSameDistance:base.replace(orig,"u.x=clamp(t.x+(u.team==='blue'?.075:-.075));u.y=clamp(t.y+(rnd()-.5)*.10);"),
+ rearSameDistance:shipped,
  rearMiddle:base.replace(orig,"u.x=clamp(t.x+(u.team==='blue'?.055:-.055));u.y=clamp(t.y+(rnd()-.5)*.08);"),
  rearClose:base.replace(orig,"u.x=clamp(t.x+(u.team==='blue'?.035:-.035));u.y=clamp(t.y+(rnd()-.5)*.06);")
 };
