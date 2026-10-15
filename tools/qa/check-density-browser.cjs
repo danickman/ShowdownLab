@@ -36,6 +36,9 @@ const server=http.createServer((req,res)=>{
     const blue=make(),red=make(),levels=Object.fromEntries(types.map((t,i)=>[t,[1,4,5][i%3]]));
     ShowdownAdapter.startMatch({blue,red,blueLevels:levels,redLevels:levels,blueLives:4,redLives:4,seed:81337});
     ShowdownAdapter.setSpeed(1);
+    // Capture ALL 300 bodies at the same unadvanced deployment state; later
+    // timed screenshots are expected to have casualties and cannot prove it.
+    ShowdownAdapter.pauseBattle();
     ShowdownQA.clearRenderProfile();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     const s=ShowdownQA.snapshot();
@@ -43,6 +46,10 @@ const server=http.createServer((req,res)=>{
     return{count:s.units.length,arena:s.arena,canvas:{width:rect.width,height:rect.height,backingWidth:document.querySelector('#battleCanvas').width,backingHeight:document.querySelector('#battleCanvas').height},assetStatus:typeof FighterAssets.assetStatus==='function'?FighterAssets.assetStatus():null};
    },count);
    assert.equal(trial.count,count,'browser adapter lost fighter objects at deployment');
+   if([40,120,300].includes(count)){
+    await page.screenshot({path:path.join(out,'density-deploy-'+count+'-portrait.png')});
+   }
+   await page.evaluate(()=>ShowdownAdapter.pauseBattle()); // Resume only after the intact deployment capture.
    // Frame sampling intentionally short at stress densities; bounded wall time and
    // censored samples are reported instead of fabricating a full-match FPS.
    const speeds=count===300?[1,10]:[1,10];
