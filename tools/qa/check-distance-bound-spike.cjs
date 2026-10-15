@@ -7,8 +7,8 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
 const shipped=read('legacy-sim-core');
-const old='for(const v of pool){const d=Math.hypot(v.x-u.x,v.y-u.y),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035;if(s<score){score=s;bd=d;best=v}}';
-const changed='for(const v of pool){const dx=v.x-u.x,dy=v.y-u.y,bound=score+1e-12;if(dx*dx+dy*dy>=bound*bound)continue;const d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035;if(s<score){score=s;bd=d;best=v}}';
+const old="for(const v of pool){const dx=v.x-u.x,dy=v.y-u.y,d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);if(s<score){score=s;bd=d;best=v}}";
+const changed="for(const v of pool){const dx=v.x-u.x,dy=v.y-u.y,bound=score+1e-12;if(dx*dx+dy*dy>=bound*bound)continue;const d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);if(s<score){score=s;bd=d;best=v}}";
 assert.equal(shipped.split(changed).length,2,'shipped nearest-bound guard moved; inspect semantics');
 const base=shipped.replace(changed,old);
 const optimized=shipped;
