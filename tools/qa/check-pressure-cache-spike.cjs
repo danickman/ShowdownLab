@@ -75,9 +75,20 @@ const summary=populations.map(count=>{
  const cases=rows.filter(r=>r.count===count);
  return{count,medianRatio:cases.map(x=>x.ratio).sort((a,b)=>a-b)[Math.floor(cases.length/2)],worstRatio:Math.max(...cases.map(x=>x.ratio))};
 });
+// Late-battle pressure: cover kills, role re-targets, burns, stuns and deadlock
+// across hundreds of ticks with two seeds and both directions.
+const durability=[];
+for(const [count,speed,frames] of [[40,10,80],[80,10,70],[120,4,70]]){
+ for(const seed of [1337,9917])for(const mirror of [false,true]){
+  const control=scenario(base,count,seed,mirror,speed,frames);
+  const candidate=scenario(optimized,count,seed,mirror,speed,frames);
+  assert.deepEqual(candidate.traces,control.traces,'LATE pressure-cache drift '+count+' '+speed+'x seed '+seed+' mirror '+mirror);
+  durability.push({count,speed,seed,mirror,frames:control.samples,tick:control.tick,winner:control.winner,exactTraceParity:true});
+ }
+}
 const receipt={status:'QA-only incremental per-tick target-pressure A/B, not loaded by game',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
  warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not Canvas. Target bookkeeping includes deaths, burrow retargeting and Assassin override, and is reset in finally. Require meaningful repeatable speed gain, long-run combat checks, 300 stress, browser gate and role counterplay before promotion.',
- scenarios:rows,summary};
+ scenarios:rows,summary,lateParity:durability};
 console.log('PRESSURE CACHE SPIKE '+JSON.stringify(receipt));
 if(process.env.QA_PRESSURE_RECEIPT)fs.writeFileSync(process.env.QA_NEAREST_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('PASS: cached-pressure exact per-callback parity for all density/mirror/speed combinations; timing remains exploratory');
