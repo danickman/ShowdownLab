@@ -295,6 +295,28 @@ jobs:
           path: sniper-shot-cue.json
           if-no-files-found: warn
 
+  turtle-shell-slam-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real Turtle shell-slam event study syntax
+        run: node --check tools/qa/check-turtle-shell-slam-cue.cjs
+      - name: Compare actual shell slam cues to baseline combat at 1x 4x and 10x
+        env:
+          QA_TURTLE_RECEIPT: turtle-shell-slam-cue.json
+        run: node tools/qa/check-turtle-shell-slam-cue.cjs
+      - name: Upload exact physical combat parity and no-phantom-slam evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-shell-slam-cue-sampling
+          path: turtle-shell-slam-cue.json
+          if-no-files-found: warn
+
   beetank-charge-cue-sampling:
     runs-on: ubuntu-latest
     timeout-minutes: 10
