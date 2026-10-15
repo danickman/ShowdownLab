@@ -301,6 +301,29 @@ jobs:
           path: pressure-cache-spike.json
           if-no-files-found: warn
 
+  collision-coarse-bound-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate universal collision-bound QA syntax
+        run: node --check tools/qa/check-collision-coarse-bound-spike.cjs
+      - name: ABBA-test universal collision reach with exact role/parity traces
+        env:
+          QA_COARSE_COUNTS: '40,80,120,180,300'
+          QA_COARSE_RECEIPT: collision-coarse-spike.json
+        run: node tools/qa/check-collision-coarse-bound-spike.cjs
+      - name: Archive mirrored collision-bound performance and parity receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collision-coarse-bound-spike
+          path: collision-coarse-spike.json
+          if-no-files-found: warn
+
   collision-separation-research:
     runs-on: ubuntu-latest
     timeout-minutes: 8
