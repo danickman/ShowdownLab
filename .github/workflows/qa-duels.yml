@@ -295,6 +295,28 @@ jobs:
           path: sniper-shot-cue.json
           if-no-files-found: warn
 
+  mole-eruption-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify true Mole eruption cue study syntax
+        run: node --check tools/qa/check-mole-eruption-cue.cjs
+      - name: Validate real Mole eruptions, no phantom effects and exact old-core physical parity
+        env:
+          QA_MOLE_RECEIPT: mole-eruption-cue.json
+        run: node tools/qa/check-mole-eruption-cue.cjs
+      - name: Upload seed and mirror real-event audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-eruption-cue-sampling
+          path: mole-eruption-cue.json
+          if-no-files-found: warn
+
   turtle-shell-slam-cue-sampling:
     runs-on: ubuntu-latest
     timeout-minutes: 12
