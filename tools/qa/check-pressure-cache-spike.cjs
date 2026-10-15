@@ -90,5 +90,5 @@ const receipt={status:'QA-only incremental per-tick target-pressure A/B, not loa
  warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not Canvas. Target bookkeeping includes deaths, burrow retargeting and Assassin override, and is reset in finally. Require meaningful repeatable speed gain, long-run combat checks, 300 stress, browser gate and role counterplay before promotion.',
  scenarios:rows,summary,lateParity:durability};
 console.log('PRESSURE CACHE SPIKE '+JSON.stringify(receipt));
-if(process.env.QA_PRESSURE_RECEIPT)fs.writeFileSync(process.env.QA_NEAREST_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
+if(process.env.QA_PRESSURE_RECEIPT)fs.writeFileSync(process.env.QA_PRESSURE_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('PASS: cached-pressure exact per-callback parity for all density/mirror/speed combinations; timing remains exploratory');
