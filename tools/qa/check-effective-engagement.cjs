@@ -47,7 +47,7 @@ function classify(units,previous=new Map()){
 }
 // Synthetic fixtures prevent the exact measurement mistake identified in the design decision.
 const sniper={id:1,type:'sniper',team:'blue',hp:44,x:.2,y:.5,range:195,target:2,action:'aim',stun:0};
-const dragon={id:2,type:'dragon',team:'red',hp:290,x:.48,y:.5,range:128,target:1,action:'fire_windup',stun:0};
+const dragon={id:2,type:'dragon',team:'red',hp:290,x:.44,y:.5,range:128,target:1,action:'fire_windup',stun:0};
 let fixture=classify([sniper,dragon]);
 assert.equal(fixture.physicalPairs,0,'long-range reach is not physical contact');
 assert.equal(fixture.rangedThreat,2,'two ranged units can mutually threaten outside melee contact');
