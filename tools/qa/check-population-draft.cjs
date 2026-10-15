@@ -13,7 +13,7 @@ for(const total of [100,119,120,180,300]){
  const s=sample(blue,red,2,3,4,{blue:{goblin:1},red:{knight:4}});
  const offered=E.draftChoices(s,A.BASE_COUNTS);
  assert.equal(offered.length,3);
- assert(offered.every(o=>o.kind!=='mult'),'must not offer ×2 at projected population '+total);
+ assert.equal(offered.some(o=>o.kind==='mult'),total===100,'×2 only while projected army population stays <=120, current '+total);
  assert(offered.some(o=>o.kind==='disrupt'||o.kind==='up'));
 }
 const can=sample({goblin:10},{knight:40},2,3,4,{blue:{goblin:1},red:{knight:2}});
