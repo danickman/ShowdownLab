@@ -619,3 +619,12 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Reproduce 4 pending→heavy victory cases at 80 bodies (L1 seed1337 both mirrors, L4 seed1337 nonmirror, L5 seed9917 mirror): all defender victories, no Assassin wins/reversals.
 - [x] Refine permanent CI to reject established winner reversal and any Assassin-only victory against armored guard; permit only censored unresolved→defender terminal transition.
 - [ ] Rerun full 35-job new-head matrix; preserve independent core PWA, Chrome, 300 and source attributable damage regression.
+
+
+### Oct 15 — Thunder Honk L4/L5 real crowd-control and truthful guide
+- [x] Long Assassin L4/L5 source-audit: 27/390 Execution triggers L4, 30/339 L5; no unsourced damage buffs.
+- [x] Isolated source A/B L4 22→44 ticks and L5 32→64; keep 45/75% hit damage, .18/.22 area and L1–3 11-tick base honk.
+- [x] 20/40/80 matched seeded/mirrored Goose melee/ranged/mixed source tests tracked true time spent stunned; ranged counters retained in sampled 20/40 bouts, 80 outcomes censored.
+- [x] Changed Fighter Guide to actual game duration and preserved original Dragon 90-tick/1.5s Inferno explanation.
+- [ ] New-head unit+dedicated Goose source-counterplay CI, 42 offline SHA pins, 430×932 DPR3 browser, 300-fighter throughput and source-attribution full run.
+- [ ] Actual iPhone 15 Pro Max Safari performance/frame-readability and completed many-round win-rate study before production promotion.

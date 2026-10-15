@@ -20,7 +20,7 @@ for(const level of [4,5]){
  attacker.x=.1;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0);
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
  const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>h.damage===(rank===2?65:40)));
- const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);close(hits[0].damage,rank===2?75:45);assert.equal(t.stun,rank===2?32:22);
+ const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);close(hits[0].damage,rank===2?75:45);assert.equal(t.stun,rank===2?64:44);
 }
 // The actual core damage path applies resistance, reflection and splash once.
 let src=fs.readFileSync('v3/legacy-sim-core.js','utf8');src=src.replace('window.LegacySimCore={','window.TestCombat={hurt,step,setUnits:v=>{units=v;bastions=v.filter(u=>u.type==="knight"&&ultimate.rank(u))},getUnits:()=>units};window.LegacySimCore={');vm.runInContext(src,e);

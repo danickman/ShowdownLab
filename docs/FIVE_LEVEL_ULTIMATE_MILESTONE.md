@@ -44,3 +44,8 @@ Tests cover level/HP/damage boundaries, Mastery preservation, API and player/bot
 Reproduce: `node tools/check-evolution-progression.cjs`, `node tools/check-ultimate-abilities.cjs`, `node tools/check-ultimate-art-contract.cjs`, `node tools/check-evolution-effects.cjs` (native Canvas dependency), and existing checks in `TEST_MATRIX.md`.
 
 Balance is a first playable tuning pass, not a claim of fair win rates for every matchup. Device frame pacing and exact-head phone approval remain open. Ultimate art and four remaining Evolved packs are separate art milestones. Existing mixed-melee overlap remains open.
+
+
+## October 15, 2026 gameplay correction to the 2026-10-12 milestone
+
+The historical Goose Thunder Honk 22/32 ticks above (0.37/0.53s) was **the original implementation**, not the ultimate's advertised 0.73/1.07 seconds. A later measured QA-only correction doubles L4/L5 physical stun to **44/64 ticks (approximately 0.73/1.07 seconds)** without changing damage, range, chance, cooldown or base Goose. The current Fighter Guide and Ultimate specs have been aligned. [Updated matched A/B research](GOOSE_ULTIMATE_REAL_STUN_2026-10-15.md). Do not assume this gameplay change has been deployed to production.

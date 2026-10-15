@@ -430,6 +430,28 @@ jobs:
           path: beetank-charge-cue.json
           if-no-files-found: warn
 
+  goose-ultimate-stun-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Thunder Honk real-stun QA syntax
+        run: node --check tools/qa/check-goose-ultimate-stun.cjs
+      - name: Measure full physical stun ticks and mirrored ranged counterplay
+        env:
+          QA_GOOSE_ULT_RECEIPT: goose-ultimate-stun.json
+        run: node tools/qa/check-goose-ultimate-stun.cjs
+      - name: Upload measured Goose Ultimate damage and control receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-ultimate-stun
+          path: goose-ultimate-stun.json
+          if-no-files-found: warn
+
   goose-honk-cue-sampling:
     runs-on: ubuntu-latest
     timeout-minutes: 10

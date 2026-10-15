@@ -10,7 +10,7 @@ const specs={
  turtle:{name:'Ricochet Shell',l4:'Reflect 30% of damage taken from nearby attackers.',l5:'Reflect 45% of damage taken from nearby attackers.'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Axe swings splash 40% damage onto up to three nearby enemies.',l5:'Wider cleave splashes 65% damage onto up to five enemies.'},
- goose:{name:'Thunder Honk',l4:'Honk deals 45% attack damage and doubles its stun to 0.73 seconds.',l5:'75% attack damage, wider radius and a 1.07-second stun.'}
+ goose:{name:'Thunder Honk',l4:'Thunder Honk deals 45% attack damage and stuns enemies for 44 ticks (about 0.73 seconds).',l5:'75% attack damage, wider radius and 64-tick stun (about 1.07 seconds).'}
 };
 const near=(a,b,r)=>Math.hypot(a.x-b.x,a.y-b.y)<=r;
 function cue(u,kind,tick,target){if(tick-(u.ultimateTick??-1000)<12)return;u.ultimateTick=tick;u.ultimateKind=kind;u.ultimateTarget=target?.id??null}
@@ -54,7 +54,7 @@ function afterHit(a,t,dealt,units,tick){
 }
 function honk(u,units,tick){
  const r=rank(u);if(!r)return [];
- const hits=units.filter(v=>v.team!==u.team&&v.hp>0&&v.burrow<=0&&near(v,u,r===2?.22:.18)).map(v=>{v.stun=Math.max(v.stun,r===2?32:22);return{target:v,source:u,damage:u.dmg*(r===2?.75:.45)}});
+ const hits=units.filter(v=>v.team!==u.team&&v.hp>0&&v.burrow<=0&&near(v,u,r===2?.22:.18)).map(v=>{v.stun=Math.max(v.stun,r===2?64:44);return{target:v,source:u,damage:u.dmg*(r===2?.75:.45)}});
  if(hits.length)cue(u,'thunder',tick,hits[0].target);return hits;
 }
 function burn(u){if(!(u.burnTicks>0)||u.hp<=0)return 0;u.burnTicks--;return u.burrow>0?0:u.burnTicks%15===0?u.burnPower:0}
