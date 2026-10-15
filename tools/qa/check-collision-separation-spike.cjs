@@ -1,12 +1,12 @@
 'use strict';
 // QA-only collision micro-optimization. Excludes pairs by axis-aligned distance
-// BEFORE sqrt; preserves pair visit order and recomputes dynamic positions.
+// BEFORE sqrt; both variants retain the already-shipped universal radius guard. Exact pair order and dynamic positions preserved.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
 const shipped=read('legacy-sim-core');
-const original='const a=alive[i],b=alive[j],dx=b.x-a.x,dy=b.y-a.y,d0=Math.hypot(dx,dy),same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(d0>=min)continue;';
-const candidate='const a=alive[i],b=alive[j],dx=b.x-a.x,dy=b.y-a.y,same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(dx>=min||dx<=-min||dy>=min||dy<=-min)continue;const d0=Math.hypot(dx,dy);if(d0>=min)continue;';
+const original='const a=alive[i],b=alive[j],dx=b.x-a.x;if(dx>=globalBound||dx<=-globalBound)continue;const dy=b.y-a.y;if(dy>=globalBound||dy<=-globalBound)continue;const same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);const d0=Math.hypot(dx,dy);if(d0>=min)continue;';
+const candidate='const a=alive[i],b=alive[j],dx=b.x-a.x;if(dx>=globalBound||dx<=-globalBound)continue;const dy=b.y-a.y;if(dy>=globalBound||dy<=-globalBound)continue;const same=a.team===b.team,min=(radii[i]+radii[j])*(same?1.14:1.00);if(dx>=min||dx<=-min||dy>=min||dy<=-min)continue;const d0=Math.hypot(dx,dy);if(d0>=min)continue;';
 assert.equal(shipped.split(candidate).length,2,'shipped fast-reject guard moved, review collision algorithm');
 const base=shipped.replace(candidate,original);
 const optimized=shipped;
@@ -64,7 +64,7 @@ const summary=populations.map(count=>{
  const cases=rows.filter(r=>r.count===count);
  return{count,medianRatio:cases.map(x=>x.ratio).sort((a,b)=>a-b)[Math.floor(cases.length/2)],worstRatio:Math.max(...cases.map(x=>x.ratio))};
 });
-const receipt={status:'QA source-swap research only; separation axis-bound filter not in game runtime',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
+const receipt={status:'QA source-swap regression: shipped axis reject vs pre-axis candidate, both retain existing universal coarse bound',platform:'Node GitHub runner VM synthetic RAF, not iPhone or browser FPS',
  warnings:'Order-balanced ABBA repetitions reduce but do not eliminate JIT/VM scheduling noise. Benchmarked step+state emission, not full Canvas renderer. Require meaningful repeatable gains, role counterplay and 300-duel QA before promoting.',
  scenarios:rows,summary};
 console.log('COLLISION SEPARATION SPIKE '+JSON.stringify(receipt));
