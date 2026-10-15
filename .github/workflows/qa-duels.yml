@@ -295,6 +295,28 @@ jobs:
           path: sniper-shot-cue.json
           if-no-files-found: warn
 
+  assassin-backstab-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual Assassin backstab cue test syntax
+        run: node --check tools/qa/check-assassin-backstab-cue.cjs
+      - name: Test real backstabs, no phantom cues and full previous physical state parity
+        env:
+          QA_BACKSTAB_RECEIPT: assassin-backstab-cue.json
+        run: node tools/qa/check-assassin-backstab-cue.cjs
+      - name: Upload source and visual-event match receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-backstab-cue-sampling
+          path: assassin-backstab-cue.json
+          if-no-files-found: warn
+
   mole-eruption-cue-sampling:
     runs-on: ubuntu-latest
     timeout-minutes: 12
