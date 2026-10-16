@@ -496,6 +496,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  completed-match-quality-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check fully terminal battle-quality test syntax
+        run: node --check tools/qa/check-completed-match-quality.cjs
+      - name: Measure real attacker-HP damage, durable fronts and role participation in 32 complete battles
+        env:
+          QA_COMPLETED_BATTLES_RECEIPT: completed-match-quality.json
+        run: node tools/qa/check-completed-match-quality.cjs
+      - name: Upload completed 20 and 40 fighter match quality scorecards
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: completed-match-quality
+          path: completed-match-quality.json
+          if-no-files-found: warn
+
   role-multifront-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 17

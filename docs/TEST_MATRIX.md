@@ -634,3 +634,12 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 
 - [x] Recover 305/305 true Goose honks including last partial snapshot using existing test-only forced state publish; no new game telemetry or skipped cue assertion.
 - [ ] Verify full new-head GitHub QA run after both Guide and honk observation test fixes.
+
+
+### Oct 15 — full terminal battle-quality / multi-front QA turn
+- [x] A/B source variants (not shipped) tested against **full winners**, not only short censored frames: Barbarian contact, deploy spread, lane preference, secondary stagger, Goblin swarm penalty, Dragon splash. Reject variants that dilute independent 40-body damage fronts or produce little gain.
+- [x] Current baseline: 16 genuine finished matches at 20 (25 real separated, 1 persistent, 1287 true hits), 16 finished at 40 (193 separated, 66 persistent, 3386 true hits). Source-attributed damage only; no fake distance/proximity front signal.
+- [x] Add **read-only** `check-completed-match-quality.cjs`: exact uninstrumented trace parity, seeded/mirrored 32 terminal battles, HP-credited role mix, early/mid/late active windows, 25/50/75% survival, permanent conservative damage-front quality floor and JSON artifact.
+- [ ] New independent `completed-match-quality-budget` CI and full existing portrait/300/offline/legacy + role counter suite completed green for exact HEAD.
+- [ ] Improve genuine 20-body *persistent* simultaneous fights in next game turn; 1 persisted window in 16 games is a serious open design problem, not a sign-off.
+- [ ] Physical iPhone 15 Pro Max Safari animation + frame pacing and user acceptance.

@@ -1,0 +1,127 @@
+'use strict';
+// Completed-match, read-only measurable battle-quality budget.
+// A "front" is connected by real positive HP-damage attacker→target edges;
+// proximity, target intent, action names or merely visible VFX do not count.
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const root=path.resolve(__dirname,'../..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const core=read('v3/legacy-sim-core.js');
+const graph=read('tools/qa/check-role-fronts-baseline.cjs');
+const graphStart=graph.indexOf('const cell='),graphEnd=graph.indexOf('// Synthetic truth fixtures',graphStart);
+assert(graphStart>=0&&graphEnd>graphStart,'true damage-graph function moved; review quality metric');
+const damageFronts=vm.runInNewContext(graph.slice(graphStart,graphEnd)+';damageFronts',{Math});
+const ANCHOR='const dealt=Math.min(t.hp,dmg);';
+assert.equal(core.split(ANCHOR).length,2,'true HP attribution instrument anchor changed');
+const observed=core.replace(ANCHOR,ANCHOR+
+ 'if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,role:a.type,team:a.team,damage:dealt,x:t.x,y:t.y});');
+const roles=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
+const rosters={
+ mixed:[roles,roles.slice().reverse()],
+ swarm:[['goblin','goose','assassin','goblin','knight','barbarian','mole','sniper','goblin','goose'],
+  ['goblin','goblin','turtle','beetank','dragon','goose','knight','barbarian','mole','sniper']],
+ heavy:[['beetank','turtle','knight','dragon','barbarian','beetank','turtle','sniper','mole','assassin'],
+  ['dragon','beetank','barbarian','turtle','knight','sniper','assassin','goblin','goose','mole']],
+ ranged:[['sniper','sniper','dragon','dragon','sniper','knight','beetank','turtle','mole','barbarian'],
+  ['goblin','goblin','goose','assassin','knight','barbarian','mole','beetank','turtle','sniper']]
+};
+function completed(source,c,watch=true){
+ let now=0,nextId=0,queue=new Map(),errors=[],hits=[],snapshots=[],state=null,frames=0;
+ const sha=crypto.createHash('sha256');
+ const env={window:null,Math,performance:{now:()=>now},
+  requestAnimationFrame(fn){const id=++nextId;queue.set(id,fn);return id},
+  cancelAnimationFrame(id){queue.delete(id)},
+  console:{error:(...parts)=>errors.push(parts.join(' '))}};
+ env.window=env;env.__qaHit=h=>hits.push(h);vm.createContext(env);
+ vm.runInContext(read('v3/evolution-rules.js'),env);
+ vm.runInContext(read('v3/ultimate-abilities.js'),env);
+ vm.runInContext(source,env,{filename:'completed-match-core.js'});
+ const sim=env.LegacySimCore;
+ const roster=side=>{
+  const pat=rosters[c.mode][side==='blue'?(c.mirror?1:0):(c.mirror?0:1)];
+  return Array.from({length:c.count/2},(_,i)=>({type:pat[i%pat.length],level:[1,2,4,5][i%4],squad:Math.floor(i/5)}));
+ };
+ sim.configure({seed:c.seed,speed:10,onState:()=>{}});
+ sim.deploy(roster('blue'),roster('red'));sim.setRunning(true);
+ for(;frames<450;frames++){
+  now+=16.667;const actions=[...queue.values()];queue.clear();for(const action of actions)action(now);
+  state=sim.getState();sha.update(JSON.stringify(state)+'\n');
+  if(frames%4===0||state.winner)snapshots.push({tick:state.tick,alive:state.units.filter(u=>u.hp>0).length});
+  if(state.winner){frames++;break}
+ }
+ assert.deepEqual(errors,[],'simulation errors '+JSON.stringify(c));
+ assert(state&&state.winner,'battle did not actually terminate '+JSON.stringify(c));
+ assert.equal(state.units.length,c.count,'fighters disappeared '+JSON.stringify(c));
+ assert(state.units.every(u=>Number.isFinite(u.hp)&&Number.isFinite(u.x)&&Number.isFinite(u.y)),'nonfinite battle state');
+ const trace=sha.digest('hex');
+ if(!watch)return {trace,winner:state.winner,tick:state.tick};
+ const fronts=damageFronts(hits,state.tick,30);
+ const roleData=Object.fromEntries(roles.map(r=>[r,{hits:0,damage:0}]));
+ const teamData={blue:{hits:0,damage:0},red:{hits:0,damage:0}};
+ for(const h of hits){
+  roleData[h.role].hits++;roleData[h.role].damage+=h.damage;
+  teamData[h.team].hits++;teamData[h.team].damage+=h.damage;
+ }
+ for(const r of roles)roleData[r].damage=+roleData[r].damage.toFixed(2);
+ for(const r of ['blue','red'])teamData[r].damage=+teamData[r].damage.toFixed(2);
+ const phase={early:{damageWindows:0,separated:0},middle:{damageWindows:0,separated:0},late:{damageWindows:0,separated:0}};
+ for(const w of fronts.windows){
+  const f=(w.fromTick+w.toTick)/(2*state.tick);
+  const p=f<1/3?'early':f<2/3?'middle':'late';
+  if(w.hits>0)phase[p].damageWindows++;
+  if(w.separatedPairs>0)phase[p].separated++;
+ }
+ const lifespan={};
+ for(const t of [25,50,75]){
+  const s=snapshots.find(x=>x.tick>=state.tick*t/100)||snapshots.at(-1);
+  lifespan[t]=s.alive;
+ }
+ return{trace,count:c.count,mode:c.mode,seed:c.seed,mirror:c.mirror,winner:state.winner,
+  tick:state.tick,frames,aliveEnd:state.units.filter(u=>u.hp>0).length,
+  attributedHitCount:hits.length,attributedDamage:+hits.reduce((n,h)=>n+h.damage,0).toFixed(2),
+  separated:fronts.windowsWithTwoGeographicallySeparatedDamageComponents,
+  persistent:fronts.consecutivePersistentMultiFrontWindows,
+  damageWindows:fronts.damageWindows,fullWindows:fronts.totalWindows,
+  phase,lifespan,teamDamage:teamData,roleDamage:roleData};
+}
+// The observer must not change any complete state, frame-to-frame, across both scales.
+for(const count of [20,40]){
+ const c={count,mode:'mixed',seed:1337,mirror:false};
+ assert.equal(completed(observed,c).trace,completed(core,c,false).trace,'observer physically changed RC4 '+count);
+ assert.equal(completed(observed,c).trace,completed(observed,c).trace,'nondeterministic full battle '+count);
+}
+const cases=[];
+for(const count of [20,40])for(const mode of Object.keys(rosters))
+ for(const seed of [1337,9917])for(const mirror of [false,true])
+  cases.push(completed(observed,{count,mode,seed,mirror}));
+assert.equal(cases.length,32);
+const summary={};
+for(const count of [20,40]){
+ const a=cases.filter(x=>x.count===count);
+ const sum=k=>a.reduce((n,x)=>n+x[k],0);
+ const dmgRole=Object.fromEntries(roles.map(r=>[r,+a.reduce((n,x)=>n+x.roleDamage[r].damage,0).toFixed(2)]));
+ const damage=+sum('attributedDamage').toFixed(2);
+ summary[count]={matches:a.length,completed:a.filter(x=>x.winner).length,totalTicks:sum('tick'),
+  meanBattleTicks:Math.round(sum('tick')/a.length),damagePositiveEvents:sum('attributedHitCount'),
+  totalAttributedDamage:damage,realSeparatedWindows:sum('separated'),
+  persistentIndependentWindows:sum('persistent'),damagingWindows:sum('damageWindows'),
+  dragonSharePercent:+(dmgRole.dragon/damage*100).toFixed(1),
+  roleDamage:dmgRole,
+  phases:Object.fromEntries(['early','middle','late'].map(p=>[p,{
+   damagingWindows:a.reduce((n,x)=>n+x.phase[p].damageWindows,0),
+   separatedWindows:a.reduce((n,x)=>n+x.phase[p].separated,0)}]))};
+ assert.equal(summary[count].completed,16,'real terminal winners mandatory');
+ assert(summary[count].damagePositiveEvents>500,'actual damage events missing at '+count);
+ assert(summary[count].realSeparatedWindows>=(count===20?16:140),'independent damage fronts severely regressed at '+count);
+ assert(summary[count].persistentIndependentWindows>=(count===20?1:40),'persistent genuine fronts regressed at '+count);
+ for(const role of roles)assert(summary[count].roleDamage[role]>0,'role contributes zero actual HP damage: '+role+' at '+count);
+ assert(summary[count].dragonSharePercent<=50,'Dragon dominates attributed damage beyond documented safety threshold at '+count);
+}
+// Do not assert equal per-role DPS (tanks/CC have non-damage utility).
+// Current 20-body baseline has very few persistent fronts; it is a tracked
+// quality deficiency, not a justification to stage fake combat or weaken QA.
+const report={status:'Completed terminal-quality baseline on green QA runtime; runtime unchanged',
+ caveat:'Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
+ summary,cases};
+if(process.env.QA_COMPLETED_BATTLES_RECEIPT)fs.writeFileSync(process.env.QA_COMPLETED_BATTLES_RECEIPT,JSON.stringify(report,null,2)+'\n');
+console.log('COMPLETED MATCH QUALITY '+JSON.stringify(summary));
+console.log('PASS: 32 full terminal matches, true damage-connected fronts, phase survival, role contributions, 20/40 exact pure-source state parity and baseline-quality floors');
