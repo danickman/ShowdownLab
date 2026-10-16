@@ -121,7 +121,7 @@ for(const count of [20,40]){
  check(100,[turtle(1,1)]);check(100,[turtle(1,5,.8)]);check(82,[turtle(1,4)]);
  check(72,[turtle(1,5)]);check(72,[turtle(1,5),turtle(2,5)]);
  check(72,[turtle(1,5)],[knight(4)]);check(70,[turtle(1,5)],[knight(5)]);
- check(100,[turtle(1,5,.52,'red')]);check(100,[turtle(1,5)],[],turtle(1,5));
+ check(100,[turtle(1,5,.52,'red')]);const self=turtle(1,5);check(100,[self],[],self);
 }
 // Without a ranked allied Turtle, the prototype must preserve every physical state.
 // Solo against heavy Beetank, ranged Sniper and Assassin retains counter ecology.
