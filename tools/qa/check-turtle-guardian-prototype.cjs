@@ -19,10 +19,20 @@ prototypeUlt=once(prototypeUlt,
  " let shelter=0,guardian=null;\n for(const u of turtleGuardians)if(u!==t&&u.team===t.team&&u.hp>0&&u.type==='turtle'&&rank(u)&&near(u,t,rank(u)===2?.14:.12)){\n  const amount=rank(u)===2?.28:.18;if(amount>shelter){shelter=amount;guardian=u}\n }\n if(shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}\n else if(protection){damage*=1-protection;cue(protector,'bastion',tick,t)}\n return damage;");
 const guardAnchor="if(shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}";
 const observedUlt=once(prototypeUlt,guardAnchor,
- "if(shelter>protection){window.__qaGuard({tick,guardian:guardian.id,target:t.id,team:t.team,rank:rank(guardian),nominal:damage*shelter});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
+ "if(shelter>protection){window.__qaGuard({tick,guardian:guardian.id,target:t.id,team:t.team,rank:rank(guardian),shelter,nominal:damage*shelter});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
 const hitAnchor='const dealt=Math.min(t.hp,dmg);';
 const observeCore=s=>once(s,hitAnchor,hitAnchor+
+ "window.__qaResolvedHit({tick,target:t.id,hpBefore:t.hp,postDodgeDamage:dmg,dealt});"+
  "if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,role:a.type,team:a.team,damage:dealt,x:t.x,y:t.y});");
+function localHpPrevented(hp,afterShieldDamage,shelter){
+ // Same defender HP and dodge result; remove *only* the guardian reduction.
+ // A local realized saved-HP measurement, not a full counterfactual match outcome.
+ assert(hp>=0&&afterShieldDamage>=0&&shelter>0&&shelter<1);
+ return Math.max(0,Math.min(hp,afterShieldDamage/(1-shelter))-Math.min(hp,afterShieldDamage));
+}
+assert.equal(localHpPrevented(5,8,.25),0,'overkill may save no actual HP');
+assert(Math.abs(localHpPrevented(100,24,.2)-6)<1e-9,'real local HP protected');
+assert(Math.abs(localHpPrevented(100,6,.2)-1.5)<1e-9,'post-dodge protection must shrink');
 const graph=read('tools/qa/check-role-fronts-baseline.cjs');
 const lo=graph.indexOf('const cell='),hi=graph.indexOf('// Synthetic truth fixtures',lo);
 assert(lo>=0&&hi>lo,'real front metric definition moved');
@@ -36,13 +46,26 @@ const patterns={
   foe:['sniper','sniper','dragon','dragon','sniper','knight','beetank','turtle','mole','barbarian']}
 };
 function battle(c,candidate,observe=true){
- let now=0,frameId=0,queue=new Map(),state,frames=0,errors=[],hits=[],guards=[];
+ let now=0,frameId=0,queue=new Map(),state,frames=0,errors=[],hits=[],guards=[],pendingGuard=null;
  const sha=c.trace?crypto.createHash('sha256'):null;
  const env={window:null,Math,performance:{now:()=>now},
   requestAnimationFrame(fn){const n=++frameId;queue.set(n,fn);return n},
   cancelAnimationFrame(n){queue.delete(n)},
   console:{error:(...a)=>errors.push(a.join(' '))}};
- env.window=env;env.__qaHit=x=>hits.push(x);env.__qaGuard=x=>guards.push(x);
+ env.window=env;env.__qaHit=x=>hits.push(x);
+ env.__qaGuard=x=>{assert.equal(pendingGuard,null,'guardian event not settled before next hurt');
+  assert(x.shelter>0&&x.shelter<1,'valid nonstacking mitigation');
+  x.actualHpPreventedLocally=0;guards.push(x);pendingGuard=x};
+ env.__qaResolvedHit=x=>{
+  if(pendingGuard){
+   assert.equal(pendingGuard.target,x.target,'same defender must receive guardian benefit');
+   assert.equal(pendingGuard.tick,x.tick,'same deterministic hit tick');
+   pendingGuard.actualHpPreventedLocally=localHpPrevented(x.hpBefore,x.postDodgeDamage,pendingGuard.shelter);
+   assert(pendingGuard.actualHpPreventedLocally>=0&&pendingGuard.actualHpPreventedLocally<=pendingGuard.nominal+1e-7,
+    'post-dodge or HP-cap saved damage must not exceed pre-dodge nominal');
+   pendingGuard=null;
+  }
+ };
  vm.createContext(env);vm.runInContext(evo,env);
  vm.runInContext(candidate?(observe?observedUlt:prototypeUlt):liveUlt,env);
  vm.runInContext(observe?observeCore(candidate?prototypeCore:liveCore):candidate?prototypeCore:liveCore,env);
@@ -57,26 +80,31 @@ function battle(c,candidate,observe=true){
  };
  sim.configure({seed:c.seed||1337,speed:c.speed||10,onState:()=>{}});
  sim.deploy(roster('blue'),roster('red'));sim.setRunning(true);
+ const runtimeStart=process.hrtime.bigint();
  const maxFrames=c.maxFrames||800;
  for(;frames<maxFrames;frames++){
   now+=16.667;const q=[...queue.values()];queue.clear();for(const fn of q)fn(now);
   state=sim.getState();if(sha)sha.update(JSON.stringify(state)+'\n');
   if(state.winner){frames++;break}
  }
+ const runtimeMs=Number(process.hrtime.bigint()-runtimeStart)/1e6;
+ assert.equal(pendingGuard,null,'all real defender guardian events must resolve');
  assert.deepEqual(errors,[],'source error '+JSON.stringify(c));
  assert.equal(state.units.length,c.count,'density must remain intact');
  assert(state.units.every(u=>Number.isFinite(u.hp)&&Number.isFinite(u.x)&&Number.isFinite(u.y)),'finite physical state');
  if(c.requireTerminal!==false)assert(state.winner,'no censored sample '+JSON.stringify(c));
- if(!observe)return{digest:sha?.digest('hex'),winner:state.winner,tick:state.tick};
+ if(!observe)return{digest:sha?.digest('hex'),winner:state.winner,tick:state.tick,runtimeMs};
  const fronts=c.requireTerminal===false?null:damageFronts(hits,state.tick,30);
  const ours=hits.filter(h=>h.team===side),turtle=ours.filter(h=>h.role==='turtle');
  return{digest:sha?.digest('hex'),winner:state.winner,tick:state.tick,
-  won:state.winner===side,teamHpDamage:ours.reduce((n,h)=>n+h.damage,0),
+  won:state.winner===side,runtimeMs,teamHpDamage:ours.reduce((n,h)=>n+h.damage,0),
   turtleHpDamage:turtle.reduce((n,h)=>n+h.damage,0),
   realPersistentFronts:fronts?.consecutivePersistentMultiFrontWindows,
   separatedRealDamageWindows:fronts?.windowsWithTwoGeographicallySeparatedDamageComponents,
   guardianProtectionHits:guards.length,
-  nominalProtectionBeforeDodgeAndHpCap:guards.reduce((n,g)=>n+g.nominal,0)
+  nominalProtectionBeforeDodgeAndHpCap:guards.reduce((n,g)=>n+g.nominal,0),
+  immediateActualHpPrevented:guards.reduce((n,g)=>n+g.actualHpPreventedLocally,0),
+  protectingTurtleIds:[...new Set(guards.map(g=>g.guardian))]
  };
 }
 // Observer cannot influence actual state, at either 20 or 40 body densities.
@@ -125,6 +153,7 @@ for(const level of [4,5]){
   guardianSeparatedWindows:sum('after','separatedRealDamageWindows'),
   guardianHits:sum('after','guardianProtectionHits'),
   nominalPreDodgePreHpCapReduction:+sum('after','nominalProtectionBeforeDodgeAndHpCap').toFixed(2),
+  actualImmediateHpPrevented:+sum('after','immediateActualHpPrevented').toFixed(2),
   byPopulation:{}
  };
  for(const count of [20,40]){
@@ -134,7 +163,10 @@ for(const level of [4,5]){
    baselinePersistentFronts:r.reduce((n,x)=>n+x.before.realPersistentFronts,0),
    guardianPersistentFronts:r.reduce((n,x)=>n+x.after.realPersistentFronts,0)};
  }
- assert(a.guardianHits>0&&a.nominalPreDodgePreHpCapReduction>0,'no tactical defensive exposure');
+ assert(a.guardianHits>0&&a.nominalPreDodgePreHpCapReduction>0&&a.actualImmediateHpPrevented>0,
+  'no verified live defender HP protection');
+ assert(a.actualImmediateHpPrevented<=a.nominalPreDodgePreHpCapReduction,
+  'locally true saved HP exceeded theoretical nominal reduction');
  assert(a.guardianWins>=a.baselineWins,'guardian loses team value in this controlled sample');
  assert(a.guardianPersistentFronts>=a.baselinePersistentFronts-4,'authentic independent fights degraded');
  assert(a.guardianTurtlePositiveHp>=a.baselineTurtlePositiveHp*.85,'Turtle real attacking contribution degraded');
@@ -148,11 +180,31 @@ for(const count of [80,120,300])for(const speed of [1,10]){
  const v=battle(c,true);
  assert(v.tick>0,'dense evolved guardians did not run');
 }
+// Real Node wall-clock simulator-only cost, no source instrumentation, 1x and 10x.
+ // Warm both variants before timing to reduce VM warm-up distortion. Numbers are
+ // diagnostic, NOT benchmarks of iOS Safari RAF, GPU, battery or thermal limits.
+const perf={};
+const median=arr=>{const a=arr.slice().sort((x,y)=>x-y);return a[Math.floor(a.length/2)]};
+for(const count of [120,300])for(const speed of [1,10]){
+ const c={count,mode:'mixed',seed:9917,level:5,speed,maxFrames:10,requireTerminal:false};
+ battle(c,false,false);battle(c,true,false);
+ const baseline=[],prototype=[];
+ for(let i=0;i<5;i++){
+  if(i%2===0){baseline.push(battle(c,false,false).runtimeMs);prototype.push(battle(c,true,false).runtimeMs)}
+  else{prototype.push(battle(c,true,false).runtimeMs);baseline.push(battle(c,false,false).runtimeMs)}
+ }
+ const b=median(baseline),p=median(prototype);
+ perf[count+'@'+speed+'x']={baselineMedianMs:+b.toFixed(3),prototypeMedianMs:+p.toFixed(3),
+  prototypeToBaseline:+(p/b).toFixed(3),baselineRuns:baseline.map(x=>+x.toFixed(3)),
+  prototypeRuns:prototype.map(x=>+x.toFixed(3))};
+ assert(Number.isFinite(p/b)&&b>0,'valid real median times');
+}
 const receipt={
  status:'Source-only A/B prospective Guardian Shell; NOT SHIPPED OR DEPLOYED',
  specification:'L4 18% damage reduction within 0.12 units, L5 28% within 0.14; highest of guardian and Knight Bastion only; never protects the Turtle itself. Defender must be an actual living ally.',
- caveats:'Nominal mitigation before dodge and HP cap is NOT HP genuinely prevented. All wins and damage fronts from completed true source games. 300 bodies are limited finite source-state checks, NOT FPS or full terminal. Physical iPhone 14 Pro Max Safari still manual.',
- summary,cases};
+ caveats:'Immediate saved HP is measured on the same resolved hit after dodge and remaining-HP cap; it is not total team counterfactual HP saved across a divergent match. Nominal incoming mitigation is separate. All wins and damage fronts from completed true source games. 300 bodies are limited finite source-state checks, NOT FPS or full terminal. Node/V8 median simulator times are not physical iPhone 14 Pro Max Safari FPS.',
+ summary,simulatorCpu:perf,cases};
 if(process.env.QA_TURTLE_GUARDIAN_RECEIPT)fs.writeFileSync(process.env.QA_TURTLE_GUARDIAN_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('TURTLE GUARDIAN SOURCE A/B '+JSON.stringify(summary));
+console.log('TURTLE GUARDIAN NODE CPU '+JSON.stringify(perf));
 console.log('PASS: 48 completed matched guardian source A/B and finite uncapped 300 source, pure trace parity; prototype not shipped');

@@ -1573,3 +1573,10 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 - Corrected 216 terminal ROI found L4 Turtle 11/24 wins (same as L1), L5 13/24, while Beetank still substantially exceeds Turtle direct HP contribution. Tested *read-only source substitution*, not a game/runtime release: L4 protective 18%/0.12 radius vs L5 28%/0.14, mutually exclusive with stronger Knight Bastion and not self-protecting.
 - 48 preliminary true fully terminal matched A/B: L4 team wins 11→13, real persisted fronts 113→110; L5 wins 13→14, real persisted fronts 100→112. L5 Turtle direct real damage drops while team damage rises. More evidence/counters/performance needed.
 - Added permanent CI source-only prototype QA with real winners, damage graphs, solo role controls, exact observer physics parity, uncapped 300-body finite-state checks, archived JSON; no runtime, CSS, assets, root, worker, 42 SHA-256 pin or production changes. Current specific follow-up [study](TURTLE_GUARDIAN_PROTOTYPE_2026-10-16.md); full latest-head CI still required before claiming validation. Future choose shipped change only after risk and iPhone 14 Pro Max performance review.
+
+
+### Oct 16 — Extend prospective Turtle guardian proof before shipping
+
+- Source-only guardian CI now measures **immediately prevented actual HP per resolved hit after the identical dodge and defender remaining-HP cap**, not only nominal cover; explicitly not the full counterfactual match's HP divergence. Synthetic overkill/dodge controls and identity/tick reconciliation prevent false savings; parity and 48 terminal A/B remain.
+- Added unobserved Node/V8 simulator-only median CPU A/B at 120/300 units 1×/10×, five timed samples each after warm-ups. This is diagnostic, not measured Safari/iPhone 14 Pro Max performance; review receipt before accepting performance budget and any gameplay release.
+- No combat runtime, PWA hashes, assets, main or production modified. Full fresh-head CI and receipt required.

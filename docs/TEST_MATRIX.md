@@ -739,3 +739,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Compare actual damage HP and genuine persistent independent damage fronts, winning sides, solo Turtle vs Beetank/Sniper/Assassin and exact no-evolved-guardian state parity
 - [ ] Validate 80/120/300 real engine finite simulation, 1×/10×, no hard cap; iPhone 14 Pro Max physical Safari still manual
 - [ ] Only after separate source evidence and current exact-head CI decide whether to ship a guarded, nonstacking protective Turtle niche; no covert DPS boosts
+
+
+### Source-only Turtle Guardian actual savings and CPU acceptance
+- [ ] All guardian events matched to the exact incoming defender/tick and post-dodge/remaining-HP capped hit; immediately realized prevented HP must be nonzero but never exceed nominal pre-dodge reduction
+- [ ] Keep full-state observational parity, genuine counterplay and terminal wins/fronts; distinguish event-local HP saving from whole-match counterfactual
+- [ ] Record balanced-order baseline vs guardian Node CPU median ratios with 5 repetitions at 120/300, 1×/10× before any runtime ship; real iPhone 14 Pro Max manual acceptance pending
