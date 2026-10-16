@@ -752,3 +752,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Two Turtles and Knight Bastion never stack; strongest single protective effect applies; historical exact no-guard source comparisons and solo Beetank/Sniper/Assassin remain valid
 - [ ] Full 48 terminal match source A/B, real reflected HP and locally saved HP distinguished from nominal, persistent independent real HP-damage fronts, exact source observer parity, 300 density at 1×/10×
 - [ ] 42 pinned PWA runtime digests, new runtime/cache URLs, mint comic guardian cue and Guide descriptions; physical iPhone 14 Pro Max Safari UX/FPS/thermal manual gate OPEN
+
+
+### Guardian Shell wounded ally guard (post full-unrestricted rejection)
+- [ ] Real source limits Guardian to current defender pre-hit HP fraction <60%, no effect at >=60%, regardless of nearby evolved Turtle; L4=18%/0.12, L5=28%/0.14, never stacks with Bastion or other Turtles, no self-guard
+- [ ] Standard 16 genuine 20/40 matches each: 20 real persistent fronts >=1, 40 >=40 with separated windows >=140 and all roles real HP damage; no relaxing original source gate
+- [ ] In dedicated 48 completed Turtle evolution matches: L4 and L5 real win/fronts and immediate real prevented HP source, solo counter truths and deterministic parity
+- [ ] Original Assassin L5 Execution and Turtle radius .09→.10 A/B tests reconstruct exact prior no-Guardian physics, while latest live Guardian is separately regression-tested; current 42 SHA-256 hashes and Safari manual acceptance

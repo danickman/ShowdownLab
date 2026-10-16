@@ -6,16 +6,12 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cryp
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const releasedCore=read('v3/legacy-sim-core.js'),releasedUlt=read('v3/ultimate-abilities.js'),evo=read('v3/evolution-rules.js');
 const once=(s,a,b)=>{assert.equal(s.split(a).length,2,'source anchor drift: '+a.slice(0,85));return s.replace(a,b)};
-// Strict old no-guard control is reconstructed from the actually shipped QA source.
+const {withoutGuardian}=require('./historical-guardian-control.cjs');
 const prototypeCore=releasedCore,prototypeUlt=releasedUlt;
-let liveCore=once(releasedCore,'let bastions=[],turtleGuardians=[];','let bastions=[];');
-liveCore=once(liveCore,"bastions=units.filter(u=>u.type==='knight'&&ultimate.rank(u));turtleGuardians=units.filter(u=>u.type==='turtle'&&ultimate.rank(u));lastAliveCount","bastions=units.filter(u=>u.type==='knight'&&ultimate.rank(u));lastAliveCount");
-liveCore=once(liveCore,'ultimate.incoming(t,dmg,units,tick,bastions,turtleGuardians)','ultimate.incoming(t,dmg,units,tick,bastions)');
-let liveUlt=once(releasedUlt,'function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){','function incoming(t,damage,units,tick,bastions=units){');
-liveUlt=once(liveUlt," let shelter=0,guardian=null;\n for(const u of turtleGuardians)if(u!==t&&u.team===t.team&&u.hp>0&&u.type==='turtle'&&rank(u)&&near(u,t,rank(u)===2?.14:.12)){\n  const amount=rank(u)===2?.28:.18;if(amount>shelter){shelter=amount;guardian=u}\n }\n if(shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}\n else if(protection){damage*=1-protection;cue(protector,'bastion',tick,t)}\n return damage;"," if(protection){damage*=1-protection;cue(protector,'bastion',tick,t)}\n return damage;");
-const guardAnchor="if(shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}";
+const {core:liveCore,ability:liveUlt}=withoutGuardian(releasedCore,releasedUlt);
+const guardAnchor="if(t.hp/t.maxHp<.6&&shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}";
 const observedUlt=once(prototypeUlt,guardAnchor,
- "if(shelter>protection){window.__qaGuard({tick,guardian:guardian.id,target:t.id,team:t.team,rank:rank(guardian),shelter,nominal:damage*shelter});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
+ "if(t.hp/t.maxHp<.6&&shelter>protection){window.__qaGuard({tick,guardian:guardian.id,target:t.id,team:t.team,rank:rank(guardian),shelter,nominal:damage*shelter});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
 const hitAnchor='const dealt=Math.min(t.hp,dmg);';
 const observeCore=s=>once(s,hitAnchor,hitAnchor+
  "window.__qaResolvedHit({tick,target:t.id,hpBefore:t.hp,postDodgeDamage:dmg,dealt});"+
@@ -114,14 +110,14 @@ for(const count of [20,40]){
  const sandbox={window:null,Math};sandbox.window=sandbox;vm.createContext(sandbox);
  vm.runInContext(evo,sandbox);vm.runInContext(prototypeUlt,sandbox);
  const incoming=sandbox.ShowdownUltimates.incoming;
- const t={id:99,type:'goblin',team:'blue',level:1,hp:100,maxHp:100,x:.5,y:.5};
+ const t={id:99,type:'goblin',team:'blue',level:1,hp:50,maxHp:100,x:.5,y:.5};
  const turtle=(id,level,x=.52,team='blue')=>({id,type:'turtle',team,level,hp:200,maxHp:200,x,y:.5});
  const knight=level=>({id:50,type:'knight',team:'blue',level,hp:200,maxHp:200,x:.52,y:.5});
  const check=(expected,ts=[],ks=[],target=t)=>assert(Math.abs(incoming(target,100,[target,...ks,...ts],50,ks,ts)-expected)<1e-7,'nonstacking proximity/side/level protector contract');
  check(100,[turtle(1,1)]);check(100,[turtle(1,5,.8)]);check(82,[turtle(1,4)]);
  check(72,[turtle(1,5)]);check(72,[turtle(1,5),turtle(2,5)]);
  check(72,[turtle(1,5)],[knight(4)]);check(70,[turtle(1,5)],[knight(5)]);
- check(100,[turtle(1,5,.52,'red')]);const self=turtle(1,5);check(100,[self],[],self);
+ check(100,[turtle(1,5,.52,'red')]);const healthy={...t,hp:60};check(100,[turtle(1,5)],[],healthy);const self=turtle(1,5);self.hp=80;check(100,[self],[],self);
 }
 // Without a ranked allied Turtle, the prototype must preserve every physical state.
 // Solo against heavy Beetank, ranged Sniper and Assassin retains counter ecology.
@@ -211,7 +207,7 @@ for(const count of [120,300])for(const speed of [1,10]){
 }
 const receipt={
  status:'QA-shipped Guardian Shell versus historical no-guardian source baseline; main/production unchanged',
- specification:'L4 18% damage reduction within 0.12 units, L5 28% within 0.14; highest of guardian and Knight Bastion only; never protects the Turtle itself. Defender must be an actual living ally.',
+ specification:'If allied defender is strictly below 60% HP before the hit: L4 18% reduction within 0.12, L5 28% within 0.14. Highest of Guardian and Knight Bastion only, no self-protection.',
  caveats:'Immediate saved HP is measured on the same resolved hit after dodge and remaining-HP cap; it is not total team counterfactual HP saved across a divergent match. Nominal incoming mitigation is separate. All wins and damage fronts from completed true source games. 300 bodies are limited finite source-state checks, NOT FPS or full terminal. Node/V8 median simulator times are not physical iPhone 14 Pro Max Safari FPS.',
  summary,simulatorCpu:perf,cases};
 if(process.env.QA_TURTLE_GUARDIAN_RECEIPT)fs.writeFileSync(process.env.QA_TURTLE_GUARDIAN_RECEIPT,JSON.stringify(receipt,null,2)+'\n');

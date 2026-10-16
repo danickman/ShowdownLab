@@ -7,7 +7,7 @@ const specs={
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
  beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},
- turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies take 18% less damage within 0.12 arena units (strongest protection only).',l5:'Reflect 45% of actual close-contact damage; nearby allies take 28% less damage within 0.14 arena units (no guard stacking).'},
+ turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Axe swings splash 40% damage onto up to three nearby enemies.',l5:'Wider cleave splashes 65% damage onto up to five enemies.'},
  goose:{name:'Thunder Honk',l4:'Thunder Honk deals 45% attack damage and stuns enemies for 44 ticks (about 0.73 seconds).',l5:'75% attack damage, wider radius and 64-tick stun (about 1.07 seconds).'}
@@ -31,7 +31,7 @@ function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){
  for(const u of turtleGuardians)if(u!==t&&u.team===t.team&&u.hp>0&&u.type==='turtle'&&rank(u)&&near(u,t,rank(u)===2?.14:.12)){
   const amount=rank(u)===2?.28:.18;if(amount>shelter){shelter=amount;guardian=u}
  }
- if(shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}
+ if(t.hp/t.maxHp<.6&&shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}
  else if(protection){damage*=1-protection;cue(protector,'bastion',tick,t)}
  return damage;
 }

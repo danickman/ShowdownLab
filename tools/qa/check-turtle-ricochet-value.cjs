@@ -3,7 +3,10 @@
 // A/B against exact prior 0.09 radius, with fully terminal true damage-front scoring.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const ability=read('v3/ultimate-abilities.js'),core=read('v3/legacy-sim-core.js');
+const shippedAbility=read('v3/ultimate-abilities.js'),shippedCore=read('v3/legacy-sim-core.js');
+const {withoutGuardian}=require('./historical-guardian-control.cjs');
+// Isolate original 0.09→0.10 Ricochet range A/B from subsequent Guardian capability.
+const {core,ability}=withoutGuardian(shippedCore,shippedAbility);
 const oldRadius='near(a,t,.09)&&dealt>0',newRadius='near(a,t,.10)&&dealt>0';
 assert.equal(ability.split(newRadius).length,2,'actual Turtle Ricochet .10 source changed, update A/B');
 const control=ability.replace(newRadius,oldRadius);

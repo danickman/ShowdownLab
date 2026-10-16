@@ -4,7 +4,11 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),
  crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const core=read('v3/legacy-sim-core.js'),live=read('v3/ultimate-abilities.js');
+const shippedCore=read('v3/legacy-sim-core.js'),shippedAbility=read('v3/ultimate-abilities.js');
+const {withoutGuardian}=require('./historical-guardian-control.cjs');
+const {core,ability:live}=withoutGuardian(shippedCore,shippedAbility);
+// Original Assassin 55%→75% controlled study excludes future Turtle support physics.
+assert(shippedAbility.includes("t.hp/t.maxHp<.6&&shelter>protection"),'Guardian contract must have independent current-runtime QA');
 const oldGate='t.hp/t.maxHp<(r===2?.55:.4)',newGate='t.hp/t.maxHp<(r===2?.75:.4)';
 assert.equal(live.split(newGate).length,2,'L5 Execution condition changed; review battle QA');
 const baseline=live.replace(newGate,oldGate);
