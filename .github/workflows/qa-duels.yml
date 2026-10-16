@@ -566,94 +566,6 @@ jobs:
           path: assassin-l4-pursuit.json
           if-no-files-found: warn
 
-  assassin-l4-target-focus:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Check genuine L4 Assassin target focus study syntax
-        run: node --check tools/qa/check-assassin-l4-target-focus.cjs
-      - name: Full source-only 312-battle Assassin L4 selection and counter audit
-        env:
-          QA_ASSASSIN_FOCUS_RECEIPT: assassin-l4-target-focus.json
-        run: node tools/qa/check-assassin-l4-target-focus.cjs
-      - name: Upload physical target-choice, real HP and independent-front report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: assassin-l4-target-focus
-          path: assassin-l4-target-focus.json
-          if-no-files-found: warn
-
-  assassin-l4-trigger-study:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Validate Assassin L4 source study
-        run: node --check tools/qa/check-assassin-l4-trigger-study.cjs
-      - name: Run real terminal Assassin L4 threshold and counter study
-        env:
-          QA_L4_ASSASSIN_RECEIPT: assassin-l4-source-study.json
-        run: node tools/qa/check-assassin-l4-trigger-study.cjs
-      - name: Archive physical match and balance counter receipts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: assassin-l4-source-study
-          path: assassin-l4-source-study.json
-          if-no-files-found: warn
-
-  turtle-timed-shell-study:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Check actual timed Turtle shell source study syntax
-        run: node --check tools/qa/check-turtle-timed-shell-study.cjs
-      - name: Compare true terminal shell response and actual physical fronts
-        env:
-          QA_L4_TURTLE_RECEIPT: turtle-timed-shell-study.json
-        run: node tools/qa/check-turtle-timed-shell-study.cjs
-      - name: Preserve shell defense source research
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: turtle-timed-shell-study
-          path: turtle-timed-shell-study.json
-          if-no-files-found: warn
-
-  turtle-l4-investment:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Check Turtle L4 source study syntax
-        run: node --check tools/qa/check-turtle-l4-investment.cjs
-      - name: Compare full matched terminal Turtle L4 payoff, actual protection and role fronts
-        env:
-          QA_L4_TURTLE_RECEIPT: turtle-l4-investment.json
-        run: node tools/qa/check-turtle-l4-investment.cjs
-      - name: Archive source A/B investment, L5 parity and held-out matchups
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: turtle-l4-investment
-          path: turtle-l4-investment.json
-          if-no-files-found: warn
-
   turtle-guardian-prototype:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -696,28 +608,6 @@ jobs:
         with:
           name: evolution-investment-value
           path: evolution-investment-value.json
-          if-no-files-found: warn
-
-  small-army-pressure-study:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Check tactical target-pressure source study syntax
-        run: node --check tools/qa/check-small-army-pressure-study.cjs
-      - name: Audit genuine 20/40 terminal HP fronts and winner/role losses
-        env:
-          QA_SMALL_PRESSURE_RECEIPT: small-army-pressure-study.json
-        run: node tools/qa/check-small-army-pressure-study.cjs
-      - name: Archive source A/B role and real independent-front receipts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: small-army-pressure-study
-          path: small-army-pressure-study.json
           if-no-files-found: warn
 
   completed-match-quality-budget:

@@ -841,3 +841,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 1.65 gives selected Assassin +3.9% HP but loses wins 13→12, standard 20 persistent fronts 1→0, standard 40 fronts 58→34
 - [x] 1.85 gives selected +12.5% HP but loses wins 13→12, standard 40 fronts 58→41 and separated HP windows 192→186; NO speed patch shipped
 - [ ] Profile physical Assassin slotPoint destination distance vs actual melee reach, physical collision/separate() pushback and two different nearest() assignments in one tick; guard by real positive HP-damage fronts at 20/40 and high-pop 300 budget before another action change
+
+
+### QA research cost governance
+- [x] Five previously rejected source A/B studies moved unchanged to conditional combat-source/own-script push workflow; preserve fixtures/artefacts, do not weaken checks. Saves >1,664 completed terminal matches on routine docs/QA commits.
+- [x] Original shipped-combat regressions, true HP fronts, active Assassin last-mile, primary iPhone 14 Pro Max 430×932 browser contract, 300 fighters, 42-PWA-digest integrity remain 43-job normal push/PR matrix.
+- [ ] Verify exact-head GitHub push and PR with new archive registration; when real combat core changes require source archive success as well; physical Safari manual gate pending.
