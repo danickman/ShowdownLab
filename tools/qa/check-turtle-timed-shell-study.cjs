@@ -28,11 +28,11 @@ for(const [name,p] of Object.entries(prototypes)){
  if(p.shellBoost!==undefined)source=once(source,'const amount=rank(u)===2?.28:.18;',
    'const amount=rank(u)===2?.28:(u.shell>0?'+p.shellBoost+':.18);');
  if(p.react)source=once(source,'if(t.hp/t.maxHp<.6&&shelter>protection){',
-   'if(guardian&&rank(guardian)===1&&t.hp/t.maxHp<.45&&guardian.shell===0&&guardian.special<=0){guardian.shell=22;guardian.special=85;guardian.action=\'shell\';shelter='+p.shellBoost+';}if(t.hp/t.maxHp<.6&&shelter>protection){');
+   'if(guardian&&rank(guardian)===1&&t.hp/t.maxHp<.45&&guardian.shell===0&&guardian.special<=0){guardian.shell=22;guardian.special=85;guardian.action=\'shell\';window.__qaShellReact({tick,guardianId:guardian.id,team:t.team,defenderId:t.id,level:guardian.level,defenderHpFraction:t.hp/t.maxHp});shelter='+p.shellBoost+';}if(t.hp/t.maxHp<.6&&shelter>protection){');
  source=once(source,guardAnchor,
  "if(t.hp/t.maxHp<.6&&shelter>protection){window.__qaGuard({tick,defenderId:t.id,team:t.team,guardianId:guardian.id,guardianLevel:guardian.level,shellActive:guardian.shell>0,strength:shelter,nominal:damage*shelter});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
  programs[name]={observedAbility:source,rawAbility:source.replace(
-  "window.__qaGuard({tick,defenderId:t.id,team:t.team,guardianId:guardian.id,guardianLevel:guardian.level,shellActive:guardian.shell>0,strength:shelter,nominal:damage*shelter});",'')};
+  "window.__qaGuard({tick,defenderId:t.id,team:t.team,guardianId:guardian.id,guardianLevel:guardian.level,shellActive:guardian.shell>0,strength:shelter,nominal:damage*shelter});",'').replace('window.__qaShellReact({tick,guardianId:guardian.id,team:t.team,defenderId:t.id,level:guardian.level,defenderHpFraction:t.hp/t.maxHp});','')};
 }
 const graph=read('tools/qa/check-role-fronts-baseline.cjs'),start=graph.indexOf('const cell='),end=graph.indexOf('// Synthetic truth fixtures',start);
 assert(start>=0&&end>start,'real damage-edge front score not found');
@@ -60,7 +60,7 @@ const selections={
   foe:['beetank','beetank','dragon','turtle','knight','barbarian','beetank','sniper','mole','assassin']}
 };
 function match(c,kind,observed=true){
- let now=0,nextId=0,queue=new Map(),state,errors=[],hits=[],guards=[],reflections=[],pending=null;
+ let now=0,nextId=0,queue=new Map(),state,errors=[],hits=[],guards=[],reflections=[],shellReactions=[],pending=null;
  const sha=c.trace?crypto.createHash('sha256'):null;
  const env={window:null,Math,performance:{now:()=>now},
   requestAnimationFrame(fn){const id=++nextId;queue.set(id,fn);return id},cancelAnimationFrame(id){queue.delete(id)},
@@ -77,6 +77,11 @@ function match(c,kind,observed=true){
   pending=null};
  env.__qaHit=h=>hits.push(h);
  env.__qaReflect=x=>{assert(x.damage>0&&Number.isFinite(x.damage),'invalid actual reflection HP');reflections.push(x)};
+ env.__qaShellReact=x=>{
+  assert.equal(x.level,4,'only evolved L4 Turtle is allowed to react');
+  assert(x.defenderHpFraction<.45&&x.defenderHpFraction>=0,'real critical pre-hit defender required');
+  shellReactions.push(x);
+ };
  vm.createContext(env);
  vm.runInContext(evolution,env);
  vm.runInContext(observed?programs[kind].observedAbility:programs[kind].rawAbility,env);
@@ -118,7 +123,7 @@ function match(c,kind,observed=true){
   won:state.winner===ally,realPersistentFronts:graph.consecutivePersistentMultiFrontWindows,
   realSeparatedWindows:graph.windowsWithTwoGeographicallySeparatedDamageComponents,
   actualTurtleHp:sum(turtle),realL4ImmediateAllyHpSaved:l4Saves.reduce((n,x)=>n+x.actualSavedHp,0),
-  l4GuardianEvents:l4Saves.length,activeL4ShellGuardEvents:activeShellGuards.length,actualL4ReflectedHp:l4Reflect.reduce((n,r)=>n+r.damage,0),l4ReflectionEvents:l4Reflect.length,
+  l4GuardianEvents:l4Saves.length,activeL4ShellGuardEvents:activeShellGuards.length,trueL4ShellReactions:shellReactions.filter(x=>c.kind==='standard'||x.team===ally).length,actualL4ReflectedHp:l4Reflect.reduce((n,r)=>n+r.damage,0),l4ReflectionEvents:l4Reflect.length,
   realKnightHp:sum(hits.filter(h=>h.role==='knight')),realGoblinHp:sum(hits.filter(h=>h.role==='goblin'))};
 }
 const controls=[
@@ -167,7 +172,7 @@ for(const name of names){
    persistentRealFronts:sum('realPersistentFronts'),
    separatedRealDamageWindows:sum('realSeparatedWindows'),
    actualTurtleHp:+sum('actualTurtleHp').toFixed(2),
-   L4GuardianEvents:sum('l4GuardianEvents'),activeL4ShellGuardEvents:sum('activeL4ShellGuardEvents'),
+   L4GuardianEvents:sum('l4GuardianEvents'),activeL4ShellGuardEvents:sum('activeL4ShellGuardEvents'),trueL4ShellReactions:sum('trueL4ShellReactions'),
    realImmediateL4AllyHpSaved:+sum('realL4ImmediateAllyHpSaved').toFixed(2),
    realActualL4ReflectedHp:+sum('actualL4ReflectedHp').toFixed(2),l4ReflectionEvents:sum('l4ReflectionEvents'),
    realKnightHp:+sum('realKnightHp').toFixed(2),
@@ -180,8 +185,9 @@ for(const name of names){
  }
 }
 assert(summary.baseline.prespecified.realActualL4ReflectedHp>0,'Ricochet must be observed as actual target HP, not nominal');
-assert(summary.reactiveShell24.prespecified.activeL4ShellGuardEvents>0,'physical prespecified source must use reactive shell');
-assert(summary.reactiveShell30['counter-stress'].activeL4ShellGuardEvents>0,'physical stress source must use reactive shell');
+assert(summary.reactiveShell24.prespecified.trueL4ShellReactions>0,'a real prespecified critical attack must trigger reactive shell');
+assert(summary.reactiveShell30['counter-stress'].trueL4ShellReactions>0,'a real stress critical attack must trigger reactive shell');
+assert.equal(summary.baseline.prespecified.trueL4ShellReactions,0,'baseline cannot trigger the new response');
 for(const name of names.slice(1)){
  assert(summary[name].standard.byPopulation[20].persisted>=1,'small true fronts must persist '+name);
  assert(summary[name].standard.byPopulation[40].persisted>=40,'40 real front safety floor '+name);

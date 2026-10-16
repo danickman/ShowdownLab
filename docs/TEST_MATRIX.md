@@ -792,3 +792,5 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 4 ×104 fully terminal standard/prespecified/new-seed/stress comparisons; genuine nonstacking timed shell defensive response, not global passive percentage increase
 - [ ] Actual post-hit saved/reflected/direct HP, original genuine independent active fronts, Beetank/Assassin and Knight/Goblin collateral, unchanged L5 solo hashes and physical source observer parity
 - [ ] Do not ship until holdouts, 80/120/300 CPU and real iPhone 14 Pro Max Safari reviewed
+
+- [ ] Count true injured-ally reactive shell starts independently; do not mistake existing shell animation for the new counterplay

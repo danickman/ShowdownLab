@@ -1630,3 +1630,5 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 
 - Prior 520-case passive L4 parameter trial rejected stronger percentages. Now test a distinct tactical ability: L4 shell-time brief Guardian 28%, or real ally below 45% HP hit triggers eligible chosen L4 Turtle entering existing 22-tick shell with 24%/30% protection, forgoing its attacks. No random/synthetic hits, L5 unchanged, strongest guard still only one. 4 ×104 truly terminal source matches standard 20/40 and prespecified/unseen/counter stress. Observe true defensive HP saved, Ricochet reflected HP and persistent geographically independent damage fronts. [Study](TURTLE_TIMED_SHELL_COUNTERPLAY_2026-10-16.md).
 - New CI job `turtle-timed-shell-study`, with instrumented/observed RAF SHA controls and L5 solo counter SHA. **No change to actual gameplay/PWA; exact-head green gate pending.**
+
+- Timed shell QA now explicitly distinguishes new real critical-hit reaction callbacks from ordinary naturally triggered shell protection; raw source removes this read-only observer and requires state-hash parity.

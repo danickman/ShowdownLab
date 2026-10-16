@@ -13,3 +13,5 @@ Four comparison sources: **baseline** (shipped QA); **shellBrace28** (L4 shelter
 If source-only data survives holdouts, follow with more independent seeds, 80/120/300 real fighter CPU and physical **iPhone 14 Pro Max** Safari acceptance *before any gameplay patch*. Source CI is not FPS certification. No runtime changes, art, PWA assets, merge or deploy.
 
 See also [rejected passive L4 ROI](TURTLE_L4_EVOLUTION_INVESTMENT_2026-10-16.md).
+
+**Measurement correctness:** record a true below-45%-HP trigger separately from ordinary shell-active mitigation. A baseline shell must never count as the proposed reactive action; observation must preserve all RAF-state SHA hashes.
