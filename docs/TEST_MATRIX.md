@@ -828,3 +828,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Candidate focus06/focus12 stop five lost wounded backlines (in 24 selected cases), but selected Assassin real HP falls by ~1.9%, backstabs 192→187, no win improvements; armored stress 20-fighter real persistent fronts 10→7 — REJECTED
 - [x] 13,255 / 18,892 prespecified L4 decisions have ready attack but cannot reach target; measure is simulator decisions, not wall clock time. Source `step()` double-nearest persists, target lock not appropriate.
 - [ ] Next L4-only short-range *movement* research when cooldown ready and backline target within final .30 arena units; no attack range/damage or armor changes, preserve 20/40 independent real HP-damage fronts and real counter/winner health, check 80/120/300 performance and iPhone 14 Pro Max manual QA
+
+
+### Source-only Assassin L4 last-mile ready pursuit vs real backline
+- [ ] 312 terminal A/B battles: L4 only attack-ready, real Sniper/Dragon target, beyond actual reach but within 0.30 arena; 1.45 baseline vs movement multipliers 1.65 and 1.85
+- [ ] Source true damage/HP/fronts, first and unseen winner stability, remaining Beetank/Turtle counters, current 20/40 full independent-front parity, actual struck-backstab/Execution conversion
+- [ ] Exact read-only observer RAF SHA, unchanged L5 1v1 vs five counter classes and unaffected 80/120/300 at 1× and 10×, plus evolved-L4 large-pop CPU acceptance before any runtime update
