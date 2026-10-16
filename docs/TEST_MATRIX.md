@@ -765,3 +765,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 80 extra fully terminal A/B pairs across unseen seeds and no-Knight/armored-heavy lineups; each mode/tier has eight paired mirrors, with 20/40 populations
 - [ ] Report real positive HP-damage fronts, wins, Turtle role HP and actual immediately saved HP; no weakening initial 48-case game outcome checks
 - [ ] Verify exact-head 43-job GitHub Actions; production/main still untouched; manual iPhone 14 Pro Max Safari open
+
+
+### Small-army target allocation pressure source study, rejection control
+- [ ] 16 terminal 20-body source matches per candidate with genuine positive HP damage-connected front score, Knight/Goblin/Beetank/Turtle direct HP and winner flips
+- [ ] 16 terminal 40-body matches per candidate with baseline-versus-tuned identical full RAF SHA trace; no hidden large-pop changes
+- [ ] Candidate must NOT be shipped if it sacrifices viable roles, even when persistent fronts look numerically better; no proximity-only fight counting

@@ -588,6 +588,28 @@ jobs:
           path: evolution-investment-value.json
           if-no-files-found: warn
 
+  small-army-pressure-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check tactical target-pressure source study syntax
+        run: node --check tools/qa/check-small-army-pressure-study.cjs
+      - name: Audit genuine 20/40 terminal HP fronts and winner/role losses
+        env:
+          QA_SMALL_PRESSURE_RECEIPT: small-army-pressure-study.json
+        run: node tools/qa/check-small-army-pressure-study.cjs
+      - name: Archive source A/B role and real independent-front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: small-army-pressure-study
+          path: small-army-pressure-study.json
+          if-no-files-found: warn
+
   completed-match-quality-budget:
     runs-on: ubuntu-latest
     timeout-minutes: 20

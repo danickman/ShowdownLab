@@ -1599,3 +1599,9 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 
 - After unrestricted Guardian triggered three real CI failures, QA restricted its protection to endangered allied defenders below 60% current HP; guard strength unchanged at 18%/28% and radius 0.12/0.14. No shipping to main or Vercel.
 - Added 80 extra SOURCE-REAL **fully terminal** mirrored A/B holdouts atop prior 48: previously unseen seeds 2017/4201 and separate no-Knight / armored-heavy compositions. Covers L4/L5 and 20/40; every receipt exposes actual saved ally HP after dodge/cap, target Turtle HP contribution, true persisted independent fronts and winner flips. The holdout is report-only so losses are not erased by tuned acceptance floors. Existing 48 strict role/counter gates remain; exact-head CI required. No combat / PWA files changed in this commit.
+
+
+### Oct 16 — Small-army target assignment pressure source trial rejected
+
+- Evaluated true source `nearest()` target crowding variants at only 20 fighters, no camera, sprite or fake engagement separations. Baseline 16 fully terminal standard fights: one persistent independent HP-damage front; candidate pressure threshold -1/coef .015 for all roles yielded 6, but real Goblin HP 1243→1106, Knight HP 3667→3179, two winner flips. Turtle-only variant yielded 2 fronts, two winner flips; not useful enough. Other higher penalties similarly cut role value. **Rejected all**, no production/gameplay code changed.
+- Dedicated test and CI artifact now compare fully real 16×20 and 16×40 seeded complete matches for baseline/two variants, strictly identical 40-fighter RAF state SHA (no unintended spillover). Study: [SMALL_ARMY_TARGET_PRESSURE_REJECTED_2026-10-16.md](SMALL_ARMY_TARGET_PRESSURE_REJECTED_2026-10-16.md). Pending exact-head CI. Next pursue battlefield tactics and natural separate fights without compromising authentic damage/wins. Primary iPhone 14 Pro Max; physical Safari manual.
