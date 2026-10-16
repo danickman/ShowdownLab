@@ -11,6 +11,8 @@ on:
       - 'tools/qa/check-turtle-timed-shell-study.cjs'
       - 'tools/qa/check-turtle-l4-investment.cjs'
       - 'tools/qa/check-small-army-pressure-study.cjs'
+      - 'tools/qa/check-draft-evolution-choice-value.cjs'
+      - 'tools/qa/check-evolution-choice-investment.cjs'
   workflow_dispatch:
     inputs:
       study:
@@ -25,6 +27,8 @@ on:
           - turtle-timed-shell-study
           - turtle-l4-investment
           - small-army-pressure-study
+          - draft-evolution-choice-value
+          - evolution-choice-investment
 permissions:
   contents: read
 # Run rejected source A/B variants on physical COMBAT SOURCE changes, not every QA document/experiment.
@@ -146,4 +150,50 @@ jobs:
         with:
           name: small-army-pressure-study
           path: small-army-pressure-study.json
+          if-no-files-found: warn
+
+  draft-evolution-choice-value:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'draft-evolution-choice-value' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-authentic draft choice value syntax
+        run: node --check tools/qa/check-draft-evolution-choice-value.cjs
+      - name: Compare one evolution draft pick against reinforcing and Beetank
+        env:
+          QA_DRAFT_VALUE_RECEIPT: draft-evolution-choice-value.json
+        run: node tools/qa/check-draft-evolution-choice-value.cjs
+      - name: Archive 384 terminal choice alternatives and physical contribution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draft-evolution-choice-value
+          path: draft-evolution-choice-value.json
+          if-no-files-found: warn
+
+  evolution-choice-investment:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'evolution-choice-investment' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check true draft investment ROI syntax
+        run: node --check tools/qa/check-evolution-choice-investment.cjs
+      - name: Compare 432 terminal L3/L4 evolution and reinforcement choices
+        env:
+          QA_EVOLUTION_CHOICE_RECEIPT: evolution-choice-investment.json
+        run: node tools/qa/check-evolution-choice-investment.cjs
+      - name: Preserve true role ROI, physical defender value and fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolution-choice-investment
+          path: evolution-choice-investment.json
           if-no-files-found: warn

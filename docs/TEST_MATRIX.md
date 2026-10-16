@@ -872,3 +872,12 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 3/6 physical chosen copies and 1/2 existing Beetanks per side, 2 recruits increase global population to 22/42; do not claim exact random draft offer count
 - [ ] Genuine wins, separately real physical direct HP, actual returned shell Ricochet damage, post-dodge/cap Guardian ally saving, Beetank HP, damage-positive independent fronts; strict observed/raw RAF hash parity
 - [ ] Hold current real combat/evolution rules; if hard counters reveal underperforming choices, design a bounded tactical role mechanic and test it rather than generic percentage/attack-range buff. 80/120/300 game budget and physical iPhone 14 Pro Max Safari must precede any future gameplay release
+
+
+### Evolution one-pick opportunity verdict (816 completed, QA only)
+- [x] 432 full terminal family evolution L3→L4 / L4→L5 vs +1/+2 same family (Assassin/Turtle/Beetank); 384 full terminal same-team nominated family vs recruiting two vs evolving existing Beetank
+- [x] Observer/raw full-RAF state parity; all nominated same-type physical IDs receive family-wide upgrades, guardian marginal HP above eligible Knight mitigation, actual Ricochet HP after armor/dodge/cap, true HP-damaging front graph, complete winner and 20/40 roster side/mode/seed pairing
+- [x] Assassin L4 loses same-team comparative draft opportunity: own evolution 5 vs +2 6 vs Beetank evolution 8 winner counts; real persistent fronts 56 vs recruiting 68 vs Beetank 66. L5 delivers 10 vs 8 vs 9, retain valuable L5 identity.
+- [x] Turtle protection is physically real (4,615 L4; 13,873 L5 HP per-event marginal saves) but extremes cause 8/24 wins irrespective of choice (8 swarm wins, 16 armor/backline losses). Find winnable borderline utility, not simple percentage buffs.
+- [x] Source studies preserved conditionally on actual combat-source or own-study change in qa-research-archive workflow, 816 redundant normal CI matches removed. Existing original counter/front/300/PWA/browser regressions remain required.
+- [ ] Design truly tier-4 Assassin backline threat-denial action and Turtle bounded ally-intervention; strict matched 20/40 physical fronts/winners and high-density CPU; physical iPhone 14 Pro Max Safari manual gate.
