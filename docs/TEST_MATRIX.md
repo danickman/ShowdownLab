@@ -800,3 +800,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] First 416 true terminal baseline / natural shell / reactive 24% / reactive 30% comparisons passed, genuine actual trigger callback measured; broad reaction 40-pop fronts 58→52 and unseen wins 13→12, natural shell stress wins 6→4, so not shipped
 - [ ] Same 416-case CI job now compares baseline, broad reactive24, gap-only reactive24 and gap+recovery-window reactive24; asserts actual selected Guardian initially stronger than Knight/Bastion and recovery cooldown>=16 where applicable; maintains L5 solo full physical SHA
 - [ ] Never call source-only CPU or true-front metrics real iPhone 14 Pro Max Safari acceptance
+
+
+### Assassin L4 Execution payoff — SOURCE ONLY
+- [ ] Four true L4 pre-hit HP gate source variants (40%, 50%, 55%, 60%) × 104 genuine full-terminal matches with mirrored standard, distinct backline, swarm and heavy-counter holdouts
+- [ ] Explicit true physical backstab / Execution callback conversion, real L4 attacker-attributed HP versus Beetank/Turtle/Sniper and general combat, role wins, Knight/Goblin contribution and authentic 20/40 persistent fronts
+- [ ] Instrumented/raw full RAF parity, L5 Assassin unchanged solo-versus-Beetank/Turtle/Sniper/Dragon/Knight SHA, and 80/120/300 1×/10× no-Assassin full state unchanged
+- [ ] Preserve primary iPhone 14 Pro Max Safari acceptance and choose gameplay change only after measured holdout counter health and device frame budget

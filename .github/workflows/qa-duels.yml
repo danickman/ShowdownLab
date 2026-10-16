@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  assassin-l4-trigger-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Assassin L4 source study
+        run: node --check tools/qa/check-assassin-l4-trigger-study.cjs
+      - name: Run real terminal Assassin L4 threshold and counter study
+        env:
+          QA_L4_ASSASSIN_RECEIPT: assassin-l4-source-study.json
+        run: node tools/qa/check-assassin-l4-trigger-study.cjs
+      - name: Archive physical match and balance counter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-source-study
+          path: assassin-l4-source-study.json
+          if-no-files-found: warn
+
   turtle-timed-shell-study:
     runs-on: ubuntu-latest
     timeout-minutes: 30

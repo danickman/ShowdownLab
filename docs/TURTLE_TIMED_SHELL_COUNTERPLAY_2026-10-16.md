@@ -39,3 +39,8 @@ Keep original baseline and reactiveShell24 as historical/controlled comparators;
 
 Both require defender **pre-hit HP below 45%**, a physically nearby selected L4 Turtle, and Turtle `special<=0, shell===0`; triggered shell still lasts 22 ticks with special lockout and a normal eventual shell slam, no new damage. The observer records actual pre-react protection and cooldown; hard assertions verify every new reaction met these restrictions, with raw-source RAF state equivalence. **Same job and 416-case budget**, not an expensive accumulating per-commit CI job. This does not change shipped gameplay, root PWA hashes, UI art, 300-population cap, or main/prod.
 
+
+
+## Verified gated-refinement verdict — October 16
+
+Exact-head QA `901c198` [push 38925820908](https://github.com/danickman/ShowdownLab/actions/runs/38925820908) and PR green. Of 416 fully terminal matches, the gap-only L4 shell reaction gives 24 prespecified genuine fronts 109→122 but held-out wins fall **13→10**, while baseline 40-body independent sustained fronts fall **58→50**. Recovery-only reaction seldom triggers (0 prespecified, 1 unseen, 2 stress) and loses hard-counter wins **6→3**. Broad 24% reaction dropped standard 40 fronts **58→52** and unseen wins **13→12**. **All rejected.** No actual Turtle combat or ability description changed. Next research is [Assassin L4](ASSASSIN_L4_EXECUTION_STUDY_2026-10-16.md).
