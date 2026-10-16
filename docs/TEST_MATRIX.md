@@ -657,3 +657,12 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Authoritative device confirmed as **iPhone 14 Pro Max portrait**, 430×932 CSS pixels, DPR3, physical display 1290×2796. Existing Chromium viewport test geometry remains valid.
 - [x] Browser emulation uses 430×932 ×3 and smaller-screen responsive checks remain secondary; dedicated `tools/qa/check-primary-device-contract.cjs` prevents wrong phone naming.
 - [ ] Manual **iPhone 14 Pro Max Safari** validation of the actual PWA: Dynamic Island/header and home-indicator/footer safe areas, ability/touch hit targets, authored sprite clarity, 1× 20/40/80 and exceptional 300-fighter frame pacing, PWA install and offline behavior, thermal and memory stability.
+
+
+### Oct 15/16 — Turtle L4/L5 legitimate melee retaliatory reach (QA)
+- [x] Finished 16 mirrored seeded mixed/swarm/heavy/ranged 20-body and 16 40-body match A/B: old .09 → new .10 reflected real post-defense HP 139→177, 360→401; stable completed winners.
+- [x] Protect real damage-connected multi-front persistence **20:1→1**, **40:66→66**; reject .105+ Turtle and L4/L5 Assassin blanket/conditional HP threshold increases that erase fragile 20 persistent multi-front window.
+- [x] Existing L1–3, Turtle vs Beetank and Turtle vs Sniper counters and true anti-recursion, plus exact 20/40/80/120/300 no-Turtle state parity 1×/10×, permanent dedicated independent Actions/receipt.
+- [x] Update truthful L4/L5 Guide text, root script cache bump, atomic 42 SHA256 SW pins and cache namespace.
+- [ ] Full new-head runtime PWA/QA including new Turtle test, 430×932 DPR3 **iPhone 14 Pro Max** emulated portrait, 300 and role counter gates.
+- [ ] **Still outstanding:** Assassin evolved Execution strategic payoff (high-threshold direct buffs were rejected), stronger Turtle ally/team utility vs Beetank, more sustained 20-body true fronts and actual iPhone 14 Pro Max Safari physical QA. Do not call these fixed.

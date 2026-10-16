@@ -42,3 +42,8 @@ Specifically:
 ## Current-turn boundary
 
 The October 15/16 completed-match QA turn **did not implement any of these role adjustments**. The next development turn must execute the measurement and then ship one validated Assassin-or-Turtle payoff correction. Preserve the work already completed on 20-body persistent fronts; this role-value effort does not remove that priority.
+
+
+## October 15/16 first measured implementation: Turtle Ricochet contact access
+
+A bounded first Turtle defensive improvement has been selected for QA, **0.09→0.10 contact-reflection radius at L4/L5**, no strength change (30%/45% of actual incoming HP damage), no ability at lower levels, no additional per-tick work. In the fixed 16-per-size completely terminated source A/B, real reflected HP rose **139→177 (20 bodies), 360→401 (40)** while 20/40 persistent independent real-damage fronts remained **1/66** and no winner changed. New independent true-reflection/counterplay/full 300-body regression. See [Turtle measured QA study](TURTLE_RICOCHET_ACTUAL_VALUE_2026-10-15.md). Status stays **QA only, not production**. The broader user goal, Turtle-versus-Beetank utility and meaningful Assassin L4/L5 Execution (threshold adjustments rejected due 20-body true-front loss), **remains a next-turn design priority**. iPhone 14 Pro Max is primary.

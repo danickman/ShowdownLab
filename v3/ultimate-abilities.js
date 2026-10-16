@@ -7,7 +7,7 @@ const specs={
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 55% health.'},
  beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},
- turtle:{name:'Ricochet Shell',l4:'Reflect 30% of damage taken from nearby attackers.',l5:'Reflect 45% of damage taken from nearby attackers.'},
+ turtle:{name:'Ricochet Shell',l4:'Ricochet Shell reflects 30% of actual damage taken from attackers within 0.10 arena units.',l5:'Reflect 45% of actual damage taken within 0.10 arena units.'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Axe swings splash 40% damage onto up to three nearby enemies.',l5:'Wider cleave splashes 65% damage onto up to five enemies.'},
  goose:{name:'Thunder Honk',l4:'Thunder Honk deals 45% attack damage and stuns enemies for 44 ticks (about 0.73 seconds).',l5:'75% attack damage, wider radius and 64-tick stun (about 1.07 seconds).'}
@@ -32,7 +32,7 @@ function incoming(t,damage,units,tick,bastions=units){
 }
 function afterHit(a,t,dealt,units,tick){
  const hits=[],r=rank(a);
- if(rank(t)&&t.type==='turtle'&&a&&a.hp>0&&near(a,t,.09)&&dealt>0){hits.push({target:a,source:null,damage:dealt*(rank(t)===2?.45:.3)});cue(t,'reflect',tick,a)}
+ if(rank(t)&&t.type==='turtle'&&a&&a.hp>0&&near(a,t,.10)&&dealt>0){hits.push({target:a,source:null,damage:dealt*(rank(t)===2?.45:.3)});cue(t,'reflect',tick,a)}
  if(!r||!['sniper','dragon','beetank','barbarian'].includes(a.type))return hits;
  const enemies=units.filter(v=>v!==t&&v.team!==a.team&&v.hp>0&&v.burrow<=0);
  if(a.type==='sniper'&&a.action==='attack'){
