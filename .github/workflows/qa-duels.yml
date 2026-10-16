@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  turtle-l4-investment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Turtle L4 source study syntax
+        run: node --check tools/qa/check-turtle-l4-investment.cjs
+      - name: Compare full matched terminal Turtle L4 payoff, actual protection and role fronts
+        env:
+          QA_L4_TURTLE_RECEIPT: turtle-l4-investment.json
+        run: node tools/qa/check-turtle-l4-investment.cjs
+      - name: Archive source A/B investment, L5 parity and held-out matchups
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-l4-investment
+          path: turtle-l4-investment.json
+          if-no-files-found: warn
+
   turtle-guardian-prototype:
     runs-on: ubuntu-latest
     timeout-minutes: 25

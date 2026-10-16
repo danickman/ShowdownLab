@@ -771,3 +771,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 16 terminal 20-body source matches per candidate with genuine positive HP damage-connected front score, Knight/Goblin/Beetank/Turtle direct HP and winner flips
 - [ ] 16 terminal 40-body matches per candidate with baseline-versus-tuned identical full RAF SHA trace; no hidden large-pop changes
 - [ ] Candidate must NOT be shipped if it sacrifices viable roles, even when persistent fronts look numerically better; no proximity-only fight counting
+
+
+### L4 Turtle evolutionary investment, independently held-out A/B
+- [ ] Four L4-only source variants against current live rules, 104 genuinely terminal pairings each (standard 32, prespecified 24, unseen seed 24, no-Knight/armored 24)
+- [ ] Genuine attacker-credited HP and separate actual immediate saved ally HP; role-normalized value, winner flips, Knight/Goblin damage, persistent independent true-damage fronts
+- [ ] L5 solo Beetank/Sniper/Assassin full-frame state SHA unchanged for *all* L4-only variants and read-only physical observer parity
+- [ ] No gameplay patch, hash/PWA changes or main/production touch until candidate is proven across held-out strategies and 300/iPhone 14 Pro Max budget
