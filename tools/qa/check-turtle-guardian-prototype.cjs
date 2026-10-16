@@ -140,7 +140,7 @@ for(const count of [20,40]){
 // 48 source-real paired completed matches: 2 levels x 3 modes x 2 densities x
 // 2 seeds x 2 mirrors. No proximity-only credit for fronts or win outcomes.
 const cases=[];
-for(const level of [4,5])for(const mode of ['mixed','swarm','ranged']
+for(const level of [4,5])for(const mode of ['mixed','swarm','ranged'])
  for(const count of [20,40])for(const seed of [1337,9917])
   for(const side of ['blue','red']){
    const c={level,mode,count,seed,side};
