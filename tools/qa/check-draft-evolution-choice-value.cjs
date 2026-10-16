@@ -10,7 +10,7 @@ const hitAnchor='const dealt=Math.min(t.hp,dmg);';
 const reflectLoop='if(!secondary)for(const hit of ultimate.afterHit(a,t,dealt,units,tick))hurt(hit.target,hit.damage,hit.source,true)';
 const guarded="if(t.hp/t.maxHp<.6&&shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}";
 const watchedAbility=replace(ability,guarded,
- "if(t.hp/t.maxHp<.6&&shelter>protection){window.__qaGuard({guardianId:guardian.id,defenderId:t.id,team:t.team,strength:shelter,tick});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
+ "if(t.hp/t.maxHp<.6&&shelter>protection){window.__qaGuard({guardianId:guardian.id,defenderId:t.id,team:t.team,strength:shelter,alternativeKnightProtection:protection,tick});damage*=1-shelter;cue(guardian,'shelter',tick,t)}");
 const witnessedCore=replace(replace(live,hitAnchor,hitAnchor+
  "window.__qaResolved({id:t.id,tick,remainingHp:t.hp,postDodgeDamage:dmg});"+
  "if(dealt>0&&window.__qaReflectionContext)window.__qaReflect({...window.__qaReflectionContext,damage:dealt,tick});"+
@@ -65,9 +65,9 @@ function simulate(c,observed=true,trace=false){
   assert.equal(x.id,pending.defenderId,'defender physical ID mismatch');
   assert.equal(x.tick,pending.tick,'defender tick mismatch');
   pending.actualHpSaved=Math.max(0,
-   Math.min(x.remainingHp,x.postDodgeDamage/(1-pending.strength))-
+   Math.min(x.remainingHp,x.postDodgeDamage*(1-pending.alternativeKnightProtection)/(1-pending.strength))-
    Math.min(x.remainingHp,x.postDodgeDamage));
-  assert(pending.actualHpSaved>=0,'negative immediate saved ally HP');
+  assert(pending.actualHpSaved>=0&&pending.actualHpSaved<=x.postDodgeDamage/(1-pending.strength)*pending.strength+1e-7,'saved ally HP must be physical and within shell budget');
   pending=null};
  vm.createContext(env);
  vm.runInContext(evolution,env);
@@ -164,7 +164,7 @@ const method={
   evolveBeetank:'One drafted evolution advances existing Beetank family L3→L4 or L4→L5 while nominated family remains at base tier (1/2 Beetanks at 20/40)'
  },
  honesty:'These are fixed controlled draft-option examples, NOT guaranteed real-game offer amounts or exactly matched population/evolution purchasing power. Actual drafted add quantities and team-composition availability vary. Report absolute real winner/HP and comparisons, not a fake universal value score.',
- metrics:'Real physically resolved full-terminal winner, direct HP by nominated physical IDs, true post-armor/dodge/cap reflected HP, true immediate HP spared by nominated guardians, Beetank-family attacker HP, opposing team damage, actual independent attacker/defender HP-damage fronts. No proximity-based false fronts. Source observer full-frame parity on 16 matches; 384 complete fights. No Safari performance claim.'
+ metrics:'Real physically resolved full-terminal winner, direct HP by nominated physical IDs, true post-armor/dodge/cap reflected HP, true *marginal over Knight* immediate HP spared by nominated guardians, Beetank-family attacker HP, opposing team damage, actual independent attacker/defender HP-damage fronts. No proximity-based false fronts. Source observer full-frame parity on 16 matches; 384 complete fights. No Safari performance claim.'
 };
 const report={status:'READ-ONLY controlled choice audit; no game/Guide/stat/pwa/production changes',method,summary:summaries,matched:results};
 if(process.env.QA_DRAFT_VALUE_RECEIPT)fs.writeFileSync(process.env.QA_DRAFT_VALUE_RECEIPT,JSON.stringify(report,null,2)+'\n');
