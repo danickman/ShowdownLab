@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  evolution-investment-value:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate tier ROI test syntax
+        run: node --check tools/qa/check-evolution-investment-value.cjs
+      - name: Compare 216 real full-match Assassin Turtle and Beetank tier investments
+        env:
+          QA_EVOLUTION_ROI_RECEIPT: evolution-investment-value.json
+        run: node tools/qa/check-evolution-investment-value.cjs
+      - name: Archive paired win damage reflection shell and Execution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolution-investment-value
+          path: evolution-investment-value.json
+          if-no-files-found: warn
+
   completed-match-quality-budget:
     runs-on: ubuntu-latest
     timeout-minutes: 20

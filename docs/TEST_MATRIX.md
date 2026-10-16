@@ -716,3 +716,12 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 
 - [x] Update old stress5c and two armored-Assassin contact CI comparators to the live pressure-cache source contract without removing baseline state/counterplay assertions.
 - [ ] Verify fresh exact-head CI entire matrix after source-check maintenance; 42 SW pins unchanged since pressurecache1.
+
+
+### Oct 16 — completed marginal evolution ROI evidence gate
+- [x] 216 20/40 seeded/mirrored **terminal** tier-controlled Assassin/Turtle/Beetank battles, three opponent styles, both teams, L1/L4/L5; normalise damage by actually deployed role fighters.
+- [x] Read-only positive HP sourced attacks, actual HP removed by Turtle Ricochet, shell reduction marked **pre-armor nominal** (not falsely actual HP saved), true Execution events, role survival exposure, real damage-connected front windows, actual winner.
+- [x] Pure-versus-instrumented entire physical state SHA parity for Turtle swarm and Assassin ranged matches; reject non-terminal or missing role-ability cases.
+- [ ] Exact-head GitHub CI success and archived JSON receipt for new `evolution-investment-value` job plus all previous 300/browser/counterplay suites.
+- [ ] Select next evolutionary gameplay candidate based on ROI including strategic counters; preserve source-authentic fronts and avoid global numerical DPS equalization.
+- [ ] Physical iPhone **14 Pro Max Safari** manual performance, touch and evolution visual acceptance.
