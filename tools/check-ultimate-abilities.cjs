@@ -15,6 +15,9 @@ for(const level of [4,5]){
  const dragon=unit('dragon',level);dragon.action='fire';U.afterHit(dragon,t,100,[dragon,t],30);let burn=0;for(let i=0;i<90;i++)burn+=U.burn(t);assert(Math.abs(burn-(rank===2?75:45))<1e-10);assert.equal(U.burn(t),0);
  U.afterHit(dragon,t,100,[dragon,t],45);t.burrow=90;for(let i=0;i<90;i++)assert.equal(U.burn(t),0);t.burrow=0;
  const assassin=unit('assassin',level);assassin.action='backstab';t.hp=30;assert.equal(U.outgoing(assassin,t,100,[assassin,t],30),rank===2?220.00000000000003:180);t.hp=90;assert.equal(U.outgoing(assassin,t,100,[assassin,t],50),100);
+ t.hp=74;assert.equal(U.outgoing(assassin,t,100,[assassin,t],61),rank===2?220.00000000000003:100,'L5 Execution triggers below 75%; L4 remains below 40%');
+ t.hp=75;assert.equal(U.outgoing(assassin,t,100,[assassin,t],75),100,'75% boundary is strictly below');
+ t.hp=40;assert.equal(U.outgoing(assassin,t,100,[assassin,t],89),rank===2?220.00000000000003:100,'L4 40% boundary unchanged');
  const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);
  const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,1);close(hits[0].damage,rank===2?18:12);
  attacker.x=turtle.x+.095;hits=U.afterHit(attacker,turtle,40,[attacker,turtle],45);assert.equal(hits.length,1,'close collision-edge attacker should trigger Ricochet');close(hits[0].damage,rank===2?18:12);

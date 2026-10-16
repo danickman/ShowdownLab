@@ -666,3 +666,13 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Update truthful L4/L5 Guide text, root script cache bump, atomic 42 SHA256 SW pins and cache namespace.
 - [ ] Full new-head runtime PWA/QA including new Turtle test, 430×932 DPR3 **iPhone 14 Pro Max** emulated portrait, 300 and role counter gates.
 - [ ] **Still outstanding:** Assassin evolved Execution strategic payoff (high-threshold direct buffs were rejected), stronger Turtle ally/team utility vs Beetank, more sustained 20-body true fronts and actual iPhone 14 Pro Max Safari physical QA. Do not call these fixed.
+
+
+### Oct 15/16 — Assassin L5 actual Execution payoff without multi-front degradation
+- [x] Reject target bias and post-vanish broad Execution window: ineffective/erased real persistent fronts; reject L4 threshold upgrades for 20-body multi-front harm.
+- [x] Isolate L5-only 55%→75% successful pre-hit backstab threshold (unchanged L4 40%; no L1–3 damage, power, base HP, knockback, speed or cooldown changes).
+- [x] Source A/B 40 complete mirrored/seeded 20/40 matches (mixed/heavy/swarm/ranged/backline): no winner flips; real Execution 6→7/4→7, separated damage 30→30/226→226; persistence 1→1/75→75.
+- [x] L1/L4/L5 solo source A/B versus Turtle/Beetank/Dragon/Knight/Sniper: L5 four mirrored heavy defender victories retained each, Sniper still countered; L1/L4 exact physical parity.
+- [x] Dedicated `check-assassin-execution-payoff.cjs` real event, true HP damage, 1×/10× no-Assassin 80/120/300 source parity, actual 20/40 fronts and counterplay. Existing Ultimate unit thresholds now explicit.
+- [ ] New-head all Actions, browser portrait 430×932 DPR3, offline SHA/rollback and role sample complete success; only then consider this QA branch green.
+- [ ] Actual iPhone 14 Pro Max Safari readability/performance/thermal and more rigorous draft-evolution ROI.

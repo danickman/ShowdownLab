@@ -213,6 +213,28 @@ jobs:
           path: assassin-counterplay-outcomes.json
           if-no-files-found: warn
 
+  assassin-l5-execution-payoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Assassin execution true-counterplay regression syntax
+        run: node --check tools/qa/check-assassin-execution-payoff.cjs
+      - name: Run 40 fully terminal real-damage/role samples and armored solo L5 counters
+        env:
+          QA_ASSASSIN_EXECUTION_RECEIPT: assassin-execution-payoff.json
+        run: node tools/qa/check-assassin-execution-payoff.cjs
+      - name: Upload L5 Execution real impact and front parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-execution-payoff
+          path: assassin-execution-payoff.json
+          if-no-files-found: warn
+
   assassin-heavy-contact-counterplay:
     runs-on: ubuntu-latest
     timeout-minutes: 20

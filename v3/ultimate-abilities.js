@@ -4,7 +4,7 @@ const specs={
  knight:{name:'Bastion',l4:'Nearby allies take 20% less damage within a short radius.',l5:'Protection rises to 30% with a wider radius.'},
  sniper:{name:'Piercing Verdict',l4:'Rifle shots ignore 60% of armor and pierce one enemy behind the target for 55% damage.',l5:'Shots ignore all armor; the piercing hit deals 80% damage.'},
  dragon:{name:'Inferno',l4:'Breath ignites targets for another 45% attack damage over 3 seconds.',l5:'Burn damage rises to 75% of attack damage.'},
- assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 55% health.'},
+ assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
  beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},
  turtle:{name:'Ricochet Shell',l4:'Ricochet Shell reflects 30% of actual damage taken from attackers within 0.10 arena units.',l5:'Reflect 45% of actual damage taken within 0.10 arena units.'},
@@ -17,7 +17,7 @@ function cue(u,kind,tick,target){if(tick-(u.ultimateTick??-1000)<12)return;u.ult
 function armor(t,a){return (t.armor||0)*(rank(a)&&a.type==='sniper'&&a.action==='attack'?(rank(a)===2?0:.4):1)}
 function outgoing(a,t,damage,units,tick){
  const r=rank(a);if(!r)return damage;
- if(a.type==='assassin'&&a.action==='backstab'&&t.hp/t.maxHp<(r===2?.55:.4)){cue(a,'execution',tick,t);return damage*(r===2?2.2:1.8)}
+ if(a.type==='assassin'&&a.action==='backstab'&&t.hp/t.maxHp<(r===2?.75:.4)){cue(a,'execution',tick,t);return damage*(r===2?2.2:1.8)}
  if(a.type==='goblin'){const count=Math.min(r===2?4:3,units.filter(u=>u!==a&&u.team===a.team&&u.type==='goblin'&&u.hp>0&&near(u,a,.10)).length);if(count){cue(a,'pack',tick,t);return damage*(1+count*(r===2?.3:.2))}}
  return damage;
 }
