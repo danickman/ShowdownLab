@@ -1,5 +1,7 @@
 # QA implementation handoff — turn 1 (in progress)
 
+**LATEST SHORT RECOVERY ENTRY:** [CURRENT_QA_RECOVERY_CHECKPOINT.md](CURRENT_QA_RECOVERY_CHECKPOINT.md) — reconstructed from exact QA Git history and CI after vanished conversation. Read **before** extending an old turn plan. Verify branch HEAD fresh.
+
 **Primary target device:** **iPhone 14 Pro Max**, portrait-first. Its CSS viewport is **430 × 932 pixels at DPR 3** (native OLED display 1290 × 2796 pixels). Dynamic Island and bottom home-indicator safe areas need real on-device checks. Landscape and smaller phones are secondary responsiveness checks. Chromium viewport emulation is a useful geometry/layout gate, **not an iOS Safari frame-rate, touch, safe-area, thermal or PWA acceptance claim**.
 
 Date: 2026-10-13
