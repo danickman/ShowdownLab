@@ -1,5 +1,5 @@
 'use strict';
-// Browser-only viewport/frame budget evidence at 430x932 DPR3.
+// Browser-only viewport/frame budget evidence for iPhone 14 Pro Max portrait, 430x932 DPR3.
 // NOT iPhone Safari: do not claim phone FPS, battery or touch success.
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),puppeteer=require('puppeteer');
 const root=path.resolve(__dirname,'../..'),out=path.resolve(process.env.QA_DENSITY_OUTPUT||'/tmp/showdown-density-browser');
@@ -15,7 +15,7 @@ const server=http.createServer((req,res)=>{
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
- const report={browser:await browser.version(),viewport:{width:430,height:932,dpr:3},note:'Chromium/Linux emulated mobile CSS/Canvas. NOT physical iPhone/Safari FPS, GPU power, memory or battery.',cases:[],failures:[]};
+ const report={browser:await browser.version(),targetDevice:'iPhone 14 Pro Max (portrait viewport emulation only)',viewport:{width:430,height:932,dpr:3},note:'Chromium/Linux emulated mobile CSS/Canvas. NOT physical iPhone/Safari FPS, GPU power, memory or battery.',cases:[],failures:[]};
  try{
   const page=await browser.newPage();
   page.on('pageerror',e=>report.failures.push('page: '+e.message));

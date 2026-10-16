@@ -51,3 +51,8 @@ Test selective **small-battle engagement retention** without predetermined battl
 ## Validation and queued role-value follow-up
 
 The new 32 terminal-match quality gate fully passed on [QA Actions run 38830645911](https://github.com/danickman/ShowdownLab/actions/runs/38830645911): 36 required jobs successful, zero failed, one optional skipped. Observed mid/late phase separated-damage windows confirmed **20-body early 22, middle 3, late 0** vs **40-body early 114, middle 73, late 6** across the 16 completed matchups per size. The user then explicitly prioritized Assassin Execution, Turtle defensive value versus Beetank, and evolved weak units in the next gameplay implementation turn; see [ROLE_VALUE_EVOLUTION_NEXT_TURN.md](ROLE_VALUE_EVOLUTION_NEXT_TURN.md). No live gameplay files change in this doc-only follow-up.
+
+
+## Correct target-device clarification
+
+**Primary physical acceptance phone: iPhone 14 Pro Max.** Portrait layout viewport 430×932 CSS/DPR3 is shared with some other devices, so earlier correct-size Chromium screenshots remain useful, but **no Chromium test certifies Safari on the iPhone 14 Pro Max**. Physical iPhone 14 Pro Max touch, safe-area, frame-pacing and PWA tests remain outstanding. This editorial correction does not alter the completed-match numeric evidence or the green [36-required-job baseline](https://github.com/danickman/ShowdownLab/actions/runs/38831269212).

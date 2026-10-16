@@ -2,6 +2,8 @@
 
 **Priority:** Next gameplay implementation turn after the completed-match multi-front benchmark. User requested explicit Assassin Execution and Turtle-versus-Beetank improvement while the current QA pass was finishing. This document is a committed **future work order**, not an implemented rebalance.
 
+**Primary target device:** **iPhone 14 Pro Max**, portrait-first. Its CSS viewport is **430 × 932 pixels at DPR 3** (native OLED display 1290 × 2796 pixels). Dynamic Island and bottom home-indicator safe areas need real on-device checks. Landscape and smaller phones are secondary responsiveness checks. Chromium viewport emulation is a useful geometry/layout gate, **not an iOS Safari frame-rate, touch, safe-area, thermal or PWA acceptance claim**.
+
 **Baseline:** QA branch `qa-turn1-duel-baseline`, source `8351308afed29ca04b9fc7dda9e8968a535bd263`, [36 required jobs passing](https://github.com/danickman/ShowdownLab/actions/runs/38830645911), one optional exploratory skip. Main and production remain unchanged.
 
 ## Player-experience problem / design goal
@@ -34,8 +36,8 @@ Specifically:
 ### D. Acceptance, docs and release
 - For each A/B trial report population, seeds, side mirrors, role counts, level, initial condition, real winner, elapsed simulation ticks, attributed damage, damage prevented/reflected, ability event count, actual independent damage fronts, and performance costs. Compare **normalized value**, not raw totals alone.
 - Require meaningful L4/L5 uplift in at least one strategically important complete-match scenario, **while retaining losing counters**. Do not invent arbitrary 20% improvement goals or force all outcomes to turn favorable.
-- Add permanent deterministic regressions for selected behavior, protect Turtle/Turtle and all existing 300-body/offline/430×932 DPR3 tests, ensure any new visual cue is based on real sim event and capped at high density, repin all 42 release resources if runtime or Guide changes, update `ROADMAP.md`, `QA_IMPLEMENTATION_HANDOFF.md` and `TEST_MATRIX.md`, and obtain full new-head GitHub Actions success.
-- Keep QA branch only. **No merge/deployment without explicit approval.** Physical iPhone Safari remains a manual acceptance gate.
+- Add permanent deterministic regressions for selected behavior, protect Turtle/Turtle and all existing 300-body/offline/iPhone 14 Pro Max 430×932 DPR3 tests, ensure any new visual cue is based on real sim event and capped at high density, repin all 42 release resources if runtime or Guide changes, update `ROADMAP.md`, `QA_IMPLEMENTATION_HANDOFF.md` and `TEST_MATRIX.md`, and obtain full new-head GitHub Actions success.
+- Keep QA branch only. **No merge/deployment without explicit approval.** Physical **iPhone 14 Pro Max Safari** remains the manual acceptance gate: portrait-safe areas (Dynamic Island/home indicator), legible full fighter silhouettes, precise spell/draft/Lab taps, 1× 20/40/80 and rare 300-body frame pacing, thermal comfort, PWA resume/offline/upgrade behavior. Never substitute Chromium results for actual on-device testing.
 
 ## Current-turn boundary
 

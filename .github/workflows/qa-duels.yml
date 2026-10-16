@@ -27,6 +27,8 @@ jobs:
           test ! -e v3/index.html
           node tools/qa/release-hashes.cjs --verify
           node tools/qa/check-turn3-consistency.cjs
+      - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
+        run: node tools/qa/check-primary-device-contract.cjs
       - name: Verify offline precache graph and rollback
         run: node tools/qa/check-release4c.cjs
       - name: Verify Home art streaming
@@ -43,6 +45,8 @@ jobs:
           node-version: '22'
       - name: Verify pinned SHA256 release manifest
         run: node tools/qa/release-hashes.cjs --verify
+      - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
+        run: node tools/qa/check-primary-device-contract.cjs
       - name: Ordered 300-duel sweep
         env:
           QA_RECEIPT: duel-receipt.json

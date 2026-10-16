@@ -9,7 +9,7 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL
 (async()=>{
  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
  const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
- const report={browser:await browser.version(),note:'Chromium emulation only; not physical iPhone Safari',screens:[],dragon:[],knight:[],errors:[],failedResponses:[],passed:false};
+ const report={browser:await browser.version(),targetDevice:'iPhone 14 Pro Max (430x932 DPR3; secondary smaller device probes)',note:'Chromium emulation only; not physical iPhone Safari',screens:[],dragon:[],knight:[],errors:[],failedResponses:[],passed:false};
  try{
   for(const [width,height] of [[430,932],[390,844],[375,667]]){
    const page=await browser.newPage();

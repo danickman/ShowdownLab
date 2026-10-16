@@ -596,7 +596,7 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Add reachable role-specific +5 control; exercise real event handler in Node.
 - [x] Cap tests: 0→5, 58→60, 60→60; exact mixed custom enemy counts.
 - [ ] New-head full GH Actions including portrait, offline rollback and 300 body stress must finish green.
-- [ ] iPhone 15 Pro Max Safari device visual/tap review still open.
+- [ ] iPhone 14 Pro Max Safari device visual/tap review still open.
 
 
 ### Oct 15 — Assassin authentic Dragon-contact regression
@@ -604,7 +604,7 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Source A/B 36 non-Dragon L1/L4/L5 solo duels bitwise-unchanged; Beetank/Turtle tank counters remain.
 - [x] Seed/mirrored 20/40/80 group probes measured true attributed damage and persistent geographic fronts rather than proximity-only contacts; outcomes are censored.
 - [ ] Complete *new-head* GitHub Actions including dedicated Dragon contact test and exact physical-state/300-offline/portrait gates.
-- [ ] iPhone 15 Pro Max Safari real-device battle/readability and long completed matches; Chromium is only a proxy.
+- [ ] iPhone 14 Pro Max Safari real-device battle/readability and long completed matches; Chromium is only a proxy.
 
 
 ### October 15 — Assassin reaches Beetank and Turtle at true body contact
@@ -627,7 +627,7 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 20/40/80 matched seeded/mirrored Goose melee/ranged/mixed source tests tracked true time spent stunned; ranged counters retained in sampled 20/40 bouts, 80 outcomes censored.
 - [x] Changed Fighter Guide to actual game duration and preserved original Dragon 90-tick/1.5s Inferno explanation.
 - [ ] New-head unit+dedicated Goose source-counterplay CI, 42 offline SHA pins, 430×932 DPR3 browser, 300-fighter throughput and source-attribution full run.
-- [ ] Actual iPhone 15 Pro Max Safari performance/frame-readability and completed many-round win-rate study before production promotion.
+- [ ] Actual iPhone 14 Pro Max Safari performance/frame-readability and completed many-round win-rate study before production promotion.
 
 - [x] Update legacy `check-turn3-consistency.cjs` duration assertions to **enforce new L4 44/L5 64 Goose Guide** (not delete timing checks).
 - [ ] Complete all post-test-fix CI jobs including source-linked honk true-stun and duel QA.
@@ -642,7 +642,7 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Add **read-only** `check-completed-match-quality.cjs`: exact uninstrumented trace parity, seeded/mirrored 32 terminal battles, HP-credited role mix, early/mid/late active windows, 25/50/75% survival, permanent conservative damage-front quality floor and JSON artifact.
 - [ ] New independent `completed-match-quality-budget` CI and full existing portrait/300/offline/legacy + role counter suite completed green for exact HEAD.
 - [ ] Improve genuine 20-body *persistent* simultaneous fights in next game turn; 1 persisted window in 16 games is a serious open design problem, not a sign-off.
-- [ ] Physical iPhone 15 Pro Max Safari animation + frame pacing and user acceptance.
+- [ ] Physical iPhone 14 Pro Max Safari animation + frame pacing and user acceptance.
 
 
 ### Queued next gameplay turn — Assassin/Turtle L4/L5 tangible evolution value
@@ -651,3 +651,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Turtle-versus-Beetank complete tank utility comparison: real HP prevented, damage reflected to sourced attackers, ally survival, meaningful shell/bash disruptions, survival time, counter matchups. Count that value separate from attributable direct DPS.
 - [ ] Implement bounded validated role improvement (not blanket DPS), with true event cue and dedicated permanent deterministic coverage.
 - [ ] Full new-head branch CI 300 fighters + 430×932 DPR3 portrait + 42 pinned offline release and role-counter checks, QA only; physical iPhone Safari manual QA.
+
+
+### Correct primary phone — iPhone 14 Pro Max
+- [x] Authoritative device confirmed as **iPhone 14 Pro Max portrait**, 430×932 CSS pixels, DPR3, physical display 1290×2796. Existing Chromium viewport test geometry remains valid.
+- [x] Browser emulation uses 430×932 ×3 and smaller-screen responsive checks remain secondary; dedicated `tools/qa/check-primary-device-contract.cjs` prevents wrong phone naming.
+- [ ] Manual **iPhone 14 Pro Max Safari** validation of the actual PWA: Dynamic Island/header and home-indicator/footer safe areas, ability/touch hit targets, authored sprite clarity, 1× 20/40/80 and exceptional 300-fighter frame pacing, PWA install and offline behavior, thermal and memory stability.
