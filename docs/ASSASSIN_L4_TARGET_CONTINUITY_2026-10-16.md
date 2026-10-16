@@ -19,3 +19,25 @@ The permanent research runner `tools/qa/check-assassin-l4-target-focus.cjs` repo
 ## Acceptance and follow-through
 
 If both candidate variants fail genuine battle quality, do not silently ship a target-lock tweak; use the diagnostic to locate the dominant loss (stalking versus disengagement, too little actual HP contact, focus swaps, armour access). If a candidate is promising, consider role-specific balance and real high-population frame budget before any production change. Keep QA handoff, roadmap and test matrix synchronized.
+
+
+## Verified result: 312 real terminal matches — October 16
+
+Dedicated source study passed in [push Actions 38956599251](https://github.com/danickman/ShowdownLab/actions/runs/38956599251) on QA `eb26a7b`. Instrumented/raw SHA identical; five L5 solo counter roles and no-L4 80/120/300 fighters at 1×/10× identical. All 312 seeded battles actually terminated. The receipt explicitly marks **both proposals REJECTED**. These are source-only results; no runtime patch.
+
+| 24 preselected L4 Assassin games | Live | 0.06 wounded-backline focus | 0.12 focus |
+|---|---:|---:|---:|
+| Team wins | 13 | 13 | 13 |
+| Actual Assassin L4 direct HP | **16,815.88** | 16,502.92 | 16,502.92 |
+| Real backstabs | **192** | 187 | 187 |
+| L4 Execution callbacks | 13 | 14 | 14 |
+| Wounded backline abandoned alive | 5 | 0 | 0 |
+| Physically separated persistent attack fronts | 77 | 85 | 85 |
+| Real damage-front windows | 214 | 221 | 221 |
+
+The relatively few relevant abandoned wounded enemies (five in 24 first matches, sixteen in the unseen seed matches) do not justify keeping an already wounded target if it delays contact. Focus variants reduce normal target switches modestly but also reduce realized offensive HP. The positive fronts in selected matches do **not** override actual lost HP and no win gains; in 24 stress matches, 20-fighter persistent independent fronts also drop 10→7. Neither focus margin meets the independent +5% selected real HP improvement check.
+
+**Primary measured bottleneck is access, not Execution activation or target loyalty.** During those 24 first matches, L4 Assassin source observations counted **18,892 decision ticks**: 17,079 stalking; 227 vanish; 192 backstab; 1,394 disengagement; 13,255 decision ticks where attack cooldown was zero but target distance remained beyond reach (~70.2% of observed decisions). One decision tick is **not** a real-time second. Double generic/backline nearest selection still exists, and `u.target` is reset first by generic selection each tick.
+
+The response should *not* be to invent hits, globally enlarge reach, remove Beetank/Turtle armour or broadly double Execution damage. **Next falsifiable source-only test**: give only L4 Assassin a modest, finite **last-mile backline pursuit assist** on stalking ticks with `cooldown<=0`, target actually of Sniper/Dragon type, `d>r` but inside a short bounded distance (e.g. `d<.30`). Test movement multipliers and real landed HP, 20/40 independent fronts, armor/ranged counterplay, 80/120/300 cost and physical device eventually. Keep existing L5 75% Execution, L4 40% and all current actual combat unchanged until those tests succeed.
+

@@ -821,3 +821,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Measure target switches while original prey remains alive below 40% HP; stalking/vanish/backstab/disengage decisions, positive real Assassin HP on Sniper/Dragon vs Beetank/Turtle; true independent 20/40 HP-damaging fronts
 - [ ] All L5 5 solo counters unchanged full frame SHA, no-L4 80/120/300 1× and 10× snapshots identical and read-only observer full RAF parity
 - [ ] Never use `u.target` as persistent prey state without fixing existing core double-nearest, and never weaken authentic front thresholds to promote a source-only failed candidate
+
+
+### L4 Assassin target continuity tested / rejected; last-mile reach diagnosis verified
+- [x] Three ×104 genuine completed matched source simulations and physical observer SHA/L5 solo/80-300 no-L4 parity, separate true damage fronts
+- [x] Candidate focus06/focus12 stop five lost wounded backlines (in 24 selected cases), but selected Assassin real HP falls by ~1.9%, backstabs 192→187, no win improvements; armored stress 20-fighter real persistent fronts 10→7 — REJECTED
+- [x] 13,255 / 18,892 prespecified L4 decisions have ready attack but cannot reach target; measure is simulator decisions, not wall clock time. Source `step()` double-nearest persists, target lock not appropriate.
+- [ ] Next L4-only short-range *movement* research when cooldown ready and backline target within final .30 arena units; no attack range/damage or armor changes, preserve 20/40 independent real HP-damage fronts and real counter/winner health, check 80/120/300 performance and iPhone 14 Pro Max manual QA
