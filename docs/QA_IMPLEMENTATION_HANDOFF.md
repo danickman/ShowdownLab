@@ -1687,3 +1687,9 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 ### Oct 16 — L4 Assassin Shadow Mark tactical source study (NO gameplay change)
 
 - Rejected earlier vanilla speed/teleport/slot/reach ideas from authentic real HP/front/winner samples. A different L4-only hypothesis: real vanish versus Sniper/Dragon marks prey for one real direct allied follow-up hit (25/40% power, 120 ticks, nonstacking). 3×104 completed 20/40 seed/mirror selected/unseen/armored matches, real mark/ally usage, independent physically damaged HP fronts, L5 solo and 80/120/300 no-L4 controls in new CI job. No source changes to game/PWA/art/main/prod. [Protocol](ASSASSIN_L4_SHADOW_MARK_2026-10-16.md).
+
+
+### Oct 16 — Shadow Mark rejected after 312 real completed games
+
+- Dedicated source-only CI job 117172081229 passed real 312 terminal study, full instrumented/raw physics parity and all L5/300 controls. First 24 selected mark25/mark40 applied 166/165 real backline marks, consumed 78/78—but **zero** by any other allied class. Actual L4 Assassin direct HP 16816→18322/19284, wins **13→13→13**, persistent fronts **77→73/72**. Crucially standard 20 real independent fronts 1→0 for BOTH, and 40 separated windows 192→191/185; 40% heldout heavy wins 10→9. **Reject both**, no physics change. [Evidence](ASSASSIN_L4_SHADOW_MARK_2026-10-16.md).
+- Next meaningful evolution decision criterion: compare real opportunity cost L3→L4 and L4→L5 against reinforcing a squad and Beetank rival upgrade; role-specific endgame moments need to be measurable by true *team* wins / HP saved / priority attacks denied, not raw damage. Limit to meaningful distinct bounded abilities that do not degrade authentic independent combat or expensive population tests. No app/PWA/main/production changes.

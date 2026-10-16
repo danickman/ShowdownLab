@@ -853,3 +853,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Baseline + 25/40% one-use 120-tick real Sniper/Dragon marks from an actual L4 vanish, 312 real completed 20/40 matches
 - [ ] Real other-ally direct-hit mark consumption, actual HP, front windows, original/new seed/armored/no-Knight winners, unaffected Beetank/Turtle counters
 - [ ] Strict observed/raw RAF SHA, L5 five-solo counter SHA, no-L4 80/120/300 1×/10× SHA, no PWA or production change pending evidence
+
+
+### L4 Assassin Shadow Mark — 312-match terminal result REJECTED
+- [x] 3×104 matched real terminal source simulation study / L5 five solo SHA / no-L4 80/120/300 1×/10× SHA all pass (CI 117172081229)
+- [x] Mark25 166 applications/78 consumed, mark40 165/78, **zero allied consumers**; only Assassin direct HP ↑, no selected or unseen wins ↑, baseline standard 20 true persistent fronts 1→0, real separated 40 windows ↓
+- [x] Both Shadow Mark candidates intentionally NOT in runtime or Guide. Next: evaluate L3→L4 and L4→L5 **draft choice payoff** versus actual reinforcement/Beetank with real winners, defense/attack contribution, 20/40 authentic front and 300 performance gates; no synthetic medal for raw DPS
