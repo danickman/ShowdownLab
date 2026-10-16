@@ -732,3 +732,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] L1 nominated Turtle reflects **zero** HP, while separate allied L4 Turtles produce independently reported, positive, non-target same-role reflection; L4/L5 selected Turtle reflects actual HP
 - [ ] Selected squad attribution applies to direct HP damage, shell nominal, Execution and alive unit-ticks, with exact deployment denominator (3/6), no other same-role ally contamination
 - [ ] Instrumented vs uninstrumented exact frame-state SHA parity and exact-head green PR run; independent Actions receipt audited before balancing
+
+
+### Turtle Guardian Shell prospective A/B, non-shipping CI
+- [ ] Dedicated 48 full terminal matched source A/B covers mixed/swarm/ranged, both mirrors, L4/L5, 20/40, 2 fixed seeds
+- [ ] Compare actual damage HP and genuine persistent independent damage fronts, winning sides, solo Turtle vs Beetank/Sniper/Assassin and exact no-evolved-guardian state parity
+- [ ] Validate 80/120/300 real engine finite simulation, 1×/10×, no hard cap; iPhone 14 Pro Max physical Safari still manual
+- [ ] Only after separate source evidence and current exact-head CI decide whether to ship a guarded, nonstacking protective Turtle niche; no covert DPS boosts

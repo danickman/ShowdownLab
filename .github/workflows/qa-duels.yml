@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  turtle-guardian-prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source-only guardian A/B syntax
+        run: node --check tools/qa/check-turtle-guardian-prototype.cjs
+      - name: Verify 48 terminal pairwise Turtle guardian trades and unchanged counter physics
+        env:
+          QA_TURTLE_GUARDIAN_RECEIPT: turtle-guardian-prototype.json
+        run: node tools/qa/check-turtle-guardian-prototype.cjs
+      - name: Archive real wins damage fronts counters and dense-state receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-guardian-prototype
+          path: turtle-guardian-prototype.json
+          if-no-files-found: warn
+
   evolution-investment-value:
     runs-on: ubuntu-latest
     timeout-minutes: 25
