@@ -1464,3 +1464,8 @@ Full run [38823463079](https://github.com/danickman/ShowdownLab/actions/runs/388
 ### Oct 15 — Honk QA wording assertion follow-up
 
 The first `goosestun1` [Actions run 38826655443](https://github.com/danickman/ShowdownLab/actions/runs/38826655443) found the legacy `tools/qa/check-turn3-consistency.cjs` asserting **previous 22/32-tick Goose text** after runtime, Fighter Guide and Ultimate specs had intentionally changed to **44/64 real stun ticks**. Updated this existing test to require **the new 44-tick/0.73s and 64-tick/1.07s labels** rather than deleting the Guide timing check. There is no runtime change in this follow-up. Full fresh new-head CI required; mobile Safari manual gate remains open.
+
+
+### Oct 15 — Goose honk sampling fixture final-window correction
+
+The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget without publishing the final pending state. Longer Thunder Honk stun changed mid-match event timing, so strict 100% sampling became **302/305** before the artificial cutoff, not a defect in actual honks. Source A/B re-ran all 12 20/40 × 1×/4×/10× mirrored cases: *calling only* `LegacySimCore.setRunning(false)` at fixture end triggers existing forced state emission, recovers **305/305** real honks, and leaves physical states and FX detection unchanged. Rejected adding `honkTick` telemetry: it also missed the final, not-yet-emitted events. Updated `check-goose-honk-cue.cjs` to include the final snapshot and retained exact detector=real assertions; no game, renderer or worker change. New exact-head CI still required.

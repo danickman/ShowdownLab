@@ -631,3 +631,6 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 
 - [x] Update legacy `check-turn3-consistency.cjs` duration assertions to **enforce new L4 44/L5 64 Goose Guide** (not delete timing checks).
 - [ ] Complete all post-test-fix CI jobs including source-linked honk true-stun and duel QA.
+
+- [x] Recover 305/305 true Goose honks including last partial snapshot using existing test-only forced state publish; no new game telemetry or skipped cue assertion.
+- [ ] Verify full new-head GitHub QA run after both Guide and honk observation test fixes.

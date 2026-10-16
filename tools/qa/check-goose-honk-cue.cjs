@@ -55,6 +55,10 @@ function run(source,{count,speed,mirror,frames}){
   time+=16.667;const callbacks=[...q.values()];q.clear();for(const fn of callbacks)fn(time);framesSeen++;
   if(sim.getState().winner)break;
  }
+ // This finite-source fixture stops mid-battle; publish its final pending state
+ // exactly as pause/stop does in the app, or the last ~48ms snapshot is censored.
+ // Keep every real-event/no-duplicate assertion strict after that final emit.
+ sim.setRunning(false);
  assert.deepEqual(errors,[],'RC4 exception during honk study');
  return{hash:digest.digest('hex'),count,speed,mirror,framesSeen,tick:sim.getState().tick,states,
   actualHonk,observedByAction,detectedByCooldown,recovered,duplicatesAvoided};
@@ -79,7 +83,7 @@ const summary={cases:rows.length,actual:rows.reduce((n,x)=>n+x.actualHonk,0),
  at10x:{actual:rows.filter(x=>x.speed===10).reduce((n,x)=>n+x.actualHonk,0),
  actionVisible:rows.filter(x=>x.speed===10).reduce((n,x)=>n+x.observedByAction,0)}};
 const report={status:'QA render-source and exact sim observer parity; no combat or stat change',
- explanation:'Actual Goose honk resets cooldown 105+ ticks. Emit snapshots are ~48ms real time; one-tick action often invisible at 4x and 10x. Prior timer >= previous+5 recovers the real ability activation. Renderer already draws kind honk; fallback reuses this effect, prevents duplication, density throttles >48 fighters.',
+ explanation:'Actual Goose honk resets cooldown 105+ ticks. Emit snapshots are ~48ms real time; finite fixture stops with a final explicit state emit, otherwise last-window events remain unobserved. Cooldown reset recovers the real ability activation. Existing honk FX dedupes action cues and density caps >48.',
  caveat:'Density throttling intentionally drops some visual cues in 80-300 crowds. This checks signal correctness, not physical Safari animation quality. Renderer can only show surviving/cached simulation state at snapshot time; not a full event journal.',
  summary,rows};
 if(process.env.QA_HONK_RECEIPT)fs.writeFileSync(process.env.QA_HONK_RECEIPT,JSON.stringify(report,null,2)+'\n');

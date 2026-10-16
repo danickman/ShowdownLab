@@ -30,3 +30,8 @@ At 20 bodies, matched melee/ranged/mirror-Goose tests showed control gain; range
 ## Gate
 
 `tools/qa/check-goose-ultimate-stun.cjs` verifies exact 44/64 applied stun ticks and unchanged immediate damage, Observer-vs-pure full physical state hashes, exact L1–3 behavior, 20/40/80 mirror-and-seed enemy stun-time, maintained ranged counter and exact no-Goose 80/120/300 physical parity at 1×/10×. Existing ten-ability unit check and Fighter Guide durations updated. The PWA worker release `goosestun1` repins all 42 critical shell/runtime resources and has changed exact root, Ultimate and renderer URLs. Dedicated independent Actions job joins full existing 300/browser/offline roll-back suite. **Post-commit QA not yet confirmed at report creation.**
+
+
+## True-honk cue sampling versus truncated QA window
+
+An initial Goose-stun CI job also failed in `check-goose-honk-cue.cjs`: it required **every actual honk to appear in periodic snapshots**, but stopped the simulator at a preselected frame with no final emitted snapshot. In isolated mirrored 20/40-fighter 1×/4×/10× reproduction, cooldown- and action-based detection found **302 of 305** true honks *before* the forced final tick boundary. Calling existing `LegacySimCore.setRunning(false)` at the **end of the test fixture only** forces the same state publish the game performs on pause, and recovered **305 of 305**, with no physical simulation change and no fake visual event. A proposed `honkTick` telemetry spike was rejected: it still missed those exact same final-window events because they had not been emitted. This is a **test observation boundary repair**, not a renderer or combat change. Strict no-missing-honk and no-double-cue assertions are preserved. No further runtime/SW pin updates.
