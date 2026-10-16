@@ -1612,3 +1612,8 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 - Verified corrected ROI previously showed L4 Turtle team wins 11/24 same as L1; Beetank stronger attacker HP. Conditional wounded-ally guardian gave real protection but L4 payoff remains worth testing with full ecosystem gates.
 - Preliminary standard seeded 20/40 and targeted L4 source trial: 18→20% L4-only cover leaves standard 20 persisted fronts 1→1, 40 58→57; in 24 target-squad source games genuine persistence 109→120, Turtle attacker HP 10,384.5→11,338.8 and wins 12→12. Stronger 22% counterproductive to wins; reflection/radius changes mixed. No runtime buff justified yet.
 - Added read-only L4 study with four candidates and standard plus independent new-seed/no-Knight/armored holdouts, source-real terminal winners/HP and true fronts, actual immediate post-dodge HP saved, strict solo L5 physics parity, and independent GitHub CI artifact. Current game/PWA/mobile visual assets unchanged. [Study](TURTLE_L4_EVOLUTION_INVESTMENT_2026-10-16.md). Full exact-head green gate required before relying on expanded receipt.
+
+
+### Oct 16 — Correcting L4 reflected HP accounting
+
+- New Turtle L4 source-only study originally attributed direct attacker hits and Guardian savings correctly, but Ricochet secondary `hurt()` used `source:null` and thus was absent from attacker HP. Added strictly read-only reflector→secondary-hit context to count **actual HP removed after armor, dodge, shell and defender remaining-HP cap**, with rank/physical ID; keep it separate from true offensive geographic-front statistics. Full observed/unobserved physical RAF SHA parity is enforced. No production combat behavior changed. See [L4 study](TURTLE_L4_EVOLUTION_INVESTMENT_2026-10-16.md).

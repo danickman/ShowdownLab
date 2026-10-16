@@ -778,3 +778,5 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Genuine attacker-credited HP and separate actual immediate saved ally HP; role-normalized value, winner flips, Knight/Goblin damage, persistent independent true-damage fronts
 - [ ] L5 solo Beetank/Sniper/Assassin full-frame state SHA unchanged for *all* L4-only variants and read-only physical observer parity
 - [ ] No gameplay patch, hash/PWA changes or main/production touch until candidate is proven across held-out strategies and 300/iPhone 14 Pro Max budget
+
+- [ ] L4 Ricochet's secondary `source:null` hits are physically attributed to the reflecting L4 Turtle and counted only after armour/shield/dodge/HP cap; actual reflection >0 and observed/unobserved SHA matches. Do not conflate with direct attack HP or artificially count reflected damage as independent offensive fronts.

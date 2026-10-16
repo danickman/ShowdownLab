@@ -7,9 +7,15 @@ const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(roo
 const core=read('v3/legacy-sim-core.js'),ability=read('v3/ultimate-abilities.js'),evolution=read('v3/evolution-rules.js');
 const once=(s,a,b)=>{assert.equal(s.split(a).length,2,'source anchor drift: '+a.slice(0,70));return s.replace(a,b)};
 const hitAnchor='const dealt=Math.min(t.hp,dmg);';
-const hitObserver=s=>once(s,hitAnchor,hitAnchor+
+const reflectionLoop='if(!secondary)for(const hit of ultimate.afterHit(a,t,dealt,units,tick))hurt(hit.target,hit.damage,hit.source,true)';
+const hitObserver=s=>once(once(s,hitAnchor,hitAnchor+
  "window.__qaResolved({target:t.id,tick,remainingHp:t.hp,postDodgeDamage:dmg});"+
- "if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,team:a.team,role:a.type,damage:dealt,x:t.x,y:t.y});");
+ "if(dealt>0&&window.__qaSecondaryContext)window.__qaReflect({...window.__qaSecondaryContext,tick,damage:dealt});"+
+ "if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,team:a.team,role:a.type,damage:dealt,x:t.x,y:t.y});"),
+ reflectionLoop,
+ "if(!secondary)for(const hit of ultimate.afterHit(a,t,dealt,units,tick)){"+
+ "window.__qaSecondaryContext=hit.source===null&&a&&t.type==='turtle'?{turtleId:t.id,level:t.level,team:t.team}:null;"+
+ "hurt(hit.target,hit.damage,hit.source,true);window.__qaSecondaryContext=null}");
 const guardAnchor="if(t.hp/t.maxHp<.6&&shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}";
 const prototypes={
  baseline:{},l4Guard20:{guard:.20},l4Guard22:{guard:.22},
@@ -52,7 +58,7 @@ const selections={
   foe:['beetank','beetank','dragon','turtle','knight','barbarian','beetank','sniper','mole','assassin']}
 };
 function match(c,kind,observed=true){
- let now=0,nextId=0,queue=new Map(),state,errors=[],hits=[],guards=[],pending=null;
+ let now=0,nextId=0,queue=new Map(),state,errors=[],hits=[],guards=[],reflections=[],pending=null;
  const sha=c.trace?crypto.createHash('sha256'):null;
  const env={window:null,Math,performance:{now:()=>now},
   requestAnimationFrame(fn){const id=++nextId;queue.set(id,fn);return id},cancelAnimationFrame(id){queue.delete(id)},
@@ -68,6 +74,7 @@ function match(c,kind,observed=true){
   assert(pending.actualSavedHp>=0&&pending.actualSavedHp<=pending.nominal+1e-7,'actual saved > nominal');
   pending=null};
  env.__qaHit=h=>hits.push(h);
+ env.__qaReflect=x=>{assert(x.damage>0&&Number.isFinite(x.damage),'invalid actual reflection HP');reflections.push(x)};
  vm.createContext(env);
  vm.runInContext(evolution,env);
  vm.runInContext(observed?programs[kind].observedAbility:programs[kind].rawAbility,env);
@@ -103,11 +110,12 @@ function match(c,kind,observed=true){
  const turtle=hits.filter(h=>h.role==='turtle'&&(c.kind==='standard'||h.team===ally));
  const sum=a=>a.reduce((n,x)=>n+x.damage,0);
  const l4Saves=guards.filter(g=>g.guardianLevel===4&&(c.kind==='standard'||g.team===ally));
+ const l4Reflect=reflections.filter(r=>r.level===4&&(c.kind==='standard'||r.team===ally));
  return{winner:state.winner,digest,tick:state.tick,
   won:state.winner===ally,realPersistentFronts:graph.consecutivePersistentMultiFrontWindows,
   realSeparatedWindows:graph.windowsWithTwoGeographicallySeparatedDamageComponents,
   actualTurtleHp:sum(turtle),realL4ImmediateAllyHpSaved:l4Saves.reduce((n,x)=>n+x.actualSavedHp,0),
-  l4GuardianEvents:l4Saves.length,
+  l4GuardianEvents:l4Saves.length,actualL4ReflectedHp:l4Reflect.reduce((n,r)=>n+r.damage,0),l4ReflectionEvents:l4Reflect.length,
   realKnightHp:sum(hits.filter(h=>h.role==='knight')),realGoblinHp:sum(hits.filter(h=>h.role==='goblin'))};
 }
 const controls=[
@@ -158,6 +166,7 @@ for(const name of names){
    actualTurtleHp:+sum('actualTurtleHp').toFixed(2),
    L4GuardianEvents:sum('l4GuardianEvents'),
    realImmediateL4AllyHpSaved:+sum('realL4ImmediateAllyHpSaved').toFixed(2),
+   realActualL4ReflectedHp:+sum('actualL4ReflectedHp').toFixed(2),l4ReflectionEvents:sum('l4ReflectionEvents'),
    realKnightHp:+sum('realKnightHp').toFixed(2),
    realGoblinHp:+sum('realGoblinHp').toFixed(2),
    byPopulation:Object.fromEntries([20,40].map(count=>[count,{
@@ -167,15 +176,16 @@ for(const name of names){
   };
  }
 }
+assert(summary.baseline.prespecified.realActualL4ReflectedHp>0,'Ricochet must be observed as actual target HP, not nominal');
 for(const name of names.slice(1)){
  assert(summary[name].standard.byPopulation[20].persisted>=1,'small true fronts must persist '+name);
  assert(summary[name].standard.byPopulation[40].persisted>=40,'40 real front safety floor '+name);
 }
 const report={
  status:'Turtle L4 evolution value CANDIDATE SOURCE A/B ONLY, no shipped physics changed',
- methods:'Each of five variants: 32 standard completed fights + 24 prespecified L4 Turtle selected + 24 new-seed + 24 counter-stress; same seed, rosters, mirrors and level. Actual positive attacker-HP damage and source-connected independent fronts, per-hit local after-dodge and HP-cap guardian saving. Solo L5 unchanged full trace. Node source VM only, not iPhone Safari.',
+ methods:'Each of five variants: 32 standard completed fights + 24 prespecified L4 Turtle selected + 24 new-seed + 24 counter-stress; same seed, rosters, mirrors and level. Actual positive attacker-HP damage, source-connected independent fronts, physical post-shield/armor/dodge/HP-cap reflected target HP on otherwise unattributed secondary hits, per-hit local after-dodge and HP-cap guardian saving. Solo L5 unchanged full trace. Node source VM only, not iPhone Safari.',
  caveat:'Meaningful evolution is not proven by solo gross DPS or front count alone: consider wins, role HP, counter style and whether Knight/Goblin decline; immediate saved HP is per-hit, not entire divergent-match counterfactual. No balancing decision preselected from holdout.',
  summary,fixtures};
 if(process.env.QA_L4_TURTLE_RECEIPT)fs.writeFileSync(process.env.QA_L4_TURTLE_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('TURTLE L4 INVESTMENT SOURCE A/B '+JSON.stringify(summary));
-console.log('PASS: five source candidates x 104 full terminal cases, L5 solo SHA parity and actual HP/fronts; no game patch');
+console.log('PASS: five source candidates x 104 full terminal cases, actual L4 Ricochet reflection/Guardian savings, L5 solo SHA parity, and real HP/fronts; no game patch');
