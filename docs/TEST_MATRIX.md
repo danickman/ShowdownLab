@@ -786,3 +786,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 520 truly completed matched source trials, actual post-armor/dodge/cap Ricochet HP separate from attacker-credited HP; L5 solo SHA and source observer parity, archived in Actions 38857552669
 - [x] Guard20 worsens no-Knight/armored holdout wins 6→4 despite initial persistence benefit; Guard22 hurts several role-front measures; reflect35 increases true reflected HP but degrades persistence in prespecified/unseen seeds; radius13 worsens stress wins
 - [x] Retain original L4 Turtle gameplay values; no hidden numeric adjustment or false 'balance pass'. Next design event-gated tactical shell counterplay with genuine winner, front, hero-role and population performance controls
+
+
+### Source-only timed Turtle shell guard tactical hypothesis
+- [ ] 4 ×104 fully terminal standard/prespecified/new-seed/stress comparisons; genuine nonstacking timed shell defensive response, not global passive percentage increase
+- [ ] Actual post-hit saved/reflected/direct HP, original genuine independent active fronts, Beetank/Assassin and Knight/Goblin collateral, unchanged L5 solo hashes and physical source observer parity
+- [ ] Do not ship until holdouts, 80/120/300 CPU and real iPhone 14 Pro Max Safari reviewed

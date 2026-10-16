@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  turtle-timed-shell-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check actual timed Turtle shell source study syntax
+        run: node --check tools/qa/check-turtle-timed-shell-study.cjs
+      - name: Compare true terminal shell response and actual physical fronts
+        env:
+          QA_L4_TURTLE_RECEIPT: turtle-timed-shell-study.json
+        run: node tools/qa/check-turtle-timed-shell-study.cjs
+      - name: Preserve shell defense source research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-timed-shell-study
+          path: turtle-timed-shell-study.json
+          if-no-files-found: warn
+
   turtle-l4-investment:
     runs-on: ubuntu-latest
     timeout-minutes: 30
