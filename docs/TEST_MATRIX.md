@@ -725,3 +725,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Exact-head GitHub CI success and archived JSON receipt for new `evolution-investment-value` job plus all previous 300/browser/counterplay suites.
 - [ ] Select next evolutionary gameplay candidate based on ROI including strategic counters; preserve source-authentic fronts and avoid global numerical DPS equalization.
 - [ ] Physical iPhone **14 Pro Max Safari** manual performance, touch and evolution visual acceptance.
+
+
+### Evolution ROI nominated-unit attribution (Oct 16)
+- [ ] 216 completed 20/40 real source battles, no censored samples, selected slot ID mapping consistent with blue-then-red and front-before-back deployment
+- [ ] L1 nominated Turtle reflects **zero** HP, while separate allied L4 Turtles produce independently reported, positive, non-target same-role reflection; L4/L5 selected Turtle reflects actual HP
+- [ ] Selected squad attribution applies to direct HP damage, shell nominal, Execution and alive unit-ticks, with exact deployment denominator (3/6), no other same-role ally contamination
+- [ ] Instrumented vs uninstrumented exact frame-state SHA parity and exact-head green PR run; independent Actions receipt audited before balancing

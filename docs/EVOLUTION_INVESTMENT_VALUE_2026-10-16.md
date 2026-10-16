@@ -2,6 +2,8 @@
 
 **October 16, 2026 · QA branch only**
 
+**October 16 audit correction — selected-fighter identity (CI revalidation required):** The first run [38848544412](https://github.com/danickman/ShowdownLab/actions/runs/38848544412) exposed L1 reflected HP 984.46. The observer filtered by team and role, thereby including **different non-target allied L4 Turtles** in swarm/ranged rosters; this was not evidence that L1 unlocked Ricochet. The updated observer deterministically maps specifically nominated TARGET slots to live unit IDs after the engine's front/back deployment ordering, validates exact selected team/role/level against physical state, then accounts for actual source damage, incoming shell events, reflector, Execution and alive unit-ticks **only for selected IDs**. Other allied same-role reflected HP is independently reported, with a non-vacuous positive contamination-fixture gate; L1 still strictly must have zero selected-Turtle reflection/Execution. Physics and input roster shape remain unchanged and exact frame-state trace parity remains mandatory. The 216 completed terminal trials and full same-head CI must pass before metrics are used for fighter balancing. No changes to combat, assets, PWA, `main` or production.
+
 The prior exact source head `8ea4896ef3f5592c366cad30acb503384839475d` was [39 mandatory jobs green](https://github.com/danickman/ShowdownLab/actions/runs/38847657325). Existing QA fixes: Turtle L4/L5 0.10 true hit-reflect reach, Assassin L5 Execution below 75% pre-hit HP, cached per-tick target pressure. No production or `main` promotion.
 
 **Question:** Does spending multiple draft evolutions on Assassin or Turtle materially improve combat outcomes, or do Beetank's proactive disruption and Dragon/Sniper raw damage dominate?
