@@ -807,3 +807,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Explicit true physical backstab / Execution callback conversion, real L4 attacker-attributed HP versus Beetank/Turtle/Sniper and general combat, role wins, Knight/Goblin contribution and authentic 20/40 persistent fronts
 - [ ] Instrumented/raw full RAF parity, L5 Assassin unchanged solo-versus-Beetank/Turtle/Sniper/Dragon/Knight SHA, and 80/120/300 1×/10× no-Assassin full state unchanged
 - [ ] Preserve primary iPhone 14 Pro Max Safari acceptance and choose gameplay change only after measured holdout counter health and device frame budget
+
+
+### Assassin L4 execution source study — completed/rejected numerical thresholds
+- [x] 416 genuine complete 20/40-body source games: 40% live vs 50/55/60% with unseen/armored holdouts, real L4 hits, true physical Execution/backstab callbacks, original HP-damage front graph and role counters
+- [x] 5 L5 solo-counter full-frame SHA parity; 80/120/300 1x/10x no-Assassin parity; unchanged original live baseline 20/40 authentic front gates; export explicit rejection instead of aborting receipts
+- [x] All 3 simple higher L4 gates REJECTED: first 24 actual L4 Execution procs 13→26/28/31, real HP damage +2.8–3.8%, no winner gain, standard 20 independent persistent fronts 1→0. Do not weaken gates.
+- [ ] Diagnose exact L4 stalking/vanish/backstab/target-switch-to-unwounded loss under 20/40 physical full matches before an Assassin-specific pursuit/kill-confirm tactical candidate; validate role-counter and CPU invariants, physical iPhone 14 Pro Max Safari manual.
