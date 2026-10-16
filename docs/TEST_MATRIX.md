@@ -865,3 +865,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 144 role×tier×swarm/ranged/armored×20/40×seed×side base fixtures, current unmodified simulator, three actions upgrade all role units vs +1 or +2 real reinforcements, 432 fully terminal genuine matches
 - [ ] Compare actual draft choice winners, selected direct HP, physically reflected Ricochet HP, Guardian marginal HP saved beyond Knight after HP cap/dodge, positive HP-damage fronts and mode-specific counters
 - [ ] Exact read-only observer/unedited RAF SHA; no new physics/ability/Guide/PWA assets until player-value and Safari 14 Pro Max gates and independent holdouts support a change
+
+
+### Draft one-pick evolution opportunity cost (experimental source-real, NOT shipped)
+- [ ] 96 mirrored selected cases ×4 held-roster/upgrade/recruit2/Beetank upgrade = 384 terminal battles; two selected families (Turtle, Assassin), L3→L4 & L4→L5, swarm/backline/armored, 20/40, two seeds, both sides
+- [ ] 3/6 physical chosen copies and 1/2 existing Beetanks per side, 2 recruits increase global population to 22/42; do not claim exact random draft offer count
+- [ ] Genuine wins, separately real physical direct HP, actual returned shell Ricochet damage, post-dodge/cap Guardian ally saving, Beetank HP, damage-positive independent fronts; strict observed/raw RAF hash parity
+- [ ] Hold current real combat/evolution rules; if hard counters reveal underperforming choices, design a bounded tactical role mechanic and test it rather than generic percentage/attack-range buff. 80/120/300 game budget and physical iPhone 14 Pro Max Safari must precede any future gameplay release

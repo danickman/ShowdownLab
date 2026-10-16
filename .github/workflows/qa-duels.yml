@@ -35,6 +35,28 @@ jobs:
         run: node tools/qa/check-streaming.cjs
       - name: Verify launch guide and PWA hooks
         run: node tools/check-launch-guide.cjs
+  draft-evolution-choice-value:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-authentic draft choice value syntax
+        run: node --check tools/qa/check-draft-evolution-choice-value.cjs
+      - name: Compare one evolution draft pick against reinforcing and Beetank
+        env:
+          QA_DRAFT_VALUE_RECEIPT: draft-evolution-choice-value.json
+        run: node tools/qa/check-draft-evolution-choice-value.cjs
+      - name: Archive 384 terminal choice alternatives and physical contribution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draft-evolution-choice-value
+          path: draft-evolution-choice-value.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12

@@ -1698,3 +1698,10 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 ### Oct 16 — Compare actual L3→L4 and L4→L5 evolution against reinforcements
 
 - To resolve whether Assassin/Turtle L4 or L5 offers a genuine *draft choice*, run current unchanged QA source for three roles (Assassin/Turtle/Beetank), two milestone levels, swarm/backline/armored, 20/40-body starts, mirrored 1337/2017 seeds. Compare evolution of all existing role units vs +1 / +2 real same-tier reinforcements. 144 matched fixtures ×3 =432 fully terminal source games. Distinguish real Turtle reflected HP, actual Guardian blocked HP marginal to Bastion after cap/dodge, direct attacker HP and actual independent damaging fronts. Gate read-only observer physical SHA and keep all runtime/asset/PWA files untouched. [Study](EVOLUTION_CHOICE_OPPORTUNITY_COST_2026-10-16.md). Exact CI required.
+
+
+### Oct 16 — Real draft evolution opportunity cost source audit
+
+- New SOURCE-ONLY `tools/qa/check-draft-evolution-choice-value.cjs` and dedicated GitHub job compare one full-fighter-family L3→L4 or L4→L5 draft upgrade (Turtle and Assassin separately) against two same-family reinforcements or a Beetank family upgrade using real 20/40 bodies, opponent swarm/backline/armored, both mirrored teams and original/holdout seeds: **96 matched starts × 4 choices = 384 full terminal battles**.
+- Per-unit physical ID attributes actual direct HP, genuine reflected HP, immediate actual Guardian ally HP saved, Beetank HP, team wins, and independent real HP-positive front persistence and geographic damage. Source observer must be full RAF SHA-neutral on controls; results are hypotheses, not gameplay changes. Explicitly note two recruits grow population 20→22, 40→42 while upgrading 3/6 units keeps it flat; fixed comparative offers do not prove all draft RNG choices or an identical cost equivalence.
+- [Protocol](DRAFT_EVOLUTION_CHOICE_VALUE_2026-10-16.md). Exact-head push/PR CI required; unchanged L4 Guardian, Assassin Execution, game assets/PWA/main/deployment. iPhone 14 Pro Max Safari manual gate pending.
