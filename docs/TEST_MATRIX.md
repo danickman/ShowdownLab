@@ -847,3 +847,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Five previously rejected source A/B studies moved unchanged to conditional combat-source/own-script push workflow; preserve fixtures/artefacts, do not weaken checks. Saves >1,664 completed terminal matches on routine docs/QA commits.
 - [x] Original shipped-combat regressions, true HP fronts, active Assassin last-mile, primary iPhone 14 Pro Max 430×932 browser contract, 300 fighters, 42-PWA-digest integrity remain 43-job normal push/PR matrix.
 - [ ] Verify exact-head GitHub push and PR with new archive registration; when real combat core changes require source archive success as well; physical Safari manual gate pending.
+
+
+### Assassin L4 Shadow Mark (research only)
+- [ ] Baseline + 25/40% one-use 120-tick real Sniper/Dragon marks from an actual L4 vanish, 312 real completed 20/40 matches
+- [ ] Real other-ally direct-hit mark consumption, actual HP, front windows, original/new seed/armored/no-Knight winners, unaffected Beetank/Turtle counters
+- [ ] Strict observed/raw RAF SHA, L5 five-solo counter SHA, no-L4 80/120/300 1×/10× SHA, no PWA or production change pending evidence

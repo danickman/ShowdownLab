@@ -1682,3 +1682,8 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 ### October 16 — Preserve historical source A/B without exhausting each ordinary CI turn
 
 - Removed five **rejected** source-only studies from always-on Duel CI, retained their unchanged jobs in `.github/workflows/qa-research-archive.yml` triggered automatically on actual legacy core / ultimate / evolution and historical script modifications. This avoids at least 1,664 redundant terminal games per workflow on docs/research/art commits; current last-mile, Guardian, real battle fronts, 300, browser, integrity and iPhone primary portrait gates stay required. Manual per-study dispatch becomes available after default-branch registration. [CI policy](QA_RESEARCH_CI_BUDGET_2026-10-16.md). No live code touched; exact-head workflow QA pending.
+
+
+### Oct 16 — L4 Assassin Shadow Mark tactical source study (NO gameplay change)
+
+- Rejected earlier vanilla speed/teleport/slot/reach ideas from authentic real HP/front/winner samples. A different L4-only hypothesis: real vanish versus Sniper/Dragon marks prey for one real direct allied follow-up hit (25/40% power, 120 ticks, nonstacking). 3×104 completed 20/40 seed/mirror selected/unseen/armored matches, real mark/ally usage, independent physically damaged HP fronts, L5 solo and 80/120/300 no-L4 controls in new CI job. No source changes to game/PWA/art/main/prod. [Protocol](ASSASSIN_L4_SHADOW_MARK_2026-10-16.md).

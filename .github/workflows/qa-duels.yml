@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  assassin-l4-shadow-mark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Shadow Mark test syntax
+        run: node --check tools/qa/check-assassin-l4-shadow-mark.cjs
+      - name: Run actual terminal L4 mark and counterplay study
+        env:
+          QA_ASSASSIN_SHADOW_RECEIPT: assassin-l4-shadow-mark.json
+        run: node tools/qa/check-assassin-l4-shadow-mark.cjs
+      - name: Keep exact source A/B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-shadow-mark
+          path: assassin-l4-shadow-mark.json
+          if-no-files-found: warn
+
   assassin-l4-last-mile-pursuit:
     runs-on: ubuntu-latest
     timeout-minutes: 30
