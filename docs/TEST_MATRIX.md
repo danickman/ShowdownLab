@@ -686,3 +686,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Full exact new-head CI green with normalized receipts, 300 stress, rooted offline 42 SHA resources and 430×932 DPR3 Chromium portrait.
 - [ ] Actual physical iPhone **14 Pro Max** Safari manually accepted.
 - [ ] Future measured selective contact ownership for multiple genuine 20-body mid/late fronts; protect 40+ and weak-role utility.
+
+
+### Oct 16 — 20-body survivor-adjusted real damage-front QA
+- [x] All 32 matched 20-fighter forensic games actually terminate: 4 modes × 4 seeds × 2 mirrors. 4v4+ midfight opportunity distinguished from natural 1–2-enemy late attrition using *actual HP>0* living fighter counts.
+- [x] Hit-grounded 90-tick retarget A/B across 30 completed 20 plus 30 40-body matches, with corrected nearest candidate admissibility. Reject variants which fail persistent damage-front gain and reduce low-damage role value; NO runtime changes.
+- [x] Extend 32-term-match permanent test: per-RAF living blue/red, eligible 4v4+ vs lopsided ≤2 by 30-tick damage window, 1/6/1/2/5/6 phase snapshots, summary and no fictional front criteria. Preserve previous terminal, positive HP graph, role denominators and observer state parity.
+- [ ] Full exact-head QA Actions and archived new phase receipt. Primary iPhone 14 Pro Max physical Safari still manual.

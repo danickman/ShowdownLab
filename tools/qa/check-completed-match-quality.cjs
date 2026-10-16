@@ -48,7 +48,10 @@ function completed(source,c,watch=true){
  for(;frames<450;frames++){
   now+=16.667;const actions=[...queue.values()];queue.clear();for(const action of actions)action(now);
   state=sim.getState();sha.update(JSON.stringify(state)+'\n');
-  if(frames%4===0||state.winner)snapshots.push({tick:state.tick,alive:state.units.filter(u=>u.hp>0).length});
+  // Side-specific living counts only: a read-only sample at each real RAF frame.
+  const alive=state.units.filter(u=>u.hp>0);
+  snapshots.push({tick:state.tick,alive:alive.length,
+   blue:alive.filter(u=>u.team==='blue').length,red:alive.filter(u=>u.team==='red').length});
   if(state.winner){frames++;break}
  }
  assert.deepEqual(errors,[],'simulation errors '+JSON.stringify(c));
@@ -66,13 +69,29 @@ function completed(source,c,watch=true){
  }
  for(const r of roles)roleData[r].damage=+roleData[r].damage.toFixed(2);
  for(const r of ['blue','red'])teamData[r].damage=+teamData[r].damage.toFixed(2);
- const phase={early:{damageWindows:0,separated:0},middle:{damageWindows:0,separated:0},late:{damageWindows:0,separated:0}};
+ const bucket=()=>({totalWindows:0,damageWindows:0,separated:0,eligibleWindows:0,eligibleDamageWindows:0,eligibleSeparatedWindows:0,lopsidedWindows:0});
+ const phase={early:bucket(),middle:bucket(),late:bucket()};
  for(const w of fronts.windows){
   const f=(w.fromTick+w.toTick)/(2*state.tick);
   const p=f<1/3?'early':f<2/3?'middle':'late';
+  phase[p].totalWindows++;
   if(w.hits>0)phase[p].damageWindows++;
   if(w.separatedPairs>0)phase[p].separated++;
+  // A viable opportunity requires living opponents; it is NOT a claim of fighting.
+  const alive=snapshots.find(s=>s.tick>=w.fromTick)||snapshots.at(-1);
+  if(alive.blue>=4&&alive.red>=4){
+   phase[p].eligibleWindows++;
+   if(w.hits>0)phase[p].eligibleDamageWindows++;
+   if(w.separatedPairs>0)phase[p].eligibleSeparatedWindows++;
+  }
+  if(Math.min(alive.blue,alive.red)<=2)phase[p].lopsidedWindows++;
  }
+ const center={early:1/6,middle:1/2,late:5/6};
+ const phaseSurvivors=Object.fromEntries(Object.entries(center).map(([name,f])=>{
+  const s=snapshots.find(s=>s.tick>=state.tick*f)||snapshots.at(-1);
+  return [name,{blue:s.blue,red:s.red,alive:s.alive,bothAtLeast4:s.blue>=4&&s.red>=4,
+   oneTeamAtMost2:Math.min(s.blue,s.red)<=2}];
+ }));
  const lifespan={};
  for(const t of [25,50,75]){
   const s=snapshots.find(x=>x.tick>=state.tick*t/100)||snapshots.at(-1);
@@ -84,7 +103,7 @@ function completed(source,c,watch=true){
   separated:fronts.windowsWithTwoGeographicallySeparatedDamageComponents,
   persistent:fronts.consecutivePersistentMultiFrontWindows,
   damageWindows:fronts.damageWindows,fullWindows:fronts.totalWindows,
-  phase,lifespan,teamDamage:teamData,roleDamage:roleData,roleDeployed};
+  phase,phaseSurvivors,lifespan,teamDamage:teamData,roleDamage:roleData,roleDeployed};
 }
 // The observer must not change any complete state, frame-to-frame, across both scales.
 for(const count of [20,40]){
@@ -113,8 +132,27 @@ for(const count of [20,40]){
   roleDamage:dmgRole,roleDeployed:deployedRole,roleDamagePerDeployedFighter:damagePerDeployed,
   phases:Object.fromEntries(['early','middle','late'].map(p=>[p,{
    damagingWindows:a.reduce((n,x)=>n+x.phase[p].damageWindows,0),
-   separatedWindows:a.reduce((n,x)=>n+x.phase[p].separated,0)}]))};
+   separatedWindows:a.reduce((n,x)=>n+x.phase[p].separated,0),
+   totalWindows:a.reduce((n,x)=>n+x.phase[p].totalWindows,0),
+   eligibleWindows:a.reduce((n,x)=>n+x.phase[p].eligibleWindows,0),
+   eligibleDamageWindows:a.reduce((n,x)=>n+x.phase[p].eligibleDamageWindows,0),
+   eligibleSeparatedWindows:a.reduce((n,x)=>n+x.phase[p].eligibleSeparatedWindows,0),
+   lopsidedWindows:a.reduce((n,x)=>n+x.phase[p].lopsidedWindows,0),
+   midpointMeanAlive:+(a.reduce((n,x)=>n+x.phaseSurvivors[p].alive,0)/a.length).toFixed(1),
+   midpointMeanBlue:+(a.reduce((n,x)=>n+x.phaseSurvivors[p].blue,0)/a.length).toFixed(1),
+   midpointMeanRed:+(a.reduce((n,x)=>n+x.phaseSurvivors[p].red,0)/a.length).toFixed(1),
+   balanced4v4MidpointCases:a.filter(x=>x.phaseSurvivors[p].bothAtLeast4).length,
+   oneTeamAtMost2MidpointCases:a.filter(x=>x.phaseSurvivors[p].oneTeamAtMost2).length}]))};
  assert.equal(summary[count].completed,16,'real terminal winners mandatory');
+ for(const p of ['early','middle','late']){
+  const v=summary[count].phases[p];
+  assert(v.eligibleSeparatedWindows<=v.separatedWindows,'false eligible separated front '+p);
+  assert(v.eligibleDamageWindows<=v.damagingWindows,'false eligible damage '+p);
+  assert(v.eligibleWindows+v.lopsidedWindows<=v.totalWindows,'side-survival classes overlap '+p);
+  assert(v.balanced4v4MidpointCases+v.oneTeamAtMost2MidpointCases<=a.length,'midpoint classes overlap '+p);
+ }
+ if(count===20)assert(summary[count].phases.early.balanced4v4MidpointCases>=12,
+  '20-fighter early eligible opponent count regressed');
  assert(summary[count].damagePositiveEvents>500,'actual damage events missing at '+count);
  assert(summary[count].realSeparatedWindows>=(count===20?16:140),'independent damage fronts severely regressed at '+count);
  assert(summary[count].persistentIndependentWindows>=(count===20?1:40),'persistent genuine fronts regressed at '+count);
@@ -132,8 +170,8 @@ for(const count of [20,40]){
 // Current 20-body baseline has very few persistent fronts; it is a tracked
 // quality deficiency, not a justification to stage fake combat or weaken QA.
 const report={status:'Completed terminal-quality baseline on green QA runtime; runtime unchanged',
- caveat:'Per-deployed-fighter damage divides by all original fighters of each type, including non-survivors and all levels; it is NOT per-level DPS. Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
+ caveat:'Eligible windows mean four or more actually living fighters on each side near a 30-tick window start, not proof of distinct fights. Living side counts are sampled at every RAF (~10 sim ticks at 10x) and phase centers are 1/6,1/2,5/6 of finished battle time. Per-deployed-fighter damage divides by all original fighters of each type, including non-survivors and all levels; it is NOT per-level DPS. Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
  summary,cases};
 if(process.env.QA_COMPLETED_BATTLES_RECEIPT)fs.writeFileSync(process.env.QA_COMPLETED_BATTLES_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('COMPLETED MATCH QUALITY '+JSON.stringify(summary));
-console.log('PASS: 32 full terminal matches, true damage-connected fronts, phase survival, role deployment-normalized attacker HP, 20/40 exact pure-source state parity and baseline-quality floors');
+console.log('PASS: 32 terminal matches; damage-edge fronts conditioned on real 4v4 opportunity; role-normalized HP; physical observer parity');
