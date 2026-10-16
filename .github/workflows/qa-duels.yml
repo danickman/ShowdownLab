@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  assassin-l4-target-focus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check genuine L4 Assassin target focus study syntax
+        run: node --check tools/qa/check-assassin-l4-target-focus.cjs
+      - name: Full source-only 312-battle Assassin L4 selection and counter audit
+        env:
+          QA_ASSASSIN_FOCUS_RECEIPT: assassin-l4-target-focus.json
+        run: node tools/qa/check-assassin-l4-target-focus.cjs
+      - name: Upload physical target-choice, real HP and independent-front report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-target-focus
+          path: assassin-l4-target-focus.json
+          if-no-files-found: warn
+
   assassin-l4-trigger-study:
     runs-on: ubuntu-latest
     timeout-minutes: 25

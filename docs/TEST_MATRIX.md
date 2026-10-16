@@ -814,3 +814,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 5 L5 solo-counter full-frame SHA parity; 80/120/300 1x/10x no-Assassin parity; unchanged original live baseline 20/40 authentic front gates; export explicit rejection instead of aborting receipts
 - [x] All 3 simple higher L4 gates REJECTED: first 24 actual L4 Execution procs 13→26/28/31, real HP damage +2.8–3.8%, no winner gain, standard 20 independent persistent fronts 1→0. Do not weaken gates.
 - [ ] Diagnose exact L4 stalking/vanish/backstab/target-switch-to-unwounded loss under 20/40 physical full matches before an Assassin-specific pursuit/kill-confirm tactical candidate; validate role-counter and CPU invariants, physical iPhone 14 Pro Max Safari manual.
+
+
+### Assassin L4 wounded-backline continuity (SOURCE ONLY, no buff shipping)
+- [ ] 3×104 genuinely terminal baseline / 0.06 / 0.12 remembered wounded Sniper-or-Dragon physical target comparisons, including standard, prespecified, unseen, no-Knight/armored
+- [ ] Measure target switches while original prey remains alive below 40% HP; stalking/vanish/backstab/disengage decisions, positive real Assassin HP on Sniper/Dragon vs Beetank/Turtle; true independent 20/40 HP-damaging fronts
+- [ ] All L5 5 solo counters unchanged full frame SHA, no-L4 80/120/300 1× and 10× snapshots identical and read-only observer full RAF parity
+- [ ] Never use `u.target` as persistent prey state without fixing existing core double-nearest, and never weaken authentic front thresholds to promote a source-only failed candidate
