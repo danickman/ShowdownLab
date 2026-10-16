@@ -1632,3 +1632,9 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 - New CI job `turtle-timed-shell-study`, with instrumented/observed RAF SHA controls and L5 solo counter SHA. **No change to actual gameplay/PWA; exact-head green gate pending.**
 
 - Timed shell QA now explicitly distinguishes new real critical-hit reaction callbacks from ordinary naturally triggered shell protection; raw source removes this read-only observer and requires state-hash parity.
+
+
+### Oct 16 — Real 416-match L4 Shell response result and gap/recovery refinement
+
+- 4×104 real full-terminal study passed on QA `76f99b5`; first 24-case selected true fronts 109→117 with 24% triggered shell and real first 24 saved HP 4007→5759; independent-seed true fronts 110→118, but unseen wins 13→12 and standard 40-fighter actual fronts 58→52. 30% variant unseen wins fall to 11; natural-shell 28% stress wins fall 6→4. No eligible initial variation should ship; note 20-fighter standard remained 1 persistent front.
+- Refining existing CI study without adding a new expensive job: retain current baseline and reactiveShell24 controls; test `protectiveGap24` only where Knight can't protect better, and `gapDuringRecovery24` additionally only when Turtle attack cooldown >=16. Physically proved response, strict selected-guardian pre-hit gap/cooldown telemetry, no runtime/PWA/production change. [Study](TURTLE_TIMED_SHELL_COUNTERPLAY_2026-10-16.md). Exact-head CI required before interpreting.

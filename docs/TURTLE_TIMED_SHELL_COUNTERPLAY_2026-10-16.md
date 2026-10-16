@@ -15,3 +15,27 @@ If source-only data survives holdouts, follow with more independent seeds, 80/12
 See also [rejected passive L4 ROI](TURTLE_L4_EVOLUTION_INVESTMENT_2026-10-16.md).
 
 **Measurement correctness:** record a true below-45%-HP trigger separately from ordinary shell-active mitigation. A baseline shell must never count as the proposed reactive action; observation must preserve all RAF-state SHA hashes.
+
+
+## Verified first full trial — commit `76f99b5`, push CI 38924690947
+
+The 416-match source-only trial **passed**. Real triggered shells were confirmed by a separate callback (not confused with ordinary shell time), and per-frame observed/raw source SHA controls plus L5 solo SHA held. It is **not** a gameplay approval.
+
+| Candidate | First 24 true fronts | Unseen 24 true fronts | Unseen wins | No-Knight/armored wins | Standard 40 true fronts |
+|---|---:|---:|---:|---:|---:|
+| Current QA | 109 | 110 | 13/24 | 6/24 | 58 |
+| Natural shell 28% | 110 | 113 | 13/24 | **4/24** | 57 |
+| Real critical-ally reaction 24% | 117 | 118 | 12/24 | **7/24** | 52 |
+| Real critical-ally reaction 30% | 124 | 123 | **11/24** | 7/24 | 54 |
+
+24%-reaction triggered **176** real events in first 24 matches and **194** on unseen seeds; L4 *same-hit* saved ally HP first 24 matches rose 4,007→5,759. The 20-body standard still had only **one** persistent real separated attack front; 40-body real persistence declined **58→52**, so the original broad reaction should **not ship** even though the defensive effect is real. Natural-shell-only 28% worsened stress wins. 30% reaction further worsened unseen wins. Do not confuse immediate saved HP with full-match causal team HP.
+
+### Follow-up refinement — same 416-case job, no new expensive CI job
+
+Keep original baseline and reactiveShell24 as historical/controlled comparators; replace rejected natural shell 28% and reactive 30% with two role-preserving L4 24% reaction variations:
+
+- **protectiveGap24** — only react if the currently selected L4 Turtle's ordinary 18% shelter is *already* stronger than nearby Knight Bastion or any other assigned guard. It won't interrupt the Knight-protected defender merely to steal Bastion's role.
+- **gapDuringRecovery24** — same lack-of-alternative-protection requirement, and Turtle must still have `cooldown>=16`; Turtle protects a critically hit ally during its attack recovery rather than interrupting its own ready strike.
+
+Both require defender **pre-hit HP below 45%**, a physically nearby selected L4 Turtle, and Turtle `special<=0, shell===0`; triggered shell still lasts 22 ticks with special lockout and a normal eventual shell slam, no new damage. The observer records actual pre-react protection and cooldown; hard assertions verify every new reaction met these restrictions, with raw-source RAF state equivalence. **Same job and 416-case budget**, not an expensive accumulating per-commit CI job. This does not change shipped gameplay, root PWA hashes, UI art, 300-population cap, or main/prod.
+

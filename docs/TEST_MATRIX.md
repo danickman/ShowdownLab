@@ -794,3 +794,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Do not ship until holdouts, 80/120/300 CPU and real iPhone 14 Pro Max Safari reviewed
 
 - [ ] Count true injured-ally reactive shell starts independently; do not mistake existing shell animation for the new counterplay
+
+
+### Turtle shell response selectivity — new source gating
+- [x] First 416 true terminal baseline / natural shell / reactive 24% / reactive 30% comparisons passed, genuine actual trigger callback measured; broad reaction 40-pop fronts 58→52 and unseen wins 13→12, natural shell stress wins 6→4, so not shipped
+- [ ] Same 416-case CI job now compares baseline, broad reactive24, gap-only reactive24 and gap+recovery-window reactive24; asserts actual selected Guardian initially stronger than Knight/Bastion and recovery cooldown>=16 where applicable; maintains L5 solo full physical SHA
+- [ ] Never call source-only CPU or true-front metrics real iPhone 14 Pro Max Safari acceptance
