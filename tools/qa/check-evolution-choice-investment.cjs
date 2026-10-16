@@ -71,7 +71,7 @@ function match(c,choice,observe=true){
   reflect=reflects.filter(x=>x.team===team&&x.level>0),
   saved=saves.filter(x=>x.team===team),
   sum=(a,k)=>a.reduce((n,x)=>n+x[k],0);
- return{winner:state.winner,won:state.winner===team,realFronts:fronts.consecutivePersistentMultiFrontWindows,
+ return{winner:state.winner,digest:hash?.digest('hex'),won:state.winner===team,realFronts:fronts.consecutivePersistentMultiFrontWindows,
   realSeparated:fronts.windowsWithTwoGeographicallySeparatedDamageComponents,
   roleDirectHp:sum(roleHits,'damage'),roleReflectedHp:sum(reflect.filter(x=>c.role==='turtle'),'damage'),
   savedAllyHp:sum(saved.filter(x=>c.role==='turtle'),'saved'),otherAllyHp:sum(ownHit.filter(x=>x.role!==c.role),'damage'),
