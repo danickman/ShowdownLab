@@ -643,3 +643,11 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] New independent `completed-match-quality-budget` CI and full existing portrait/300/offline/legacy + role counter suite completed green for exact HEAD.
 - [ ] Improve genuine 20-body *persistent* simultaneous fights in next game turn; 1 persisted window in 16 games is a serious open design problem, not a sign-off.
 - [ ] Physical iPhone 15 Pro Max Safari animation + frame pacing and user acceptance.
+
+
+### Queued next gameplay turn — Assassin/Turtle L4/L5 tangible evolution value
+- [ ] True Execution activations per physical backstab and pre-hit target HP bracket, normalized for each Assassin deployed and duration; completed L1/L4/L5 mirror/seed 20/40 and selected 80 battles, record marginal L4/L5 value.
+- [ ] Targeted trigger/finisher/selection variants with evidence, preserving Beetank/Turtle tank counters, Sniper/Dragon tactical identity and real-battle persistence.
+- [ ] Turtle-versus-Beetank complete tank utility comparison: real HP prevented, damage reflected to sourced attackers, ally survival, meaningful shell/bash disruptions, survival time, counter matchups. Count that value separate from attributable direct DPS.
+- [ ] Implement bounded validated role improvement (not blanket DPS), with true event cue and dedicated permanent deterministic coverage.
+- [ ] Full new-head branch CI 300 fighters + 430×932 DPR3 portrait + 42 pinned offline release and role-counter checks, QA only; physical iPhone Safari manual QA.

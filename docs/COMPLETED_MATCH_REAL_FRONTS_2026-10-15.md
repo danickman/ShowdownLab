@@ -46,3 +46,8 @@ The persistent 20-fighter signal is critically weak (**one qualifying window acr
 Test selective **small-battle engagement retention** without predetermined battle lines: late target-switch hysteresis, squads following live opponents when actual local damage has occurred, or one-to-one contact ownership. Require genuine persistent fronts (20-body) and non-degraded 40-body counterplay across more seeds/roles, including real finished winners and 300-fighter budget. No new high-density CPU work or global stat multipliers without proving benefit. The Phaser/HTML renderer and actual Safari QA remain separate.
 
 **This turn intentionally ships no combat or presentation adjustment after five candidate families failed measured quality.** That is a QA and design safeguard, not a claim that the weak 20-fighter experience has been solved. Full new-head GitHub CI required to validate the new analysis test.
+
+
+## Validation and queued role-value follow-up
+
+The new 32 terminal-match quality gate fully passed on [QA Actions run 38830645911](https://github.com/danickman/ShowdownLab/actions/runs/38830645911): 36 required jobs successful, zero failed, one optional skipped. Observed mid/late phase separated-damage windows confirmed **20-body early 22, middle 3, late 0** vs **40-body early 114, middle 73, late 6** across the 16 completed matchups per size. The user then explicitly prioritized Assassin Execution, Turtle defensive value versus Beetank, and evolved weak units in the next gameplay implementation turn; see [ROLE_VALUE_EVOLUTION_NEXT_TURN.md](ROLE_VALUE_EVOLUTION_NEXT_TURN.md). No live gameplay files change in this doc-only follow-up.
