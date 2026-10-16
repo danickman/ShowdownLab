@@ -1580,3 +1580,10 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 - Source-only guardian CI now measures **immediately prevented actual HP per resolved hit after the identical dodge and defender remaining-HP cap**, not only nominal cover; explicitly not the full counterfactual match's HP divergence. Synthetic overkill/dodge controls and identity/tick reconciliation prevent false savings; parity and 48 terminal A/B remain.
 - Added unobserved Node/V8 simulator-only median CPU A/B at 120/300 units 1×/10×, five timed samples each after warm-ups. This is diagnostic, not measured Safari/iPhone 14 Pro Max performance; review receipt before accepting performance budget and any gameplay release.
 - No combat runtime, PWA hashes, assets, main or production modified. Full fresh-head CI and receipt required.
+
+
+### Oct 16 — Shipped Turtle Guardian Shell on QA, not main/prod
+
+- Previous head `ea766929b1bce69dbf3ad6c18815f0866d051d62` 41/41 green push CI (run 38851560553). Measured 48 terminal matched source trials L4 wins 11→13, persistent real fronts 113→110; L5 wins 13→14, persistent fronts 100→112. Immediate local *real* HP saved after dodge + defender cap: L4 11171.91, L5 40804.42 across 24 matches each. Node 300 10× sim median +3.4%; no real Safari guarantee.
+- L4/L5 Turtle gains Guardian Shell nearby ally protection, 18%/0.12 and 28%/0.14, never self-protect, strongest-only comparison to Knight Bastion. Real core caches only evolved Turtle references per deployment; Guardian cue mint-ink shield, public ability text accurate. Existing Ricochet HP reflection unchanged. Root versioned runtime changed, 42 pinned SHA-256 hashes regenerated and cache version updated.
+- Permanent guardian prototype QA now measures *shipped* variant vs reconstructed old no-guardian source, with direct rule fixtures, real 48 completed A/B, 120/300 1×/10× CPU and state checks. No merge or prod deployment. FULL NEW-HEAD CI REQUIRED before success claim; physical iPhone 14 Pro Max Safari still manually untested.

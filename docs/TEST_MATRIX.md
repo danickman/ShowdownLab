@@ -745,3 +745,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] All guardian events matched to the exact incoming defender/tick and post-dodge/remaining-HP capped hit; immediately realized prevented HP must be nonzero but never exceed nominal pre-dodge reduction
 - [ ] Keep full-state observational parity, genuine counterplay and terminal wins/fronts; distinguish event-local HP saving from whole-match counterfactual
 - [ ] Record balanced-order baseline vs guardian Node CPU median ratios with 5 repetitions at 120/300, 1×/10× before any runtime ship; real iPhone 14 Pro Max manual acceptance pending
+
+
+### Turtle Guardian Shell runtime (QA only)
+- [ ] L4 18% ally protection inside 0.12, L5 28% inside 0.14; only evolved living allied Turtle, not self
+- [ ] Two Turtles and Knight Bastion never stack; strongest single protective effect applies; historical exact no-guard source comparisons and solo Beetank/Sniper/Assassin remain valid
+- [ ] Full 48 terminal match source A/B, real reflected HP and locally saved HP distinguished from nominal, persistent independent real HP-damage fronts, exact source observer parity, 300 density at 1×/10×
+- [ ] 42 pinned PWA runtime digests, new runtime/cache URLs, mint comic guardian cue and Guide descriptions; physical iPhone 14 Pro Max Safari UX/FPS/thermal manual gate OPEN

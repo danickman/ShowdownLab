@@ -1,4 +1,8 @@
-# Turtle guardian candidate — source A/B research (NOT SHIPPED)
+# Turtle Guardian Shell — research and QA-only implementation
+
+**Oct 16 — Turtle Guardian Shell QA shipped (not main/production):** After 48 completed paired true match trials, immediately realized post-dodge/HP-capped saved HP L4 11,171.91 / L5 40,804.42 across 24 candidate matches/tier. L4 18% within 0.12; L5 28% within 0.14, protects teammates, not itself; strongest nearby Knight or Turtle protection only. Supports Turtle's defense role vs Beetank proactive damage. Medians CPU 300@10× +3.4% Node (not iPhone FPS). Authoritative source, mint comic shelter shield cue, Guide descriptions, root versioning and all 42 atomic integrity hashes updated. Historical no-guardian physics reconstructed as tight A/B, full fresh-head CI required. Physical iPhone 14 Pro Max Safari still manual. [Study](TURTLE_GUARDIAN_PROTOTYPE_2026-10-16.md).
+
+
 
 **October 16, 2026 · QA branch read-only prototype**
 

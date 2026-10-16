@@ -7,7 +7,7 @@ const specs={
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
  beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},
- turtle:{name:'Ricochet Shell',l4:'Ricochet Shell reflects 30% of actual damage taken from attackers within 0.10 arena units.',l5:'Reflect 45% of actual damage taken within 0.10 arena units.'},
+ turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies take 18% less damage within 0.12 arena units (strongest protection only).',l5:'Reflect 45% of actual close-contact damage; nearby allies take 28% less damage within 0.14 arena units (no guard stacking).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Axe swings splash 40% damage onto up to three nearby enemies.',l5:'Wider cleave splashes 65% damage onto up to five enemies.'},
  goose:{name:'Thunder Honk',l4:'Thunder Honk deals 45% attack damage and stuns enemies for 44 ticks (about 0.73 seconds).',l5:'75% attack damage, wider radius and 64-tick stun (about 1.07 seconds).'}
@@ -21,13 +21,18 @@ function outgoing(a,t,damage,units,tick){
  if(a.type==='goblin'){const count=Math.min(r===2?4:3,units.filter(u=>u!==a&&u.team===a.team&&u.type==='goblin'&&u.hp>0&&near(u,a,.10)).length);if(count){cue(a,'pack',tick,t);return damage*(1+count*(r===2?.3:.2))}}
  return damage;
 }
-function incoming(t,damage,units,tick,bastions=units){
+function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){
  if(rank(t)&&t.type==='mole'){damage*=rank(t)===2?.5:.65;cue(t,'carapace',tick)}
  let protection=0,protector=null;
  for(const u of bastions)if(u.team===t.team&&u.hp>0&&u.type==='knight'&&rank(u)&&near(u,t,rank(u)===2?.12:.09)){
   const strength=rank(u)===2?.3:.2;if(strength>protection){protection=strength;protector=u}
  }
- if(protection){damage*=1-protection;cue(protector,'bastion',tick,t)}
+ let shelter=0,guardian=null;
+ for(const u of turtleGuardians)if(u!==t&&u.team===t.team&&u.hp>0&&u.type==='turtle'&&rank(u)&&near(u,t,rank(u)===2?.14:.12)){
+  const amount=rank(u)===2?.28:.18;if(amount>shelter){shelter=amount;guardian=u}
+ }
+ if(shelter>protection){damage*=1-shelter;cue(guardian,'shelter',tick,t)}
+ else if(protection){damage*=1-protection;cue(protector,'bastion',tick,t)}
  return damage;
 }
 function afterHit(a,t,dealt,units,tick){
