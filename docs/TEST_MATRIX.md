@@ -676,3 +676,13 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Dedicated `check-assassin-execution-payoff.cjs` real event, true HP damage, 1×/10× no-Assassin 80/120/300 source parity, actual 20/40 fronts and counterplay. Existing Ultimate unit thresholds now explicit.
 - [ ] New-head all Actions, browser portrait 430×932 DPR3, offline SHA/rollback and role sample complete success; only then consider this QA branch green.
 - [ ] Actual iPhone 14 Pro Max Safari readability/performance/thermal and more rigorous draft-evolution ROI.
+
+
+### Oct 15/16 — Target retention independent holdout and normalized role-value QA
+- [x] 40 completed 20-body calibration and separate **60 complete battle six-seed** holdout, five matchup mixes × mirrored sides; record independent positive HP damage-front persistence, winner changes and role damage, not proximity.
+- [x] Correct lower-bounded nearest-scan pruning before accepting any discounted target score; reject fake gains caused by skipping legally better scores.
+- [x] Reject blanket/nearby and bounded bruiser target stickiness: limited persistent-front improvements did not justify 9–12 changed winners in 60 games or mixed damage loss for Turtle/Goblin.
+- [x] Existing 32-terminal `check-completed-match-quality.cjs` adds per-role original-deployment denominator and true attributed HP per deployed fighter, with finite/nonzero checks and original exact observer-vs-pure-state parity.
+- [ ] Full exact new-head CI green with normalized receipts, 300 stress, rooted offline 42 SHA resources and 430×932 DPR3 Chromium portrait.
+- [ ] Actual physical iPhone **14 Pro Max** Safari manually accepted.
+- [ ] Future measured selective contact ownership for multiple genuine 20-body mid/late fronts; protect 40+ and weak-role utility.

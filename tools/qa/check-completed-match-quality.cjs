@@ -41,7 +41,10 @@ function completed(source,c,watch=true){
   return Array.from({length:c.count/2},(_,i)=>({type:pat[i%pat.length],level:[1,2,4,5][i%4],squad:Math.floor(i/5)}));
  };
  sim.configure({seed:c.seed,speed:10,onState:()=>{}});
- sim.deploy(roster('blue'),roster('red'));sim.setRunning(true);
+ const blueRoster=roster('blue'),redRoster=roster('red');
+ const roleDeployed=Object.fromEntries(roles.map(r=>[r,0]));
+ for(const entry of [...blueRoster,...redRoster])roleDeployed[entry.type]++;
+ sim.deploy(blueRoster,redRoster);sim.setRunning(true);
  for(;frames<450;frames++){
   now+=16.667;const actions=[...queue.values()];queue.clear();for(const action of actions)action(now);
   state=sim.getState();sha.update(JSON.stringify(state)+'\n');
@@ -81,7 +84,7 @@ function completed(source,c,watch=true){
   separated:fronts.windowsWithTwoGeographicallySeparatedDamageComponents,
   persistent:fronts.consecutivePersistentMultiFrontWindows,
   damageWindows:fronts.damageWindows,fullWindows:fronts.totalWindows,
-  phase,lifespan,teamDamage:teamData,roleDamage:roleData};
+  phase,lifespan,teamDamage:teamData,roleDamage:roleData,roleDeployed};
 }
 // The observer must not change any complete state, frame-to-frame, across both scales.
 for(const count of [20,40]){
@@ -99,13 +102,15 @@ for(const count of [20,40]){
  const a=cases.filter(x=>x.count===count);
  const sum=k=>a.reduce((n,x)=>n+x[k],0);
  const dmgRole=Object.fromEntries(roles.map(r=>[r,+a.reduce((n,x)=>n+x.roleDamage[r].damage,0).toFixed(2)]));
+ const deployedRole=Object.fromEntries(roles.map(r=>[r,a.reduce((n,x)=>n+x.roleDeployed[r],0)]));
+ const damagePerDeployed=Object.fromEntries(roles.map(r=>[r,deployedRole[r]>0?+(dmgRole[r]/deployedRole[r]).toFixed(2):null]));
  const damage=+sum('attributedDamage').toFixed(2);
  summary[count]={matches:a.length,completed:a.filter(x=>x.winner).length,totalTicks:sum('tick'),
   meanBattleTicks:Math.round(sum('tick')/a.length),damagePositiveEvents:sum('attributedHitCount'),
   totalAttributedDamage:damage,realSeparatedWindows:sum('separated'),
   persistentIndependentWindows:sum('persistent'),damagingWindows:sum('damageWindows'),
   dragonSharePercent:+(dmgRole.dragon/damage*100).toFixed(1),
-  roleDamage:dmgRole,
+  roleDamage:dmgRole,roleDeployed:deployedRole,roleDamagePerDeployedFighter:damagePerDeployed,
   phases:Object.fromEntries(['early','middle','late'].map(p=>[p,{
    damagingWindows:a.reduce((n,x)=>n+x.phase[p].damageWindows,0),
    separatedWindows:a.reduce((n,x)=>n+x.phase[p].separated,0)}]))};
@@ -113,15 +118,22 @@ for(const count of [20,40]){
  assert(summary[count].damagePositiveEvents>500,'actual damage events missing at '+count);
  assert(summary[count].realSeparatedWindows>=(count===20?16:140),'independent damage fronts severely regressed at '+count);
  assert(summary[count].persistentIndependentWindows>=(count===20?1:40),'persistent genuine fronts regressed at '+count);
- for(const role of roles)assert(summary[count].roleDamage[role]>0,'role contributes zero actual HP damage: '+role+' at '+count);
+ for(const role of roles){
+  assert(summary[count].roleDamage[role]>0,'role contributes zero actual HP damage: '+role+' at '+count);
+  assert(summary[count].roleDeployed[role]>0,'missing actual deployed role: '+role+' at '+count);
+  assert(Number.isFinite(summary[count].roleDamagePerDeployedFighter[role])&&summary[count].roleDamagePerDeployedFighter[role]>0,
+   'invalid per-deployed-fighter contribution: '+role+' at '+count);
+  const sampleSum=a.reduce((n,x)=>n+x.roleDeployed[role],0);
+  assert.equal(sampleSum,summary[count].roleDeployed[role],'role population denominator drift: '+role);
+ }
  assert(summary[count].dragonSharePercent<=50,'Dragon dominates attributed damage beyond documented safety threshold at '+count);
 }
 // Do not assert equal per-role DPS (tanks/CC have non-damage utility).
 // Current 20-body baseline has very few persistent fronts; it is a tracked
 // quality deficiency, not a justification to stage fake combat or weaken QA.
 const report={status:'Completed terminal-quality baseline on green QA runtime; runtime unchanged',
- caveat:'Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
+ caveat:'Per-deployed-fighter damage divides by all original fighters of each type, including non-survivors and all levels; it is NOT per-level DPS. Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
  summary,cases};
 if(process.env.QA_COMPLETED_BATTLES_RECEIPT)fs.writeFileSync(process.env.QA_COMPLETED_BATTLES_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('COMPLETED MATCH QUALITY '+JSON.stringify(summary));
-console.log('PASS: 32 full terminal matches, true damage-connected fronts, phase survival, role contributions, 20/40 exact pure-source state parity and baseline-quality floors');
+console.log('PASS: 32 full terminal matches, true damage-connected fronts, phase survival, role deployment-normalized attacker HP, 20/40 exact pure-source state parity and baseline-quality floors');
