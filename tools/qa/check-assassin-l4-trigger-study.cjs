@@ -175,18 +175,32 @@ for(const name of names){
   };
  }
 }
+// A source-only candidate is allowed to FAIL the release-safety threshold.
+// Such a failure must appear in the report as REJECTED rather than prevent
+// the audit from exporting its genuine fully-terminal results. The *current*
+// gameplay baseline is still strictly gated, and no candidate ships here.
+assert(summary.baseline.standard.byPopulation[20].persistent>=1,'current runtime lost small-army true multi-front baseline');
+assert(summary.baseline.standard.byPopulation[40].persistent>=40,'current runtime lost 40-fighter true front baseline');
+const acceptance={};
 for(const name of names.slice(1)){
- assert(summary[name].standard.byPopulation[20].persistent>=1,
-  'cannot erase actual small-army front '+name);
- assert(summary[name].standard.byPopulation[40].persistent>=40,
-  'existing nontrivial full-pop independent fight gate '+name);
+ const standard=summary[name].standard.byPopulation,control=summary.baseline.standard.byPopulation;
+ const rec={
+  retained20:standard[20].persistent>=control[20].persistent,
+  retained40:standard[40].persistent>=control[40].persistent,
+  retainedSeparated20:standard[20].separated>=control[20].separated,
+  retainedSeparated40:standard[40].separated>=control[40].separated,
+  avoidedHeldoutWinLoss:summary[name]['unseen-seeds'].wins>=summary.baseline['unseen-seeds'].wins,
+  avoidedArmoredCounterFlip:summary[name]['counter-stress'].winnerFlips===0,
+  meaningfulExecutionIncrease:summary[name].prespecified.trueExecutions>summary.baseline.prespecified.trueExecutions,
+ };
+ acceptance[name]={...rec,verdict:Object.values(rec).every(Boolean)?'REVIEW_FOR_LATER_RELEASE':'REJECTED'};
 }
 assert(summary.baseline.prespecified.trueExecutions>0,'real L4 Execution must be exercised');
 const report={
  status:'L4 Assassin Execution source-only trigger study, NOT A GAMEPLAY CHANGE',
  method:'4 source variants × 104 fully terminal matches: 32 standard, 24 prespecified selected L4 Assassin, 24 unseen seeds, 24 noKnight/armored heavy. Pre-hit real Execution events, true backstab count, actual post-armor/dodge/HP-cap direct HP by selected L4 Assassins, meaningful role counter damage, positive-attacker-HP independent fronts and 80/120/300 no-Assassin 1x/10x state parity. L5 solo full physical frame SHA unchanged; observer full frame SHA unchanged.',
  warning:'Do not accept an L4 buff merely for increasing trigger counts. Need win/counter/front stability, Fighter Guide and PWA integrity if later shipping. Match recordings use Node VM, not iPhone 14 Pro Max Safari.',
- summary,fixtures};
+ summary,acceptance,fixtures};
 if(process.env.QA_L4_ASSASSIN_RECEIPT)fs.writeFileSync(process.env.QA_L4_ASSASSIN_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('ASSASSIN L4 SOURCE STUDY '+JSON.stringify(summary));
-console.log('PASS: four versions x104 real terminal matches, original L5 frame SHA, 80/120/300 non-Assassin physical parity; no gameplay patch');
+console.log('PASS: four versions x104 terminal SOURCE-ONLY research matches; rejected source candidates explicitly FAIL promotion without failing validation of measured evidence; L5 and unaffected 300 physics SHA identical; no game patch');
