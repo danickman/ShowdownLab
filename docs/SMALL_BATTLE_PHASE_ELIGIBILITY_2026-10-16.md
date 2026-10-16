@@ -37,3 +37,8 @@ The existing completed-match QA records living **blue** and **red** fighter coun
 A window is *eligible* if enough actual opposing units remain; it is NOT automatically a fight. Approximate window start survivor state is accurate to one RAF (~10 simulation ticks at 10x). Do not claim browser/FPS evidence from the Node simulation. Continue targeting mid-match 4v4+ authentic separate battles while preserving Turtle, Assassin, Goblin and existing role counters, 40+ fronts and 300-body performance.
 
 **No combat, VFX, source art, release hashes or production content changed.**
+
+
+## Oct 16 follow-up — damage actually connected locally
+
+A separate read-only QA observation now measures **positive primary melee attacker-target HP damage at <=0.13 arena separation**, independent of long-range crossfire, without equating proximity with fighting. Source A/B 20 full battles found no ranged-crossfire-caused merged-front artifacts, and no proposed combat change met the role-preserving multiple-front standard. See [SMALL_BATTLE_LOCAL_DAMAGE_2026-10-16.md](SMALL_BATTLE_LOCAL_DAMAGE_2026-10-16.md). All full-state snapshots and runtime unchanged.

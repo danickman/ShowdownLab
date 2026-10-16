@@ -13,7 +13,23 @@ const damageFronts=vm.runInNewContext(graph.slice(graphStart,graphEnd)+';damageF
 const ANCHOR='const dealt=Math.min(t.hp,dmg);';
 assert.equal(core.split(ANCHOR).length,2,'true HP attribution instrument anchor changed');
 const observed=core.replace(ANCHOR,ANCHOR+
- 'if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,role:a.type,team:a.team,damage:dealt,x:t.x,y:t.y});');
+ 'if(dealt>0&&a&&a.team!==t.team)window.__qaHit({tick,attacker:a.id,target:t.id,role:a.type,team:a.team,damage:dealt,x:t.x,y:t.y,distance:Math.hypot(a.x-t.x,a.y-t.y),secondary:!!secondary});');
+
+const fixture=[
+ {tick:1,attacker:1,target:2,team:'blue',role:'knight',damage:8,x:.2,y:.25,distance:.07,secondary:false},
+ {tick:2,attacker:1,target:2,team:'blue',role:'knight',damage:8,x:.2,y:.25,distance:.07,secondary:false},
+ {tick:3,attacker:3,target:4,team:'red',role:'goblin',damage:6,x:.8,y:.75,distance:.06,secondary:false},
+ {tick:4,attacker:3,target:4,team:'red',role:'goblin',damage:6,x:.8,y:.75,distance:.06,secondary:false},
+ {tick:5,attacker:5,target:2,team:'blue',role:'dragon',damage:9,x:.2,y:.25,distance:.31,secondary:false},
+ {tick:6,attacker:5,target:4,team:'blue',role:'dragon',damage:9,x:.8,y:.75,distance:.39,secondary:false}
+];
+const isMeleeContact=h=>h.distance<=.13&&!h.secondary&&h.role!=='dragon'&&h.role!=='sniper';
+assert.equal(damageFronts(fixture,30).windowsWithTwoGeographicallySeparatedDamageComponents,0,
+ 'source-linked long-range Dragon attacks should merge previously independent fronts in fixture');
+assert.equal(damageFronts(fixture.filter(isMeleeContact),30).windowsWithTwoGeographicallySeparatedDamageComponents,1,
+ 'two actual independent close melee fights must survive ranged-crossfire exclusion');
+assert.equal(damageFronts([],30).windowsWithTwoGeographicallySeparatedDamageComponents,0,
+ 'no actual HP damage cannot be called a melee fight');
 const roles=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
 const rosters={
  mixed:[roles,roles.slice().reverse()],
@@ -61,6 +77,9 @@ function completed(source,c,watch=true){
  const trace=sha.digest('hex');
  if(!watch)return {trace,winner:state.winner,tick:state.tick};
  const fronts=damageFronts(hits,state.tick,30);
+ const closeHits=hits.filter(isMeleeContact);
+ const closeFronts=damageFronts(closeHits,state.tick,30);
+ assert.equal(closeFronts.totalWindows,fronts.totalWindows,'paired true damage/local melee window alignment');
  const roleData=Object.fromEntries(roles.map(r=>[r,{hits:0,damage:0}]));
  const teamData={blue:{hits:0,damage:0},red:{hits:0,damage:0}};
  for(const h of hits){
@@ -69,7 +88,7 @@ function completed(source,c,watch=true){
  }
  for(const r of roles)roleData[r].damage=+roleData[r].damage.toFixed(2);
  for(const r of ['blue','red'])teamData[r].damage=+teamData[r].damage.toFixed(2);
- const bucket=()=>({totalWindows:0,damageWindows:0,separated:0,eligibleWindows:0,eligibleDamageWindows:0,eligibleSeparatedWindows:0,lopsidedWindows:0});
+ const bucket=()=>({totalWindows:0,damageWindows:0,separated:0,localMeleeDamageWindows:0,localMeleeSeparated:0,crossfireMergedWindows:0,eligibleWindows:0,eligibleDamageWindows:0,eligibleSeparatedWindows:0,lopsidedWindows:0});
  const phase={early:bucket(),middle:bucket(),late:bucket()};
  for(const w of fronts.windows){
   const f=(w.fromTick+w.toTick)/(2*state.tick);
@@ -77,6 +96,10 @@ function completed(source,c,watch=true){
   phase[p].totalWindows++;
   if(w.hits>0)phase[p].damageWindows++;
   if(w.separatedPairs>0)phase[p].separated++;
+  const melee=closeFronts.windows[Math.floor((w.fromTick-1)/30)];
+  if(melee.hits>0)phase[p].localMeleeDamageWindows++;
+  if(melee.separatedPairs>0)phase[p].localMeleeSeparated++;
+  if(melee.separatedPairs>0&&w.separatedPairs===0)phase[p].crossfireMergedWindows++;
   // A viable opportunity requires living opponents; it is NOT a claim of fighting.
   const alive=snapshots.find(s=>s.tick>=w.fromTick)||snapshots.at(-1);
   if(alive.blue>=4&&alive.red>=4){
@@ -103,6 +126,12 @@ function completed(source,c,watch=true){
   separated:fronts.windowsWithTwoGeographicallySeparatedDamageComponents,
   persistent:fronts.consecutivePersistentMultiFrontWindows,
   damageWindows:fronts.damageWindows,fullWindows:fronts.totalWindows,
+  localMeleePositiveHits:closeHits.length,
+  localMeleeDamage:+closeHits.reduce((n,h)=>n+h.damage,0).toFixed(2),
+  localMeleeDamageWindows:closeFronts.damageWindows,
+  localMeleeSeparatedWindows:closeFronts.windowsWithTwoGeographicallySeparatedDamageComponents,
+  localMeleePersistentWindows:closeFronts.consecutivePersistentMultiFrontWindows,
+  crossfireMergedWindows:phase.early.crossfireMergedWindows+phase.middle.crossfireMergedWindows+phase.late.crossfireMergedWindows,
   phase,phaseSurvivors,lifespan,teamDamage:teamData,roleDamage:roleData,roleDeployed};
 }
 // The observer must not change any complete state, frame-to-frame, across both scales.
@@ -128,11 +157,20 @@ for(const count of [20,40]){
   meanBattleTicks:Math.round(sum('tick')/a.length),damagePositiveEvents:sum('attributedHitCount'),
   totalAttributedDamage:damage,realSeparatedWindows:sum('separated'),
   persistentIndependentWindows:sum('persistent'),damagingWindows:sum('damageWindows'),
+  localMeleePositiveHits:sum('localMeleePositiveHits'),
+  localMeleeDamage:+sum('localMeleeDamage').toFixed(2),
+  localMeleeDamageWindows:sum('localMeleeDamageWindows'),
+  localMeleeSeparatedWindows:sum('localMeleeSeparatedWindows'),
+  localMeleePersistentWindows:sum('localMeleePersistentWindows'),
+  crossfireMergedWindows:sum('crossfireMergedWindows'),
   dragonSharePercent:+(dmgRole.dragon/damage*100).toFixed(1),
   roleDamage:dmgRole,roleDeployed:deployedRole,roleDamagePerDeployedFighter:damagePerDeployed,
   phases:Object.fromEntries(['early','middle','late'].map(p=>[p,{
    damagingWindows:a.reduce((n,x)=>n+x.phase[p].damageWindows,0),
    separatedWindows:a.reduce((n,x)=>n+x.phase[p].separated,0),
+   localMeleeDamageWindows:a.reduce((n,x)=>n+x.phase[p].localMeleeDamageWindows,0),
+   localMeleeSeparatedWindows:a.reduce((n,x)=>n+x.phase[p].localMeleeSeparated,0),
+   crossfireMergedWindows:a.reduce((n,x)=>n+x.phase[p].crossfireMergedWindows,0),
    totalWindows:a.reduce((n,x)=>n+x.phase[p].totalWindows,0),
    eligibleWindows:a.reduce((n,x)=>n+x.phase[p].eligibleWindows,0),
    eligibleDamageWindows:a.reduce((n,x)=>n+x.phase[p].eligibleDamageWindows,0),
@@ -147,6 +185,8 @@ for(const count of [20,40]){
  for(const p of ['early','middle','late']){
   const v=summary[count].phases[p];
   assert(v.eligibleSeparatedWindows<=v.separatedWindows,'false eligible separated front '+p);
+  assert(v.localMeleeDamageWindows<=v.damagingWindows,'local hit windows exceed all positive damage windows '+p);
+  assert(v.crossfireMergedWindows<=v.localMeleeSeparatedWindows,'crossfire merger not sourced by actual two local melee fights '+p);
   assert(v.eligibleDamageWindows<=v.damagingWindows,'false eligible damage '+p);
   assert(v.eligibleWindows+v.lopsidedWindows<=v.totalWindows,'side-survival classes overlap '+p);
   assert(v.balanced4v4MidpointCases+v.oneTeamAtMost2MidpointCases<=a.length,'midpoint classes overlap '+p);
@@ -154,6 +194,9 @@ for(const count of [20,40]){
  if(count===20)assert(summary[count].phases.early.balanced4v4MidpointCases>=12,
   '20-fighter early eligible opponent count regressed');
  assert(summary[count].damagePositiveEvents>500,'actual damage events missing at '+count);
+ assert(summary[count].localMeleePositiveHits>0&&summary[count].localMeleePositiveHits<=summary[count].damagePositiveEvents,'no genuine local melee evidence '+count);
+ assert(summary[count].localMeleeDamage>0&&summary[count].localMeleeDamage<=summary[count].totalAttributedDamage,'local melee HP exceeds all credited HP '+count);
+ assert(summary[count].crossfireMergedWindows<=summary[count].localMeleeSeparatedWindows,'synthetic crossfire merger '+count);
  assert(summary[count].realSeparatedWindows>=(count===20?16:140),'independent damage fronts severely regressed at '+count);
  assert(summary[count].persistentIndependentWindows>=(count===20?1:40),'persistent genuine fronts regressed at '+count);
  for(const role of roles){
@@ -170,8 +213,8 @@ for(const count of [20,40]){
 // Current 20-body baseline has very few persistent fronts; it is a tracked
 // quality deficiency, not a justification to stage fake combat or weaken QA.
 const report={status:'Completed terminal-quality baseline on green QA runtime; runtime unchanged',
- caveat:'Eligible windows mean four or more actually living fighters on each side near a 30-tick window start, not proof of distinct fights. Living side counts are sampled at every RAF (~10 sim ticks at 10x) and phase centers are 1/6,1/2,5/6 of finished battle time. Per-deployed-fighter damage divides by all original fighters of each type, including non-survivors and all levels; it is NOT per-level DPS. Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
+ caveat:'Local melee means a strictly positive attacker-attributed primary HP hit from a non-Dragon/non-Sniper attacker whose true attacker-to-target distance is <=0.13 arena units at hurt() time; it excludes splash/secondary, burns and projectile crossfire. Crossfire-merged windows have two independent real local melee fights but no independent full-source damage graph after ranged connections; the local metric is diagnostic and DOES NOT replace the strict all-role independent-front acceptance floor. Eligible windows mean four or more actually living fighters on each side near a 30-tick window start, not proof of distinct fights. Living side counts are sampled at every RAF (~10 sim ticks at 10x) and phase centers are 1/6,1/2,5/6 of finished battle time. Per-deployed-fighter damage divides by all original fighters of each type, including non-survivors and all levels; it is NOT per-level DPS. Attacker-attributed positive HP damage excludes source-less Dragon burn, Turtle reflection and spells; solo stuns/guard utility not equivalent to DPS. Front persistence requires real independent attacker-target groups in adjacent 30-tick windows; does not infer actual mobile FPS. 20-body persistence remains an explicit design weakness.',
  summary,cases};
 if(process.env.QA_COMPLETED_BATTLES_RECEIPT)fs.writeFileSync(process.env.QA_COMPLETED_BATTLES_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('COMPLETED MATCH QUALITY '+JSON.stringify(summary));
-console.log('PASS: 32 terminal matches; damage-edge fronts conditioned on real 4v4 opportunity; role-normalized HP; physical observer parity');
+console.log('PASS: 32 terminal matches; true all-role and close-melee HP damage graph/crossfire truth; 4v4 opportunity; role-normalized HP; physical observer parity');

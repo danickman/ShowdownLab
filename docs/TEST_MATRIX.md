@@ -693,3 +693,14 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Hit-grounded 90-tick retarget A/B across 30 completed 20 plus 30 40-body matches, with corrected nearest candidate admissibility. Reject variants which fail persistent damage-front gain and reduce low-damage role value; NO runtime changes.
 - [x] Extend 32-term-match permanent test: per-RAF living blue/red, eligible 4v4+ vs lopsided ≤2 by 30-tick damage window, 1/6/1/2/5/6 phase snapshots, summary and no fictional front criteria. Preserve previous terminal, positive HP graph, role denominators and observer state parity.
 - [ ] Full exact-head QA Actions and archived new phase receipt. Primary iPhone 14 Pro Max physical Safari still manual.
+
+
+
+### Oct 16 — true melee contact and crossfire front diagnostic
+- [x] Confirm complete-matches and living side eligibility; no fake front counts from target proximity or action intent.
+- [x] Instrument actual attacker-to-target distance and primary-vs-secondary **positive HP damage** in QA only; preserve full deterministic state parity.
+- [x] Synthetic fixture: true close melee fronts remain two while crossfire Dragon merges full attacker-target graph into one; all-zero events never count as battle.
+- [x] 20 completed source samples: all-role 30 separated, direct-close melee 10, no hidden independent melee front swallowed by ranged links.
+- [x] Reject phase-qualified +0.02/.035/.05 target-ownership and alternative slot geometry without stable contribution/persistence across fronts; no combat/runtime modifications.
+- [ ] Full *new-head* CI including 32 finished 20/40 true-damage front/role QA, portrait iPhone 14 Pro Max CSS proxy, PWA SHA pins, and 300-body counterplay.
+- [ ] Physical iPhone 14 Pro Max Safari device acceptance; do not claim Chromium = mobile FPS.
