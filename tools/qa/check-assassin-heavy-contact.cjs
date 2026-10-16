@@ -6,7 +6,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cryp
 const root=path.resolve(__dirname,'../..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const shipped=read('v3/legacy-sim-core.js');
-const prefix="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;";
+const prefix="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;trackTarget(u,t.id);";
 const previous=prefix+"/* The Dragon's wide standing collider otherwise prevents any close backstab. Keep armored tank counters unchanged. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;";
 const current=prefix+"/* Match attack reach to the untraversable standing collider, not an artificial melee DPS boost. Dragon retains its verified +.002 access margin; armored defenders retain their armor and shell counters. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):(t.type==='beetank'||t.type==='turtle')?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)):u.range/500;";
 assert.equal(shipped.split(current).length,2,'only audited Assassin contact rule permitted');

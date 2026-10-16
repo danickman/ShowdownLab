@@ -713,3 +713,6 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Root/core query `pressurecache1`, all 42 SHA-256 PWA resources repinned; no visuals/Ultimate changes.
 - [ ] New head complete CI: direct cache parity job, prior pressure A/B research, local-front/lane, Assassin/Turtle counters, 300, browser PWA and atomic offline integrity all green.
 - [ ] Physical iPhone **14 Pro Max** Safari 1× performance and actual multiple localized combat QA; Node benchmark ratios are *not* phone FPS.
+
+- [x] Update old stress5c and two armored-Assassin contact CI comparators to the live pressure-cache source contract without removing baseline state/counterplay assertions.
+- [ ] Verify fresh exact-head CI entire matrix after source-check maintenance; 42 SW pins unchanged since pressurecache1.

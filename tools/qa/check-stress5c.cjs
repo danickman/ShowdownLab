@@ -5,10 +5,11 @@ const {performance}=require('perf_hooks');
 const path=require('path'),root=path.resolve(__dirname,'../..');
 const read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
 const optimized=read('legacy-sim-core');
-const optimizedNearest='const pressureByTarget=new Map();for(const a of units)if(a.team===u.team&&a.hp>0)pressureByTarget.set(a.target,(pressureByTarget.get(a.target)||0)+1);';
+const optimizedNearest='const pressureByTarget=pressureCache[u.team];';
 const baselineNearest='';
 const optimizedPressure='pressure=pressureByTarget.get(v.id)||0';
 const baselinePressure='pressure=units.reduce((n,a)=>n+(a.team===u.team&&a.hp>0&&a.target===v.id?1:0),0)';
+// This original-vs-reduce probe now keeps cache bookkeeping on both arms to isolate lookup from rescanning.
 // RC4's later universal collision bound requires this radius array in BOTH
 // benchmark variants. Compare 5C's original per-pair radius computation and
 // pressure-counting logic without deleting the live broadphase dependency.

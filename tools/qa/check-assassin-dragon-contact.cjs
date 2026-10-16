@@ -5,9 +5,9 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=f=>fs.readFileSync(path.join(root,f),'utf8');
 const shipped=read('v3/legacy-sim-core.js');
-const before="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;const r=u.range/500;";
-const after="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;/* Match attack reach to the untraversable standing collider, not an artificial melee DPS boost. Dragon retains its verified +.002 access margin; armored defenders retain their armor and shell counters. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):(t.type==='beetank'||t.type==='turtle')?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)):u.range/500;";
-const oldDragon="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;u.target=t.id;/* The Dragon's wide standing collider otherwise prevents any close backstab. Keep armored tank counters unchanged. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;";
+const before="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;trackTarget(u,t.id);const r=u.range/500;";
+const after="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;trackTarget(u,t.id);/* Match attack reach to the untraversable standing collider, not an artificial melee DPS boost. Dragon retains its verified +.002 access margin; armored defenders retain their armor and shell counters. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):(t.type==='beetank'||t.type==='turtle')?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)):u.range/500;";
+const oldDragon="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;trackTarget(u,t.id);/* The Dragon's wide standing collider otherwise prevents any close backstab. Keep armored tank counters unchanged. */const r=t.type==='dragon'?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;";
 assert.equal(shipped.split(after).length,2,'review any changes to Dragon-only Assassin contact correction');
 const previousDragon=shipped.replace(after,oldDragon);
 const original=previousDragon.replace(oldDragon,before);
