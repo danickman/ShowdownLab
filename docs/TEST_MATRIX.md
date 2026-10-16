@@ -834,3 +834,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 312 terminal A/B battles: L4 only attack-ready, real Sniper/Dragon target, beyond actual reach but within 0.30 arena; 1.45 baseline vs movement multipliers 1.65 and 1.85
 - [ ] Source true damage/HP/fronts, first and unseen winner stability, remaining Beetank/Turtle counters, current 20/40 full independent-front parity, actual struck-backstab/Execution conversion
 - [ ] Exact read-only observer RAF SHA, unchanged L5 1v1 vs five counter classes and unaffected 80/120/300 at 1× and 10×, plus evolved-L4 large-pop CPU acceptance before any runtime update
+
+
+### L4 Assassin last-mile movement experiments — completed / rejected
+- [x] 312 truly completed 20/40 matched source games with observed/raw SHA, unaffected five L5 solo counters and non-L4 80/120/300 1×/10× SHA, exact source CI 38957537337 dedicated study green
+- [x] 1.65 gives selected Assassin +3.9% HP but loses wins 13→12, standard 20 persistent fronts 1→0, standard 40 fronts 58→34
+- [x] 1.85 gives selected +12.5% HP but loses wins 13→12, standard 40 fronts 58→41 and separated HP windows 192→186; NO speed patch shipped
+- [ ] Profile physical Assassin slotPoint destination distance vs actual melee reach, physical collision/separate() pushback and two different nearest() assignments in one tick; guard by real positive HP-damage fronts at 20/40 and high-pop 300 budget before another action change
