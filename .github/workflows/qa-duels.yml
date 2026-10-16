@@ -1076,3 +1076,25 @@ jobs:
           name: knight-base-256-candidate
           path: tools/qa/knight-candidate
           if-no-files-found: error
+
+  borderline-draft-decisions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate borderline L4 draft source research syntax
+        run: node --check tools/qa/check-borderline-draft-decisions.cjs
+      - name: Compare borderline evolutions with real terminal unseen outcomes
+        env:
+          QA_BORDERLINE_RECEIPT: borderline-draft-decisions.json
+        run: node tools/qa/check-borderline-draft-decisions.cjs
+      - name: Archive physical last-hit and true HP/front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: borderline-draft-decisions
+          path: borderline-draft-decisions.json
+          if-no-files-found: warn

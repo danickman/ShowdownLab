@@ -881,3 +881,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Turtle protection is physically real (4,615 L4; 13,873 L5 HP per-event marginal saves) but extremes cause 8/24 wins irrespective of choice (8 swarm wins, 16 armor/backline losses). Find winnable borderline utility, not simple percentage buffs.
 - [x] Source studies preserved conditionally on actual combat-source or own-study change in qa-research-archive workflow, 816 redundant normal CI matches removed. Existing original counter/front/300/PWA/browser regressions remain required.
 - [ ] Design truly tier-4 Assassin backline threat-denial action and Turtle bounded ally-intervention; strict matched 20/40 physical fronts/winners and high-density CPU; physical iPhone 14 Pro Max Safari manual gate.
+
+
+### Oct 16 — borderline L4 draft choices (source study)
+- [ ] Exact-head Action: 768 discovery plus 128 unseen real terminal matches, 16 physical frame-hash parity pairs and actual physical HP/Guardian/reflection/damaging-front/direct-fatal-hit ID receipts
+- [ ] Review unseen win flips vs recruit/Beetank and counter/front sustainability before prototyping L4 role-specific intervention
+- [ ] Physical iPhone 14 Pro Max Safari acceptance remains OPEN
