@@ -759,3 +759,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Standard 16 genuine 20/40 matches each: 20 real persistent fronts >=1, 40 >=40 with separated windows >=140 and all roles real HP damage; no relaxing original source gate
 - [ ] In dedicated 48 completed Turtle evolution matches: L4 and L5 real win/fronts and immediate real prevented HP source, solo counter truths and deterministic parity
 - [ ] Original Assassin L5 Execution and Turtle radius .09→.10 A/B tests reconstruct exact prior no-Guardian physics, while latest live Guardian is separately regression-tested; current 42 SHA-256 hashes and Safari manual acceptance
+
+
+### Guardian wounded-ally independent holdout (Oct 16)
+- [ ] 80 extra fully terminal A/B pairs across unseen seeds and no-Knight/armored-heavy lineups; each mode/tier has eight paired mirrors, with 20/40 populations
+- [ ] Report real positive HP-damage fronts, wins, Turtle role HP and actual immediately saved HP; no weakening initial 48-case game outcome checks
+- [ ] Verify exact-head 43-job GitHub Actions; production/main still untouched; manual iPhone 14 Pro Max Safari open

@@ -35,7 +35,12 @@ const patterns={
  swarm:{ours:['turtle','turtle','knight','goblin','goose','barbarian','mole','turtle','sniper','knight'],
   foe:['goblin','goblin','goose','goblin','barbarian','knight','goblin','beetank','turtle','mole']},
  ranged:{ours:['turtle','knight','turtle','goblin','barbarian','mole','goose','turtle','sniper','knight'],
-  foe:['sniper','sniper','dragon','dragon','sniper','knight','beetank','turtle','mole','barbarian']}
+  foe:['sniper','sniper','dragon','dragon','sniper','knight','beetank','turtle','mole','barbarian']},
+ // Independent stress scenarios to avoid fitting only a few friendly compositions.
+ noKnight:{ours:['turtle','turtle','goblin','barbarian','mole','goose','turtle','sniper','assassin','dragon'],
+  foe:['sniper','dragon','beetank','barbarian','knight','goblin','assassin','turtle','mole','goose']},
+ armored:{ours:['turtle','knight','turtle','goblin','barbarian','mole','turtle','sniper','goose','assassin'],
+  foe:['beetank','beetank','dragon','turtle','knight','barbarian','beetank','sniper','mole','assassin']}
 };
 function battle(c,candidate,observe=true){
  let now=0,frameId=0,queue=new Map(),state,frames=0,errors=[],hits=[],guards=[],pendingGuard=null;
@@ -135,7 +140,7 @@ for(const count of [20,40]){
 // 48 source-real paired completed matches: 2 levels x 3 modes x 2 densities x
 // 2 seeds x 2 mirrors. No proximity-only credit for fronts or win outcomes.
 const cases=[];
-for(const level of [4,5])for(const mode of Object.keys(patterns))
+for(const level of [4,5])for(const mode of ['mixed','swarm','ranged']
  for(const count of [20,40])for(const seed of [1337,9917])
   for(const side of ['blue','red']){
    const c={level,mode,count,seed,side};
@@ -186,6 +191,47 @@ for(const count of [80,120,300])for(const speed of [1,10]){
  const v=battle(c,true);
  assert(v.tick>0,'dense evolved guardians did not run');
 }
+// Independent holdout: do not choose a candidate only by its earlier 48 pairs.
+ // Additional 80 fully terminal pairs: 48 new-seed matches across the three
+ // original strategies, and 32 no-Knight/armored-stress strategy mirrors.
+ // Unfavourable role/front/win outcomes remain visible and DO NOT get erased
+ // by relaxing the prespecified 48-pair gates above.
+const holdouts=[];
+for(const mode of ['mixed','swarm','ranged'])
+ for(const level of [4,5])for(const count of [20,40])
+  for(const seed of [2017,4201])for(const side of ['blue','red']){
+   const c={mode,level,count,seed,side},before=battle(c,false),after=battle(c,true);
+   assert(before.winner&&after.winner,'no censored unseen-seed holdout');
+   holdouts.push({c,before,after});
+  }
+for(const mode of ['noKnight','armored'])
+ for(const level of [4,5])for(const count of [20,40])
+  for(const seed of [1337,9917])for(const side of ['blue','red']){
+   const c={mode,level,count,seed,side},before=battle(c,false),after=battle(c,true);
+   assert(before.winner&&after.winner,'no censored role-counter holdout');
+   holdouts.push({c,before,after});
+  }
+assert.equal(holdouts.length,80,'expected 48 unseen seed + 32 composition stress paired matches');
+const holdoutSummary={};
+for(const mode of Object.keys(patterns))for(const level of [4,5]){
+ const subset=holdouts.filter(x=>x.c.mode===mode&&x.c.level===level);
+ const sum=(side,key)=>subset.reduce((n,x)=>n+x[side][key],0);
+ holdoutSummary[mode+'-L'+level]={
+  pairs:subset.length,
+  baselineWins:sum('before','won'),guardianWins:sum('after','won'),
+  baselinePersistentRealFronts:sum('before','realPersistentFronts'),
+  guardianPersistentRealFronts:sum('after','realPersistentFronts'),
+  baselineTurtleHp:+sum('before','turtleHpDamage').toFixed(2),
+  guardianTurtleHp:+sum('after','turtleHpDamage').toFixed(2),
+  actualImmediateSavedHp:+sum('after','immediateActualHpPrevented').toFixed(2),
+  winnerFlips:subset.filter(x=>x.before.winner!==x.after.winner).length
+ };
+ assert.equal(subset.length,8,'fully mirrored held-out comparisons per mode/level');
+}
+assert(Object.values(holdoutSummary).some(x=>x.actualImmediateSavedHp>0),
+ 'holdout did not exercise any real Guardian mitigation');
+// Performance comparison is NOT a substitute for real iPhone hardware acceptance.
+
 // Real Node wall-clock simulator-only cost, no source instrumentation, 1x and 10x.
  // Warm both variants before timing to reduce VM warm-up distortion. Numbers are
  // diagnostic, NOT benchmarks of iOS Safari RAF, GPU, battery or thermal limits.
@@ -209,8 +255,9 @@ const receipt={
  status:'QA-shipped Guardian Shell versus historical no-guardian source baseline; main/production unchanged',
  specification:'If allied defender is strictly below 60% HP before the hit: L4 18% reduction within 0.12, L5 28% within 0.14. Highest of Guardian and Knight Bastion only, no self-protection.',
  caveats:'Immediate saved HP is measured on the same resolved hit after dodge and remaining-HP cap; it is not total team counterfactual HP saved across a divergent match. Nominal incoming mitigation is separate. All wins and damage fronts from completed true source games. 300 bodies are limited finite source-state checks, NOT FPS or full terminal. Node/V8 median simulator times are not physical iPhone 14 Pro Max Safari FPS.',
- summary,simulatorCpu:perf,cases};
+ summary,holdoutSummary,holdouts,simulatorCpu:perf,cases};
 if(process.env.QA_TURTLE_GUARDIAN_RECEIPT)fs.writeFileSync(process.env.QA_TURTLE_GUARDIAN_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('TURTLE GUARDIAN SOURCE A/B '+JSON.stringify(summary));
+console.log('TURTLE GUARDIAN HOLDOUT '+JSON.stringify(holdoutSummary));
 console.log('TURTLE GUARDIAN NODE CPU '+JSON.stringify(perf));
-console.log('PASS: 48 complete Turtle Guardian QA runtime A/B vs reconstructed old physics, actual-HP parity and 300 finite states');
+console.log('PASS: 48 baseline and 80 independent held-out true-terminal Turtle A/B pairs, actual-HP parity and uncapped 300 states');
