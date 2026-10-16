@@ -5,7 +5,22 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
-const base=read('legacy-sim-core');
+const live=read('legacy-sim-core');
+const priorCore=(function (live){
+ let base=live;
+ const replace=(a,b)=>{if(base.split(a).length!==2)throw Error('pressure source reconstruction anchor moved: '+a.slice(0,90));base=base.replace(a,b)};
+ replace("let pressureCache=null,pressureTick=-1;\n// Lazily rebuild once per combat tick; keep counts exact as targets switch or die.\nfunction refreshPressureCache(){const blue=new Map(),red=new Map();for(const a of units){if(a.hp<=0)continue;const map=a.team==='blue'?blue:red;map.set(a.target,(map.get(a.target)||0)+1)}pressureCache={blue,red};pressureTick=tick}\nfunction trackTarget(u,id){if(pressureCache&&pressureTick===tick&&u.hp>0&&u.target!==id){const map=pressureCache[u.team];map.set(u.target,(map.get(u.target)||0)-1);map.set(id,(map.get(id)||0)+1)}u.target=id}\nfunction nearest(u,preferBack=false){if(pressureTick!==tick)refreshPressureCache();","function nearest(u,preferBack=false){");
+ replace("const pressureByTarget=pressureCache[u.team];","const pressureByTarget=new Map();for(const a of units)if(a.team===u.team&&a.hp>0)pressureByTarget.set(a.target,(pressureByTarget.get(a.target)||0)+1);");
+ replace("const wasAlive=t.hp>0;t.hp=Math.max(0,t.hp-dmg);if(pressureCache&&pressureTick===tick&&wasAlive&&t.hp<=0){const map=pressureCache[t.team];map.set(t.target,(map.get(t.target)||0)-1)}lastDamageTick=tick;","t.hp=Math.max(0,t.hp-dmg);lastDamageTick=tick;");
+ replace("function deploy(blue=['knight','sniper'],red=['goose','dragon']){pressureCache=null;pressureTick=-1;running=false;","function deploy(blue=['knight','sniper'],red=['goose','dragon']){running=false;");
+ for(const [after,before] of [["trackTarget(u,t.id)","u.target=t.id"],["trackTarget(u,mt.id)","u.target=mt.id"],["trackTarget(u,null)","u.target=null"],["trackTarget(u,nearest(u)[0]?.id??null)","u.target=nearest(u)[0]?.id??null"]]){
+  if(!base.includes(after))throw Error('target tracking source drift '+after);
+  base=base.split(after).join(before);
+ }
+ return base;
+});
+const base=priorCore(live);
+assert.notEqual(base,live,'shipped pressure cache must be present');
 function candidateFor(src){
  let result=src;
  const replaceOne=(old,replacement)=>{assert.equal(result.split(old).length,2,'source drift: '+old.slice(0,60));result=result.replace(old,replacement)};

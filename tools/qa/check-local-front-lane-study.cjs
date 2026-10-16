@@ -7,8 +7,8 @@ const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(roo
 const current=read('v3/legacy-sim-core.js'),frontQA=read('tools/qa/check-role-fronts-baseline.cjs');
 const anchor="s=d+Math.max(0,pressure-2)*.035;";
 const targetReplacement="s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);";
-const nearestAnchor="function nearest(u,preferBack=false){";
-const shippedOpening="function nearest(u,preferBack=false){const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;";
+const nearestAnchor="function nearest(u,preferBack=false){if(pressureTick!==tick)refreshPressureCache();";
+const shippedOpening="function nearest(u,preferBack=false){if(pressureTick!==tick)refreshPressureCache();const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;";
 assert.equal(current.split(shippedOpening).length,2,'shipped local-lane policy changed; revalidate population gates');
 assert.equal(current.split(targetReplacement).length,2,'shipped tactical score changed');
 const shipped=current.replace(shippedOpening,nearestAnchor).replace(targetReplacement,anchor);

@@ -704,3 +704,12 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Reject phase-qualified +0.02/.035/.05 target-ownership and alternative slot geometry without stable contribution/persistence across fronts; no combat/runtime modifications.
 - [ ] Full *new-head* CI including 32 finished 20/40 true-damage front/role QA, portrait iPhone 14 Pro Max CSS proxy, PWA SHA pins, and 300-body counterplay.
 - [ ] Physical iPhone 14 Pro Max Safari device acceptance; do not claim Chromium = mobile FPS.
+
+
+### Oct 16 — target pressure once per tick while preserving real fights
+- [x] Reject early tactical lane interception, heavy-target reward and frontliner distribution source A/Bs that compromise role damage, winners or real persistent 40-body fronts; document denominator (16 fully terminal cases per population).
+- [x] New real lazy target-pressure cache captures sequential nearest pressure, tracked per-unit target updates, death pruning, and match reset without stat/AI change.
+- [x] Source A/B **44/44 exact full-state trace parity**: 32 fully completed 20/40 matches and 12 mirrored 80/120/300 1×/10× cases; keep true 20/40 multi-front floor, unchanged attacker damage and role contributions.
+- [x] Root/core query `pressurecache1`, all 42 SHA-256 PWA resources repinned; no visuals/Ultimate changes.
+- [ ] New head complete CI: direct cache parity job, prior pressure A/B research, local-front/lane, Assassin/Turtle counters, 300, browser PWA and atomic offline integrity all green.
+- [ ] Physical iPhone **14 Pro Max** Safari 1× performance and actual multiple localized combat QA; Node benchmark ratios are *not* phone FPS.

@@ -689,6 +689,28 @@ jobs:
           path: distance-bound-spike.json
           if-no-files-found: warn
 
+  pressure-cache-runtime-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check pressure-cache full trace verifier syntax
+        run: node --check tools/qa/check-target-pressure-cache-parity.cjs
+      - name: Confirm 32 terminal and twelve 80/120/300 body full-state parity arms
+        env:
+          QA_PRESSURE_LIVE_RECEIPT: pressure-cache-live.json
+        run: node tools/qa/check-target-pressure-cache-parity.cjs
+      - name: Upload true battle equivalence receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pressure-cache-runtime-parity
+          path: pressure-cache-live.json
+          if-no-files-found: warn
+
   pressure-cache-research:
     runs-on: ubuntu-latest
     timeout-minutes: 9
