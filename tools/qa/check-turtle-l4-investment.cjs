@@ -135,7 +135,7 @@ for(const mode of ['mixed','swarm','ranged'])
  for(const count of [20,40])for(const seed of [2017,4201])for(const side of ['blue','red'])
   fixtures.push({kind:'selected',phase:'unseen-seeds',level:4,count,mode,seed,side});
 for(const mode of ['noKnight','armored'])
- for(const count of [20,40])for(const seed of [1337,9917])for(const side of ['blue','red'])
+ for(const count of [20,40])for(const seed of [1337,9917,4201])for(const side of ['blue','red'])
   fixtures.push({kind:'selected',phase:'counter-stress',level:4,count,mode,seed,side});
 assert.equal(fixtures.length,104,'32 standard + 24 prespecified + 24 new-seed + 24 stress fixture count');
 const names=Object.keys(prototypes),receipts={};
