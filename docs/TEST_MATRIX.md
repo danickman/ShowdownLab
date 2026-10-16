@@ -780,3 +780,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] No gameplay patch, hash/PWA changes or main/production touch until candidate is proven across held-out strategies and 300/iPhone 14 Pro Max budget
 
 - [ ] L4 Ricochet's secondary `source:null` hits are physically attributed to the reflecting L4 Turtle and counted only after armour/shield/dodge/HP cap; actual reflection >0 and observed/unobserved SHA matches. Do not conflate with direct attack HP or artificially count reflected damage as independent offensive fronts.
+
+
+### Turtle L4 long-form payoff study — accepted evidence, rejected proposed buffs
+- [x] 520 truly completed matched source trials, actual post-armor/dodge/cap Ricochet HP separate from attacker-credited HP; L5 solo SHA and source observer parity, archived in Actions 38857552669
+- [x] Guard20 worsens no-Knight/armored holdout wins 6→4 despite initial persistence benefit; Guard22 hurts several role-front measures; reflect35 increases true reflected HP but degrades persistence in prespecified/unseen seeds; radius13 worsens stress wins
+- [x] Retain original L4 Turtle gameplay values; no hidden numeric adjustment or false 'balance pass'. Next design event-gated tactical shell counterplay with genuine winner, front, hero-role and population performance controls

@@ -1,5 +1,22 @@
 # Turtle L4 meaningful evolution investment — controlled source study
 
+## Verified extended source results — October 16, exact QA `98a2e836f09854fed6d233f8a50c943aeaac4e88`
+
+The independent `turtle-l4-investment` Actions job passed on [push run 38857552669](https://github.com/danickman/ShowdownLab/actions/runs/38857552669): **5 variants × 104 genuine fully terminal battles = 520**, strict read-only instrumented/uninstrumented frame-state parity, unchanged L5 Turtle solo counters, actual local ally HP savings, and actual reflected HP after armor/dodge/remaining HP cap. **Decision: no L4 numerical gameplay change.** Comparison:
+
+| L4 variant | Prespecified persisted fronts (24) | New-seed persisted fronts (24) | Counter-stress wins (24) | Standard 40-body persisted fronts |
+|---|---:|---:|---:|---:|
+| Existing 18% Guardian / 30% Ricochet | 109 | 110 | 6 | 58 |
+| Guardian 20% | 120 | 109 | **4** | 57 |
+| Guardian 22% | 116 | 105 | 5 | 53 |
+| Ricochet 35% | 106 | 106 | 6 | 58 |
+| Guardian radius 0.13 | 112 | 109 | **4** | 55 |
+
+Guardian 20% increases *immediately realized* L4 ally HP saved in selected battles 4,007→4,326 and initially improves selected Turtle attacker HP 10,385→11,339, but stress match wins fall 6→4. Guardian 22% raises apparent defensive value further but changes several real winners and reduces independent fronts. A 35% L4 Ricochet increases **actual reflected HP** 945→1,134 in prespecified cases, 1,054→1,176 in unseen seeds, and 1,889→2,266 against stress opponents, without changing winners, but reduces prespecified persistently independent fronts 109→106 and unseen fronts 110→106; standard 20 remains stuck at **1**. This is not a robust strategic evolution upgrade. Keep the existing 30% L4 reflection, 18% Guardian / 0.12 radius, below-60%-HP condition, and L5 values unchanged.
+
+**Next gameplay hypothesis:** Instead of stat buffs, research a bounded, event-driven L4 protective counterplay triggered by Turtle's existing shell/shell-slam response to a real threatened ally (not a permanent aura, not fabricated fronts and not another Beetank ram), with actual target/defender matching, explicit telegraph/cue only after real events, matched solo Assassin/Beetank/Sniper counters, 20/40 full-terminal front/win checks, 80/120/300 CPU, then iPhone 14 Pro Max Safari acceptance. In parallel keep **Assassin L4 Execution marginal accessibility** and genuine sustained 20-body fights on the roadmap. Never reduce source CI thresholds to justify a change. No main merge or Vercel production release.
+
+
 **October 16, 2026 · QA-only research · no runtime change**
 
 ## Why
