@@ -544,6 +544,28 @@ jobs:
           path: local-front-lane-research.json
           if-no-files-found: warn
 
+  evolution-choice-investment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check true draft investment ROI syntax
+        run: node --check tools/qa/check-evolution-choice-investment.cjs
+      - name: Compare 432 terminal L3/L4 evolution and reinforcement choices
+        env:
+          QA_EVOLUTION_CHOICE_RECEIPT: evolution-choice-investment.json
+        run: node tools/qa/check-evolution-choice-investment.cjs
+      - name: Preserve true role ROI, physical defender value and fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolution-choice-investment
+          path: evolution-choice-investment.json
+          if-no-files-found: warn
+
   assassin-l4-shadow-mark:
     runs-on: ubuntu-latest
     timeout-minutes: 30

@@ -859,3 +859,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 3×104 matched real terminal source simulation study / L5 five solo SHA / no-L4 80/120/300 1×/10× SHA all pass (CI 117172081229)
 - [x] Mark25 166 applications/78 consumed, mark40 165/78, **zero allied consumers**; only Assassin direct HP ↑, no selected or unseen wins ↑, baseline standard 20 true persistent fronts 1→0, real separated 40 windows ↓
 - [x] Both Shadow Mark candidates intentionally NOT in runtime or Guide. Next: evaluate L3→L4 and L4→L5 **draft choice payoff** versus actual reinforcement/Beetank with real winners, defense/attack contribution, 20/40 authentic front and 300 performance gates; no synthetic medal for raw DPS
+
+
+### Evolution milestone opportunity cost — actual current game outcomes
+- [ ] 144 role×tier×swarm/ranged/armored×20/40×seed×side base fixtures, current unmodified simulator, three actions upgrade all role units vs +1 or +2 real reinforcements, 432 fully terminal genuine matches
+- [ ] Compare actual draft choice winners, selected direct HP, physically reflected Ricochet HP, Guardian marginal HP saved beyond Knight after HP cap/dodge, positive HP-damage fronts and mode-specific counters
+- [ ] Exact read-only observer/unedited RAF SHA; no new physics/ability/Guide/PWA assets until player-value and Safari 14 Pro Max gates and independent holdouts support a change
