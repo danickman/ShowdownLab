@@ -24,13 +24,13 @@ assert(first>=0&&last>first,'source-authentic HP-damage front algorithm moved');
 const graph=vm.runInNewContext(g.slice(first,last)+';damageFronts',{Math});
 const modes={
  swarm:{
-  ours:['TARGET','TARGET','knight','goblin','goose','barbarian','beetank','TARGET','sniper','turtle'],
+  ours:['TARGET','TARGET','knight','goblin','goose','barbarian','beetank','TARGET','sniper','mole'],
   foe:['goblin','goblin','goose','goblin','barbarian','knight','goblin','beetank','turtle','mole']},
  backline:{
-  ours:['TARGET','knight','TARGET','goblin','barbarian','beetank','goose','TARGET','sniper','turtle'],
+  ours:['TARGET','knight','TARGET','goblin','barbarian','beetank','goose','TARGET','sniper','mole'],
   foe:['sniper','sniper','dragon','dragon','sniper','knight','beetank','turtle','mole','barbarian']},
  armored:{
-  ours:['TARGET','knight','TARGET','goblin','barbarian','beetank','goose','TARGET','sniper','turtle'],
+  ours:['TARGET','knight','TARGET','goblin','barbarian','beetank','goose','TARGET','sniper','mole'],
   foe:['beetank','beetank','dragon','turtle','knight','barbarian','beetank','sniper','mole','assassin']}
 };
 const choices=['hold','evolve','recruit2','evolveBeetank'];
@@ -77,6 +77,7 @@ function simulate(c,observed=true,trace=false){
  const blue=roster(c,'blue'),red=roster(c,'red'),ours=c.side==='blue'?blue:red;
  const back=e=>e.type==='sniper'||e.type==='dragon';
  const deployed=ours.filter(e=>!back(e)).concat(ours.filter(back));
+ assert.equal(ours.filter(e=>e.type===c.role).length,c.count/2/10*3+(c.choice==='recruit2'?2:0), 'all own family copies must be nominated: draft upgrades apply family-wide');
  const start=c.side==='blue'?1:blue.length+1;
  const chosen=new Set(),bee=new Set();
  deployed.forEach((e,i)=>{if(e.isTarget)chosen.add(start+i);if(e.isBee)bee.add(start+i)});
