@@ -960,3 +960,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 408/408 genuinely complete Barbarian L3→L4 and L4→L5 source match A/B, 12 instrumented/raw complete-frame SHA parity, QA 0ba5ef5 push/PR 50 required successful each.
 - [x] Held-out premium L5 7/8 vs current 2/8 wins, real secondary HP 23,178.92 vs 9,102.36. Front persistence 14 vs 32; enemy full-army ×2 still wins 7/8, peer 4/8, 3-v-15 wins 0/8.
 - [ ] 80/120/300 true fighters, current/premium CPU 1x/10x, 2 seeds, 6 SHA off-target no-Barbarian parity. Node synthetic frames are not Safari FPS. New exact-head CI pending; no live mechanics changes.
+
+
+### Oct 17 — Premium Barbarian live QA (NOT main/prod)
+- [x] Original-source 408 terminal A/B and 12 RAF parity proved L4 6/8, L5 7/8 unseen first-tier wins, meaningful peer and whole-army ×2 counter.
+- [x] 80/120/300 synthetic Node source CPU cost comparable to former Barbarian (10× p95 premium/base .94–1.08), no state invalidity, six exact SHA off-target no-Barbarian controls; **300×10 CPU still severe**.
+- [ ] Fresh `barbcleave1` playable QA v3 rules/effects specs, static unit splash QA, SW 42 pinned SHA/RUNTIME atomic cache, all-roster live first-tier regression and art/viewport. CI pending, physical Safari 14 Pro Max OPEN, no production deployment.

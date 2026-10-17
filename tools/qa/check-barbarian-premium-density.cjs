@@ -4,7 +4,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const ult=read('v3/ultimate-abilities.js'),core=read('v3/legacy-sim-core.js'),evo=read('v3/evolution-rules.js');
+const ult=read('tools/qa/fixtures/barbarian-before-premium-ultimate.js'),core=read('v3/legacy-sim-core.js'),evo=read('v3/evolution-rules.js');
 const study=read('tools/qa/check-barbarian-first-ultimate-ab.cjs');
 const from=study.indexOf('const section='),to=study.indexOf('const prelude=[',from);
 assert(from>=0&&to>from,'accepted 408-game premium Cleave source declaration moved');

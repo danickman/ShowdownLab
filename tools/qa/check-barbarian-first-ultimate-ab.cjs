@@ -7,6 +7,8 @@ const boundary='const matched=[];';
 assert.equal(base.split(boundary).length,2,'first-tier benchmark preamble changed');
 const one=(s,a,b)=>{assert.equal(s.split(a).length,2,'source anchor drift: '+a.slice(0,95));return s.replace(a,b)};
 let pre=base.slice(0,base.indexOf(boundary));
+// Exact historical control: prevent a shipped premium Cleave from silently changing the 408-case discovery baseline.
+pre=one(pre,"const live=read('v3/legacy-sim-core.js'),ult=read('v3/ultimate-abilities.js'),evo=read('v3/evolution-rules.js');","const live=read('v3/legacy-sim-core.js'),ult=read('tools/qa/fixtures/barbarian-before-premium-ultimate.js'),evo=read('v3/evolution-rules.js');");
 const section="if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){";
 const barb=(r5,d5,stun5)=>[
  section,

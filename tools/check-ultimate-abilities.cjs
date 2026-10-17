@@ -23,7 +23,8 @@ for(const level of [4,5]){
  attacker.x=turtle.x+.095;hits=U.afterHit(attacker,turtle,40,[attacker,turtle],45);assert.equal(hits.length,1,'close collision-edge attacker should trigger Ricochet');close(hits[0].damage,rank===2?18:12);
  attacker.x=turtle.x+.101;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0,'outside 0.10 Ricochet radius must preserve ranged counterplay');
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
- const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>h.damage===(rank===2?65:40)));
+ const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>Math.abs(h.damage-(rank===2?100:58))<1e-9),'premium Cleave physical secondary damage');
+ assert(hits.every(h=>h.target.stun===(rank===2?12:8)),'premium Cleave stagger on real splash victims');
  const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);
  close(hits[0].damage,rank===2?110:75);assert.equal(t.stun,rank===2?64:44);
  const direct=unit('knight',1,'red',45,rank===2?.73:.68),echo=unit('goblin',1,'red',46,rank===2?.86:.77);

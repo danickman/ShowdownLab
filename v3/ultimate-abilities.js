@@ -9,7 +9,7 @@ const specs={
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},
  turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
- barbarian:{name:'Blood Cleave',l4:'Axe swings splash 40% damage onto up to three nearby enemies.',l5:'Wider cleave splashes 65% damage onto up to five enemies.'},
+ barbarian:{name:'Blood Cleave',l4:'Sweeping axe strikes splash 58% attack damage onto up to three nearby foes and stagger them for 8 ticks.',l5:'A giant sweeping strike splashes 100% attack damage onto up to five foes across a wider arc, staggering them for 12 ticks.'},
  goose:{name:'Impact Shockwave',l4:'Thunder Honk blasts up to five nearby foes, then sends a damaging echo into up to three more with only a brief stagger.',l5:'An ascended sonic crash hits up to six nearby foes and echoes into up to four more with powerful damage, without a long secondary stun.'}
 };
 const near=(a,b,r)=>Math.hypot(a.x-b.x,a.y-b.y)<=r;
@@ -52,10 +52,14 @@ function afterHit(a,t,dealt,units,tick){
   if(a.action==='ram'||a.ultimateHits%(r===2?2:3)===0){for(const v of enemies.filter(v=>near(v,t,r===2?.14:.11))){v.stun=Math.max(v.stun,r===2?20:12);hits.push({target:v,source:a,damage:a.dmg*(r===2?.55:.35)})}cue(a,'seismic',tick,t)}
  }
  if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){
-  const targets=enemies.filter(v=>near(v,t,r===2?.09:.065)).sort((x,y)=>Math.hypot(x.x-t.x,x.y-t.y)-Math.hypot(y.x-t.x,y.y-t.y)||x.id-y.id).slice(0,r===2?5:3);
-  for(const v of targets)hits.push({target:v,source:a,damage:a.dmg*(r===2?.65:.4)});if(targets.length)cue(a,'cleave',tick,t);
- }
- return hits;
+  const targets=enemies.filter(v=>near(v,t,r===2?.205:.135))
+   .sort((x,y)=>Math.hypot(x.x-t.x,x.y-t.y)-Math.hypot(y.x-t.x,y.y-t.y)||x.id-y.id)
+   .slice(0,r===2?5:3);
+  for(const v of targets){v.stun=Math.max(v.stun,r===2?12:8);
+   hits.push({target:v,source:a,damage:a.dmg*(r===2?1.00:.58)})}
+  if(targets.length)cue(a,'cleave',tick,t);
+}
+return hits;
 }
 function honk(u,units,tick){
  const r=rank(u);if(!r)return [];
