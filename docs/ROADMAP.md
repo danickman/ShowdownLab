@@ -708,3 +708,8 @@ Branch `ultimate-portrait-polish` begins at main `4d88372`. Ten Ultimate canonic
 
 
 **Oct 17 — Beetank L5 Breach/Overdrive REJECT:** held-out 8 first-L5 wins for current, 4 Breach, 7 Overdrive despite increased physical aftershock. Preserve source. Focus now on **Assassin L5 live draft ROI**: previous frozen-source mixed roster evolution wins 10/24 vs recruits 8/24 vs upgrade Beetank 9/24; run fresh 192 true full battles/16 state parity, current live premium Barbarian and Goose, per-enemy matchup and 20/40 split, decide whether any tactical changes are warranted. Test only, no deployment. [Design](ASSASSIN_L5_LIVE_DRAFT_ROI_2026-10-17.md).
+
+
+### Oct 17 — source-only Beetank studies archived after failed held-out payoff
+- Both completed but REJECTED historical A/B explorations retain their original executable checks, strict physical-winner/front contracts, 408 + 204 full terminal battle protocols, artifact receipts, and 12+16 RAF parity controls apiece. Moved their jobs from regular `qa-duels.yml` to `qa-research-archive.yml` with conditional **combat-source / own-script change** trigger and optional `workflow_dispatch` study selectors. Not deleted and no relaxed thresholds.
+- Active live ten-role first-tier source regression, Goose/Barbarian performance, genuine damage fronts, PWA integrity, 300 bodies, UI/browser and new live Assassin L5 ROI remain in regular CI. This is only a CI workload isolation; it does **not** change any playable ability, renderer, PWA, main or production. Verify exact new-commit CI and retain physical iPhone 14 Pro Max manual gate.

@@ -16,6 +16,8 @@ on:
       - 'tools/qa/check-borderline-draft-decisions.cjs'
       - 'tools/qa/check-ultimate-signature-spike-candidates.cjs'
       - 'tools/qa/check-goose-echo-falloff-ab.cjs'
+      - 'tools/qa/check-beetank-seismic-first-ultimate-ab.cjs'
+      - 'tools/qa/check-beetank-seismic-breach-ab.cjs'
   workflow_dispatch:
     inputs:
       study:
@@ -35,6 +37,8 @@ on:
           - borderline-draft-decisions
           - ultimate-signature-spike-candidates
           - goose-echo-falloff-ab
+          - beetank-seismic-first-ultimate-ab
+          - beetank-seismic-breach-source
 permissions:
   contents: read
 # Run rejected source A/B variants on physical COMBAT SOURCE changes, not every QA document/experiment.
@@ -272,3 +276,49 @@ jobs:
           name: goose-echo-falloff-ab
           path: goose-echo-falloff-ab.json
           if-no-files-found: error
+
+  beetank-seismic-first-ultimate-ab:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'beetank-seismic-first-ultimate-ab' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Seismic Overdrive source-only A/B syntax
+        run: node --check tools/qa/check-beetank-seismic-first-ultimate-ab.cjs
+      - name: Compare first L4 L5 physical HP, fronts, peer and all-army x2
+        env:
+          QA_BEETANK_SEISMIC_RECEIPT: beetank-seismic-first-ultimate-ab.json
+        run: node tools/qa/check-beetank-seismic-first-ultimate-ab.cjs
+      - name: Preserve real terminal and full RAF parity receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-seismic-first-ultimate-ab
+          path: beetank-seismic-first-ultimate-ab.json
+          if-no-files-found: error
+
+  beetank-seismic-breach-source:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'beetank-seismic-breach-source' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check bounded primary-and-side L5 source study
+        run: node --check tools/qa/check-beetank-seismic-breach-ab.cjs
+      - name: Measure live Beetank versus contact-first Seismic Breach, full terminal fights
+        env:
+          QA_BEETANK_BREACH_RECEIPT: beetank-seismic-breach.json
+        run: node tools/qa/check-beetank-seismic-breach-ab.cjs
+      - name: Retain matched winner, physical HP, damaging-front, parity and counter receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-seismic-breach-source
+          path: beetank-seismic-breach.json
+          if-no-files-found: warn
