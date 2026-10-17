@@ -966,3 +966,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Original-source 408 terminal A/B and 12 RAF parity proved L4 6/8, L5 7/8 unseen first-tier wins, meaningful peer and whole-army ×2 counter.
 - [x] 80/120/300 synthetic Node source CPU cost comparable to former Barbarian (10× p95 premium/base .94–1.08), no state invalidity, six exact SHA off-target no-Barbarian controls; **300×10 CPU still severe**.
 - [ ] Fresh `barbcleave1` playable QA v3 rules/effects specs, static unit splash QA, SW 42 pinned SHA/RUNTIME atomic cache, all-roster live first-tier regression and art/viewport. CI pending, physical Safari 14 Pro Max OPEN, no production deployment.
+
+
+### Oct 17 — Premium Barbarian cross-ability regression discipline
+- [ ] Exact-head updated Goose 20 full-RAF off-target parity comparing only old/new Honk on otherwise IDENTICAL current Premium Barbarian source
+- [ ] Historical Assassin L5 strict fixed witness on frozen pre-premium Ultimate source and separately logged real current Premium-Barbarian cross-evolution 20/40 HP/front/winner effects (no hidden acceptance of collapsed fronts)
+- [ ] Source first L4/L5 winners, actual multi-front ecology, 300 CPU 10x and physical iPhone 14 Pro Max Safari still separate gates; no main/prod merge.

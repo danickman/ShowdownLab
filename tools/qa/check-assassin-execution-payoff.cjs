@@ -4,11 +4,18 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),
  crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const shippedCore=read('v3/legacy-sim-core.js'),shippedAbility=read('v3/ultimate-abilities.js');
+// Historical L5 55%→75% discovery comparisons intentionally retain the
+// pre-premium Barbarian ecosystem; after that fixed witness we ALSO observe
+// the currently shipped premium-roster cross-evolution effects separately.
+const shippedCore=read('v3/legacy-sim-core.js'),
+ currentAbility=read('v3/ultimate-abilities.js'),
+ shippedAbility=read('tools/qa/fixtures/barbarian-before-premium-ultimate.js');
 const {withoutGuardian}=require('./historical-guardian-control.cjs');
 const {core,ability:live}=withoutGuardian(shippedCore,shippedAbility);
 // Original Assassin 55%→75% controlled study excludes future Turtle support physics.
-assert(shippedAbility.includes("t.hp/t.maxHp<.6&&shelter>protection"),'Guardian contract must have independent current-runtime QA');
+assert(shippedAbility.includes("t.hp/t.maxHp<.6&&shelter>protection"),'historical Guardian source contract');
+assert(currentAbility.includes("t.hp/t.maxHp<.6&&shelter>protection"),'current live Guardian contract');
+assert(currentAbility.includes("t.hp/t.maxHp<(r===2?.75:.4)"),'current live Assassin L5 Execution HP gate');
 const oldGate='t.hp/t.maxHp<(r===2?.55:.4)',newGate='t.hp/t.maxHp<(r===2?.75:.4)';
 assert.equal(live.split(newGate).length,2,'L5 Execution condition changed; review battle QA');
 const baseline=live.replace(newGate,oldGate);
@@ -161,8 +168,40 @@ for(const level of [1,4])for(const mode of ['mixed','backline']){
  assert.equal(simulate(live,c).trace,simulate(baseline,c).trace,
   'L1/L4 fights must remain physically identical under L5-only change '+JSON.stringify(c));
 }
-const report={status:'L5-only true Execution activation and completed-match counterplay; QA branch only',
- summary,solo:solo.map(x=>({c:x.c,before:x.before,after:x.after})),cases:rows,
+
+// Modern premium-Barbarian cross-evolution diagnostic: replay identical
+// matched completed fixtures against the exact new gameplay. Do NOT replace
+// the historical fixed 20/40 HP/front thresholds with arbitrary new floors.
+// This reports current dangerous front/role interactions as a release review.
+const {ability:modernLive}=withoutGuardian(shippedCore,currentAbility);
+const modernOld=modernLive.replace(newGate,oldGate);
+assert(modernOld!==modernLive,'contemporary L5 Execution reference did not change');
+const contemporary={};
+for(const n of [20,40]){
+ const observations=[];
+ for(const mode of ['mixed','swarm','heavy','ranged','backline'])
+  for(const seed of [1337,9917])for(const mirror of [false,true]){
+   const c={count:n,mode,seed,mirror};
+   const before=simulate(modernOld,c),after=simulate(modernLive,c);
+   assert(before.winner&&after.winner,'modern cross-evolution outcome must be terminal');
+   observations.push({before,after});
+  }
+ const total=(side,key)=>+observations.reduce((v,x)=>v+(x[side][key]||0),0).toFixed(2);
+ contemporary[n]={completed:observations.length,
+   executionsBefore:total('before','executions'),executionsAfter:total('after','executions'),
+   physicalAssassinHpBefore:total('before','assassinDamage'),physicalAssassinHpAfter:total('after','assassinDamage'),
+   realPersistentFrontsBefore:total('before','realPersistentWindows'),realPersistentFrontsAfter:total('after','realPersistentWindows'),
+   separatedPositiveHpWindowsBefore:total('before','realSeparatedWindows'),
+   separatedPositiveHpWindowsAfter:total('after','realSeparatedWindows'),
+   winnerFlips:observations.filter(x=>x.before.winner!==x.after.winner).length};
+ assert.equal(contemporary[n].completed,20,'contemporary sample regression');
+ assert(contemporary[n].executionsAfter>=contemporary[n].executionsBefore,
+  'L5 chosen threshold cannot execute less frequently in current live source');
+}
+console.log('ASSASSIN L5 PREMIUM-BARBARIAN CONTEMPORARY FRONT DIAGNOSTIC '+JSON.stringify(contemporary));
+
+const report={status:'L5-only 55→75 threshold historical fixed evidence plus modern Premium Barbarian cross-evolution live outcomes; QA branch only',
+ summary,contemporary,solo:solo.map(x=>({c:x.c,before:x.before,after:x.after})),cases:rows,
  caveats:'Attacker-attributed HP excludes source-less burns/reflection. Ordinary L1-L4 Execution unchanged. 20-body persistence remains a weak 1-window baseline, not a gameplay-quality signoff. Matches are terminated, unlike earlier short stage snapshots; phone Safari still manual.'};
 if(process.env.QA_ASSASSIN_EXECUTION_RECEIPT)fs.writeFileSync(process.env.QA_ASSASSIN_EXECUTION_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('ASSASSIN L5 EXECUTION COMPLETE MATCH '+JSON.stringify(summary));
