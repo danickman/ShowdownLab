@@ -44,7 +44,7 @@ let inject=[
 ].join('\n');
 pre=once(pre,"const choices=['hold','firstUnlock','matchedUnlock','foeDouble'];",inject+"\nconst choices=['hold','firstUnlock','matchedUnlock','foeDouble'];");
 pre=once(pre,'vm.createContext(env);vm.runInContext(evo,env);vm.runInContext(ult,env);',
- "vm.createContext(env);vm.runInContext(evo,env);vm.runInContext(c.arm==='prototype'?powers[c.role]:ult,env);");
+ "vm.createContext(env);vm.runInContext(evo,env);vm.runInContext(c.arm==='prototype'&&Object.prototype.hasOwnProperty.call(powers,c.role)?powers[c.role]:ult,env);");
 const {simulate,roles,prototype,build}=vm.runInNewContext(pre+'\n;({simulate,roles,prototype,build})',
  {require,__dirname,console,process},{filename:'source-only-first-unlock-special-ability-a-b.cjs'});
 assert.equal(roles.length,10);
@@ -121,4 +121,4 @@ const raw={status:'SOURCE-ONLY ROLE ULTIMATE A/B, no shipped ability or PWA edit
  cohorts,counterCases,parity,samples};
 if(process.env.QA_ULTIMATE_PROTOTYPE_RECEIPT)fs.writeFileSync(process.env.QA_ULTIMATE_PROTOTYPE_RECEIPT,JSON.stringify(raw,null,2)+'\n');
 console.log('ULTIMATE SIGNATURE CANDIDATE '+JSON.stringify({cohorts,overwhelmed:{fights:counterCases.length,currentWins:counterCases.reduce((n,x)=>n+x.baseline.win,0),prototypeWins:counterCases.reduce((n,x)=>n+x.prototype.win,0)}}));
-console.log('PASS: 416 real first-tier/peer/x2 source A/B match variants, 16 severe counter matches, 8 complete RAF observer pairs');
+console.log('PASS: 448 genuine first-tier/peer/family-x2 source A/B matches, 32 severe-number battle variants, 8 exact-RAF observer pairs, 6 unaffected-role raw trace guards');
