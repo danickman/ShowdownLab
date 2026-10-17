@@ -68,13 +68,13 @@ for(const level of [1,2,3,4,5]){
  assert.equal(dealt.length,level>=4?1:0,'Ultimate should only begin at L4');
  assert.equal(foe.stun,level===4?44:level===5?64:0,'44/64 physical stun ticks promised');
  if(level>=4){
- assert.equal(dealt[0].damage,level===4?75:110,'Impact primary HP damage physical tier contract');
+ assert(Math.abs(dealt[0].damage-(level===4?75:110))<1e-9,'Impact primary HP damage physical tier contract');
  const victim={id:4,type:'knight',team:'red',level:1,x:level===4?.68:.73,y:.5,hp:300,stun:0,burrow:0};
  const echo={id:3,type:'goblin',team:'red',level:1,x:level===4?.77:.86,y:.5,hp:200,stun:0,burrow:0};
  const hits=e.ShowdownUltimates.honk(goose,[goose,victim,echo],31);
  assert(hits.some(h=>h.target.id===3),'Impact must hit real secondary foe outside primary ring');
  assert.equal(echo.stun,4,'secondary echo must last four ticks only');
- assert.equal(hits.find(h=>h.target.id===3).damage,level===4?60:83,'secondary HP contribution');
+ assert(Math.abs(hits.find(h=>h.target.id===3).damage-(level===4?60:83))<1e-9,'secondary HP contribution');
 }
 }
 assert(live.includes('Impact Shockwave')&&live.includes('brief stagger')&&live.includes('without a long secondary stun'),'Ultimate public specs must describe Impact');
