@@ -1120,3 +1120,25 @@ jobs:
           name: assassin-backline-telegraph-opportunity
           path: assassin-backline-telegraph-opportunity.json
           if-no-files-found: error
+
+  first-ultimate-tier-spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify first-to-tier full-match audit syntax
+        run: node --check tools/qa/check-first-ultimate-tier-spike.cjs
+      - name: Measure all ten families first-L4/L5 versus peer-tier and x2 counters
+        env:
+          QA_TIER_SPIKE_RECEIPT: first-ultimate-tier-spike.json
+        run: node tools/qa/check-first-ultimate-tier-spike.cjs
+      - name: Retain 720 true match and 24 frame-parity tier receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-ultimate-tier-spike
+          path: first-ultimate-tier-spike.json
+          if-no-files-found: error

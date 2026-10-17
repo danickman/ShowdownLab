@@ -901,3 +901,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Exact-head source-only CI: 180 fully terminal choice cases, 12 read-only full-RAF SHA parity pairs; aim/windup positive HP physical-ID backstabs distinguished from readiness/proximity
 - [ ] Separate prespecified seed 9173 holdout; measure actual enemy shots and dragon breath events, real true damaging fronts and team wins without claiming blocked attacks
 - [ ] Any proposed new anti-ranged interruption requires genuine source A/B actual denied shots, 20/40 counters/fronts and 80/120/300 performance plus iPhone 14 Pro Max Safari manual acceptance (OPEN)
+
+
+### Oct 17 — First-to-L4/L5 transformational unlock game design acceptance
+- [ ] First-to-tier source-real audit across 10 fighter families x L3->L4 and L4->L5 x 20/40, 1337/2017 mirror x hold/first L4/L5/peer L4/L5/foe x2 = 640 genuine terminal matches, plus 80 true severe 3-evolved-vs-15 exceptions, 24 exact RAF physics SHA parity pairs
+- [ ] Directional design: first L4 should usually swing equal-force rounds (approximately 75%+) and first L5 stronger still (approximately 80%+), but retain countervailing peer evolutions, x2 family and overwhelming odds. These are initial design goals **not** unjustified CI fail floors; log each role, exceptions and genuine fronts.
+- [ ] Re-evaluate prior Assassin and Turtle same-tier ROI research as **secondary**, since opposing L4s already present invalidates treating these as first-unlock tests; preserve complete battle quality and physical iPhone 14 Pro Max Safari release gates.

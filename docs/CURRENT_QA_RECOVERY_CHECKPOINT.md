@@ -51,3 +51,7 @@ This file is a **durable recovery pointer**, not a claim that missing chat messa
 
 ### Oct 16 — successor turn: Assassin real telegraph observability
 - Verified prior exact-head QA `17fe3453469de747f642d6580873ffc34073bcfd`: push [38993178701](https://github.com/danickman/ShowdownLab/actions/runs/38993178701) and PR [38993180464](https://github.com/danickman/ShowdownLab/actions/runs/38993180464) both 44/44 required successful. New source-only L4 Assassin actual Sniper aim and Dragon windup physical-HP contact study (180 terminal cases and 12 observer/original SHA pairs) has **new-head CI pending**, no proposed ability or blocked-shot claim. QA-only; no main/production or PWA changes. 14 Pro Max Safari still open.
+
+
+### Oct 17 — decisive first-ultimate unlock design correction
+- User explicitly clarifies original Draft Showdown feel: **L4/L5 should normally decide a fair round when unlocked first**, countered by peer evolutions, ×2 family/overwhelming numbers, or strong compositions (three weak evolved units should not beat fifteen powerful troops automatically). Previous most-squad-at-L4 Assassin/Beetank/Turtle comparisons do not measure that product goal. **Reprioritize all-ten-role first-unlock power-spike validation** before incremental marginal stats. [New 720-real-match test / contract](FIRST_ULTIMATE_TIER_SPIKE_2026-10-17.md), CI pending. Never claim prototype shipped; continue real role/counter/mobile stress controls. Main/prod unchanged.

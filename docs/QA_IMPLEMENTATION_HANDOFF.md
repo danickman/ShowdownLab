@@ -1738,3 +1738,8 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 
 ### Oct 16 — real-telegraph source harness syntax remediation
 - Initial `9a32b5e` study job failed **before any battle** due missing nested observer `replace()` closures; no combat regression evidence from that job. Fixed closures and added a generated source V8 compile check. Study still pending fresh exact-head Actions and no role/game mechanic modified.
+
+
+### Oct 17 — user-corrected ultimate power-spike design contract
+- **Design correction:** being first to unlock L4 or L5 should ordinarily **win an otherwise fair round**, with a spectacular new capability. Valid exceptions: the foe also attains L4/L5, ×2 doubling a family or overwhelming composition/numerical advantage (e.g. two/three evolved units vs fifteen strong opponents). Our previous comparisons often held many fighters L4 on both teams, so they measured **relative same-tier opportunity cost**, NOT intended asymmetric first-unlock impact. Do not treat all purposeful winner flips as unacceptable; do retain authentic damaging fronts, role counters, positive-HP accounting, full determinism and performance safety.
+- New [first-to-tier design study](FIRST_ULTIMATE_TIER_SPIKE_2026-10-17.md) checks all 10 families at both rung boundaries, 20/40 populations, seed/mirror, hold/first-unlock/peer-counter/foe-×2 and 3-evolved-vs-15 exceptions: **720 genuine terminal matches and 24 read-only RAF SHA controls**. Source-only benchmark, findings **pending fresh exact-head CI**. No shipped balance changes, main or prod merge. iPhone 14 Pro Max Safari still open.
