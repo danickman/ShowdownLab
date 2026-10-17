@@ -705,3 +705,6 @@ Branch `ultimate-portrait-polish` begins at main `4d88372`. Ten Ultimate canonic
 
 
 **Oct 17 Beetank L5 next gate:** Verified held-out current/Shock/Quake first-L5 4/8 each; extra splash HP alone is insufficient. Reject both. New source-only Seismic Breach primary physical aftershock + short bounded quake tested at L5 only on distinct seeds against peer/full army ×2/severe cases; 204 terminal plus 28 state-SHA controls on CI, then check 80/120/300 and native portrait effects ONLY if actual held-out win lift. Live L4/L5 unchanged; main/prod protected. [Research](BEETANK_SEISMIC_OVERDRIVE_AB_2026-10-17.md).
+
+
+**Oct 17 — Beetank L5 Breach/Overdrive REJECT:** held-out 8 first-L5 wins for current, 4 Breach, 7 Overdrive despite increased physical aftershock. Preserve source. Focus now on **Assassin L5 live draft ROI**: previous frozen-source mixed roster evolution wins 10/24 vs recruits 8/24 vs upgrade Beetank 9/24; run fresh 192 true full battles/16 state parity, current live premium Barbarian and Goose, per-enemy matchup and 20/40 split, decide whether any tactical changes are warranted. Test only, no deployment. [Design](ASSASSIN_L5_LIVE_DRAFT_ROI_2026-10-17.md).

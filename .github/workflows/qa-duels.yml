@@ -1285,3 +1285,25 @@ jobs:
           name: beetank-seismic-breach-source
           path: beetank-seismic-breach.json
           if-no-files-found: warn
+
+  assassin-l5-live-draft-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse read-only live Assassin L5 opportunity cost
+        run: node --check tools/qa/check-assassin-l5-live-roi.cjs
+      - name: Compare L5 Assassin to recruiting and upgrading Beetank on current live source
+        env:
+          QA_ASSASSIN_L5_ROI_RECEIPT: assassin-l5-live-roi.json
+        run: node tools/qa/check-assassin-l5-live-roi.cjs
+      - name: Save 192 complete matched battles, positive HP, Execution, independent fronts, exact state parity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l5-live-roi
+          path: assassin-l5-live-roi.json
+          if-no-files-found: warn

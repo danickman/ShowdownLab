@@ -118,3 +118,8 @@ This file is a **durable recovery pointer**, not a claim that missing chat messa
 
 ### Oct 17 — Beetank held-out L5 Shock/Quake do NOT improve wins
 - QA `a4fcc35` push 39072663005 and PR 39072665731 green; 408 actual terminal source games/12 instrumented RAF parity/16 strict L4 parity. Unseen first L5 wins current/Shock/Quake **4/8 each**; positive-HP secondary increases 4,423→7,930→12,136 but meaningful win pay-off does not. Reject both as shipping candidates, preserve genuine independent fronts/counters. Fresh **204-match Seismic Breach** focused primary follow-through and bounded sides A/B source-only; CI pending. Live Beetank, PWA, main and production untouched; Safari iPhone 14 Pro Max still OPEN.
+
+
+### Oct 17 — Verified Beetank Breach no-go; live Assassin L5 ROI next
+- Exact `a332e335` dedicated Beetank source job PASS: 204 real full terminal, 12 observer/raw RAF, 16 L4 exact. Held-out L5 current **8/8**, Breach **4/8**, Overdrive **7/8**; secondary HP increased without improvement in first win, real damage fronts 22/13/21. Both candidates rejected; peer/full-army x2/severe number counters preserved. Source study itself has no runtime change.
+- Historical Assassin L5 ROI 10/24 evolving vs 8/24 recruits vs 9/24 upgrade Beetank is on frozen older Goose; remeasure with real live Goose Impact + premium Barbarian via 192-match 4-choice live ROI and 16 physics SHA pairs on new holdout seeds. Exact new CI pending. Original live Assassin stats unchanged; main/prod untouched; physical Safari 14 Pro Max OPEN.
