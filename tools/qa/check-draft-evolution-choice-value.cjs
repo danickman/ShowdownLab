@@ -1,10 +1,12 @@
 'use strict';
+// Historical fixed-fixture research: preserve accepted pre-Impact Goose source.
+// New all-roster first-tier tests exercise current live Goose Impact separately.
 // One draft-pick opportunity cost, source-real. Never imported into game or PWA.
 // Choices: level up one fighter FAMILY (all copies), add two copies, or level
 // up the existing Beetank family. No winner, front, or performance shortcuts.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const live=read('v3/legacy-sim-core.js'),ability=read('v3/ultimate-abilities.js'),evolution=read('v3/evolution-rules.js');
+const live=read('v3/legacy-sim-core.js'),ability=read('tools/qa/fixtures/goose-before-impact-ultimate.js'),evolution=read('v3/evolution-rules.js');
 const replace=(s,a,b)=>{assert.equal(s.split(a).length,2,'observer anchor drift: '+a.slice(0,90));return s.replace(a,b)};
 const hitAnchor='const dealt=Math.min(t.hp,dmg);';
 const reflectLoop='if(!secondary)for(const hit of ultimate.afterHit(a,t,dealt,units,tick))hurt(hit.target,hit.damage,hit.source,true)';

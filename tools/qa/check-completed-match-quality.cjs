@@ -1,4 +1,6 @@
 'use strict';
+// Historical fixed-fixture research: preserve accepted pre-Impact Goose source.
+// New all-roster first-tier tests exercise current live Goose Impact separately.
 // Completed-match, read-only measurable battle-quality budget.
 // A "front" is connected by real positive HP-damage attacker→target edges;
 // proximity, target intent, action names or merely visible VFX do not count.
@@ -49,7 +51,7 @@ function completed(source,c,watch=true){
   console:{error:(...parts)=>errors.push(parts.join(' '))}};
  env.window=env;env.__qaHit=h=>hits.push(h);vm.createContext(env);
  vm.runInContext(read('v3/evolution-rules.js'),env);
- vm.runInContext(read('v3/ultimate-abilities.js'),env);
+ vm.runInContext(read('tools/qa/fixtures/goose-before-impact-ultimate.js'),env);
  vm.runInContext(source,env,{filename:'completed-match-core.js'});
  const sim=env.LegacySimCore;
  const roster=side=>{

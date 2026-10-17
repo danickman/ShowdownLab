@@ -1,10 +1,12 @@
 'use strict';
+// Historical fixed-fixture research: preserve accepted pre-Impact Goose source.
+// New all-roster first-tier tests exercise current live Goose Impact separately.
 // Read-only prospective Turtle guardian source A/B. No game runtime is modified.
 // Evolved Turtle would protect nearby allies without stacking with Knight Bastion.
 // Compare true terminal winners, positive HP damage and connected real fronts.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const releasedCore=read('v3/legacy-sim-core.js'),releasedUlt=read('v3/ultimate-abilities.js'),evo=read('v3/evolution-rules.js');
+const releasedCore=read('v3/legacy-sim-core.js'),releasedUlt=read('tools/qa/fixtures/goose-before-impact-ultimate.js'),evo=read('v3/evolution-rules.js');
 const once=(s,a,b)=>{assert.equal(s.split(a).length,2,'source anchor drift: '+a.slice(0,85));return s.replace(a,b)};
 const {withoutGuardian}=require('./historical-guardian-control.cjs');
 const prototypeCore=releasedCore,prototypeUlt=releasedUlt;

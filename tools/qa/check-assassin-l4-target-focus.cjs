@@ -1,9 +1,11 @@
 'use strict';
+// Historical fixed-fixture research: preserve accepted pre-Impact Goose source.
+// New all-roster first-tier tests exercise current live Goose Impact separately.
 // L4 Assassin target-continuity source study: never imported by game.
 // Uses the shipping simulator and real terminal matches, no synthetic outcomes.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const core=read('v3/legacy-sim-core.js'),ult=read('v3/ultimate-abilities.js'),evo=read('v3/evolution-rules.js');
+const core=read('v3/legacy-sim-core.js'),ult=read('tools/qa/fixtures/goose-before-impact-ultimate.js'),evo=read('v3/evolution-rules.js');
 const once=(s,a,b)=>{assert.equal(s.split(a).length,2,'source drift '+a.slice(0,80));return s.replace(a,b)};
 const choose="function assassinStep(u){const[t,d]=nearest(u,true);if(!t)return;trackTarget(u,t.id);";
 const action="u.special--;if(d>r){if(u.special<=0&&d<.42){u.action='vanish'";

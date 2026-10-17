@@ -1,9 +1,11 @@
 'use strict';
+// Historical fixed-fixture research: preserve accepted pre-Impact Goose source.
+// New all-roster first-tier tests exercise current live Goose Impact separately.
 // Assassin L4 Execution investment: source-only, fully terminal paired match study.
 // Changes are never imported by the game. The true L5 threshold stays at 75%.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const liveCore=read('v3/legacy-sim-core.js'),liveAbility=read('v3/ultimate-abilities.js'),evo=read('v3/evolution-rules.js');
+const liveCore=read('v3/legacy-sim-core.js'),liveAbility=read('tools/qa/fixtures/goose-before-impact-ultimate.js'),evo=read('v3/evolution-rules.js');
 const once=(s,from,to)=>{assert.equal(s.split(from).length,2,'source contract drift '+from.slice(0,90));return s.replace(from,to)};
 const gate='t.hp/t.maxHp<(r===2?.75:.4)';
 const execCue="cue(a,'execution',tick,t);return damage";
