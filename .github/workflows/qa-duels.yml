@@ -1285,3 +1285,25 @@ jobs:
           name: assassin-l5-difficulty-gradient
           path: assassin-l5-difficulty-gradient.json
           if-no-files-found: warn
+
+  mole-l5-physical-fissure-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only Mole L5 eruption fissure comparison
+        run: node --check tools/qa/check-mole-l5-fissure-ab.cjs
+      - name: Measure true terminal first-L5 wins peer and whole-army counters and physical fronts
+        env:
+          QA_MOLE_RIFT_RECEIPT: mole-l5-fissure-source.json
+        run: node tools/qa/check-mole-l5-fissure-ab.cjs
+      - name: Preserve 204 real source matches and whole RAF physical state parity receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-l5-fissure-source
+          path: mole-l5-fissure-source.json
+          if-no-files-found: warn
