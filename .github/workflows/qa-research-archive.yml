@@ -13,6 +13,7 @@ on:
       - 'tools/qa/check-small-army-pressure-study.cjs'
       - 'tools/qa/check-draft-evolution-choice-value.cjs'
       - 'tools/qa/check-evolution-choice-investment.cjs'
+      - 'tools/qa/check-borderline-draft-decisions.cjs'
   workflow_dispatch:
     inputs:
       study:
@@ -29,6 +30,7 @@ on:
           - small-army-pressure-study
           - draft-evolution-choice-value
           - evolution-choice-investment
+          - borderline-draft-decisions
 permissions:
   contents: read
 # Run rejected source A/B variants on physical COMBAT SOURCE changes, not every QA document/experiment.
@@ -196,4 +198,27 @@ jobs:
         with:
           name: evolution-choice-investment
           path: evolution-choice-investment.json
+          if-no-files-found: warn
+
+  borderline-draft-decisions:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'borderline-draft-decisions' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate borderline L4 draft source research syntax
+        run: node --check tools/qa/check-borderline-draft-decisions.cjs
+      - name: Compare borderline evolutions with real terminal unseen outcomes
+        env:
+          QA_BORDERLINE_RECEIPT: borderline-draft-decisions.json
+        run: node tools/qa/check-borderline-draft-decisions.cjs
+      - name: Archive physical last-hit and true HP/front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: borderline-draft-decisions
+          path: borderline-draft-decisions.json
           if-no-files-found: warn

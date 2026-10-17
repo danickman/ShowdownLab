@@ -887,3 +887,11 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Exact-head Action: 768 discovery plus 128 unseen real terminal matches, 16 physical frame-hash parity pairs and actual physical HP/Guardian/reflection/damaging-front/direct-fatal-hit ID receipts
 - [ ] Review unseen win flips vs recruit/Beetank and counter/front sustainability before prototyping L4 role-specific intervention
 - [ ] Physical iPhone 14 Pro Max Safari acceptance remains OPEN
+
+
+### Oct 16 — Completed borderline L4 choice study acceptance
+- [x] 896/896 genuinely terminal matched source battles, 16/16 observed/raw per-RAF SHA parity pairs at QA `8bc4d21`, [push CI](https://github.com/danickman/ShowdownLab/actions/runs/38977768668) and [PR CI](https://github.com/danickman/ShowdownLab/actions/runs/38977772560) 44 required successes each
+- [x] Held-out 4049/9091 seeded blue/red mirror Turtle L3→L4 win flips at 20 (hold 0/8, evolve 7/8) and 40 (hold 3/8, evolve 7/8). True Guardian/Ricochet physical HP measured; 20 front 7→3 warning preserved
+- [x] Held-out Assassin L4 mixed outcome 20 3→1 wins, 40 2→4; Beetank 5/8 and 8/8, so investigate tactical backline shot denial rather than raw multiplier
+- [ ] New exact-head 128-case *known* borderline CI regression plus 8 RAF parity controls; **pending** in current archive/refinement change
+- [ ] Any proposed new backline threat denial must prove actual shot suppression and true 20/40 wins/fronts, L5 unchanged, 80/120/300 budget; physical iPhone 14 Pro Max Safari OPEN

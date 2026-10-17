@@ -1077,24 +1077,24 @@ jobs:
           path: tools/qa/knight-candidate
           if-no-files-found: error
 
-  borderline-draft-decisions:
+  borderline-choice-regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validate borderline L4 draft source research syntax
-        run: node --check tools/qa/check-borderline-draft-decisions.cjs
-      - name: Compare borderline evolutions with real terminal unseen outcomes
+      - name: Validate accepted borderline choice regression syntax
+        run: node --check tools/qa/check-borderline-choice-regression.cjs
+      - name: Protect Turtle L4 real-win value and monitor Assassin counter trade
         env:
-          QA_BORDERLINE_RECEIPT: borderline-draft-decisions.json
-        run: node tools/qa/check-borderline-draft-decisions.cjs
-      - name: Archive physical last-hit and true HP/front evidence
+          QA_BORDERLINE_SMOKE_RECEIPT: borderline-choice-regression.json
+        run: node tools/qa/check-borderline-choice-regression.cjs
+      - name: Upload 128 real-match physical damage-front regression receipt
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: borderline-draft-decisions
-          path: borderline-draft-decisions.json
-          if-no-files-found: warn
+          name: borderline-choice-regression
+          path: borderline-choice-regression.json
+          if-no-files-found: error
