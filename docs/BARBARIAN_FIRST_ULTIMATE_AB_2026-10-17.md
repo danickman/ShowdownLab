@@ -11,3 +11,18 @@ At 20 and 40 initial fighters, two milestone tiers, seeds 8111/10103 prespecifie
 Source comparison is directional on small correlated matched seeds; do not falsely promise automatic victories. A viable candidate must increase first L5's fair advantage and make signature attacks visibly impactful **without invalidating peer tier and whole-army ×2**, destroying independent fights, or producing dangerous 80/120/300 crowd CPU cost. Physical iPhone 14 Pro Max Safari 430×932 DPR3 remains open.
 
 New exact-head CI pending. No gameplay, effects, renderer, hashes, main or production changes.
+## Verified first-tier A/B and dense-population CPU follow-up
+
+Study at QA `0ba5ef5b32928f114d64871a310698c75e08900d` completed 408 genuine terminal matches and 12 observed/raw full physical frame parity pairs. [Push Actions](https://github.com/danickman/ShowdownLab/actions/runs/39058215766) and [PR Actions](https://github.com/danickman/ShowdownLab/actions/runs/39058218964) both **50 required jobs passed**, one intentionally skipped.
+
+| Held-out first unlock | Current | Wide | Premium |
+|---|---:|---:|---:|
+| L4 wins | 3/8 | **6/8** | **6/8** |
+| L5 wins | 2/8 | 5/8 | **7/8** |
+| L5 physical secondary HP | 9,102.36 | 19,909.18 | 23,178.92 |
+| L5 true persistent positive-HP fronts | 32 | 17 | 14 |
+| L5 independent HP-damage windows | 80 | 64 | 74 |
+
+Peer evolution maintains 4/8 wins on held-out L4 and L5; whole opposing army ×2 leaves premium evolved player at 0/8 L4 and **1/8 L5**, so numerical counterplay still dominates, but this exceptional win deserves its own replay. All eight severe 3 Barbarian versus 15 enemies exceptions still lose. The candidate is legitimately dramatic, not a flat percentage stat increase. More damage may shorten battles and reduce time for simultaneous fronts; both winners and authentic HP damaging front persistence must be reviewed.
+
+Next source-only trial `tools/qa/check-barbarian-premium-density.cjs`: current vs premium at 80/120/300 fighters, Blue Barbarian L5 vs Red L4 with 26% Barbarian each, two seeds, 1× 16 and 10× 8 synthetic source RAF frames, finite positional/HP and unit count checks, CPU percentiles and 6 full physical frame-SHA **off-target** parity pairs without Barbarian. No iPhone browser GPU performance claim or runtime patch. New exact-head CI pending.

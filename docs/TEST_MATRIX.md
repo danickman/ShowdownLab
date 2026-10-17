@@ -954,3 +954,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Exact live Goose Impact QA SHA 7c09cb3 49 required successful on push & PR; PWA hashes/Guide and historical source baselines reconciled.
 - [ ] Source-only 408 fully terminal first-L4/L5 Barbarian current/wide/premium real battles, 12 observed vs original full-state RAF SHA; genuine post-cap physical HP on secondary hits, independent true fronts, 13007/16001 unseen seeds.
 - [ ] Peer matching and **whole opposing army ×2**, not just same-family doubling, plus severe 3 evolved versus 15. Do NOT ship until new-head CI/80-120-300 density and real iPhone 14 Pro Max Safari visual acceptance.
+
+
+### Oct 17 — Barbarian premium real source research accepted
+- [x] 408/408 genuinely complete Barbarian L3→L4 and L4→L5 source match A/B, 12 instrumented/raw complete-frame SHA parity, QA 0ba5ef5 push/PR 50 required successful each.
+- [x] Held-out premium L5 7/8 vs current 2/8 wins, real secondary HP 23,178.92 vs 9,102.36. Front persistence 14 vs 32; enemy full-army ×2 still wins 7/8, peer 4/8, 3-v-15 wins 0/8.
+- [ ] 80/120/300 true fighters, current/premium CPU 1x/10x, 2 seeds, 6 SHA off-target no-Barbarian parity. Node synthetic frames are not Safari FPS. New exact-head CI pending; no live mechanics changes.

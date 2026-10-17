@@ -1219,3 +1219,25 @@ jobs:
           name: barbarian-first-ultimate-ab
           path: barbarian-first-ultimate-ab.json
           if-no-files-found: error
+
+  barbarian-premium-density-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Barbarian premium source density syntax
+        run: node --check tools/qa/check-barbarian-premium-density.cjs
+      - name: Compare 80 120 300 fighter Barbarian source frame costs and off-target physics
+        env:
+          QA_BARBARIAN_DENSITY_RECEIPT: barbarian-premium-density.json
+        run: node tools/qa/check-barbarian-premium-density.cjs
+      - name: Preserve physical state and Node CPU source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-premium-density
+          path: barbarian-premium-density.json
+          if-no-files-found: error
