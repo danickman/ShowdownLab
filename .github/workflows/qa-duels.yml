@@ -1186,3 +1186,14 @@ jobs:
           name: goose-impact-density
           path: goose-impact-density.json
           if-no-files-found: error
+
+  goose-impact-offtarget-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify no-Goose and pre-L4 Goose original/current RAF SHA parity
+        run: node tools/qa/check-goose-impact-offtarget-parity.cjs

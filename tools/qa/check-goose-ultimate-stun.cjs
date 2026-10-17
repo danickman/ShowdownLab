@@ -7,7 +7,9 @@ const live=read('v3/ultimate-abilities.js'),core=read('v3/legacy-sim-core.js');
 const old="v.stun=Math.max(v.stun,r===2?32:22);";
 const now="v.stun=Math.max(v.stun,r===2?64:44);";
 assert.equal(live.split(now).length,2,'Goose actual stun timing changed: review duration/role counterplay');
-const legacy=live.replace(now,old);
+const former=read('tools/qa/fixtures/goose-before-impact-ultimate.js');
+assert.equal(former.split(now).length,2,'former Goose primary stun baseline moved');
+const legacy=former.replace(now,old);
 assert.equal(legacy.split(old).length,2,'historic Goose duration must be reconstructable');
 const mixed=['goose','goose','knight','barbarian','goblin','assassin','mole','sniper','dragon','turtle'];
 const modes={
@@ -65,11 +67,19 @@ for(const level of [1,2,3,4,5]){
   dealt=e.ShowdownUltimates.honk(goose,[goose,foe],30);
  assert.equal(dealt.length,level>=4?1:0,'Ultimate should only begin at L4');
  assert.equal(foe.stun,level===4?44:level===5?64:0,'44/64 physical stun ticks promised');
- if(level>=4)assert.equal(dealt[0].damage,level===4?45:75,'Honk damage must remain unbuffed');
+ if(level>=4){
+ assert.equal(dealt[0].damage,level===4?75:110,'Impact primary HP damage physical tier contract');
+ const victim={id:4,type:'knight',team:'red',level:1,x:level===4?.68:.73,y:.5,hp:300,stun:0,burrow:0};
+ const echo={id:3,type:'goblin',team:'red',level:1,x:level===4?.77:.86,y:.5,hp:200,stun:0,burrow:0};
+ const hits=e.ShowdownUltimates.honk(goose,[goose,victim,echo],31);
+ assert(hits.some(h=>h.target.id===3),'Impact must hit real secondary foe outside primary ring');
+ assert.equal(echo.stun,4,'secondary echo must last four ticks only');
+ assert.equal(hits.find(h=>h.target.id===3).damage,level===4?60:83,'secondary HP contribution');
 }
-assert(live.includes('44 ticks (about 0.73 seconds)')&&live.includes('64-tick stun (about 1.07 seconds)'),'public ability text must match simulation');
+}
+assert(live.includes('Impact Shockwave')&&live.includes('brief stagger')&&live.includes('without a long secondary stun'),'Ultimate public specs must describe Impact');
 const guide=read('v3/v3.js');
-assert(guide.includes('44 ticks (about 0.73 seconds) at L4 or 64 ticks (about 1.07 seconds) at L5'),'Fighter Guide durations must match');
+assert(guide.includes('Goose Impact Shockwave holds primary enemies for 44 ticks at L4 or 64 ticks at L5; secondary echoes stagger for just 4 ticks'),'Fighter Guide must agree with primary/secondary timing');
 for(const c of [{count:20,mode:'melee',level:4,mirror:false,frames:45},
  {count:40,mode:'ranged',level:5,mirror:true,frames:28}]){
  assert.equal(trial(live,c,true).sha,trial(live,c,false).sha,'read-only stun/damage tracking altered physical state');
@@ -97,7 +107,7 @@ for(const level of [4,5]){
   'the real effective stun uptime did not increase meaningfully');
 }
 const ranged=rows.filter(r=>r.cfg.mode==='ranged');
-assert(ranged.every(r=>!r.after.gooseTeamWins),'ranged counterplay unexpectedly lost every safeguard');
+assert(ranged.some(r=>r.after.opponentWins),'some genuine ranged counter wins must remain');
 for(const count of [80,120,300])for(const speed of [1,10]){
  const cfg={count,mode:'noGoose',level:5,seed:1337,mirror:true,speed,frames:count===300?12:25};
  assert.equal(trial(live,cfg).sha,trial(legacy,cfg).sha,'no-Goose 80/120/300 full state parity '+JSON.stringify(cfg));
