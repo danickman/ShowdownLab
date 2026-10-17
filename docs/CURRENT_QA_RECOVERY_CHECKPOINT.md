@@ -80,3 +80,7 @@ This file is a **durable recovery pointer**, not a claim that missing chat messa
 
 ### Oct 17 — playable QA Impact candidate + atomically pinned offline module bundle
 - Source-only 416 real terminal, 16 full RAF parity results held-out L5 Impact 8/8 vs original 3/8, true persistent damage fronts 9 vs 8, separated positiveHP windows 51 vs 86. Synthetic 80/120/300 Impact CPU no catastrophic increase vs original, but 300 at 10x p95 ~340ms Node. Full enemy ×2 strongly defeats first-tier Goose in matched fixtures. Actual Goose one-hop Impact Ultimate now in QA `v3/ultimate-abilities.js` plus subdued secondary ground-level echo in UltimateEffects. Updated dynamic Guide specs, root index and SW RUNTIME/sha256 with gooseimpact1 cache name. Frozen pre-impact source control in test fixture. New exact-head CI PENDING; physical iPhone 14 Pro Max still OPEN; no main merge/production deploy.
+
+
+### Oct 17 — Goose Guide timing and offline pinned assets corrected
+- After historical fixture pinning and physically exact 20-case off-target-Goose controls, updated Fighter Guide static timing from old Thunder Honk to actual Impact: primary 44/64-tick stun, echoed targets only four-tick stagger. Root HTML renderer revision gooseimpactguide2, service worker RUNTIME graph, SHA256 pins for root/renderer, and atomic cache id updated together; 42 pinned asset digest entries retained. This is QA-only; exact-head CI and physical iPhone 14 Pro Max Safari remain OPEN, no main/production merge.
