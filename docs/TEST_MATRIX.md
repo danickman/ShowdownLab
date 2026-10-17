@@ -913,3 +913,11 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] 720/720 real complete matches / 24 original-observer physical RAF SHA parity on exact QA `c703b91` ([push](https://github.com/danickman/ShowdownLab/actions/runs/39001984770), [PR](https://github.com/danickman/ShowdownLab/actions/runs/39001987803)), both 46 required successful
 - [x] Baseline first unlock L4 64/80, L5 57/80; peer 40/80 both tiers; doubled enemy nominated family counter 52/80 and 49/80; 3 evolved vs 15 only 3/40 L4 and 1/40 L5. Treat mirrored small-N directional, not universal rates.
 - [ ] New Goose Thunder echo and Barbarian Blood Cleave staggering sweep source-only 4-tier A/B, 20/40 and peer-/nominated-family double and 3-v-15 real terminal outcomes; 8 RAF source instrumentation SHA parity pairs. **Exact-head CI pending**; reject absent actual ability wins/role counters; no gameplay/pins/source modified.
+
+### Oct 17 — verified Goose/Barbarian source-only signatures
+- [x] fc86180 dedicated source job passed 480 real terminal matches, 8 raw/observer full-RAF SHA parity, 6 unaffected role SHA controls
+- [x] Goose L5 unseen first-tier 5 -> 8/8 but real persistent fronts 12 -> 2 and separated physical-HP windows 99 -> 46; do not yet ship this particular fanout/stun duration
+- [x] Barbarian L5 unseen 4 -> 6/8 first-tier wins, damaging fronts 20 -> 17 and separated windows 75 -> 69
+- [x] Same-tier peer remains 16/32 either source; severe number counter 3-v-15 wins 0/16; enemy family double NOT whole army x2
+- [ ] Retune Goose echo to balance exceptional power with independent simultaneous fights; whole-army x2 study, actual 80/120/300 CPU, real Safari and asset-integrity checks
+- [ ] New exact-head archived/reduced CI workflow approval; no playable combat or production change

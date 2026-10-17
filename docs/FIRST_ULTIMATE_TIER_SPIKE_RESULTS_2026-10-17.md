@@ -28,3 +28,26 @@ New `tools/qa/check-ultimate-signature-spike-candidates.cjs` probes two dramatic
 
 ### Oct 17 CI guard correction
 - First candidate run at QA `266efff` [push](https://github.com/danickman/ShowdownLab/actions/runs/39016144222) completed prototype match loops but failed **after them**, in final non-target-role exact-SHA guard: attempted `powers[c.role]` for Knight/Sniper/Mole although only Goose/Barbarian prototypes exist. Undefined source left `ShowdownUltimates` unregistered. Fixed by loading unmodified ultimate source for every other role. Also corrected console case accounting: 448 real paired scenario variants plus 32 severe-number case variants = 480 complete source fights; 8 pairwise RAF parity and six unaffected-role source-SHA comparisons. No combat/A/B result should be claimed until this corrected CI passes and prints receipts. Runtime/main/production unchanged.
+
+## Verified source-only Goose/Barbarian signature outcome — 17 October
+
+QA fc861806f487747b968a963149f2bce68a29f6cd. Dedicated source study passed in push Actions run 39016547468: 448 full terminal matched role/tier/peer/family-double variants plus 32 true severe-number variants = 480 completed battles; 8 raw-vs-observed complete-RAF SHA parity pairs and 6 unaffected Knight/Sniper/Mole source-SHA guards.
+
+| First-tier scenario | Existing wins | Prototype wins | True persistent damaging fronts existing -> prototype |
+|---|---:|---:|---:|
+| Goose L4, training | 3/8 | 8/8 | 13 -> 8 |
+| Goose L4, held-out | 7/8 | 7/8 | 8 -> 5 |
+| Goose L5, training | 4/8 | 7/8 | 3 -> 3 |
+| Goose L5, held-out | 5/8 | 8/8 | 12 -> 2 |
+| Barbarian L4, training | 4/8 | 6/8 | 9 -> 19 |
+| Barbarian L4, held-out | 3/8 | 4/8 | 21 -> 18 |
+| Barbarian L5, training | 4/8 | 4/8 | 23 -> 15 |
+| Barbarian L5, held-out | 4/8 | 6/8 | 20 -> 17 |
+
+Aggregate unseen first-unlock Goose+Barbarian: 19/32 -> 25/32 wins, but true independent physical HP-damaging fronts 61 -> 42 and separated positive-HP windows 332 -> 271. The weakest tradeoff is Goose L5 unseen (12 -> 2 fronts, 99 -> 46 separated HP windows) and peer L5 (6 -> 0 fronts). This over-broad cascade is spectacular but risks replacing a lively multi-front fight with mass disabling.
+
+Unseen peer-matched evolution baseline and prototype remain 16/32 wins each; equal tier counters still restore symmetry. The opposing nominated fighter FAMILY doubling trial is 20/32 -> 22/32 wins, NOT a whole-army x2 counter. Severe 3 evolved against 15 foes remained 0/16 wins in either arm. These comparisons are matched per source; small cohort seeds and side mirrors correlate.
+
+Decision: retain Goose broad cascading prototype as a RESEARCH SPIKE, not as live gameplay. Narrow echo stun duration and fan-out, retain distinctive spectacle and real independent fronts, test with new seeds and 80/120/300 density before promotion. Barbarian L5 wide staggering sweep is promising (held-out wins 4 -> 6/8 and fronts 20 -> 17), but L4 held-out rises only 3 -> 4/8; real secondary-hit instrumentation, high population CPU, comic timing and iPhone 14 Pro Max physical Safari needed. Beetank L5, Mole L5 and both Goblin tiers remain weak in prior first-unlock benchmark.
+
+Preserve accepted full research script and source receipt while moving its 480-match job to conditional historical CI. The 720-match ten-role first-unlock benchmark remains actively required. Changes to docs/workflows have their own exact-head CI and cannot inherit green from the previous source commit. No live combat, PWA, Guide, art, main or production edits.
