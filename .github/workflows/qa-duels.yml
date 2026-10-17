@@ -1241,3 +1241,25 @@ jobs:
           name: barbarian-premium-density
           path: barbarian-premium-density.json
           if-no-files-found: error
+
+  beetank-seismic-first-ultimate-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Seismic Overdrive source-only A/B syntax
+        run: node --check tools/qa/check-beetank-seismic-first-ultimate-ab.cjs
+      - name: Compare first L4 L5 physical HP, fronts, peer and all-army x2
+        env:
+          QA_BEETANK_SEISMIC_RECEIPT: beetank-seismic-first-ultimate-ab.json
+        run: node tools/qa/check-beetank-seismic-first-ultimate-ab.cjs
+      - name: Preserve real terminal and full RAF parity receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-seismic-first-ultimate-ab
+          path: beetank-seismic-first-ultimate-ab.json
+          if-no-files-found: error

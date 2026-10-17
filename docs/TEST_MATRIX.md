@@ -978,3 +978,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Goose current real physical stun/hit changes and ranged counters compared against **Goose-only historical honk on current Premium Barbarian**; no-Goose at 80/120/300 1×/10× must be bitwise identical
 - [ ] Historical Turtle .09→.10 Ricochet original front/winner/reflect floors unchanged on frozen pre-premium sources, plus 32 true terminal modern Turtle cross-Premium diagnostics at 20/40 logged separately
 - [ ] Modern actual independent-front metrics must be reviewed for meaningful lost simultaneous engagements before main/prod; iPhone 14 Pro Max Safari remains OPEN.
+
+
+### Oct 17 — Beetank L5 first-evolution Seismic Overdrive source-only
+- [x] Barbarian playable QA da87c14 exact-head CI: push 39065712821/PR 39065715932 51 required pass each and one intentional skip; PWA/genuine counter controls not shipped to main.
+- [ ] Beetank L5 source trial 408 authentic terminal original/Shock/Quake matches in 20/40, both mirrors, new seed calibration 9821/11071 and held-out 14341/19121; peer tier, enemy family doubling, **entire enemy army ×2**, severe 3-v-15
+- [ ] 12 real raw/instrumented whole RAF SHA parity, plus 16 original vs L5-only variants strict L4 whole-frame equality. Physical positive-HP secondary hits, independent fronts and counter-win evidence mandatory before any QA gameplay integration.
+- [ ] 80/120/300 1x/10x actual physics/CPU, visual authored quake, real iPhone 14 Pro Max physical Safari remain OPEN.
