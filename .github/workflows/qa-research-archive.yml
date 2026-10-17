@@ -15,6 +15,7 @@ on:
       - 'tools/qa/check-evolution-choice-investment.cjs'
       - 'tools/qa/check-borderline-draft-decisions.cjs'
       - 'tools/qa/check-ultimate-signature-spike-candidates.cjs'
+      - 'tools/qa/check-goose-echo-falloff-ab.cjs'
   workflow_dispatch:
     inputs:
       study:
@@ -33,6 +34,7 @@ on:
           - evolution-choice-investment
           - borderline-draft-decisions
           - ultimate-signature-spike-candidates
+          - goose-echo-falloff-ab
 permissions:
   contents: read
 # Run rejected source A/B variants on physical COMBAT SOURCE changes, not every QA document/experiment.
@@ -246,4 +248,27 @@ jobs:
         with:
           name: ultimate-signature-spike-candidates
           path: ultimate-signature-spike-candidates.json
+          if-no-files-found: error
+
+  goose-echo-falloff-ab:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'goose-echo-falloff-ab' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile Goose capped double ring source A/B
+        run: node --check tools/qa/check-goose-echo-falloff-ab.cjs
+      - name: Compare first L4 L5, true entire-army x2, and physical damage fronts
+        env:
+          QA_GOOSE_ECHO_RECEIPT: goose-echo-falloff-ab.json
+        run: node tools/qa/check-goose-echo-falloff-ab.cjs
+      - name: Preserve full terminal and RAF-parity research receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-echo-falloff-ab
+          path: goose-echo-falloff-ab.json
           if-no-files-found: error

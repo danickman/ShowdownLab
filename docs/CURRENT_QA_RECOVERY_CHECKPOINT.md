@@ -67,3 +67,7 @@ This file is a **durable recovery pointer**, not a claim that missing chat messa
 
 ### Oct 17 — next source experiment: Goose short echo stagger
 - Exact QA `24e7be2` completed push and PR both 46 required jobs green. Source-only retune tests existing/broad/trim Goose Thunder Honk across L4/L5, 20/40 fighters, new holdout seeds 8303/10111 and original 1337/2017. Separate **full enemy army ×2** (not family only) and 3-v-15 counters now modeled. 408 authentic terminal variants, 12 read-only raw-vs-observed RAF state SHA pairs. Results pending exact-head CI. No live `ultimate-abilities.js`/PWA/Guide/main/production changes, physical iPhone 14 Pro Max manual Safari pending.
+
+
+### Oct 17 — Goose candidate result and source-only shockwave next test
+- Last exact QA source experiment b36adbc source Goose 408 complete terminal/12 physical RAF parity passed in dedicated push job 39041535844. Heldout L5 baseline 3/8 wins, broad 8/8, trimmed 5/8, true persistent fronts 10/3/2, separate HP damage windows 86/33/66. True full army x2 defeats Goose evolved side all 16 tests. Broad and trim still test only; move accepted 408 research to conditional archive. New 4-arm damage-led short-stagger echo candidate source script adds 416 complete variants +16 RAF parity with new 15013/19031 holdout. New CI pending; main, production, v3/ultimate-abilities.js, Guide and PWA untouched; physical iPhone 14 Pro Max still open.

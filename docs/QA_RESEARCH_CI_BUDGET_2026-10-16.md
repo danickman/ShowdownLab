@@ -14,3 +14,7 @@ The source-only Assassin pursuit multipliers (1.65/1.85) were tested and rejecte
 
 ### Oct 17 — source-only signature research archived
 - Successful Goose/Barbarian 480-match candidate comparison at QA fc86180 preserved in tools/qa/check-ultimate-signature-spike-candidates.cjs and Actions artifact from run 39016547468. Moving this exploration to conditional Historical combat source studies workflow, triggered by v3 core/ultimate/evolution changes or source study script. Docs-only QA pushes no longer rerun it. The 720-match ten-fighter first-L4/L5 benchmark remains active. Source-only acceptance does not imply game ability approval; Goose wide wave requires separate revised fanout/stun prototype.
+
+
+### Oct 17 — 408-case Goose falloff accepted exploratory suite conditional
+- First source test `check-goose-echo-falloff-ab.cjs` passed 408 real terminal fights +12 exact raw/observed RAF parity at QA b36adbc in run 39041535844. Archive it under historical conditional combat/source/test triggers; ordinary daily CI avoids 408 extra completed research matches after this acceptance. The new 416-case damage-led shockwave source comparison remains active until a result is accepted and documented. Canonical first-to-tier 720-case multi-family benchmark remains required.

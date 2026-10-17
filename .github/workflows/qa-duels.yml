@@ -1143,7 +1143,7 @@ jobs:
           path: first-ultimate-tier-spike.json
           if-no-files-found: error
 
-  goose-echo-falloff-ab:
+  goose-impact-shockwave-ab:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -1151,16 +1151,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Compile Goose capped double ring source A/B
-        run: node --check tools/qa/check-goose-echo-falloff-ab.cjs
-      - name: Compare first L4 L5, true entire-army x2, and physical damage fronts
+      - name: Validate damage-led short-stagger Goose shockwave runner syntax
+        run: node --check tools/qa/check-goose-impact-shockwave-ab.cjs
+      - name: Compare true L4/L5 first unlock and fully doubled opponent against four source arms
         env:
-          QA_GOOSE_ECHO_RECEIPT: goose-echo-falloff-ab.json
-        run: node tools/qa/check-goose-echo-falloff-ab.cjs
-      - name: Preserve full terminal and RAF-parity research receipts
+          QA_GOOSE_IMPACT_RECEIPT: goose-impact-shockwave-ab.json
+        run: node tools/qa/check-goose-impact-shockwave-ab.cjs
+      - name: Preserve full physical-Goose power and damage-front evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: goose-echo-falloff-ab
-          path: goose-echo-falloff-ab.json
+          name: goose-impact-shockwave-ab
+          path: goose-impact-shockwave-ab.json
           if-no-files-found: error

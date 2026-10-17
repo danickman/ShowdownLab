@@ -927,3 +927,11 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] 408/408 genuine full terminal baseline/broad/trim Goose battles, 12 untouched/observed per-RAF SHA parity, 2 fresh held-out seeds 8303/10111, two populations, two tiers, both side mirrors
 - [ ] Assert enemy **whole-army ×2** creates 10 vs 20 or 20 vs 40; separate family-only x2 and 3 evolved vs 15
 - [ ] Preserve positive-HP genuine fronts, meaningful first L4/L5 signature spikes, peers/number counters and no global stun; performance 80/120/300 real frame budget and physical Safari 14 Pro Max remain OPEN. No live gameplay modifications.
+
+
+### Oct 17 — Goose previous trimmed echo verdict and damage-led echo trial
+- [x] Exact QA b36adbc dedicated job passed 408/408 terminal Goose original/broad/trim combat variants and 12 read-only per-RAF SHA controls
+- [x] Fresh held-out first L5 current 3/8, broad 8/8, trim 5/8, positive-HP persistent independent fronts 10/3/2, separated damage windows 86/33/66. Trim remains too weak and suppressive to promote.
+- [x] Full opposing army x2 won against ALL Goose sources in 16/16 held-out source tests, plus 3 evolved vs 15 legitimate counter
+- [ ] New damage-led echo 4-tick secondary stagger test: 416 complete terminal variants (including 32 severe-number variants) +16 exact RAF parity; two fully new seeds 15013/19031, 20/40, tier peers, family x2 and true full-army x2. CI pending.
+- [ ] Accept only actual L5 power spike plus credible peer/x2/true independent damaging fronts, then 80/120/300 and iPhone 14 Pro Max real Safari; no game/runtime edit yet.

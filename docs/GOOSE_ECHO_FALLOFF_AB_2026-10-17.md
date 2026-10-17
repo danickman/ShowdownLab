@@ -17,3 +17,18 @@ Report true terminal winners, actual post-cap direct HP by selected Goose and ea
 
 ## Status
 New exact-head push/PR CI PENDING. No modification to v3/ultimate-abilities.js, base combat, manifests/service-worker, original game assets, main or production. Previously accepted broad source experiment retained unchanged in conditional archive.
+
+## Verified 408-battle three-way Goose result — 17 October
+
+Exact QA b36adbc dedicated [push run](https://github.com/danickman/ShowdownLab/actions/runs/39041535844) **passed** 408 authentic terminal source matches and 12 exact raw/observed RAF state hashes; study artifact 12104511326. Full baseline push/PR workflows may complete later and must be checked separately.
+
+| First-to-tier, fresh 8303/10111 mirror seeds | Existing Goose | Broad stun echo | Trim short echo |
+|---|---:|---:|---:|
+| L4 wins | 3/8 | 7/8 | 4/8 |
+| L5 wins | 3/8 | 8/8 | 5/8 |
+| L5 genuine persistent damaging-front windows | 10 | 3 | 2 |
+| L5 separated physical-HP damage windows | 86 | 33 | 66 |
+
+Broad wave remains hugely impactful but overly suppressive. Trim wave improves some true HP-damage window coexistence compared to broad, but gives up too much L5 first-unlock value and does not restore persistent positive-HP fronts. Neither candidate approved for playable QA. Equal tier L5 returns 4/8 wins for existing/broad/trim. At the two truly full-army ×2 rosters (10-vs-20 and 20-vs-40), **all three Goose sources won 0/16 held-out**; 3 evolved vs 15 earlier-level troops yielded **0/4 at each tier** across all arms. These are specific mirrored scenarios, not a universal mathematical guarantee of defeats for evolved units.
+
+Next source-only iteration tests a **damage-led shockwave**: first ring still a significant L4/L5 Thunder Honk, one-hop second ring with strong positive HP but a very short 4-tick stagger. Broader damage reach without long mass stun. Two genuinely fresh 15013/19031 held-out seeds, one previously viewed 8303 calibration seed, and real full enemy army x2 as well as family doubling. Compare source actual winners and independent damaging fronts at both tiers, not artificial front flags. Previously accepted Goose A/B moved into conditional historical research workflow so ordinary CI does not repeat 408 exploratory fights on every documentation change.
