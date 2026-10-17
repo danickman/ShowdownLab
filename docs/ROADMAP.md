@@ -702,3 +702,6 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 ## Ultimate portrait milestone — 2026-10-12 Toronto (after Evolved release)
 
 Branch `ultimate-portrait-polish` begins at main `4d88372`. Ten Ultimate canonicals plus seventy poses are implemented using combined production boards and targeted repairs. Portrait camera composition addresses opening team separation; real Puppeteer/Chromium tests are now available. Six arena treatments, stronger role-specific intermediate seals, Ultimate impact ink and three-form Guide comparisons are implemented. See `ULTIMATE_PORTRAIT_PLAN.md` and `ULTIMATE_PORTRAIT_HANDOFF.md` for exact current tests/release state. Physical-phone FPS and extreme crowd readability remain open. This supersedes earlier all-Ultimate-art-pending entries.
+
+
+**Oct 17 Beetank L5 next gate:** Verified held-out current/Shock/Quake first-L5 4/8 each; extra splash HP alone is insufficient. Reject both. New source-only Seismic Breach primary physical aftershock + short bounded quake tested at L5 only on distinct seeds against peer/full army ×2/severe cases; 204 terminal plus 28 state-SHA controls on CI, then check 80/120/300 and native portrait effects ONLY if actual held-out win lift. Live L4/L5 unchanged; main/prod protected. [Research](BEETANK_SEISMIC_OVERDRIVE_AB_2026-10-17.md).

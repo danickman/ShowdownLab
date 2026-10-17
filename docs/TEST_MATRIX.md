@@ -985,3 +985,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Beetank L5 source trial 408 authentic terminal original/Shock/Quake matches in 20/40, both mirrors, new seed calibration 9821/11071 and held-out 14341/19121; peer tier, enemy family doubling, **entire enemy army ×2**, severe 3-v-15
 - [ ] 12 real raw/instrumented whole RAF SHA parity, plus 16 original vs L5-only variants strict L4 whole-frame equality. Physical positive-HP secondary hits, independent fronts and counter-win evidence mandatory before any QA gameplay integration.
 - [ ] 80/120/300 1x/10x actual physics/CPU, visual authored quake, real iPhone 14 Pro Max physical Safari remain OPEN.
+
+
+### Oct 17 — Beetank Seismic verdict and contact-first Breach A/B
+- [x] Exact QA `a4fcc35` push 39072663005 / PR 39072665731 succeeded; 408 full original/Shock/Quake terminal battles, 12 instrumented/raw full RAF SHA pairs, 16 strict L4 source parity; held-out first L5 win **4/8 for ALL 3 arms**, despite secondary actual HP 4,423/7,930/12,136. Do not ship rejected Shock/Quake as decisive.
+- [ ] Source-only contact-first Breach and Overdrive: 204 authentic L5 terminal (20/40, blue/red, 2 training +2 unseen seeds), 12 exact instrumentation RAF SHA, 16 L4 strictly unchanged physical RAF SHA, real secondary HP/front/window receipts, same-tier L5, whole-army doubling, 3-v-15 exceptions. CI pending.
+- [ ] If held-out wins actually improve, profile 80/120/300 mixed source-physics 1×/10× and true iPhone 14 Pro Max native Safari, visual treatment/pins/Guide before any playable QA promotion. Main/production unchanged.

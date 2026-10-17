@@ -1263,3 +1263,25 @@ jobs:
           name: beetank-seismic-first-ultimate-ab
           path: beetank-seismic-first-ultimate-ab.json
           if-no-files-found: error
+
+  beetank-seismic-breach-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check bounded primary-and-side L5 source study
+        run: node --check tools/qa/check-beetank-seismic-breach-ab.cjs
+      - name: Measure live Beetank versus contact-first Seismic Breach, full terminal fights
+        env:
+          QA_BEETANK_BREACH_RECEIPT: beetank-seismic-breach.json
+        run: node tools/qa/check-beetank-seismic-breach-ab.cjs
+      - name: Retain matched winner, physical HP, damaging-front, parity and counter receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-seismic-breach-source
+          path: beetank-seismic-breach.json
+          if-no-files-found: warn
