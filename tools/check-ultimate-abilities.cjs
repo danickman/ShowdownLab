@@ -24,7 +24,15 @@ for(const level of [4,5]){
  attacker.x=turtle.x+.101;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0,'outside 0.10 Ricochet radius must preserve ranged counterplay');
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
  const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>h.damage===(rank===2?65:40)));
- const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);close(hits[0].damage,rank===2?75:45);assert.equal(t.stun,rank===2?64:44);
+ const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);
+ close(hits[0].damage,rank===2?110:75);assert.equal(t.stun,rank===2?64:44);
+ const direct=unit('knight',1,'red',45,rank===2?.73:.68),echo=unit('goblin',1,'red',46,rank===2?.86:.77);
+ const two=U.honk(goose,[goose,direct,echo],31);
+ assert.equal(two.length,2,'Impact must hit a primary and a physically different echo target');
+ close(two.find(x=>x.target.id===45).damage,rank===2?110:75);
+ close(two.find(x=>x.target.id===46).damage,rank===2?83:60);
+ assert.equal(direct.stun,rank===2?64:44,'primary stun should remain powerful');
+ assert.equal(echo.stun,4,'Impact echo must only briefly stagger a secondary foe');
 }
 // The actual core damage path applies resistance, reflection and splash once.
 let src=fs.readFileSync('v3/legacy-sim-core.js','utf8');src=src.replace('window.LegacySimCore={','window.TestCombat={hurt,step,setUnits:v=>{units=v;bastions=v.filter(u=>u.type==="knight"&&ultimate.rank(u))},getUnits:()=>units};window.LegacySimCore={');vm.runInContext(src,e);
