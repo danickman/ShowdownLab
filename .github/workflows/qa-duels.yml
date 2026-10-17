@@ -1164,3 +1164,25 @@ jobs:
           name: goose-impact-shockwave-ab
           path: goose-impact-shockwave-ab.json
           if-no-files-found: error
+
+  goose-impact-density-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Goose Impact CPU and state sample syntax
+        run: node --check tools/qa/check-goose-impact-density.cjs
+      - name: Compare original vs Impact at 80 120 300 bodies 1x and 10x
+        env:
+          QA_GOOSE_DENSITY_RECEIPT: goose-impact-density.json
+        run: node tools/qa/check-goose-impact-density.cjs
+      - name: Upload CPU sample and bounded physical state receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-impact-density
+          path: goose-impact-density.json
+          if-no-files-found: error

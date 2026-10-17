@@ -71,3 +71,8 @@ This file is a **durable recovery pointer**, not a claim that missing chat messa
 
 ### Oct 17 — Goose candidate result and source-only shockwave next test
 - Last exact QA source experiment b36adbc source Goose 408 complete terminal/12 physical RAF parity passed in dedicated push job 39041535844. Heldout L5 baseline 3/8 wins, broad 8/8, trimmed 5/8, true persistent fronts 10/3/2, separate HP damage windows 86/33/66. True full army x2 defeats Goose evolved side all 16 tests. Broad and trim still test only; move accepted 408 research to conditional archive. New 4-arm damage-led short-stagger echo candidate source script adds 416 complete variants +16 RAF parity with new 15013/19031 holdout. New CI pending; main, production, v3/ultimate-abilities.js, Guide and PWA untouched; physical iPhone 14 Pro Max still open.
+
+
+### Oct 17 — Goose Impact actual L4/L5 payoff and CPU follow-up
+- Source-only PR job for QA fb11a07 **passed** 416 genuine complete-match variants and 16 raw/observer full RAF hashes; held-out Goose first L5 base 3/8 vs Impact 8/8, authentic damaging fronts 8→9, separated physical HP windows 86→51. L4 5/8→7/8. All matched peer-tier L5 4/8, whole enemy army ×2 first-tier wins 0/8, 3-evolved-v-15 wins 0. Source-only, not shippable directly; no live changes.
+- New source-only Goose-heavy 80/120/300 actual fighter performance finite-state study, two seeds, 1x/10x, original-vs-Impact Node frame CPU (not iOS GPU/FPS). New exact-head CI pending. iPhone 14 Pro Max, production, PWA untouched.

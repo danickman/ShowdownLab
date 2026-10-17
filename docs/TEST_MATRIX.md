@@ -935,3 +935,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Full opposing army x2 won against ALL Goose sources in 16/16 held-out source tests, plus 3 evolved vs 15 legitimate counter
 - [ ] New damage-led echo 4-tick secondary stagger test: 416 complete terminal variants (including 32 severe-number variants) +16 exact RAF parity; two fully new seeds 15013/19031, 20/40, tier peers, family x2 and true full-army x2. CI pending.
 - [ ] Accept only actual L5 power spike plus credible peer/x2/true independent damaging fronts, then 80/120/300 and iPhone 14 Pro Max real Safari; no game/runtime edit yet.
+
+
+### Oct 17 — Goose Impact Shockwave dense CPU/source safety
+- [x] Source-only 416 true fully terminal impact A/B and 16 read-only exact-RAF physical state parity pairs at fb11a07 PR CI; held-out L5 first 3/8→8/8, true independent fronts 8→9 but separated windows 86→51
+- [ ] New 80/120/300 actual fighter smoke, Goose-heavy mixed rosters, two seeds, original and Impact source, 16 1x/8 10x physical RAF frames each, finite HP/world excursion and Node CPU p50/p95, catastrophic >15x guard. CI pending.
+- [ ] Actual mobile iPhone 14 Pro Max Safari viewport, browser sprite-heavy 300 population FPS, cache hashes/Guide effects and main/prod unchanged. No claim Node equals Safari.
