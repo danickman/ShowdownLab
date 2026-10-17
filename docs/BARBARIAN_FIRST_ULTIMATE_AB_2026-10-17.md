@@ -1,0 +1,13 @@
+# Barbarian Blood Cleave — first L4/L5 real counter A/B
+
+17 October 2026. Source-only follow-on to the accepted all-ten first-evolution study. This does NOT edit playable abilities.
+
+User intent: first L4 or L5 should usually turn a fair round decisively, countered by a peer evolution, true whole-army ×2, severe numerical disadvantage, or extreme composition. The verified prior first-tier sample (8 small mirrored cases per tier) had Barbarian 4/8 first-L4, 4/8 first-L5 wins. The previous wide Blood Cleave source-only trial on another held-out seed improved first L5 to 6/8 with moderately reduced persistent damage fronts (20→17), but lacked whole-army doubling and real secondary-HP attribution.
+
+Three same-core genuine battle sources: current narrow Cleave; prior wide Cleave (L4 radius .135 cap3 58% attack splash, stagger 8 ticks; L5 radius .18 cap5 85% attack, stagger 14 ticks); and an L5-focused premium variant (same L4, L5 radius .205 cap5 100% attack, stagger 12 ticks). Deterministic closest-first by real position and fighter ID, no global crowd debuff, no ability at L1–L3 and no changes to another role.
+
+At 20 and 40 initial fighters, two milestone tiers, seeds 8111/10103 prespecified and 13007/16001 held out, both player sides: compare first evolution to previous tier, peer tier matching, opposing Barbarian FAMILY copies doubling, and **the entire opposing army doubling**. Exactly 32 fixtures × four strategies × three sources =384 genuinely terminal games, plus eight numerical exceptions × three sources =24 (3 evolved Barbarians versus 15 opponent fighters). Total **408 true terminal source games**; **12 exact raw/observer whole RAF physics SHA pairs**. Actual physical HP on capped, resolved secondary hits, per-side winners, distinct geographically independent positive-HP damage fronts and actual separated HP-damage windows are reported. Not merely opportunities or animation intents.
+
+Source comparison is directional on small correlated matched seeds; do not falsely promise automatic victories. A viable candidate must increase first L5's fair advantage and make signature attacks visibly impactful **without invalidating peer tier and whole-army ×2**, destroying independent fights, or producing dangerous 80/120/300 crowd CPU cost. Physical iPhone 14 Pro Max Safari 430×932 DPR3 remains open.
+
+New exact-head CI pending. No gameplay, effects, renderer, hashes, main or production changes.

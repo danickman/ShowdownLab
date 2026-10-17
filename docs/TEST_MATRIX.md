@@ -948,3 +948,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Synthetic Node CPU on true 80/120/300 population 1x/10x Impact near original, no non-finite physical state. 300 at 10x p95 ~340ms and not suitable as 60 FPS claim.
 - [ ] Fresh exact-head actual `v3/ultimate-abilities.js` QA first-tier, Goose counterplay, SW SHA256 verify/atomic PWA update, effect preview and portrait browser. Updated index and SW pins with goosestun Impact URL gooseimpact1.
 - [ ] Physical iPhone 14 Pro Max Safari, original main/prod unchanged, no deployment.
+
+
+### Oct 17 — all-ten tier spike follow-on: Barbarian real wide Cleave
+- [x] Exact live Goose Impact QA SHA 7c09cb3 49 required successful on push & PR; PWA hashes/Guide and historical source baselines reconciled.
+- [ ] Source-only 408 fully terminal first-L4/L5 Barbarian current/wide/premium real battles, 12 observed vs original full-state RAF SHA; genuine post-cap physical HP on secondary hits, independent true fronts, 13007/16001 unseen seeds.
+- [ ] Peer matching and **whole opposing army ×2**, not just same-family doubling, plus severe 3 evolved versus 15. Do NOT ship until new-head CI/80-120-300 density and real iPhone 14 Pro Max Safari visual acceptance.
