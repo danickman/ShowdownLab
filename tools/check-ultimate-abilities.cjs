@@ -15,12 +15,25 @@ for(const level of [4,5]){
  const dragon=unit('dragon',level);dragon.action='fire';U.afterHit(dragon,t,100,[dragon,t],30);let burn=0;for(let i=0;i<90;i++)burn+=U.burn(t);assert(Math.abs(burn-(rank===2?75:45))<1e-10);assert.equal(U.burn(t),0);
  U.afterHit(dragon,t,100,[dragon,t],45);t.burrow=90;for(let i=0;i<90;i++)assert.equal(U.burn(t),0);t.burrow=0;
  const assassin=unit('assassin',level);assassin.action='backstab';t.hp=30;assert.equal(U.outgoing(assassin,t,100,[assassin,t],30),rank===2?220.00000000000003:180);t.hp=90;assert.equal(U.outgoing(assassin,t,100,[assassin,t],50),100);
+ t.hp=74;assert.equal(U.outgoing(assassin,t,100,[assassin,t],61),rank===2?220.00000000000003:100,'L5 Execution triggers below 75%; L4 remains below 40%');
+ t.hp=75;assert.equal(U.outgoing(assassin,t,100,[assassin,t],75),100,'75% boundary is strictly below');
+ t.hp=40;assert.equal(U.outgoing(assassin,t,100,[assassin,t],89),rank===2?220.00000000000003:100,'L4 40% boundary unchanged');
  const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);
  const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,1);close(hits[0].damage,rank===2?18:12);
- attacker.x=.1;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0);
+ attacker.x=turtle.x+.095;hits=U.afterHit(attacker,turtle,40,[attacker,turtle],45);assert.equal(hits.length,1,'close collision-edge attacker should trigger Ricochet');close(hits[0].damage,rank===2?18:12);
+ attacker.x=turtle.x+.101;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0,'outside 0.10 Ricochet radius must preserve ranged counterplay');
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
- const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>h.damage===(rank===2?65:40)));
- const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);close(hits[0].damage,rank===2?75:45);assert.equal(t.stun,rank===2?32:22);
+ const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>Math.abs(h.damage-(rank===2?100:58))<1e-9),'premium Cleave physical secondary damage');
+ assert(hits.every(h=>h.target.stun===(rank===2?12:8)),'premium Cleave stagger on real splash victims');
+ const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);
+ close(hits[0].damage,rank===2?110:75);assert.equal(t.stun,rank===2?64:44);
+ const direct=unit('knight',1,'red',45,rank===2?.73:.68),echo=unit('goblin',1,'red',46,rank===2?.86:.77);
+ const two=U.honk(goose,[goose,direct,echo],31);
+ assert.equal(two.length,2,'Impact must hit a primary and a physically different echo target');
+ close(two.find(x=>x.target.id===45).damage,rank===2?110:75);
+ close(two.find(x=>x.target.id===46).damage,rank===2?83:60);
+ assert.equal(direct.stun,rank===2?64:44,'primary stun should remain powerful');
+ assert.equal(echo.stun,4,'Impact echo must only briefly stagger a secondary foe');
 }
 // The actual core damage path applies resistance, reflection and splash once.
 let src=fs.readFileSync('v3/legacy-sim-core.js','utf8');src=src.replace('window.LegacySimCore={','window.TestCombat={hurt,step,setUnits:v=>{units=v;bastions=v.filter(u=>u.type==="knight"&&ultimate.rank(u))},getUnits:()=>units};window.LegacySimCore={');vm.runInContext(src,e);

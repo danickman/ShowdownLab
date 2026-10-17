@@ -1,0 +1,58 @@
+name: Promote Base Knight art on QA branch
+on:
+  push:
+    branches: [qa-turn1-duel-baseline]
+permissions:
+  contents: write
+jobs:
+  promote:
+    if: contains(github.event.head_commit.message, '[knight-promote]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: qa-turn1-duel-baseline
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deterministic image dependencies
+        run: python -m pip install --disable-pip-version-check 'pillow==12.3.0' 'numpy==2.4.6' 'scipy==1.17.1'
+      - name: Rebuild approved six Base Knight poses
+        run: python tools/rebuild-base-knight.py --dest v3/assets/authored/knight
+      - name: Verify all 240 authored sprites and Knight 256px contract
+        run: |
+          python tools/check-authored-assets.py
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          base=Path('v3/assets/authored/knight')
+          for name in ('idle','move','attack','guard','charge','hit'):
+              with Image.open(base/f'{name}.webp') as im:
+                  im.load()
+                  assert im.size==(256,256), (name,im.size)
+                  assert im.getchannel('A').getbbox()
+          print('PASS: six 256x256 alpha authored Knight files')
+          PY
+      - name: Ensure changes limited to six existing Base files
+        run: |
+          git add -- v3/assets/authored/knight/idle.webp v3/assets/authored/knight/move.webp v3/assets/authored/knight/attack.webp v3/assets/authored/knight/guard.webp v3/assets/authored/knight/charge.webp v3/assets/authored/knight/hit.webp
+          git diff --cached --name-only
+          test "$(git diff --cached --name-only | wc -l)" -eq 6
+          git diff --cached --quiet && exit 1 || true
+      - name: Commit approved extraction to QA branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "art: replace blurry Base Knight poses with 256px approved-source exports"
+          git push origin HEAD:qa-turn1-duel-baseline
+      - name: Upload extraction and contact preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: promoted-knight-base
+          path: |
+            v3/assets/authored/knight/receipt.json
+            v3/assets/authored/knight/preview.jpg
+          if-no-files-found: warn

@@ -160,3 +160,43 @@ button:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 2px 3p
 .reward-evolve .rd-evolve.show{border:2px solid #b67b25;background:linear-gradient(120deg,#fff7d4,#f5d888);box-shadow:0 4px 0 #755d32,0 10px 24px #62471122;animation:ultimateRewardPunch .28s ease-out}
 @keyframes ultimateRewardPunch{0%{transform:scale(.93)}65%{transform:scale(1.035)}100%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.reward-evolve .rd-evolve.show{animation:none}}
+
+/* Turn 3 mobile touch acceptance: generous interactive boxes without adding blank visual chrome. */
+[data-screen="lab"] .lab-block input[type="range"]{
+  display:block;
+  width:100%;
+  height:48px;
+  min-height:48px;
+  margin:0;
+  padding:12px 0;
+  box-sizing:border-box;
+  touch-action:pan-x;
+}
+[data-screen="lab"] .lab-block input[type="checkbox"]{
+  width:24px;
+  height:24px;
+  min-width:24px;
+  min-height:24px;
+  accent-color:#bd861a;
+}
+[data-screen="lab"] .lab-block label:has(input[type="checkbox"]){
+  min-height:48px;
+  align-items:center;
+  padding:8px 0;
+  box-sizing:border-box;
+}
+[data-screen="roster"] button[data-upgrade-unit],
+[data-screen="roster"] button[data-upgrade-spell],
+[data-screen="roster"] button[data-buy-spell]{
+  min-height:48px;
+  touch-action:manipulation;
+}
+
+/* Optional offline artwork controls — intentionally low emphasis vs upgrades. */
+[data-screen="roster"] .offline-bay{padding:14px;margin:12px 0;border:1px solid #9b99794d;border-radius:14px;background:#eef3e6}
+[data-screen="roster"] .offline-bay h3{font-size:15px;margin:0 0 6px}
+[data-screen="roster"] .offline-bay p{font-size:12px;margin:4px 0 10px;line-height:1.5}
+[data-screen="roster"] .offline-bay select{min-height:48px;max-width:100%;border:1px solid #657871;border-radius:10px;background:#fffdf2;padding:8px}
+[data-screen="roster"] .offline-fighter-btn{display:block;width:100%;min-height:48px;margin-top:8px;border:1px solid #719385;border-radius:10px;background:#e1f1e3;color:#214c3b;font-size:12px;font-weight:800;touch-action:manipulation}
+[data-screen="roster"] .offline-fighter-btn[data-ready="true"]{background:#d5edd7;color:#275635}
+[data-screen="roster"] .offline-fighter-btn:disabled{opacity:.65}

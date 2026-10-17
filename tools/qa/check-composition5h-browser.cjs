@@ -1,0 +1,112 @@
+// Turn 5H: real Chromium matched-state baseline/candidate sprite contact sheets.
+// This is a visual diagnostic, NOT a runtime camera change.
+'use strict';
+const fs=require('fs'),path=require('path'),http=require('http'),assert=require('assert');
+const puppeteer=require('puppeteer');
+const root=path.resolve(__dirname,'../..'),out=path.resolve(process.env.QA_VISUAL_OUTPUT||'/tmp/showdown-5h');
+fs.mkdirSync(out,{recursive:true});
+const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.webp':'image/webp','.png':'image/png'};
+const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http://localhost').pathname;const file=path.resolve(root,'.'+pathname);if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end()}try{res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file))}catch{res.writeHead(404);res.end()}});
+(async()=>{
+ await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
+ const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
+ const report={device:'Chromium 430x932 @3x; baseline versus guarded stage; real authored sprites and 5G depth ordering',cases:[],failures:[]};
+ try{
+ const page=await browser.newPage();page.on('pageerror',e=>report.failures.push(e.message));
+ await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+ await page.goto('http://127.0.0.1:'+server.address().port+'/index.html?qa=1',{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>window.FighterAssets&&window.ShowdownCamera&&document.body.classList.contains('assets-ok'),{timeout:90000});
+ const camSource=fs.readFileSync(path.join(root,'v3/camera.js'),'utf8');
+ const stageSource=fs.readFileSync(path.join(root,'v3/combat-staging.js'),'utf8');
+ const exact=JSON.parse(fs.readFileSync(path.join(out,'formation-exact.json'),'utf8'));
+ const exactRows=exact.rows;
+ const zones=JSON.parse(fs.readFileSync(path.join(out,'zones-exact.json'),'utf8'));
+ const zoneRows=zones.rows;
+ for(const fixture of [20,40,60,80,120,'live120','formation120','exact80','exact120','exact80-early','exact120-early','exact80-mid','exact120-mid','zones80','zones120','zones80-early','zones120-early','zones80-mid','zones120-mid']){
+  const count=fixture==='live120'||fixture==='formation120'||String(fixture).startsWith('exact120')||String(fixture).startsWith('zones120')?120:String(fixture).startsWith('exact80')||String(fixture).startsWith('zones80')?80:fixture,live=fixture==='live120'||fixture==='formation120',formation=fixture==='formation120',exactFixture=String(fixture).startsWith('exact')||String(fixture).startsWith('zones'),zoneFixture=String(fixture).startsWith('zones');
+  const exactBase=exactFixture?(zoneFixture?zoneRows:exactRows).find(r=>r.count===count):null;
+  const phase=String(fixture).includes('-early')?'early':String(fixture).includes('-mid')?'mid':'deploy';
+  const exactRow=exactBase?{...exactBase,phase,zoneFixture}:null;
+  if(exactFixture&&!exactRow)throw Error('missing exact formation fixture '+count);
+  const result=await page.evaluate(async({count,camSource,stageSource,live,formation,exactRow})=>{
+   const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
+   let rng=1337;const rand=()=>{rng=(Math.imul(1664525,rng)+1013904223)>>>0;return rng/4294967296};
+   let units=Array.from({length:count},(_,i)=>({id:i+1,type:types[i%10],team:i%2?'red':'blue',level:1+i%5,hp:100,
+    x:.5+(i%2?.08:-.08)+(rand()-.5)*.20,y:.24+rand()*.55}));
+   const phase=String(exactRow?.phase||'deploy');
+   if(exactRow){units=exactRow.versions.baseline.positions[phase];}
+   if(live){
+    ShowdownAdapter.setSpeed(1);
+    ShowdownAdapter.startMatch({blue:{knight:20,goose:20,sniper:20},red:{beetank:20,goblin:20,barbarian:20},blueLives:1,redLives:1,seed:7301});
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const snapshot=ShowdownQA.snapshot();
+    if(snapshot.units.length!==120)throw Error('live combat snapshot not 120 units: '+snapshot.units.length);
+    units=snapshot.units.map(u=>({id:u.id,type:u.type,team:u.team,level:u.level,hp:100,x:u.x,y:u.y}));
+   }
+   await Promise.all([...new Set(units.map(u=>u.type))].map(t=>FighterAssets.preloadSpecies(t)));
+   const cap='return{x:Math.min(34,arena.w*.10),y:Math.min(23,arena.h*.07)};';
+   const candidateStage=stageSource.replace(cap,'return{x:Math.min(46,arena.w*.135),y:Math.min(30,arena.h*.085)};')
+    .replace('dx=direction*cap.x*(.16+.84*(direction<0?1-rank:rank));','dx=direction*(fullResolve?cap.x:Math.min(cap.x,34,camera.arena.w*.10))*(.16+.84*(direction<0?1-rank:rank));')
+    .replace('dy=peers?((e.u.id%3)-1)*cap.y*.78:0;','dy=peers?((e.u.id%3)-1)*(fullResolve?cap.y:Math.min(cap.y,enemies?23:30,camera.arena.h*(enemies?.07:.085)))*.78:0;');
+   if(candidateStage===stageSource)throw Error('staging candidate substitution failed');
+   const stageFactory=src=>{const proxy={FighterAssets};new Function('window',src)(proxy);return proxy.CombatStaging;};
+     // The module references window.FighterAssets / CombatStaging. Preserve those reads via proxy.
+   const make=(src)=>{const windowProxy={FighterAssets,CombatStaging};new Function('window',src)(windowProxy);return windowProxy.ShowdownCamera.create(430,932)};
+   const cvs=document.createElement('canvas');cvs.width=860;cvs.height=932;cvs.style.cssText='position:fixed;inset:0;z-index:999999;width:860px;height:932px;max-width:none;pointer-events:none';document.body.append(cvs);
+   const ctx=cvs.getContext('2d');const results=[];
+   for(const [index,source] of [[0,stageSource],[1,candidateStage]]){
+    // Exploratory visual-only vertical-stretch proxy; real simulation variant remains isolated in node QA.
+    const shown=exactRow?(index===1?exactRow.versions[exactRow.zoneFixture?'zones32':'vertical75'].positions[phase]:exactRow.versions.baseline.positions[phase]):formation&&index===1?units.map(u=>({...u,y:Math.max(.08,Math.min(.92,.5+(u.y-.5)*(.085/.065)))})):units;
+    const cam=make(camSource);for(let frame=0;frame<120;frame++)cam.focus(shown);
+    const own=document.createElement('canvas');own.width=430;own.height=932;const c=own.getContext('2d');
+    c.fillStyle='#dce7d9';c.fillRect(0,0,430,932);const a=cam.arena;c.fillStyle='#cfbc94';c.fillRect(a.x,a.y,a.w,a.h);
+    // Use real authored sprites and the same deterministic coordinates in both views.
+    const stage=stageFactory(formation||exactRow?stageSource:source).create();for(let step=0;step<16;step++)stage.prepare(shown,cam,step*16);
+    const ordered=shown.map(u=>({u,p:stage.point(u,cam)})).sort((a,b)=>{
+      if(count<=60)return a.p.y-b.p.y||a.p.x-b.p.x;
+      const laneA=Math.floor(a.p.y/12),laneB=Math.floor(b.p.y/12);
+      if(laneA!==laneB)return laneA-laneB;
+      const prominence=t=>t==='dragon'?3:t==='beetank'||t==='turtle'?2:t==='knight'||t==='barbarian'?1:0;
+      return prominence(a.u.type)-prominence(b.u.type)||a.p.y-b.p.y||a.p.x-b.p.x||a.u.id-b.u.id;
+    });
+    let drawn=0;for(const {u,p} of ordered){const kind=u.type==='dragon'?'large':['turtle','beetank'].includes(u.type)?'heavy':['goblin','goose'].includes(u.type)?'small':'normal';
+      const ok=FighterAssets.draw(c,u.type,p.x,p.y,cam.unitSize(kind,count),u.team,{level:u.level,action:'idle',density:count,time:2400,id:u.id});if(ok)drawn++;}
+    ctx.drawImage(own,index*430,0);
+    // Alpha-aware occlusion: paint each real authored sprite in isolation and
+    // count opaque pixels not covered by any subsequently drawn sprite.
+    // Sample every 3rd screen pixel for bounded Chromium QA cost.
+    const maskCanvas=document.createElement('canvas');maskCanvas.width=430;maskCanvas.height=932;
+    const maskCtx=maskCanvas.getContext('2d',{willReadFrequently:true});
+    const occupied=new Uint8Array(Math.ceil(430/3)*Math.ceil(932/3));
+    let visibleBodies=0,mostlyHidden=0,opaqueTotal=0,visibleTotal=0;
+    for(let i=ordered.length-1;i>=0;i--){
+      const {u,p}=ordered[i],kind=u.type==='dragon'?'large':['turtle','beetank'].includes(u.type)?'heavy':['goblin','goose'].includes(u.type)?'small':'normal';
+      maskCtx.clearRect(0,0,430,932);
+      FighterAssets.draw(maskCtx,u.type,p.x,p.y,cam.unitSize(kind,count),u.team,{level:u.level,action:'idle',density:count,time:2400,id:u.id});
+      const rgba=maskCtx.getImageData(0,0,430,932).data;let total=0,visible=0;
+      for(let y=0,iy=0;y<932;y+=3,iy++)for(let x=0,ix=0;x<430;x+=3,ix++){
+        const pixel=(y*430+x)*4;if(rgba[pixel+3]<96)continue;
+        total++;const bin=iy*Math.ceil(430/3)+ix;
+        if(!occupied[bin])visible++;
+        occupied[bin]=1;
+      }
+      opaqueTotal+=total;visibleTotal+=visible;
+      if(total>=12){if(visible/total>=.45)visibleBodies++;if(visible/total<.15)mostlyHidden++;}
+    }
+    const pts=shown.map(u=>cam.worldToScreen(u.x,u.y));
+    const range=(axis)=>Math.max(...pts.map(p=>p[axis]))-Math.min(...pts.map(p=>p[axis]));
+    const occupiedWidth=range('x'),occupiedHeight=range('y');
+    results.push({occupiedWidth:+occupiedWidth.toFixed(1),occupiedHeight:+occupiedHeight.toFixed(1),arenaWidth:a.w,arenaHeight:a.h,mode:index?'candidate':'baseline',drawn,zoom:cam.zoom,arena:a,alphaVisibilityRatio:+(visibleTotal/Math.max(1,opaqueTotal)).toFixed(4),recognizableProxy:visibleBodies,mostlyHidden});
+   }
+   // Save pixels rather than relying on CSS viewport clipping.
+   const png=cvs.toDataURL('image/png');cvs.remove();return {count,results,png};
+  },{count,camSource,stageSource,live,formation,exactRow});
+  const expected=exactRow?exactRow.versions.baseline.positions[phase].length:count;
+  assert(result.results.every(x=>x.drawn>0&&x.drawn<=count),'authored fighter draw failure for '+fixture+': '+JSON.stringify(result.results));
+  fs.writeFileSync(path.join(out,'composition-'+fixture+'.png'),Buffer.from(result.png.split(',')[1],'base64'));
+  report.cases.push({count,fixture,note:exactFixture?'exact baseline and revised deployment positions from identical VM simulator seed':formation?'visual-only y stretch proxy, not actual candidate simulation positions':undefined,results:result.results.map(({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden,occupiedWidth,occupiedHeight,arenaWidth,arenaHeight})=>({mode,drawn,zoom,alphaVisibilityRatio,recognizableProxy,mostlyHidden,occupiedWidth,occupiedHeight,arenaWidth,arenaHeight}))});
+ }
+ await page.close();assert.deepStrictEqual(report.failures,[]);
+ report.passed=true;console.log('PASS: paired authored-sprite composition screenshots at 20/40/60/80/120 fighters plus one fixed real-combat snapshot (baseline vs guarded staging)');
+ }finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2));await browser.close()}
+})().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());

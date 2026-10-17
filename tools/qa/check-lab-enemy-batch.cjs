@@ -1,0 +1,21 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'../..');
+const ui=fs.readFileSync(path.join(root,'v3/v3.js'),'utf8'),html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const start="const batch=e.target.closest('[data-enemy-plus-five]');",end="const minus=e.target.closest('[data-enemy-minus]');";
+assert.equal(ui.split(start).length,2,'one live batch handler');
+const from=ui.indexOf(start),to=ui.indexOf(end,from);assert(to>from,'batch before original decrement');
+assert(ui.includes('data-enemy-plus-five='),'button rendered');assert(ui.includes('aria-label="Add five '),'accessible control');
+assert(html.includes('Tap +5 for quick squads'),'instructions');
+const click=new Function('e','labEnemyDraft','renderEnemyPicker',ui.slice(from,to));
+function press(army,kind,type){let drawn=0;const selector=kind==='five'?'[data-enemy-plus-five]':'[data-enemy-plus]';
+ const field=kind==='five'?'enemyPlusFive':'enemyPlus';
+ click({target:{closest:s=>s===selector?{dataset:{[field]:type}}:null}},army,()=>drawn++);
+ assert.equal(drawn,1,'one redraw per batch or tap')}
+let army=[];press(army,'five','knight');assert.deepEqual(army,Array(5).fill('knight'));
+press(army,'one','goblin');press(army,'five','goblin');
+assert.deepEqual(Object.fromEntries([...new Set(army)].map(t=>[t,army.filter(u=>u===t).length])),{knight:5,goblin:6});
+let near=Array(58).fill('turtle');press(near,'five','goose');assert.equal(near.length,60);
+assert.equal(near.filter(x=>x==='goose').length,2);
+press(near,'five','dragon');press(near,'one','dragon');assert.equal(near.length,60,'single and batch cap');
+console.log('PASS Lab enemy +5 and +1 actual UI source, mixed composition, partial and full cap');

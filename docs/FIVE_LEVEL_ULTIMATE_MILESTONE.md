@@ -33,7 +33,7 @@ Six Evolved packs select at L2: Knight, Beetank, Goose, Sniper, Dragon, Assassin
 | Barbarian | Blood Cleave: axe swings splash 40% attack damage to up to three other enemies within .065 of the victim | 65%, up to five, .09 radius | Punish dense melee; dispersed ranged units avoid the cleave. |
 | Goose | Thunder Honk: honk deals 45% attack damage and stuns for 22 ticks within .18 | 75%, 32 ticks and .22 radius | Control nearby crowds; ranged spacing remains its counter. |
 
-Simulation uses 30 ticks/sec. Modifier hooks are in `v3/ultimate-abilities.js`; original targeting, role step logic, separation, terminal handling, listener isolation and RAF lifecycle are retained. Secondary damage applies normal defenses but cannot emit another piercing/cleave/reflection chain. No extra combat randomness is introduced. Damage reduction combines multiplicatively with existing armor, guard, shell and ward; Bastion uses only the strongest nearby source. Its candidate list is prepared once per deployment, so ordinary attacks do not rescan the whole roster for protection.
+Simulation uses approximately 60 ticks/sec at 1× (fixed step 16.666ms in `v3/legacy-sim-core.js`). Accordingly Dragon's 90-tick L4 burn lasts about 1.5s; Goose's 22-tick L4 stun about 0.37s and 32-tick L5 stun about 0.53s. This corrects the earlier 30-tick research estimate without rebalancing ability durations. Modifier hooks are in `v3/ultimate-abilities.js`; original targeting, role step logic, separation, terminal handling, listener isolation and RAF lifecycle are retained. Secondary damage applies normal defenses but cannot emit another piercing/cleave/reflection chain. No extra combat randomness is introduced. Damage reduction combines multiplicatively with existing armor, guard, shell and ward; Bastion uses only the strongest nearby source. Its candidate list is prepared once per deployment, so ordinary attacks do not rescan the whole roster for protection.
 
 ## Presentation and validation
 
@@ -44,3 +44,8 @@ Tests cover level/HP/damage boundaries, Mastery preservation, API and player/bot
 Reproduce: `node tools/check-evolution-progression.cjs`, `node tools/check-ultimate-abilities.cjs`, `node tools/check-ultimate-art-contract.cjs`, `node tools/check-evolution-effects.cjs` (native Canvas dependency), and existing checks in `TEST_MATRIX.md`.
 
 Balance is a first playable tuning pass, not a claim of fair win rates for every matchup. Device frame pacing and exact-head phone approval remain open. Ultimate art and four remaining Evolved packs are separate art milestones. Existing mixed-melee overlap remains open.
+
+
+## October 15, 2026 gameplay correction to the 2026-10-12 milestone
+
+The historical Goose Thunder Honk 22/32 ticks above (0.37/0.53s) was **the original implementation**, not the ultimate's advertised 0.73/1.07 seconds. A later measured QA-only correction doubles L4/L5 physical stun to **44/64 ticks (approximately 0.73/1.07 seconds)** without changing damage, range, chance, cooldown or base Goose. The current Fighter Guide and Ultimate specs have been aligned. [Updated matched A/B research](GOOSE_ULTIMATE_REAL_STUN_2026-10-15.md). Do not assume this gameplay change has been deployed to production.

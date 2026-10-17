@@ -1,0 +1,1243 @@
+name: Duel and combat regression
+on:
+  push:
+    branches: [qa-turn1-duel-baseline]
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+# Only the newest QA push per ref needs expensive stress/browser jobs.
+# Protect PR runs on distinct refs; cancel superseded work without weakening tests.
+concurrency:
+  group: showdown-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  root-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify canonical root-only entry and pinned integrity
+        run: |
+          test -f index.html
+          test ! -e v3/index.html
+          node tools/qa/release-hashes.cjs --verify
+          node tools/qa/check-turn3-consistency.cjs
+      - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
+        run: node tools/qa/check-primary-device-contract.cjs
+      - name: Verify offline precache graph and rollback
+        run: node tools/qa/check-release4c.cjs
+      - name: Verify Home art streaming
+        run: node tools/qa/check-streaming.cjs
+      - name: Verify launch guide and PWA hooks
+        run: node tools/check-launch-guide.cjs
+  node-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify pinned SHA256 release manifest
+        run: node tools/qa/release-hashes.cjs --verify
+      - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
+        run: node tools/qa/check-primary-device-contract.cjs
+      - name: Ordered 300-duel sweep
+        env:
+          QA_RECEIPT: duel-receipt.json
+          QA_SHA: ${{ github.sha }}
+        run: node tools/qa/check-duels.cjs
+      - name: Turn 5C paired 80 and 120 fighter deterministic stress
+        env:
+          QA_STRESS_RECEIPT: stress5c-receipt.json
+        run: node tools/qa/check-stress5c.cjs
+      - name: Turn 5D staging geometry and performance parity
+        env:
+          QA_STAGING_RECEIPT: staging5d-receipt.json
+        run: node tools/qa/check-staging5d.cjs
+      - name: Turn 5E 61 to 160 fighter dense staging visual bounds
+        env:
+          QA_DENSE_RECEIPT: dense5e-receipt.json
+        run: node tools/qa/check-dense5e.cjs
+      - name: Turn 5F staging lookup caching parity
+        env:
+          QA_STAGING5F_RECEIPT: staging5f-receipt.json
+        run: node tools/qa/check-staging5f.cjs
+      - name: Turn 5G dense depth ordering
+        run: node tools/qa/check-depth5g.cjs
+      - name: Existing evolution and deterministic checks
+        if: success()
+        run: node tools/check-evolution-progression.cjs
+      - name: Turn 3 Guide mastery and touch consistency
+        if: success()
+        run: node tools/qa/check-turn3-consistency.cjs
+      - name: Turn 4A prioritized sprite loading
+        run: node tools/qa/check-streaming.cjs
+      - name: Turn 4C atomic release and offline tests
+        run: node tools/qa/check-release4c.cjs
+      - name: Legacy launch guide and SW compatibility
+        run: node tools/check-launch-guide.cjs
+      - name: Existing Ultimate ability checks
+        if: success()
+        run: node tools/check-ultimate-abilities.cjs
+      - name: Upload duel receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: duel-receipt
+          path: |
+            duel-receipt.json
+            stress5c-receipt.json
+            staging5d-receipt.json
+            dense5e-receipt.json
+            staging5f-receipt.json
+          if-no-files-found: warn
+
+  exploratory-formations:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run optional staging and formation experiments
+        run: |
+          node tools/qa/check-composition5h.cjs
+          node tools/qa/check-staging5h-candidate.cjs
+          node tools/qa/check-formation-density.cjs
+          node tools/qa/check-formation-variants.cjs
+          node tools/qa/check-formation-spacing.cjs
+          node tools/qa/check-horizontal-formation.cjs
+          node tools/qa/check-engagement-zones.cjs
+          node tools/qa/check-zone-engagement.cjs
+          node tools/qa/check-zone-locality.cjs
+          node tools/qa/check-zone-terminal.cjs
+          node tools/qa/check-zone-mirrors.cjs
+
+  population-and-disruption:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate draft source and QA syntax
+        run: |
+          node --check v3/evolution-rules.js
+          node --check v3/simulation-adapter.js
+          node --check v3/round-loop.js
+          node --check tools/qa/check-population-draft.cjs
+          node --check tools/qa/check-lab-enemy-batch.cjs
+      - name: Verify projected cap and one-round nonpermanent sabotage
+        run: node tools/qa/check-population-draft.cjs
+      - name: Verify round winner, losing-side lives and mirrored match results
+        run: node tools/qa/check-round-winner-lives.cjs
+      - name: Verify Lab batch enemy types, single counts and cap
+        run: node tools/qa/check-lab-enemy-batch.cjs
+  extreme-300-fighters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate 300 fighter edge harness
+        run: node --check tools/qa/check-300-population.cjs
+      - name: Run 300 fighter 1x and 10x extreme stress
+        env:
+          QA_300_RECEIPT: extreme-300-receipt.json
+        run: node tools/qa/check-300-population.cjs
+      - name: Upload 300 fighter performance receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extreme-300-receipt
+          path: extreme-300-receipt.json
+          if-no-files-found: warn
+
+  threat-observer-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate pure observer and QA syntax
+        run: |
+          node --check tools/qa/threat-observer.cjs
+          node --check tools/qa/check-threat-observer.cjs
+      - name: Verify Sniper and Goblin decisions plus deterministic combat parity
+        env:
+          QA_THREAT_SIZES: '40,80,120'
+          QA_THREAT_SEEDS: '1337'
+          QA_THREAT_RECEIPT: threat-observer-receipt.json
+        run: node tools/qa/check-threat-observer.cjs
+      - name: Upload read-only observer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: threat-observer-receipt
+          path: threat-observer-receipt.json
+          if-no-files-found: warn
+
+  assassin-counterplay-outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify isolated Assassin counterplay research syntax
+        run: node --check tools/qa/check-assassin-counterplay-outcomes.cjs
+      - name: Compare matched Assassin versus guarded, ranged, swarm and mixed opposition
+        env:
+          QA_ASSASSIN_FAIR_COUNTS: '20,40,80'
+          QA_ASSASSIN_FAIR_RECEIPT: assassin-counterplay-outcomes.json
+        run: node tools/qa/check-assassin-counterplay-outcomes.cjs
+      - name: Upload real damage, winner, survival and Assassin rear-access metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-counterplay-outcomes
+          path: assassin-counterplay-outcomes.json
+          if-no-files-found: warn
+
+  assassin-l5-execution-payoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Assassin execution true-counterplay regression syntax
+        run: node --check tools/qa/check-assassin-execution-payoff.cjs
+      - name: Run 40 fully terminal real-damage/role samples and armored solo L5 counters
+        env:
+          QA_ASSASSIN_EXECUTION_RECEIPT: assassin-execution-payoff.json
+        run: node tools/qa/check-assassin-execution-payoff.cjs
+      - name: Upload L5 Execution real impact and front parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-execution-payoff
+          path: assassin-execution-payoff.json
+          if-no-files-found: warn
+
+  assassin-heavy-contact-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Beetank Turtle contact regression syntax
+        run: node --check tools/qa/check-assassin-heavy-contact.cjs
+      - name: Exercise seeded true-damage counterplay and Turtle reflection
+        env:
+          QA_ASSASSIN_HEAVY_RECEIPT: assassin-heavy-contact.json
+        run: node tools/qa/check-assassin-heavy-contact.cjs
+      - name: Upload hit, winner, HP-reflection and real-front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-heavy-contact
+          path: assassin-heavy-contact.json
+          if-no-files-found: warn
+
+  assassin-dragon-contact-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Dragon-only Assassin reach QA syntax
+        run: node --check tools/qa/check-assassin-dragon-contact.cjs
+      - name: Verify actual Dragon hits, unchanged tank counters and real fight fronts
+        env:
+          QA_ASSASSIN_DRAGON_RECEIPT: assassin-dragon-contact.json
+        run: node tools/qa/check-assassin-dragon-contact.cjs
+      - name: Upload measured Dragon Assassin matchup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-dragon-contact
+          path: assassin-dragon-contact.json
+          if-no-files-found: warn
+
+  assassin-rear-opportunity-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check rear-access research syntax
+        run: node --check tools/qa/check-assassin-rear-study.cjs
+      - name: A/B Assassin rear entry and counterplay over matched seeds
+        env:
+          QA_ASSASSIN_COUNTS: '40,80,120'
+          QA_ASSASSIN_RECEIPT: assassin-rear-opportunity.json
+        run: node tools/qa/check-assassin-rear-study.cjs
+      - name: Archive original and rear-side candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-rear-opportunity-study
+          path: assassin-rear-opportunity.json
+          if-no-files-found: warn
+
+  goblin-heavy-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original and candidate Goblin source study
+        run: node --check tools/qa/check-goblin-heavy-counterplay.cjs
+      - name: Compare Goblin swarms, armored defenders and light-duel parity
+        env:
+          QA_GOBLIN_RECEIPT: goblin-heavy-counterplay.json
+        run: node tools/qa/check-goblin-heavy-counterplay.cjs
+      - name: Upload Goblin per-side actual hits and defender-survival receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-heavy-counterplay
+          path: goblin-heavy-counterplay.json
+          if-no-files-found: warn
+
+  melee-contact-reach-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source-anchored geometry research syntax
+        run: node --check tools/qa/check-melee-contact-reach-study.cjs
+      - name: Evaluate live spacing gaps and isolated role melee reach at L1 L4 L5
+        env:
+          QA_MELEE_RECEIPT: melee-contact-reach.json
+        run: node tools/qa/check-melee-contact-reach-study.cjs
+      - name: Upload mirrored duel and mixed-army real-hit receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: melee-contact-reach-research
+          path: melee-contact-reach.json
+          if-no-files-found: warn
+
+  sniper-shot-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Sniper shot cooldown cue study syntax
+        run: node --check tools/qa/check-sniper-shot-cue.cjs
+      - name: Match real Sniper shot calls to sampled FX at 1x 4x and 10x
+        env:
+          QA_SNIPER_RECEIPT: sniper-shot-cue.json
+        run: node tools/qa/check-sniper-shot-cue.cjs
+      - name: Upload sampled rifle fire and no-phantom-fx evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sniper-shot-cue-sampling
+          path: sniper-shot-cue.json
+          if-no-files-found: warn
+
+  assassin-backstab-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual Assassin backstab cue test syntax
+        run: node --check tools/qa/check-assassin-backstab-cue.cjs
+      - name: Test real backstabs, no phantom cues and full previous physical state parity
+        env:
+          QA_BACKSTAB_RECEIPT: assassin-backstab-cue.json
+        run: node tools/qa/check-assassin-backstab-cue.cjs
+      - name: Upload source and visual-event match receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-backstab-cue-sampling
+          path: assassin-backstab-cue.json
+          if-no-files-found: warn
+
+  mole-eruption-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify true Mole eruption cue study syntax
+        run: node --check tools/qa/check-mole-eruption-cue.cjs
+      - name: Validate real Mole eruptions, no phantom effects and exact old-core physical parity
+        env:
+          QA_MOLE_RECEIPT: mole-eruption-cue.json
+        run: node tools/qa/check-mole-eruption-cue.cjs
+      - name: Upload seed and mirror real-event audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-eruption-cue-sampling
+          path: mole-eruption-cue.json
+          if-no-files-found: warn
+
+  turtle-shell-slam-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real Turtle shell-slam event study syntax
+        run: node --check tools/qa/check-turtle-shell-slam-cue.cjs
+      - name: Compare actual shell slam cues to baseline combat at 1x 4x and 10x
+        env:
+          QA_TURTLE_RECEIPT: turtle-shell-slam-cue.json
+        run: node tools/qa/check-turtle-shell-slam-cue.cjs
+      - name: Upload exact physical combat parity and no-phantom-slam evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-shell-slam-cue-sampling
+          path: turtle-shell-slam-cue.json
+          if-no-files-found: warn
+
+  beetank-charge-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real charge wind-up cue study syntax
+        run: node --check tools/qa/check-beetank-charge-cue.cjs
+      - name: Match real Beetank charge starts to rendered evidence at 1x 4x 10x
+        env:
+          QA_RAM_RECEIPT: beetank-charge-cue.json
+        run: node tools/qa/check-beetank-charge-cue.cjs
+      - name: Upload true charges, active wakes and no-phantom-impact receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-charge-cue-sampling
+          path: beetank-charge-cue.json
+          if-no-files-found: warn
+
+  turtle-ricochet-value-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate true Turtle reflection test syntax
+        run: node --check tools/qa/check-turtle-ricochet-value.cjs
+      - name: Measure post-defense reflected HP and genuine battle-front safety
+        env:
+          QA_TURTLE_REFLECTION_RECEIPT: turtle-reflection-value.json
+        run: node tools/qa/check-turtle-ricochet-value.cjs
+      - name: Upload Turtle role value and armored/ranged counterplay receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-reflection-value
+          path: turtle-reflection-value.json
+          if-no-files-found: warn
+
+  goose-ultimate-stun-counterplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Thunder Honk real-stun QA syntax
+        run: node --check tools/qa/check-goose-ultimate-stun.cjs
+      - name: Measure full physical stun ticks and mirrored ranged counterplay
+        env:
+          QA_GOOSE_ULT_RECEIPT: goose-ultimate-stun.json
+        run: node tools/qa/check-goose-ultimate-stun.cjs
+      - name: Upload measured Goose Ultimate damage and control receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-ultimate-stun
+          path: goose-ultimate-stun.json
+          if-no-files-found: warn
+
+  goose-honk-cue-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check renderer honk signal test syntax
+        run: node --check tools/qa/check-goose-honk-cue.cjs
+      - name: Detect real Goose honks at 1x 4x and 10x without modifying RC4
+        env:
+          QA_HONK_RECEIPT: goose-honk-cue.json
+        run: node tools/qa/check-goose-honk-cue.cjs
+      - name: Upload actual cast, visible cue and duplicate-prevention receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-honk-cue-sampling
+          path: goose-honk-cue.json
+          if-no-files-found: warn
+
+  local-front-lane-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate independent small-front lane research syntax
+        run: node --check tools/qa/check-local-front-lane-study.cjs
+      - name: Compare actual damage-positive local fronts, per-role hits, and strict 60-300 parity
+        env:
+          QA_FRONT_LANE_RECEIPT: local-front-lane-research.json
+        run: node tools/qa/check-local-front-lane-study.cjs
+      - name: Upload actual front, matchup and large-army parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-front-lane-research
+          path: local-front-lane-research.json
+          if-no-files-found: warn
+
+  assassin-l4-shadow-mark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Shadow Mark test syntax
+        run: node --check tools/qa/check-assassin-l4-shadow-mark.cjs
+      - name: Run actual terminal L4 mark and counterplay study
+        env:
+          QA_ASSASSIN_SHADOW_RECEIPT: assassin-l4-shadow-mark.json
+        run: node tools/qa/check-assassin-l4-shadow-mark.cjs
+      - name: Keep exact source A/B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-shadow-mark
+          path: assassin-l4-shadow-mark.json
+          if-no-files-found: warn
+
+  assassin-l4-last-mile-pursuit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate bounded Assassin source A/B syntax
+        run: node --check tools/qa/check-assassin-l4-pursuit.cjs
+      - name: Compare 312 real terminal backline pursuit battles and L5 physical parity
+        env:
+          QA_ASSASSIN_PURSUIT_RECEIPT: assassin-l4-pursuit.json
+        run: node tools/qa/check-assassin-l4-pursuit.cjs
+      - name: Publish L4 pursuit matched HP, front and counterplay verdict
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-pursuit
+          path: assassin-l4-pursuit.json
+          if-no-files-found: warn
+
+  turtle-guardian-prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source-only guardian A/B syntax
+        run: node --check tools/qa/check-turtle-guardian-prototype.cjs
+      - name: Verify 48 terminal pairwise Turtle guardian trades and unchanged counter physics
+        env:
+          QA_TURTLE_GUARDIAN_RECEIPT: turtle-guardian-prototype.json
+        run: node tools/qa/check-turtle-guardian-prototype.cjs
+      - name: Archive real wins damage fronts counters and dense-state receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-guardian-prototype
+          path: turtle-guardian-prototype.json
+          if-no-files-found: warn
+
+  evolution-investment-value:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate tier ROI test syntax
+        run: node --check tools/qa/check-evolution-investment-value.cjs
+      - name: Compare 216 real full-match Assassin Turtle and Beetank tier investments
+        env:
+          QA_EVOLUTION_ROI_RECEIPT: evolution-investment-value.json
+        run: node tools/qa/check-evolution-investment-value.cjs
+      - name: Archive paired win damage reflection shell and Execution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolution-investment-value
+          path: evolution-investment-value.json
+          if-no-files-found: warn
+
+  completed-match-quality-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check fully terminal battle-quality test syntax
+        run: node --check tools/qa/check-completed-match-quality.cjs
+      - name: Measure real attacker-HP damage, durable fronts and role participation in 32 complete battles
+        env:
+          QA_COMPLETED_BATTLES_RECEIPT: completed-match-quality.json
+        run: node tools/qa/check-completed-match-quality.cjs
+      - name: Upload completed 20 and 40 fighter match quality scorecards
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: completed-match-quality
+          path: completed-match-quality.json
+          if-no-files-found: warn
+
+  role-multifront-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify role/front diagnostic syntax
+        run: node --check tools/qa/check-role-fronts-baseline.cjs
+      - name: Inspect actual role damage, pursuit and independent live fronts at 20–300
+        env:
+          QA_ROLE_COUNTS: '20,40,80,120,180,300'
+          QA_ROLE_RECEIPT: role-fronts-baseline.json
+        run: node tools/qa/check-role-fronts-baseline.cjs
+      - name: Upload deterministic role-damage and real-front baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: role-multifront-baseline
+          path: role-fronts-baseline.json
+          if-no-files-found: warn
+
+  effective-engagement-observer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check effective engagement measurement syntax
+        run: node --check tools/qa/check-effective-engagement.cjs
+      - name: Observe real hit, ranged threat and pursuit without combat intervention
+        env:
+          QA_EFFECTIVE_COUNTS: '40,80,120,180,300'
+          QA_EFFECTIVE_RECEIPT: effective-engagement-receipt.json
+        run: node tools/qa/check-effective-engagement.cjs
+      - name: Upload engagement evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: effective-engagement-receipt
+          path: effective-engagement-receipt.json
+          if-no-files-found: warn
+
+  nearest-scan-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check exact-state perf spike syntax
+        run: node --check tools/qa/check-nearest-scan-spike.cjs
+      - name: Compare allocation-lean nearest scan to RC4 at 1x and 10x
+        env:
+          QA_NEAREST_COUNTS: '40,80,120,180,300'
+          QA_NEAREST_RECEIPT: nearest-scan-spike.json
+        run: node tools/qa/check-nearest-scan-spike.cjs
+      - name: Upload matched traces and directional timing summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nearest-scan-spike
+          path: nearest-scan-spike.json
+          if-no-files-found: warn
+
+  browser-density-portrait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify density test syntax
+        run: node --check tools/qa/check-density-browser.cjs
+      - name: Capture portrait L1/L4/L5 density and 10x stress frames
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_DENSITY_OUTPUT: ${{ runner.temp }}/density-browser
+          QA_DENSITY_COUNTS: '40,80,120,180,300'
+        run: node tools/qa/check-density-browser.cjs
+      - name: Upload real Chromium receipts and 430x932 screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: density-portrait-evidence
+          path: ${{ runner.temp }}/density-browser
+          if-no-files-found: warn
+
+  distance-bound-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check deterministic distance-bound QA syntax
+        run: node --check tools/qa/check-distance-bound-spike.cjs
+      - name: Mirror and stress 40–300 fighter distance-bound alternatives
+        env:
+          QA_DISTANCE_COUNTS: '40,80,120,180,300'
+          QA_DISTANCE_RECEIPT: distance-bound-spike.json
+        run: node tools/qa/check-distance-bound-spike.cjs
+      - name: Archive A/B seeded traces and CPU evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: distance-bound-spike
+          path: distance-bound-spike.json
+          if-no-files-found: warn
+
+  pressure-cache-runtime-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check pressure-cache full trace verifier syntax
+        run: node --check tools/qa/check-target-pressure-cache-parity.cjs
+      - name: Confirm 32 terminal and twelve 80/120/300 body full-state parity arms
+        env:
+          QA_PRESSURE_LIVE_RECEIPT: pressure-cache-live.json
+        run: node tools/qa/check-target-pressure-cache-parity.cjs
+      - name: Upload true battle equivalence receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pressure-cache-runtime-parity
+          path: pressure-cache-live.json
+          if-no-files-found: warn
+
+  pressure-cache-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check cached-pressure research syntax
+        run: node --check tools/qa/check-pressure-cache-spike.cjs
+      - name: Compare exact RC4 target pressure at 1x and 10x
+        env:
+          QA_PRESSURE_COUNTS: '40,80,120,180,300'
+          QA_PRESSURE_RECEIPT: pressure-cache-spike.json
+        run: node tools/qa/check-pressure-cache-spike.cjs
+      - name: Upload mirrored combat parity and directional CPU results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pressure-cache-spike
+          path: pressure-cache-spike.json
+          if-no-files-found: warn
+
+  collision-coarse-bound-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate universal collision-bound QA syntax
+        run: node --check tools/qa/check-collision-coarse-bound-spike.cjs
+      - name: ABBA-test universal collision reach with exact role/parity traces
+        env:
+          QA_COARSE_COUNTS: '40,80,120,180,300'
+          QA_COARSE_RECEIPT: collision-coarse-spike.json
+        run: node tools/qa/check-collision-coarse-bound-spike.cjs
+      - name: Archive mirrored collision-bound performance and parity receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collision-coarse-bound-spike
+          path: collision-coarse-spike.json
+          if-no-files-found: warn
+
+  collision-separation-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check safe collision pair-reject syntax
+        run: node --check tools/qa/check-collision-separation-spike.cjs
+      - name: Compare exact RC4 collision response at 1x and 10x
+        env:
+          QA_COLLISION_COUNTS: '40,80,120,180,300'
+          QA_COLLISION_RECEIPT: collision-separation-spike.json
+        run: node tools/qa/check-collision-separation-spike.cjs
+      - name: Upload collision response parity and timing evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collision-separation-spike
+          path: collision-separation-spike.json
+          if-no-files-found: warn
+
+  engagement-director-spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate isolated director research harness
+        run: node --check tools/qa/check-engagement-director.cjs
+      - name: Test real mixed-role combat without runtime modifications
+        env:
+          QA_ENGAGEMENT_COUNTS: '40,80'
+          QA_ENGAGEMENT_SEEDS: '1337'
+          QA_ENGAGEMENT_RECEIPT: engagement-director-spike.json
+        run: node tools/qa/check-engagement-director.cjs
+      - name: Save experimental evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engagement-director-spike
+          path: engagement-director-spike.json
+          if-no-files-found: warn
+
+  wider-front-fast-signal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate six-variant battle test syntax
+        run: node --check tools/qa/check-zone-damage.cjs
+      - name: Single-seed early formation signal
+        env:
+          QA_DAMAGE_SEEDS: '1337'
+        run: node tools/qa/check-zone-damage.cjs
+
+  damage-attribution-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate damage attribution syntax
+        run: node --check tools/qa/check-zone-damage.cjs
+      - name: Paired attributed damage smoke test
+        env:
+          QA_DAMAGE_SEEDS: '1337,7301,8675309'
+          QA_LANES_RECEIPT: zone-damage-smoke.json
+        run: node tools/qa/check-zone-damage.cjs
+      - name: Upload attributed damage smoke receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zone-damage-smoke
+          path: zone-damage-smoke.json
+          if-no-files-found: warn
+
+  browser-turn3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser runtime
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify packaged Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Browser QA for Dragon and touch
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_BROWSER_OUTPUT: ${{ runner.temp }}/turn3-browser
+        run: node tools/qa/check-turn3-browser.cjs
+      - name: Upload screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn3-browser
+          path: ${{ runner.temp }}/turn3-browser
+          if-no-files-found: warn
+
+  browser-composition5h:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Capture exact formation snapshots
+        env:
+          QA_LANES_RECEIPT: ${{ runner.temp }}/turn5h-browser/formation-exact.json
+        run: |
+          mkdir -p "${{ runner.temp }}/turn5h-browser"
+          node tools/qa/check-formation-visual-snapshots.cjs
+      - name: Capture exact tri-zone combat snapshots
+        env:
+          QA_LANES_RECEIPT: ${{ runner.temp }}/turn5h-browser/zones-exact.json
+        run: node tools/qa/check-zones-visual-snapshots.cjs
+      - name: Matched authored sprite camera screenshots
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_VISUAL_OUTPUT: ${{ runner.temp }}/turn5h-browser
+        run: node tools/qa/check-composition5h-browser.cjs
+      - name: Ultimate Lab enemy picker browser QA
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+        run: node tools/qa/check-lab-enemies-browser.cjs
+      - name: Upload A/B sprite contact sheets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn5h-composition
+          path: ${{ runner.temp }}/turn5h-browser
+          if-no-files-found: warn
+
+  browser-turn4d:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Cold warm and offline service worker QA
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_BROWSER_OUTPUT: ${{ runner.temp }}/turn4d-browser
+        run: node tools/qa/check-turn4d-browser.cjs
+      - name: Upload real browser network receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn4d-browser
+          path: ${{ runner.temp }}/turn4d-browser
+          if-no-files-found: warn
+
+  browser-upgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Interrupted upgrade and offline recovery
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_UPGRADE_OUTPUT: ${{ runner.temp }}/upgrade-browser
+        run: node tools/qa/check-upgrade-browser.cjs
+      - name: Upload failed-upgrade recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upgrade-browser
+          path: ${{ runner.temp }}/upgrade-browser
+          if-no-files-found: warn
+
+  knight-art-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install extraction dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy scipy
+      - name: Generate six larger Base Knight pose candidates
+        run: python tools/rebuild-base-knight.py --dest tools/qa/knight-candidate
+      - name: Upload proposed Knight assets and contact sheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knight-base-256-candidate
+          path: tools/qa/knight-candidate
+          if-no-files-found: error
+
+  borderline-choice-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate accepted borderline choice regression syntax
+        run: node --check tools/qa/check-borderline-choice-regression.cjs
+      - name: Protect Turtle L4 real-win value and monitor Assassin counter trade
+        env:
+          QA_BORDERLINE_SMOKE_RECEIPT: borderline-choice-regression.json
+        run: node tools/qa/check-borderline-choice-regression.cjs
+      - name: Upload 128 real-match physical damage-front regression receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: borderline-choice-regression
+          path: borderline-choice-regression.json
+          if-no-files-found: error
+
+  assassin-backline-telegraph-opportunity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual-ranged-threat observer syntax
+        run: node --check tools/qa/check-assassin-backline-telegraph-opportunity.cjs
+      - name: Measure real physical backstab overlaps with Sniper aiming and Dragon windup
+        env:
+          QA_ASSASSIN_THREAT_RECEIPT: assassin-backline-telegraph-opportunity.json
+        run: node tools/qa/check-assassin-backline-telegraph-opportunity.cjs
+      - name: Upload source-real aim windup and physical RAF-parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-backline-telegraph-opportunity
+          path: assassin-backline-telegraph-opportunity.json
+          if-no-files-found: error
+
+  first-ultimate-tier-spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify first-to-tier full-match audit syntax
+        run: node --check tools/qa/check-first-ultimate-tier-spike.cjs
+      - name: Measure all ten families first-L4/L5 versus peer-tier and x2 counters
+        env:
+          QA_TIER_SPIKE_RECEIPT: first-ultimate-tier-spike.json
+        run: node tools/qa/check-first-ultimate-tier-spike.cjs
+      - name: Retain 720 true match and 24 frame-parity tier receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-ultimate-tier-spike
+          path: first-ultimate-tier-spike.json
+          if-no-files-found: error
+
+  goose-impact-shockwave-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate damage-led short-stagger Goose shockwave runner syntax
+        run: node --check tools/qa/check-goose-impact-shockwave-ab.cjs
+      - name: Compare true L4/L5 first unlock and fully doubled opponent against four source arms
+        env:
+          QA_GOOSE_IMPACT_RECEIPT: goose-impact-shockwave-ab.json
+        run: node tools/qa/check-goose-impact-shockwave-ab.cjs
+      - name: Preserve full physical-Goose power and damage-front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-impact-shockwave-ab
+          path: goose-impact-shockwave-ab.json
+          if-no-files-found: error
+
+  goose-impact-density-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Goose Impact CPU and state sample syntax
+        run: node --check tools/qa/check-goose-impact-density.cjs
+      - name: Compare original vs Impact at 80 120 300 bodies 1x and 10x
+        env:
+          QA_GOOSE_DENSITY_RECEIPT: goose-impact-density.json
+        run: node tools/qa/check-goose-impact-density.cjs
+      - name: Upload CPU sample and bounded physical state receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-impact-density
+          path: goose-impact-density.json
+          if-no-files-found: error
+
+  goose-impact-offtarget-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify no-Goose and pre-L4 Goose original/current RAF SHA parity
+        run: node tools/qa/check-goose-impact-offtarget-parity.cjs
+
+  barbarian-first-ultimate-signature-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source-only first Barbarian evolution A/B syntax
+        run: node --check tools/qa/check-barbarian-first-ultimate-ab.cjs
+      - name: Compare real L4 L5 secondary HP and counterplay
+        env:
+          QA_BARBARIAN_SPIKE_RECEIPT: barbarian-first-ultimate-ab.json
+        run: node tools/qa/check-barbarian-first-ultimate-ab.cjs
+      - name: Keep source real wins fronts and RAF evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-first-ultimate-ab
+          path: barbarian-first-ultimate-ab.json
+          if-no-files-found: error
+
+  barbarian-premium-density-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Barbarian premium source density syntax
+        run: node --check tools/qa/check-barbarian-premium-density.cjs
+      - name: Compare 80 120 300 fighter Barbarian source frame costs and off-target physics
+        env:
+          QA_BARBARIAN_DENSITY_RECEIPT: barbarian-premium-density.json
+        run: node tools/qa/check-barbarian-premium-density.cjs
+      - name: Preserve physical state and Node CPU source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-premium-density
+          path: barbarian-premium-density.json
+          if-no-files-found: error

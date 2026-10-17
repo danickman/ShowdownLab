@@ -21,7 +21,7 @@ const authored={
 for(const [type,spec] of Object.entries(authored)){
   if(!spec.states)spec.states={idle:'idle',move:'move',attack:'attack',guard:'guard',signature:'signature',hit:'hit',defeat:'defeat'};
   spec.urls={};
-  for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${V}`;
+  for(const [state,file] of Object.entries(spec.states))spec.urls[state]=`/v3/assets/authored/${type}/${file}.webp?v=${type==='knight'?'knight-base256b':V}`;
   if(spec.presentation)spec.presentationUrl=`/v3/assets/authored/${type}/${spec.presentation}.webp?v=${V}`;
 }
 const evolutions={knight:window.KnightEvolvedArt,beetank:window.BeetankEvolvedArt,goose:window.GooseEvolvedArt,sniper:window.SniperEvolvedArt,dragon:window.DragonEvolvedArt,assassin:window.AssassinEvolvedArt,mole:window.MoleEvolvedArt,turtle:window.TurtleEvolvedArt,goblin:window.GoblinEvolvedArt,barbarian:window.BarbarianEvolvedArt};
@@ -85,7 +85,41 @@ function stateName(action){return action==='kill'?'attack':action==='move'?'move
 function resolve(type,state){const f=manifest[type];if(!f)return null;return f.states[state]||f.states.attack||f.states.idle}
 function load(src){if(cache.has(src))return cache.get(src);const img=new Image(),rec={img,ready:false,error:false};cache.set(src,rec);img.onload=()=>{rec.ready=true;rec.error=false;missing.delete(src);try{window.dispatchEvent(new CustomEvent('showdown:artready',{detail:{src}}))}catch{}};img.onerror=()=>{rec.ready=false;rec.error=true;missing.add(src);try{window.dispatchEvent(new CustomEvent('showdown:arterror',{detail:{src}}))}catch{}};img.src=src;return rec}
 function allAuthoredUrls(){return [...new Set(Object.values(authored).flatMap(f=>[...Object.values(f.urls),...(f.presentationUrl?[f.presentationUrl]:[])]).concat([...Object.values(bases),...Object.values(evolutions),...Object.values(ultimates)].filter(Boolean).flatMap(e=>[...Object.values(e.urls),e.presentationUrl])))]}
-function preload(){Object.entries(manifest).filter(([type])=>!authored[type]).forEach(([,f])=>Object.values(f.states).forEach(s=>s.frames.forEach(load)));allAuthoredUrls().forEach(load)}
+// Turn 4: load only images relevant to the current screen / selected battle.
+function preload(){allAuthoredUrls().forEach(load)} // Explicit full-pack QA/offline operation; never called at startup.
+function preloadHome(){for(const type of ['knight','dragon'])load((bases[type]||authored[type])?.presentationUrl||authored[type].urls.idle)}
+function preloadRoster(){for(const [type,f] of Object.entries(authored))load((bases[type]||f).presentationUrl||f.urls.idle)}
+function preloadSpecies(type,level=1){
+ if(!authored[type])return;
+ const f=authored[type],art=selectedArt(type,level);
+ // Preload idle and fallback first; chosen combat pack follows.
+ load(f.urls.idle);
+ if(art){load(art.urls.idle);Object.values(art.urls).forEach(load)}
+ else Object.values(f.urls).forEach(load);
+}
+function preloadBattle(blue={},red={},blueLevels={},redLevels={}){
+ for(const [army,levels] of [[blue,blueLevels],[red,redLevels]])for(const [type,count] of Object.entries(army||{}))if(count>0)preloadSpecies(type,levels?.[type]||1)
+}
+function offlinePackUrls(type,level=1){
+ if(!authored[type])return [];
+ const base=authored[type],form=selectedArt(type,level);
+ return [...new Set([base.urls.idle,...Object.values((form||base).urls)])];
+}
+async function prepareOffline(type,level=1){
+ const urls=offlinePackUrls(type,level);
+ if(!urls.length)throw Error('Unknown fighter');
+ if(!navigator?.serviceWorker?.controller)throw Error('Open this game online and reload once to enable offline downloads');
+ const channel=new MessageChannel();
+ const result=new Promise((resolve,reject)=>{
+   channel.port1.onmessage=e=>{channel.port1.close();e.data?.ok?resolve(e.data):reject(Error(e.data?.error||'Offline artwork unavailable'))};
+ });
+ navigator.serviceWorker.controller.postMessage({type:'CACHE_FIGHTER_PACK',urls},[channel.port2]);
+ await result;
+ // Readiness is granted only after the worker has confirmed every cache write.
+ return {fighter:type,level,count:urls.length,ready:true};
+}
+function assetStatus(){const urls=allAuthoredUrls();return{requested:urls.filter(u=>cache.has(u)).length,ready:urls.filter(u=>cache.get(u)?.ready).length,errors:urls.filter(u=>cache.get(u)?.error).length,total:urls.length}}
+
 function drawTeamRing(c,x,y,size,team,ground=y,density=0){
   const col=team==='red'?'#dc5146':'#228fba';
   c.save();
@@ -232,6 +266,17 @@ function drawAuthored(c,type,x,y,size,team,o){
   }
   // A failed optional high-resolution portrait still has a valid authored idle.
   if(o.presentation&&rec.error&&src===fighter.presentationUrl){src=fighter.urls.idle;rec=load(src)}
+  // While a later form is still downloading, use an already decoded lower authored form.
+  // Never substitute a procedural silhouette or block combat on optional art.
+  if(!rec.ready&&registration){
+    const lower=registration===ultimates[type]?[evolutions[type],bases[type],null]:registration===evolutions[type]?[bases[type],null]:[null];
+    for(const pack of lower){
+      const url=pack?(o.presentation?pack.presentationUrl:(pack.urls[state]||pack.urls.idle)):(o.presentation?fighter.presentationUrl:(fighter.urls[state]||fighter.urls.idle));
+      if(!url)continue;
+      const fallback=cache.get(url);
+      if(fallback?.ready){registration=pack;src=url;rec=fallback;break}
+    }
+  }
   if(rec.error||missing.has(src))return false;
   if(!rec.ready){if(o.presentation){const f=presentationFrame(o.presentationBounds||{width:c.canvas.width,height:c.canvas.height});drawTeamRing(c,f.ringX,0,f.ringSize,team,f.ringY)}else drawTeamRing(c,x,y,size,team,y,o.density||0);return 'loading'}
   const img=rec.img;if(!img.naturalWidth||!img.naturalHeight)return false;
@@ -268,6 +313,6 @@ function draw(c,type,x,y,size,team='blue',o={}){
 function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(String(id),{time,strength:Math.max(.3,Math.min(1,strength))});if(hitReactions.size>192)hitReactions.delete(hitReactions.keys().next().value)}
 function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
 function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}for(const [form,packs]of [['base',bases],['evolved',evolutions],['ultimate',ultimates]])if(packs[type]){states[form]={};for(const [state,url]of Object.entries(packs[type].urls)){const r=cache.get(url);states[form][state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,loading:urls.filter(u=>!cache.get(u)?.ready&&!cache.get(u)?.error),missing:[...missing],byFighter}}
-preload();
-window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
+preloadHome();
+window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,preloadHome,preloadRoster,preloadSpecies,preloadBattle,assetStatus,offlinePackUrls,prepareOffline,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();

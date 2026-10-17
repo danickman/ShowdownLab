@@ -589,3 +589,392 @@ The user authorized regenerating Dragon Base only; see [DRAGON_BASE_REFRESH.md](
 ## Completed Evolved roster and launch release · 2026-10-13 UTC
 
 Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian complete all ten L2 Evolved packs. Custom PWA/Apple/maskable icons, sunny home duel panel, live Ultimate/evolution Guide, defeated-species sizing and L5 introduction label are included. See `GOBLIN_BARBARIAN_EVOLUTION_RELEASE.md` for source contracts, QA and remaining phone/Ultimate-art gates. Main deployment is authorized by the user; physical-phone FPS/approval remains unverified.
+
+
+### Oct 15 custom enemy chooser QA
+- [x] Preserve ten roles, existing nested Lab screen and +1/−1 single adjustment.
+- [x] Add reachable role-specific +5 control; exercise real event handler in Node.
+- [x] Cap tests: 0→5, 58→60, 60→60; exact mixed custom enemy counts.
+- [ ] New-head full GH Actions including portrait, offline rollback and 300 body stress must finish green.
+- [ ] iPhone 14 Pro Max Safari device visual/tap review still open.
+
+
+### Oct 15 — Assassin authentic Dragon-contact regression
+- [x] Source A/B six seeded mirrored L1/L4/L5 Assassin-Dragon duels: baseline 0 actual hits; conditional contact restored real attacks, Dragon still won.
+- [x] Source A/B 36 non-Dragon L1/L4/L5 solo duels bitwise-unchanged; Beetank/Turtle tank counters remain.
+- [x] Seed/mirrored 20/40/80 group probes measured true attributed damage and persistent geographic fronts rather than proximity-only contacts; outcomes are censored.
+- [ ] Complete *new-head* GitHub Actions including dedicated Dragon contact test and exact physical-state/300-offline/portrait gates.
+- [ ] iPhone 14 Pro Max Safari real-device battle/readability and long completed matches; Chromium is only a proxy.
+
+
+### October 15 — Assassin reaches Beetank and Turtle at true body contact
+- [x] Candidate source A/B: six mirrored L1/L4/L5 solos per armored defender; baseline 0 hits, exact contact 35 total, heavy counters retain 12/12 wins.
+- [x] Turtle L4/L5 reflection verified under direct melee; existing Dragon rule and other solo roles unaffected.
+- [x] 24 heavy-army, 24 mixed-heavy matched cases measured hit damage and counters without fake zone counts; snapshot/terminal limitations recorded.
+- [ ] New-head CI, dedicated source-state/counterplay, offline PWA rollback, uncapped 300, 430×932 DPR3 browser and all existing role tests.
+- [ ] Actual iPhone Safari manual animation, visibility and performance confirmation; do not claim Chromium = real device.
+
+
+### Oct 15 — Heavy-contact test runner discrepancy follow-up
+- [x] Reproduce 4 pending→heavy victory cases at 80 bodies (L1 seed1337 both mirrors, L4 seed1337 nonmirror, L5 seed9917 mirror): all defender victories, no Assassin wins/reversals.
+- [x] Refine permanent CI to reject established winner reversal and any Assassin-only victory against armored guard; permit only censored unresolved→defender terminal transition.
+- [ ] Rerun full 35-job new-head matrix; preserve independent core PWA, Chrome, 300 and source attributable damage regression.
+
+
+### Oct 15 — Thunder Honk L4/L5 real crowd-control and truthful guide
+- [x] Long Assassin L4/L5 source-audit: 27/390 Execution triggers L4, 30/339 L5; no unsourced damage buffs.
+- [x] Isolated source A/B L4 22→44 ticks and L5 32→64; keep 45/75% hit damage, .18/.22 area and L1–3 11-tick base honk.
+- [x] 20/40/80 matched seeded/mirrored Goose melee/ranged/mixed source tests tracked true time spent stunned; ranged counters retained in sampled 20/40 bouts, 80 outcomes censored.
+- [x] Changed Fighter Guide to actual game duration and preserved original Dragon 90-tick/1.5s Inferno explanation.
+- [ ] New-head unit+dedicated Goose source-counterplay CI, 42 offline SHA pins, 430×932 DPR3 browser, 300-fighter throughput and source-attribution full run.
+- [ ] Actual iPhone 14 Pro Max Safari performance/frame-readability and completed many-round win-rate study before production promotion.
+
+- [x] Update legacy `check-turn3-consistency.cjs` duration assertions to **enforce new L4 44/L5 64 Goose Guide** (not delete timing checks).
+- [ ] Complete all post-test-fix CI jobs including source-linked honk true-stun and duel QA.
+
+- [x] Recover 305/305 true Goose honks including last partial snapshot using existing test-only forced state publish; no new game telemetry or skipped cue assertion.
+- [ ] Verify full new-head GitHub QA run after both Guide and honk observation test fixes.
+
+
+### Oct 15 — full terminal battle-quality / multi-front QA turn
+- [x] A/B source variants (not shipped) tested against **full winners**, not only short censored frames: Barbarian contact, deploy spread, lane preference, secondary stagger, Goblin swarm penalty, Dragon splash. Reject variants that dilute independent 40-body damage fronts or produce little gain.
+- [x] Current baseline: 16 genuine finished matches at 20 (25 real separated, 1 persistent, 1287 true hits), 16 finished at 40 (193 separated, 66 persistent, 3386 true hits). Source-attributed damage only; no fake distance/proximity front signal.
+- [x] Add **read-only** `check-completed-match-quality.cjs`: exact uninstrumented trace parity, seeded/mirrored 32 terminal battles, HP-credited role mix, early/mid/late active windows, 25/50/75% survival, permanent conservative damage-front quality floor and JSON artifact.
+- [ ] New independent `completed-match-quality-budget` CI and full existing portrait/300/offline/legacy + role counter suite completed green for exact HEAD.
+- [ ] Improve genuine 20-body *persistent* simultaneous fights in next game turn; 1 persisted window in 16 games is a serious open design problem, not a sign-off.
+- [ ] Physical iPhone 14 Pro Max Safari animation + frame pacing and user acceptance.
+
+
+### Queued next gameplay turn — Assassin/Turtle L4/L5 tangible evolution value
+- [ ] True Execution activations per physical backstab and pre-hit target HP bracket, normalized for each Assassin deployed and duration; completed L1/L4/L5 mirror/seed 20/40 and selected 80 battles, record marginal L4/L5 value.
+- [ ] Targeted trigger/finisher/selection variants with evidence, preserving Beetank/Turtle tank counters, Sniper/Dragon tactical identity and real-battle persistence.
+- [ ] Turtle-versus-Beetank complete tank utility comparison: real HP prevented, damage reflected to sourced attackers, ally survival, meaningful shell/bash disruptions, survival time, counter matchups. Count that value separate from attributable direct DPS.
+- [ ] Implement bounded validated role improvement (not blanket DPS), with true event cue and dedicated permanent deterministic coverage.
+- [ ] Full new-head branch CI 300 fighters + 430×932 DPR3 portrait + 42 pinned offline release and role-counter checks, QA only; physical iPhone Safari manual QA.
+
+
+### Correct primary phone — iPhone 14 Pro Max
+- [x] Authoritative device confirmed as **iPhone 14 Pro Max portrait**, 430×932 CSS pixels, DPR3, physical display 1290×2796. Existing Chromium viewport test geometry remains valid.
+- [x] Browser emulation uses 430×932 ×3 and smaller-screen responsive checks remain secondary; dedicated `tools/qa/check-primary-device-contract.cjs` prevents wrong phone naming.
+- [ ] Manual **iPhone 14 Pro Max Safari** validation of the actual PWA: Dynamic Island/header and home-indicator/footer safe areas, ability/touch hit targets, authored sprite clarity, 1× 20/40/80 and exceptional 300-fighter frame pacing, PWA install and offline behavior, thermal and memory stability.
+
+
+### Oct 15/16 — Turtle L4/L5 legitimate melee retaliatory reach (QA)
+- [x] Finished 16 mirrored seeded mixed/swarm/heavy/ranged 20-body and 16 40-body match A/B: old .09 → new .10 reflected real post-defense HP 139→177, 360→401; stable completed winners.
+- [x] Protect real damage-connected multi-front persistence **20:1→1**, **40:66→66**; reject .105+ Turtle and L4/L5 Assassin blanket/conditional HP threshold increases that erase fragile 20 persistent multi-front window.
+- [x] Existing L1–3, Turtle vs Beetank and Turtle vs Sniper counters and true anti-recursion, plus exact 20/40/80/120/300 no-Turtle state parity 1×/10×, permanent dedicated independent Actions/receipt.
+- [x] Update truthful L4/L5 Guide text, root script cache bump, atomic 42 SHA256 SW pins and cache namespace.
+- [ ] Full new-head runtime PWA/QA including new Turtle test, 430×932 DPR3 **iPhone 14 Pro Max** emulated portrait, 300 and role counter gates.
+- [ ] **Still outstanding:** Assassin evolved Execution strategic payoff (high-threshold direct buffs were rejected), stronger Turtle ally/team utility vs Beetank, more sustained 20-body true fronts and actual iPhone 14 Pro Max Safari physical QA. Do not call these fixed.
+
+
+### Oct 15/16 — Assassin L5 actual Execution payoff without multi-front degradation
+- [x] Reject target bias and post-vanish broad Execution window: ineffective/erased real persistent fronts; reject L4 threshold upgrades for 20-body multi-front harm.
+- [x] Isolate L5-only 55%→75% successful pre-hit backstab threshold (unchanged L4 40%; no L1–3 damage, power, base HP, knockback, speed or cooldown changes).
+- [x] Source A/B 40 complete mirrored/seeded 20/40 matches (mixed/heavy/swarm/ranged/backline): no winner flips; real Execution 6→7/4→7, separated damage 30→30/226→226; persistence 1→1/75→75.
+- [x] L1/L4/L5 solo source A/B versus Turtle/Beetank/Dragon/Knight/Sniper: L5 four mirrored heavy defender victories retained each, Sniper still countered; L1/L4 exact physical parity.
+- [x] Dedicated `check-assassin-execution-payoff.cjs` real event, true HP damage, 1×/10× no-Assassin 80/120/300 source parity, actual 20/40 fronts and counterplay. Existing Ultimate unit thresholds now explicit.
+- [ ] New-head all Actions, browser portrait 430×932 DPR3, offline SHA/rollback and role sample complete success; only then consider this QA branch green.
+- [ ] Actual iPhone 14 Pro Max Safari readability/performance/thermal and more rigorous draft-evolution ROI.
+
+
+### Oct 15/16 — Target retention independent holdout and normalized role-value QA
+- [x] 40 completed 20-body calibration and separate **60 complete battle six-seed** holdout, five matchup mixes × mirrored sides; record independent positive HP damage-front persistence, winner changes and role damage, not proximity.
+- [x] Correct lower-bounded nearest-scan pruning before accepting any discounted target score; reject fake gains caused by skipping legally better scores.
+- [x] Reject blanket/nearby and bounded bruiser target stickiness: limited persistent-front improvements did not justify 9–12 changed winners in 60 games or mixed damage loss for Turtle/Goblin.
+- [x] Existing 32-terminal `check-completed-match-quality.cjs` adds per-role original-deployment denominator and true attributed HP per deployed fighter, with finite/nonzero checks and original exact observer-vs-pure-state parity.
+- [ ] Full exact new-head CI green with normalized receipts, 300 stress, rooted offline 42 SHA resources and 430×932 DPR3 Chromium portrait.
+- [ ] Actual physical iPhone **14 Pro Max** Safari manually accepted.
+- [ ] Future measured selective contact ownership for multiple genuine 20-body mid/late fronts; protect 40+ and weak-role utility.
+
+
+### Oct 16 — 20-body survivor-adjusted real damage-front QA
+- [x] All 32 matched 20-fighter forensic games actually terminate: 4 modes × 4 seeds × 2 mirrors. 4v4+ midfight opportunity distinguished from natural 1–2-enemy late attrition using *actual HP>0* living fighter counts.
+- [x] Hit-grounded 90-tick retarget A/B across 30 completed 20 plus 30 40-body matches, with corrected nearest candidate admissibility. Reject variants which fail persistent damage-front gain and reduce low-damage role value; NO runtime changes.
+- [x] Extend 32-term-match permanent test: per-RAF living blue/red, eligible 4v4+ vs lopsided ≤2 by 30-tick damage window, 1/6/1/2/5/6 phase snapshots, summary and no fictional front criteria. Preserve previous terminal, positive HP graph, role denominators and observer state parity.
+- [ ] Full exact-head QA Actions and archived new phase receipt. Primary iPhone 14 Pro Max physical Safari still manual.
+
+
+
+### Oct 16 — true melee contact and crossfire front diagnostic
+- [x] Confirm complete-matches and living side eligibility; no fake front counts from target proximity or action intent.
+- [x] Instrument actual attacker-to-target distance and primary-vs-secondary **positive HP damage** in QA only; preserve full deterministic state parity.
+- [x] Synthetic fixture: true close melee fronts remain two while crossfire Dragon merges full attacker-target graph into one; all-zero events never count as battle.
+- [x] 20 completed source samples: all-role 30 separated, direct-close melee 10, no hidden independent melee front swallowed by ranged links.
+- [x] Reject phase-qualified +0.02/.035/.05 target-ownership and alternative slot geometry without stable contribution/persistence across fronts; no combat/runtime modifications.
+- [ ] Full *new-head* CI including 32 finished 20/40 true-damage front/role QA, portrait iPhone 14 Pro Max CSS proxy, PWA SHA pins, and 300-body counterplay.
+- [ ] Physical iPhone 14 Pro Max Safari device acceptance; do not claim Chromium = mobile FPS.
+
+
+### Oct 16 — target pressure once per tick while preserving real fights
+- [x] Reject early tactical lane interception, heavy-target reward and frontliner distribution source A/Bs that compromise role damage, winners or real persistent 40-body fronts; document denominator (16 fully terminal cases per population).
+- [x] New real lazy target-pressure cache captures sequential nearest pressure, tracked per-unit target updates, death pruning, and match reset without stat/AI change.
+- [x] Source A/B **44/44 exact full-state trace parity**: 32 fully completed 20/40 matches and 12 mirrored 80/120/300 1×/10× cases; keep true 20/40 multi-front floor, unchanged attacker damage and role contributions.
+- [x] Root/core query `pressurecache1`, all 42 SHA-256 PWA resources repinned; no visuals/Ultimate changes.
+- [ ] New head complete CI: direct cache parity job, prior pressure A/B research, local-front/lane, Assassin/Turtle counters, 300, browser PWA and atomic offline integrity all green.
+- [ ] Physical iPhone **14 Pro Max** Safari 1× performance and actual multiple localized combat QA; Node benchmark ratios are *not* phone FPS.
+
+- [x] Update old stress5c and two armored-Assassin contact CI comparators to the live pressure-cache source contract without removing baseline state/counterplay assertions.
+- [ ] Verify fresh exact-head CI entire matrix after source-check maintenance; 42 SW pins unchanged since pressurecache1.
+
+
+### Oct 16 — completed marginal evolution ROI evidence gate
+- [x] 216 20/40 seeded/mirrored **terminal** tier-controlled Assassin/Turtle/Beetank battles, three opponent styles, both teams, L1/L4/L5; normalise damage by actually deployed role fighters.
+- [x] Read-only positive HP sourced attacks, actual HP removed by Turtle Ricochet, shell reduction marked **pre-armor nominal** (not falsely actual HP saved), true Execution events, role survival exposure, real damage-connected front windows, actual winner.
+- [x] Pure-versus-instrumented entire physical state SHA parity for Turtle swarm and Assassin ranged matches; reject non-terminal or missing role-ability cases.
+- [ ] Exact-head GitHub CI success and archived JSON receipt for new `evolution-investment-value` job plus all previous 300/browser/counterplay suites.
+- [ ] Select next evolutionary gameplay candidate based on ROI including strategic counters; preserve source-authentic fronts and avoid global numerical DPS equalization.
+- [ ] Physical iPhone **14 Pro Max Safari** manual performance, touch and evolution visual acceptance.
+
+
+### Evolution ROI nominated-unit attribution (Oct 16)
+- [ ] 216 completed 20/40 real source battles, no censored samples, selected slot ID mapping consistent with blue-then-red and front-before-back deployment
+- [ ] L1 nominated Turtle reflects **zero** HP, while separate allied L4 Turtles produce independently reported, positive, non-target same-role reflection; L4/L5 selected Turtle reflects actual HP
+- [ ] Selected squad attribution applies to direct HP damage, shell nominal, Execution and alive unit-ticks, with exact deployment denominator (3/6), no other same-role ally contamination
+- [ ] Instrumented vs uninstrumented exact frame-state SHA parity and exact-head green PR run; independent Actions receipt audited before balancing
+
+
+### Turtle Guardian Shell prospective A/B, non-shipping CI
+- [ ] Dedicated 48 full terminal matched source A/B covers mixed/swarm/ranged, both mirrors, L4/L5, 20/40, 2 fixed seeds
+- [ ] Compare actual damage HP and genuine persistent independent damage fronts, winning sides, solo Turtle vs Beetank/Sniper/Assassin and exact no-evolved-guardian state parity
+- [ ] Validate 80/120/300 real engine finite simulation, 1×/10×, no hard cap; iPhone 14 Pro Max physical Safari still manual
+- [ ] Only after separate source evidence and current exact-head CI decide whether to ship a guarded, nonstacking protective Turtle niche; no covert DPS boosts
+
+
+### Source-only Turtle Guardian actual savings and CPU acceptance
+- [ ] All guardian events matched to the exact incoming defender/tick and post-dodge/remaining-HP capped hit; immediately realized prevented HP must be nonzero but never exceed nominal pre-dodge reduction
+- [ ] Keep full-state observational parity, genuine counterplay and terminal wins/fronts; distinguish event-local HP saving from whole-match counterfactual
+- [ ] Record balanced-order baseline vs guardian Node CPU median ratios with 5 repetitions at 120/300, 1×/10× before any runtime ship; real iPhone 14 Pro Max manual acceptance pending
+
+
+### Turtle Guardian Shell runtime (QA only)
+- [ ] L4 18% ally protection inside 0.12, L5 28% inside 0.14; only evolved living allied Turtle, not self
+- [ ] Two Turtles and Knight Bastion never stack; strongest single protective effect applies; historical exact no-guard source comparisons and solo Beetank/Sniper/Assassin remain valid
+- [ ] Full 48 terminal match source A/B, real reflected HP and locally saved HP distinguished from nominal, persistent independent real HP-damage fronts, exact source observer parity, 300 density at 1×/10×
+- [ ] 42 pinned PWA runtime digests, new runtime/cache URLs, mint comic guardian cue and Guide descriptions; physical iPhone 14 Pro Max Safari UX/FPS/thermal manual gate OPEN
+
+
+### Guardian Shell wounded ally guard (post full-unrestricted rejection)
+- [ ] Real source limits Guardian to current defender pre-hit HP fraction <60%, no effect at >=60%, regardless of nearby evolved Turtle; L4=18%/0.12, L5=28%/0.14, never stacks with Bastion or other Turtles, no self-guard
+- [ ] Standard 16 genuine 20/40 matches each: 20 real persistent fronts >=1, 40 >=40 with separated windows >=140 and all roles real HP damage; no relaxing original source gate
+- [ ] In dedicated 48 completed Turtle evolution matches: L4 and L5 real win/fronts and immediate real prevented HP source, solo counter truths and deterministic parity
+- [ ] Original Assassin L5 Execution and Turtle radius .09→.10 A/B tests reconstruct exact prior no-Guardian physics, while latest live Guardian is separately regression-tested; current 42 SHA-256 hashes and Safari manual acceptance
+
+
+### Guardian wounded-ally independent holdout (Oct 16)
+- [ ] 80 extra fully terminal A/B pairs across unseen seeds and no-Knight/armored-heavy lineups; each mode/tier has eight paired mirrors, with 20/40 populations
+- [ ] Report real positive HP-damage fronts, wins, Turtle role HP and actual immediately saved HP; no weakening initial 48-case game outcome checks
+- [ ] Verify exact-head 43-job GitHub Actions; production/main still untouched; manual iPhone 14 Pro Max Safari open
+
+
+### Small-army target allocation pressure source study, rejection control
+- [ ] 16 terminal 20-body source matches per candidate with genuine positive HP damage-connected front score, Knight/Goblin/Beetank/Turtle direct HP and winner flips
+- [ ] 16 terminal 40-body matches per candidate with baseline-versus-tuned identical full RAF SHA trace; no hidden large-pop changes
+- [ ] Candidate must NOT be shipped if it sacrifices viable roles, even when persistent fronts look numerically better; no proximity-only fight counting
+
+
+### L4 Turtle evolutionary investment, independently held-out A/B
+- [ ] Four L4-only source variants against current live rules, 104 genuinely terminal pairings each (standard 32, prespecified 24, unseen seed 24, no-Knight/armored 24)
+- [ ] Genuine attacker-credited HP and separate actual immediate saved ally HP; role-normalized value, winner flips, Knight/Goblin damage, persistent independent true-damage fronts
+- [ ] L5 solo Beetank/Sniper/Assassin full-frame state SHA unchanged for *all* L4-only variants and read-only physical observer parity
+- [ ] No gameplay patch, hash/PWA changes or main/production touch until candidate is proven across held-out strategies and 300/iPhone 14 Pro Max budget
+
+- [ ] L4 Ricochet's secondary `source:null` hits are physically attributed to the reflecting L4 Turtle and counted only after armour/shield/dodge/HP cap; actual reflection >0 and observed/unobserved SHA matches. Do not conflate with direct attack HP or artificially count reflected damage as independent offensive fronts.
+
+
+### Turtle L4 long-form payoff study — accepted evidence, rejected proposed buffs
+- [x] 520 truly completed matched source trials, actual post-armor/dodge/cap Ricochet HP separate from attacker-credited HP; L5 solo SHA and source observer parity, archived in Actions 38857552669
+- [x] Guard20 worsens no-Knight/armored holdout wins 6→4 despite initial persistence benefit; Guard22 hurts several role-front measures; reflect35 increases true reflected HP but degrades persistence in prespecified/unseen seeds; radius13 worsens stress wins
+- [x] Retain original L4 Turtle gameplay values; no hidden numeric adjustment or false 'balance pass'. Next design event-gated tactical shell counterplay with genuine winner, front, hero-role and population performance controls
+
+
+### Source-only timed Turtle shell guard tactical hypothesis
+- [ ] 4 ×104 fully terminal standard/prespecified/new-seed/stress comparisons; genuine nonstacking timed shell defensive response, not global passive percentage increase
+- [ ] Actual post-hit saved/reflected/direct HP, original genuine independent active fronts, Beetank/Assassin and Knight/Goblin collateral, unchanged L5 solo hashes and physical source observer parity
+- [ ] Do not ship until holdouts, 80/120/300 CPU and real iPhone 14 Pro Max Safari reviewed
+
+- [ ] Count true injured-ally reactive shell starts independently; do not mistake existing shell animation for the new counterplay
+
+
+### Turtle shell response selectivity — new source gating
+- [x] First 416 true terminal baseline / natural shell / reactive 24% / reactive 30% comparisons passed, genuine actual trigger callback measured; broad reaction 40-pop fronts 58→52 and unseen wins 13→12, natural shell stress wins 6→4, so not shipped
+- [ ] Same 416-case CI job now compares baseline, broad reactive24, gap-only reactive24 and gap+recovery-window reactive24; asserts actual selected Guardian initially stronger than Knight/Bastion and recovery cooldown>=16 where applicable; maintains L5 solo full physical SHA
+- [ ] Never call source-only CPU or true-front metrics real iPhone 14 Pro Max Safari acceptance
+
+
+### Assassin L4 Execution payoff — SOURCE ONLY
+- [ ] Four true L4 pre-hit HP gate source variants (40%, 50%, 55%, 60%) × 104 genuine full-terminal matches with mirrored standard, distinct backline, swarm and heavy-counter holdouts
+- [ ] Explicit true physical backstab / Execution callback conversion, real L4 attacker-attributed HP versus Beetank/Turtle/Sniper and general combat, role wins, Knight/Goblin contribution and authentic 20/40 persistent fronts
+- [ ] Instrumented/raw full RAF parity, L5 Assassin unchanged solo-versus-Beetank/Turtle/Sniper/Dragon/Knight SHA, and 80/120/300 1×/10× no-Assassin full state unchanged
+- [ ] Preserve primary iPhone 14 Pro Max Safari acceptance and choose gameplay change only after measured holdout counter health and device frame budget
+
+
+### Assassin L4 execution source study — completed/rejected numerical thresholds
+- [x] 416 genuine complete 20/40-body source games: 40% live vs 50/55/60% with unseen/armored holdouts, real L4 hits, true physical Execution/backstab callbacks, original HP-damage front graph and role counters
+- [x] 5 L5 solo-counter full-frame SHA parity; 80/120/300 1x/10x no-Assassin parity; unchanged original live baseline 20/40 authentic front gates; export explicit rejection instead of aborting receipts
+- [x] All 3 simple higher L4 gates REJECTED: first 24 actual L4 Execution procs 13→26/28/31, real HP damage +2.8–3.8%, no winner gain, standard 20 independent persistent fronts 1→0. Do not weaken gates.
+- [ ] Diagnose exact L4 stalking/vanish/backstab/target-switch-to-unwounded loss under 20/40 physical full matches before an Assassin-specific pursuit/kill-confirm tactical candidate; validate role-counter and CPU invariants, physical iPhone 14 Pro Max Safari manual.
+
+
+### Assassin L4 wounded-backline continuity (SOURCE ONLY, no buff shipping)
+- [ ] 3×104 genuinely terminal baseline / 0.06 / 0.12 remembered wounded Sniper-or-Dragon physical target comparisons, including standard, prespecified, unseen, no-Knight/armored
+- [ ] Measure target switches while original prey remains alive below 40% HP; stalking/vanish/backstab/disengage decisions, positive real Assassin HP on Sniper/Dragon vs Beetank/Turtle; true independent 20/40 HP-damaging fronts
+- [ ] All L5 5 solo counters unchanged full frame SHA, no-L4 80/120/300 1× and 10× snapshots identical and read-only observer full RAF parity
+- [ ] Never use `u.target` as persistent prey state without fixing existing core double-nearest, and never weaken authentic front thresholds to promote a source-only failed candidate
+
+
+### L4 Assassin target continuity tested / rejected; last-mile reach diagnosis verified
+- [x] Three ×104 genuine completed matched source simulations and physical observer SHA/L5 solo/80-300 no-L4 parity, separate true damage fronts
+- [x] Candidate focus06/focus12 stop five lost wounded backlines (in 24 selected cases), but selected Assassin real HP falls by ~1.9%, backstabs 192→187, no win improvements; armored stress 20-fighter real persistent fronts 10→7 — REJECTED
+- [x] 13,255 / 18,892 prespecified L4 decisions have ready attack but cannot reach target; measure is simulator decisions, not wall clock time. Source `step()` double-nearest persists, target lock not appropriate.
+- [ ] Next L4-only short-range *movement* research when cooldown ready and backline target within final .30 arena units; no attack range/damage or armor changes, preserve 20/40 independent real HP-damage fronts and real counter/winner health, check 80/120/300 performance and iPhone 14 Pro Max manual QA
+
+
+### Source-only Assassin L4 last-mile ready pursuit vs real backline
+- [ ] 312 terminal A/B battles: L4 only attack-ready, real Sniper/Dragon target, beyond actual reach but within 0.30 arena; 1.45 baseline vs movement multipliers 1.65 and 1.85
+- [ ] Source true damage/HP/fronts, first and unseen winner stability, remaining Beetank/Turtle counters, current 20/40 full independent-front parity, actual struck-backstab/Execution conversion
+- [ ] Exact read-only observer RAF SHA, unchanged L5 1v1 vs five counter classes and unaffected 80/120/300 at 1× and 10×, plus evolved-L4 large-pop CPU acceptance before any runtime update
+
+
+### L4 Assassin last-mile movement experiments — completed / rejected
+- [x] 312 truly completed 20/40 matched source games with observed/raw SHA, unaffected five L5 solo counters and non-L4 80/120/300 1×/10× SHA, exact source CI 38957537337 dedicated study green
+- [x] 1.65 gives selected Assassin +3.9% HP but loses wins 13→12, standard 20 persistent fronts 1→0, standard 40 fronts 58→34
+- [x] 1.85 gives selected +12.5% HP but loses wins 13→12, standard 40 fronts 58→41 and separated HP windows 192→186; NO speed patch shipped
+- [ ] Profile physical Assassin slotPoint destination distance vs actual melee reach, physical collision/separate() pushback and two different nearest() assignments in one tick; guard by real positive HP-damage fronts at 20/40 and high-pop 300 budget before another action change
+
+
+### QA research cost governance
+- [x] Five previously rejected source A/B studies moved unchanged to conditional combat-source/own-script push workflow; preserve fixtures/artefacts, do not weaken checks. Saves >1,664 completed terminal matches on routine docs/QA commits.
+- [x] Original shipped-combat regressions, true HP fronts, active Assassin last-mile, primary iPhone 14 Pro Max 430×932 browser contract, 300 fighters, 42-PWA-digest integrity remain 43-job normal push/PR matrix.
+- [ ] Verify exact-head GitHub push and PR with new archive registration; when real combat core changes require source archive success as well; physical Safari manual gate pending.
+
+
+### Assassin L4 Shadow Mark (research only)
+- [ ] Baseline + 25/40% one-use 120-tick real Sniper/Dragon marks from an actual L4 vanish, 312 real completed 20/40 matches
+- [ ] Real other-ally direct-hit mark consumption, actual HP, front windows, original/new seed/armored/no-Knight winners, unaffected Beetank/Turtle counters
+- [ ] Strict observed/raw RAF SHA, L5 five-solo counter SHA, no-L4 80/120/300 1×/10× SHA, no PWA or production change pending evidence
+
+
+### L4 Assassin Shadow Mark — 312-match terminal result REJECTED
+- [x] 3×104 matched real terminal source simulation study / L5 five solo SHA / no-L4 80/120/300 1×/10× SHA all pass (CI 117172081229)
+- [x] Mark25 166 applications/78 consumed, mark40 165/78, **zero allied consumers**; only Assassin direct HP ↑, no selected or unseen wins ↑, baseline standard 20 true persistent fronts 1→0, real separated 40 windows ↓
+- [x] Both Shadow Mark candidates intentionally NOT in runtime or Guide. Next: evaluate L3→L4 and L4→L5 **draft choice payoff** versus actual reinforcement/Beetank with real winners, defense/attack contribution, 20/40 authentic front and 300 performance gates; no synthetic medal for raw DPS
+
+
+### Evolution milestone opportunity cost — actual current game outcomes
+- [ ] 144 role×tier×swarm/ranged/armored×20/40×seed×side base fixtures, current unmodified simulator, three actions upgrade all role units vs +1 or +2 real reinforcements, 432 fully terminal genuine matches
+- [ ] Compare actual draft choice winners, selected direct HP, physically reflected Ricochet HP, Guardian marginal HP saved beyond Knight after HP cap/dodge, positive HP-damage fronts and mode-specific counters
+- [ ] Exact read-only observer/unedited RAF SHA; no new physics/ability/Guide/PWA assets until player-value and Safari 14 Pro Max gates and independent holdouts support a change
+
+
+### Draft one-pick evolution opportunity cost (experimental source-real, NOT shipped)
+- [ ] 96 mirrored selected cases ×4 held-roster/upgrade/recruit2/Beetank upgrade = 384 terminal battles; two selected families (Turtle, Assassin), L3→L4 & L4→L5, swarm/backline/armored, 20/40, two seeds, both sides
+- [ ] 3/6 physical chosen copies and 1/2 existing Beetanks per side, 2 recruits increase global population to 22/42; do not claim exact random draft offer count
+- [ ] Genuine wins, separately real physical direct HP, actual returned shell Ricochet damage, post-dodge/cap Guardian ally saving, Beetank HP, damage-positive independent fronts; strict observed/raw RAF hash parity
+- [ ] Hold current real combat/evolution rules; if hard counters reveal underperforming choices, design a bounded tactical role mechanic and test it rather than generic percentage/attack-range buff. 80/120/300 game budget and physical iPhone 14 Pro Max Safari must precede any future gameplay release
+
+
+### Evolution one-pick opportunity verdict (816 completed, QA only)
+- [x] 432 full terminal family evolution L3→L4 / L4→L5 vs +1/+2 same family (Assassin/Turtle/Beetank); 384 full terminal same-team nominated family vs recruiting two vs evolving existing Beetank
+- [x] Observer/raw full-RAF state parity; all nominated same-type physical IDs receive family-wide upgrades, guardian marginal HP above eligible Knight mitigation, actual Ricochet HP after armor/dodge/cap, true HP-damaging front graph, complete winner and 20/40 roster side/mode/seed pairing
+- [x] Assassin L4 loses same-team comparative draft opportunity: own evolution 5 vs +2 6 vs Beetank evolution 8 winner counts; real persistent fronts 56 vs recruiting 68 vs Beetank 66. L5 delivers 10 vs 8 vs 9, retain valuable L5 identity.
+- [x] Turtle protection is physically real (4,615 L4; 13,873 L5 HP per-event marginal saves) but extremes cause 8/24 wins irrespective of choice (8 swarm wins, 16 armor/backline losses). Find winnable borderline utility, not simple percentage buffs.
+- [x] Source studies preserved conditionally on actual combat-source or own-study change in qa-research-archive workflow, 816 redundant normal CI matches removed. Existing original counter/front/300/PWA/browser regressions remain required.
+- [ ] Design truly tier-4 Assassin backline threat-denial action and Turtle bounded ally-intervention; strict matched 20/40 physical fronts/winners and high-density CPU; physical iPhone 14 Pro Max Safari manual gate.
+
+
+### Oct 16 — borderline L4 draft choices (source study)
+- [ ] Exact-head Action: 768 discovery plus 128 unseen real terminal matches, 16 physical frame-hash parity pairs and actual physical HP/Guardian/reflection/damaging-front/direct-fatal-hit ID receipts
+- [ ] Review unseen win flips vs recruit/Beetank and counter/front sustainability before prototyping L4 role-specific intervention
+- [ ] Physical iPhone 14 Pro Max Safari acceptance remains OPEN
+
+
+### Oct 16 — Completed borderline L4 choice study acceptance
+- [x] 896/896 genuinely terminal matched source battles, 16/16 observed/raw per-RAF SHA parity pairs at QA `8bc4d21`, [push CI](https://github.com/danickman/ShowdownLab/actions/runs/38977768668) and [PR CI](https://github.com/danickman/ShowdownLab/actions/runs/38977772560) 44 required successes each
+- [x] Held-out 4049/9091 seeded blue/red mirror Turtle L3→L4 win flips at 20 (hold 0/8, evolve 7/8) and 40 (hold 3/8, evolve 7/8). True Guardian/Ricochet physical HP measured; 20 front 7→3 warning preserved
+- [x] Held-out Assassin L4 mixed outcome 20 3→1 wins, 40 2→4; Beetank 5/8 and 8/8, so investigate tactical backline shot denial rather than raw multiplier
+- [ ] New exact-head 128-case *known* borderline CI regression plus 8 RAF parity controls; **pending** in current archive/refinement change
+- [ ] Any proposed new backline threat denial must prove actual shot suppression and true 20/40 wins/fronts, L5 unchanged, 80/120/300 budget; physical iPhone 14 Pro Max Safari OPEN
+
+
+### Oct 16 — Assassin real Sniper aim / Dragon windup overlap research
+- [ ] Exact-head source-only CI: 180 fully terminal choice cases, 12 read-only full-RAF SHA parity pairs; aim/windup positive HP physical-ID backstabs distinguished from readiness/proximity
+- [ ] Separate prespecified seed 9173 holdout; measure actual enemy shots and dragon breath events, real true damaging fronts and team wins without claiming blocked attacks
+- [ ] Any proposed new anti-ranged interruption requires genuine source A/B actual denied shots, 20/40 counters/fronts and 80/120/300 performance plus iPhone 14 Pro Max Safari manual acceptance (OPEN)
+
+
+### Oct 17 — First-to-L4/L5 transformational unlock game design acceptance
+- [ ] First-to-tier source-real audit across 10 fighter families x L3->L4 and L4->L5 x 20/40, 1337/2017 mirror x hold/first L4/L5/peer L4/L5/foe x2 = 640 genuine terminal matches, plus 80 true severe 3-evolved-vs-15 exceptions, 24 exact RAF physics SHA parity pairs
+- [ ] Directional design: first L4 should usually swing equal-force rounds (approximately 75%+) and first L5 stronger still (approximately 80%+), but retain countervailing peer evolutions, x2 family and overwhelming odds. These are initial design goals **not** unjustified CI fail floors; log each role, exceptions and genuine fronts.
+- [ ] Re-evaluate prior Assassin and Turtle same-tier ROI research as **secondary**, since opposing L4s already present invalidates treating these as first-unlock tests; preserve complete battle quality and physical iPhone 14 Pro Max Safari release gates.
+
+
+### Oct 17 — VERIFIED first L4/L5 transformational power spike
+- [x] 720/720 real complete matches / 24 original-observer physical RAF SHA parity on exact QA `c703b91` ([push](https://github.com/danickman/ShowdownLab/actions/runs/39001984770), [PR](https://github.com/danickman/ShowdownLab/actions/runs/39001987803)), both 46 required successful
+- [x] Baseline first unlock L4 64/80, L5 57/80; peer 40/80 both tiers; doubled enemy nominated family counter 52/80 and 49/80; 3 evolved vs 15 only 3/40 L4 and 1/40 L5. Treat mirrored small-N directional, not universal rates.
+- [ ] New Goose Thunder echo and Barbarian Blood Cleave staggering sweep source-only 4-tier A/B, 20/40 and peer-/nominated-family double and 3-v-15 real terminal outcomes; 8 RAF source instrumentation SHA parity pairs. **Exact-head CI pending**; reject absent actual ability wins/role counters; no gameplay/pins/source modified.
+
+### Oct 17 — verified Goose/Barbarian source-only signatures
+- [x] fc86180 dedicated source job passed 480 real terminal matches, 8 raw/observer full-RAF SHA parity, 6 unaffected role SHA controls
+- [x] Goose L5 unseen first-tier 5 -> 8/8 but real persistent fronts 12 -> 2 and separated physical-HP windows 99 -> 46; do not yet ship this particular fanout/stun duration
+- [x] Barbarian L5 unseen 4 -> 6/8 first-tier wins, damaging fronts 20 -> 17 and separated windows 75 -> 69
+- [x] Same-tier peer remains 16/32 either source; severe number counter 3-v-15 wins 0/16; enemy family double NOT whole army x2
+- [ ] Retune Goose echo to balance exceptional power with independent simultaneous fights; whole-army x2 study, actual 80/120/300 CPU, real Safari and asset-integrity checks
+- [ ] New exact-head archived/reduced CI workflow approval; no playable combat or production change
+
+
+### Oct 17 — Source-only Goose L4/L5 narrower echo vs peer and full army ×2
+- [ ] 408/408 genuine full terminal baseline/broad/trim Goose battles, 12 untouched/observed per-RAF SHA parity, 2 fresh held-out seeds 8303/10111, two populations, two tiers, both side mirrors
+- [ ] Assert enemy **whole-army ×2** creates 10 vs 20 or 20 vs 40; separate family-only x2 and 3 evolved vs 15
+- [ ] Preserve positive-HP genuine fronts, meaningful first L4/L5 signature spikes, peers/number counters and no global stun; performance 80/120/300 real frame budget and physical Safari 14 Pro Max remain OPEN. No live gameplay modifications.
+
+
+### Oct 17 — Goose previous trimmed echo verdict and damage-led echo trial
+- [x] Exact QA b36adbc dedicated job passed 408/408 terminal Goose original/broad/trim combat variants and 12 read-only per-RAF SHA controls
+- [x] Fresh held-out first L5 current 3/8, broad 8/8, trim 5/8, positive-HP persistent independent fronts 10/3/2, separated damage windows 86/33/66. Trim remains too weak and suppressive to promote.
+- [x] Full opposing army x2 won against ALL Goose sources in 16/16 held-out source tests, plus 3 evolved vs 15 legitimate counter
+- [ ] New damage-led echo 4-tick secondary stagger test: 416 complete terminal variants (including 32 severe-number variants) +16 exact RAF parity; two fully new seeds 15013/19031, 20/40, tier peers, family x2 and true full-army x2. CI pending.
+- [ ] Accept only actual L5 power spike plus credible peer/x2/true independent damaging fronts, then 80/120/300 and iPhone 14 Pro Max real Safari; no game/runtime edit yet.
+
+
+### Oct 17 — Goose Impact Shockwave dense CPU/source safety
+- [x] Source-only 416 true fully terminal impact A/B and 16 read-only exact-RAF physical state parity pairs at fb11a07 PR CI; held-out L5 first 3/8→8/8, true independent fronts 8→9 but separated windows 86→51
+- [ ] New 80/120/300 actual fighter smoke, Goose-heavy mixed rosters, two seeds, original and Impact source, 16 1x/8 10x physical RAF frames each, finite HP/world excursion and Node CPU p50/p95, catastrophic >15x guard. CI pending.
+- [ ] Actual mobile iPhone 14 Pro Max Safari viewport, browser sprite-heavy 300 population FPS, cache hashes/Guide effects and main/prod unchanged. No claim Node equals Safari.
+
+
+### Oct 17 — Goose Impact original core authorized QA only
+- [x] Source A/B 416 full terminal, 16 read-only full RAF parity; unseen first L5 3/8→8/8, authentic damage fronts 8→9; complete enemy army x2 and 3-v-15 can counter.
+- [x] Synthetic Node CPU on true 80/120/300 population 1x/10x Impact near original, no non-finite physical state. 300 at 10x p95 ~340ms and not suitable as 60 FPS claim.
+- [ ] Fresh exact-head actual `v3/ultimate-abilities.js` QA first-tier, Goose counterplay, SW SHA256 verify/atomic PWA update, effect preview and portrait browser. Updated index and SW pins with goosestun Impact URL gooseimpact1.
+- [ ] Physical iPhone 14 Pro Max Safari, original main/prod unchanged, no deployment.
+
+
+### Oct 17 — all-ten tier spike follow-on: Barbarian real wide Cleave
+- [x] Exact live Goose Impact QA SHA 7c09cb3 49 required successful on push & PR; PWA hashes/Guide and historical source baselines reconciled.
+- [ ] Source-only 408 fully terminal first-L4/L5 Barbarian current/wide/premium real battles, 12 observed vs original full-state RAF SHA; genuine post-cap physical HP on secondary hits, independent true fronts, 13007/16001 unseen seeds.
+- [ ] Peer matching and **whole opposing army ×2**, not just same-family doubling, plus severe 3 evolved versus 15. Do NOT ship until new-head CI/80-120-300 density and real iPhone 14 Pro Max Safari visual acceptance.
+
+
+### Oct 17 — Barbarian premium real source research accepted
+- [x] 408/408 genuinely complete Barbarian L3→L4 and L4→L5 source match A/B, 12 instrumented/raw complete-frame SHA parity, QA 0ba5ef5 push/PR 50 required successful each.
+- [x] Held-out premium L5 7/8 vs current 2/8 wins, real secondary HP 23,178.92 vs 9,102.36. Front persistence 14 vs 32; enemy full-army ×2 still wins 7/8, peer 4/8, 3-v-15 wins 0/8.
+- [ ] 80/120/300 true fighters, current/premium CPU 1x/10x, 2 seeds, 6 SHA off-target no-Barbarian parity. Node synthetic frames are not Safari FPS. New exact-head CI pending; no live mechanics changes.
+
+
+### Oct 17 — Premium Barbarian live QA (NOT main/prod)
+- [x] Original-source 408 terminal A/B and 12 RAF parity proved L4 6/8, L5 7/8 unseen first-tier wins, meaningful peer and whole-army ×2 counter.
+- [x] 80/120/300 synthetic Node source CPU cost comparable to former Barbarian (10× p95 premium/base .94–1.08), no state invalidity, six exact SHA off-target no-Barbarian controls; **300×10 CPU still severe**.
+- [ ] Fresh `barbcleave1` playable QA v3 rules/effects specs, static unit splash QA, SW 42 pinned SHA/RUNTIME atomic cache, all-roster live first-tier regression and art/viewport. CI pending, physical Safari 14 Pro Max OPEN, no production deployment.
+
+
+### Oct 17 — Premium Barbarian cross-ability regression discipline
+- [ ] Exact-head updated Goose 20 full-RAF off-target parity comparing only old/new Honk on otherwise IDENTICAL current Premium Barbarian source
+- [ ] Historical Assassin L5 strict fixed witness on frozen pre-premium Ultimate source and separately logged real current Premium-Barbarian cross-evolution 20/40 HP/front/winner effects (no hidden acceptance of collapsed fronts)
+- [ ] Source first L4/L5 winners, actual multi-front ecology, 300 CPU 10x and physical iPhone 14 Pro Max Safari still separate gates; no main/prod merge.
+
+
+### Oct 17 — post-Premium source-isolated Goose and Turtle research
+- [ ] Goose current real physical stun/hit changes and ranged counters compared against **Goose-only historical honk on current Premium Barbarian**; no-Goose at 80/120/300 1×/10× must be bitwise identical
+- [ ] Historical Turtle .09→.10 Ricochet original front/winner/reflect floors unchanged on frozen pre-premium sources, plus 32 true terminal modern Turtle cross-Premium diagnostics at 20/40 logged separately
+- [ ] Modern actual independent-front metrics must be reviewed for meaningful lost simultaneous engagements before main/prod; iPhone 14 Pro Max Safari remains OPEN.

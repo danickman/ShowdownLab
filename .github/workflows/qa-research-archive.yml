@@ -1,0 +1,274 @@
+name: Historical combat source studies
+on:
+  push:
+    branches: [qa-turn1-duel-baseline]
+    paths:
+      - 'v3/legacy-sim-core.js'
+      - 'v3/ultimate-abilities.js'
+      - 'v3/evolution-rules.js'
+      - 'tools/qa/check-assassin-l4-target-focus.cjs'
+      - 'tools/qa/check-assassin-l4-trigger-study.cjs'
+      - 'tools/qa/check-turtle-timed-shell-study.cjs'
+      - 'tools/qa/check-turtle-l4-investment.cjs'
+      - 'tools/qa/check-small-army-pressure-study.cjs'
+      - 'tools/qa/check-draft-evolution-choice-value.cjs'
+      - 'tools/qa/check-evolution-choice-investment.cjs'
+      - 'tools/qa/check-borderline-draft-decisions.cjs'
+      - 'tools/qa/check-ultimate-signature-spike-candidates.cjs'
+      - 'tools/qa/check-goose-echo-falloff-ab.cjs'
+  workflow_dispatch:
+    inputs:
+      study:
+        description: Historical source experiment
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - assassin-l4-target-focus
+          - assassin-l4-trigger-study
+          - turtle-timed-shell-study
+          - turtle-l4-investment
+          - small-army-pressure-study
+          - draft-evolution-choice-value
+          - evolution-choice-investment
+          - borderline-draft-decisions
+          - ultimate-signature-spike-candidates
+          - goose-echo-falloff-ab
+permissions:
+  contents: read
+# Run rejected source A/B variants on physical COMBAT SOURCE changes, not every QA document/experiment.
+# workflow_dispatch control is visible after this workflow exists on the default branch.
+concurrency:
+  group: showdown-archive-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  assassin-l4-target-focus:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'assassin-l4-target-focus' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check genuine L4 Assassin target focus study syntax
+        run: node --check tools/qa/check-assassin-l4-target-focus.cjs
+      - name: Full source-only 312-battle Assassin L4 selection and counter audit
+        env:
+          QA_ASSASSIN_FOCUS_RECEIPT: assassin-l4-target-focus.json
+        run: node tools/qa/check-assassin-l4-target-focus.cjs
+      - name: Upload physical target-choice, real HP and independent-front report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-target-focus
+          path: assassin-l4-target-focus.json
+          if-no-files-found: warn
+
+  assassin-l4-trigger-study:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'assassin-l4-trigger-study' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Assassin L4 source study
+        run: node --check tools/qa/check-assassin-l4-trigger-study.cjs
+      - name: Run real terminal Assassin L4 threshold and counter study
+        env:
+          QA_L4_ASSASSIN_RECEIPT: assassin-l4-source-study.json
+        run: node tools/qa/check-assassin-l4-trigger-study.cjs
+      - name: Archive physical match and balance counter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-source-study
+          path: assassin-l4-source-study.json
+          if-no-files-found: warn
+
+  turtle-timed-shell-study:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'turtle-timed-shell-study' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check actual timed Turtle shell source study syntax
+        run: node --check tools/qa/check-turtle-timed-shell-study.cjs
+      - name: Compare true terminal shell response and actual physical fronts
+        env:
+          QA_L4_TURTLE_RECEIPT: turtle-timed-shell-study.json
+        run: node tools/qa/check-turtle-timed-shell-study.cjs
+      - name: Preserve shell defense source research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-timed-shell-study
+          path: turtle-timed-shell-study.json
+          if-no-files-found: warn
+
+  turtle-l4-investment:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'turtle-l4-investment' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Turtle L4 source study syntax
+        run: node --check tools/qa/check-turtle-l4-investment.cjs
+      - name: Compare full matched terminal Turtle L4 payoff, actual protection and role fronts
+        env:
+          QA_L4_TURTLE_RECEIPT: turtle-l4-investment.json
+        run: node tools/qa/check-turtle-l4-investment.cjs
+      - name: Archive source A/B investment, L5 parity and held-out matchups
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-l4-investment
+          path: turtle-l4-investment.json
+          if-no-files-found: warn
+
+  small-army-pressure-study:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'small-army-pressure-study' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check tactical target-pressure source study syntax
+        run: node --check tools/qa/check-small-army-pressure-study.cjs
+      - name: Audit genuine 20/40 terminal HP fronts and winner/role losses
+        env:
+          QA_SMALL_PRESSURE_RECEIPT: small-army-pressure-study.json
+        run: node tools/qa/check-small-army-pressure-study.cjs
+      - name: Archive source A/B role and real independent-front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: small-army-pressure-study
+          path: small-army-pressure-study.json
+          if-no-files-found: warn
+
+  draft-evolution-choice-value:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'draft-evolution-choice-value' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-authentic draft choice value syntax
+        run: node --check tools/qa/check-draft-evolution-choice-value.cjs
+      - name: Compare one evolution draft pick against reinforcing and Beetank
+        env:
+          QA_DRAFT_VALUE_RECEIPT: draft-evolution-choice-value.json
+        run: node tools/qa/check-draft-evolution-choice-value.cjs
+      - name: Archive 384 terminal choice alternatives and physical contribution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draft-evolution-choice-value
+          path: draft-evolution-choice-value.json
+          if-no-files-found: warn
+
+  evolution-choice-investment:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'evolution-choice-investment' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check true draft investment ROI syntax
+        run: node --check tools/qa/check-evolution-choice-investment.cjs
+      - name: Compare 432 terminal L3/L4 evolution and reinforcement choices
+        env:
+          QA_EVOLUTION_CHOICE_RECEIPT: evolution-choice-investment.json
+        run: node tools/qa/check-evolution-choice-investment.cjs
+      - name: Preserve true role ROI, physical defender value and fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolution-choice-investment
+          path: evolution-choice-investment.json
+          if-no-files-found: warn
+
+  borderline-draft-decisions:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'borderline-draft-decisions' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate borderline L4 draft source research syntax
+        run: node --check tools/qa/check-borderline-draft-decisions.cjs
+      - name: Compare borderline evolutions with real terminal unseen outcomes
+        env:
+          QA_BORDERLINE_RECEIPT: borderline-draft-decisions.json
+        run: node tools/qa/check-borderline-draft-decisions.cjs
+      - name: Archive physical last-hit and true HP/front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: borderline-draft-decisions
+          path: borderline-draft-decisions.json
+          if-no-files-found: warn
+
+  ultimate-signature-spike-candidates:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'ultimate-signature-spike-candidates' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile bounded Goose and Barbarian ultimate prototypes
+        run: node --check tools/qa/check-ultimate-signature-spike-candidates.cjs
+      - name: Compare L4 L5 signature ability win flips and real front counterplay
+        env:
+          QA_ULTIMATE_PROTOTYPE_RECEIPT: ultimate-signature-spike-candidates.json
+        run: node tools/qa/check-ultimate-signature-spike-candidates.cjs
+      - name: Archive source-only physical HP and first-tier ultimate candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ultimate-signature-spike-candidates
+          path: ultimate-signature-spike-candidates.json
+          if-no-files-found: error
+
+  goose-echo-falloff-ab:
+    if: ${{ github.event_name == 'push' || github.event.inputs.study == 'all' || github.event.inputs.study == 'goose-echo-falloff-ab' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile Goose capped double ring source A/B
+        run: node --check tools/qa/check-goose-echo-falloff-ab.cjs
+      - name: Compare first L4 L5, true entire-army x2, and physical damage fronts
+        env:
+          QA_GOOSE_ECHO_RECEIPT: goose-echo-falloff-ab.json
+        run: node tools/qa/check-goose-echo-falloff-ab.cjs
+      - name: Preserve full terminal and RAF-parity research receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-echo-falloff-ab
+          path: goose-echo-falloff-ab.json
+          if-no-files-found: error
