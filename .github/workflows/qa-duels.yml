@@ -1098,3 +1098,25 @@ jobs:
           name: borderline-choice-regression
           path: borderline-choice-regression.json
           if-no-files-found: error
+
+  assassin-backline-telegraph-opportunity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual-ranged-threat observer syntax
+        run: node --check tools/qa/check-assassin-backline-telegraph-opportunity.cjs
+      - name: Measure real physical backstab overlaps with Sniper aiming and Dragon windup
+        env:
+          QA_ASSASSIN_THREAT_RECEIPT: assassin-backline-telegraph-opportunity.json
+        run: node tools/qa/check-assassin-backline-telegraph-opportunity.cjs
+      - name: Upload source-real aim windup and physical RAF-parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-backline-telegraph-opportunity
+          path: assassin-backline-telegraph-opportunity.json
+          if-no-files-found: error

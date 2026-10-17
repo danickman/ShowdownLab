@@ -895,3 +895,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Held-out Assassin L4 mixed outcome 20 3→1 wins, 40 2→4; Beetank 5/8 and 8/8, so investigate tactical backline shot denial rather than raw multiplier
 - [ ] New exact-head 128-case *known* borderline CI regression plus 8 RAF parity controls; **pending** in current archive/refinement change
 - [ ] Any proposed new backline threat denial must prove actual shot suppression and true 20/40 wins/fronts, L5 unchanged, 80/120/300 budget; physical iPhone 14 Pro Max Safari OPEN
+
+
+### Oct 16 — Assassin real Sniper aim / Dragon windup overlap research
+- [ ] Exact-head source-only CI: 180 fully terminal choice cases, 12 read-only full-RAF SHA parity pairs; aim/windup positive HP physical-ID backstabs distinguished from readiness/proximity
+- [ ] Separate prespecified seed 9173 holdout; measure actual enemy shots and dragon breath events, real true damaging fronts and team wins without claiming blocked attacks
+- [ ] Any proposed new anti-ranged interruption requires genuine source A/B actual denied shots, 20/40 counters/fronts and 80/120/300 performance plus iPhone 14 Pro Max Safari manual acceptance (OPEN)
