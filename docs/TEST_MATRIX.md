@@ -921,3 +921,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Same-tier peer remains 16/32 either source; severe number counter 3-v-15 wins 0/16; enemy family double NOT whole army x2
 - [ ] Retune Goose echo to balance exceptional power with independent simultaneous fights; whole-army x2 study, actual 80/120/300 CPU, real Safari and asset-integrity checks
 - [ ] New exact-head archived/reduced CI workflow approval; no playable combat or production change
+
+
+### Oct 17 — Source-only Goose L4/L5 narrower echo vs peer and full army ×2
+- [ ] 408/408 genuine full terminal baseline/broad/trim Goose battles, 12 untouched/observed per-RAF SHA parity, 2 fresh held-out seeds 8303/10111, two populations, two tiers, both side mirrors
+- [ ] Assert enemy **whole-army ×2** creates 10 vs 20 or 20 vs 40; separate family-only x2 and 3 evolved vs 15
+- [ ] Preserve positive-HP genuine fronts, meaningful first L4/L5 signature spikes, peers/number counters and no global stun; performance 80/120/300 real frame budget and physical Safari 14 Pro Max remain OPEN. No live gameplay modifications.

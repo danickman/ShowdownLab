@@ -63,3 +63,7 @@ This file is a **durable recovery pointer**, not a claim that missing chat messa
 ### Oct 17 — accepted source study and next regression state
 - Latest accepted source candidate fc86180 verified 480 authentic terminal Goose/Barbarian role/tier A/B variants, 8 full-RAF instrumented/raw equality pairs, and 6 unaffected original-role SHA comparisons. Goose L5 unseen first-to-tier wins 5 -> 8/8 while true independent fronts 12 -> 2; Barbarian L5 4 -> 6/8 while fronts 20 -> 17. The broad Goose prototype needs retuning, not shipping. Distinct severe 3-evolved-vs-15 counters still win for 15; original suite foeDouble means family doubled only.
 - Historical candidate research CI is now conditional on live source and research-script changes; canonical 720 ten-role first-tier suite remains active. Latest workflow/docs commit has new exact-head CI pending. Original combat, PWA assets, main and production unchanged; physical iPhone 14 Pro Max Safari still open.
+
+
+### Oct 17 — next source experiment: Goose short echo stagger
+- Exact QA `24e7be2` completed push and PR both 46 required jobs green. Source-only retune tests existing/broad/trim Goose Thunder Honk across L4/L5, 20/40 fighters, new holdout seeds 8303/10111 and original 1337/2017. Separate **full enemy army ×2** (not family only) and 3-v-15 counters now modeled. 408 authentic terminal variants, 12 read-only raw-vs-observed RAF state SHA pairs. Results pending exact-head CI. No live `ultimate-abilities.js`/PWA/Guide/main/production changes, physical iPhone 14 Pro Max manual Safari pending.
