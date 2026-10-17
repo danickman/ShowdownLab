@@ -1734,3 +1734,7 @@ The old-speed 1×/4×/10× renderer honk QA fixture stopped at its frame budget 
 
 ### Oct 16 — real ranged telegraph overlap for Assassin L4 (source-only)
 - New original-core physical event observation of selected L4 Assassin positive-HP backstabs while Sniper has live aim ticks or Dragon active windup. Enemy rifle/Dragon breath invocations, decision-ready distance, winners, actual independent HP-damage fronts, original/observed RAF SHA. 180 real terminal matches with 5003/7027 and independent 9173 seed, matched 20/40/side/hold/Beetank choices and 12 parity pairs. **Results pending exact-head CI**; do not claim denied shots or released ability. [Protocol](ASSASSIN_REAL_BACKLINE_TELEGRAPH_OPPORTUNITY_2026-10-16.md). No game/PWA/main/prod changes.
+
+
+### Oct 16 — real-telegraph source harness syntax remediation
+- Initial `9a32b5e` study job failed **before any battle** due missing nested observer `replace()` closures; no combat regression evidence from that job. Fixed closures and added a generated source V8 compile check. Study still pending fresh exact-head Actions and no role/game mechanic modified.

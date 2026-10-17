@@ -10,14 +10,15 @@ let source=accepted.slice(0,accepted.indexOf(boundary));
 const addition=[
 'const telegraphCore=replace(replace(replace(replace(witnessedCore,',
 " 'const dealt=Math.min(t.hp,dmg);',",
-" 'const dealt=Math.min(t.hp,dmg);if(!secondary&&dealt>0&&a&&a.type===\\'assassin\\'&&a.action===\\'backstab\\'&&a.level===4&&(t.type===\\'sniper\\'||t.type===\\'dragon\\'))window.__qaThreatHit({attacker:a.id,target:t.id,targetRole:t.type,tick,damage:dealt,aim:t.aim||0,windup:t.windup||0,preHp:t.hp,stun:t.stun||0,recover:tick-t.hitTick});',",
+" 'const dealt=Math.min(t.hp,dmg);if(!secondary&&dealt>0&&a&&a.type===\\'assassin\\'&&a.action===\\'backstab\\'&&a.level===4&&(t.type===\\'sniper\\'||t.type===\\'dragon\\'))window.__qaThreatHit({attacker:a.id,target:t.id,targetRole:t.type,tick,damage:dealt,aim:t.aim||0,windup:t.windup||0,preHp:t.hp,stun:t.stun||0,recover:tick-t.hitTick});'),",
 " 'u.special--;if(d>r){if(u.special<=0&&d<.42)',",
-" 'window.__qaThreatStep({attacker:u.id,level:u.level,target:t.id,targetRole:t.type,tick,dist:d,reach:r,cooldown:u.cooldown,aim:t.aim||0,windup:t.windup||0});u.special--;if(d>r){if(u.special<=0&&d<.42)',",
+" 'window.__qaThreatStep({attacker:u.id,level:u.level,target:t.id,targetRole:t.type,tick,dist:d,reach:r,cooldown:u.cooldown,aim:t.aim||0,windup:t.windup||0});u.special--;if(d>r){if(u.special<=0&&d<.42)'),",
 " \"u.action='attack';hit(u,t);u.aim=0;u.cooldown=u.cd;\",",
 " \"u.action='attack';window.__qaThreatShot({role:'sniper',id:u.id,team:u.team,target:t.id,tick});hit(u,t);u.aim=0;u.cooldown=u.cd;\"),",
 " \"u.action='fire';dragonBreath(u,t);u.cooldown=u.cd\",",
 " \"u.action='fire';window.__qaThreatShot({role:'dragon',id:u.id,team:u.team,target:t.id,tick});dragonBreath(u,t);u.cooldown=u.cd\");"
 ].join('\n');
+new Function("const witnessedCore='';const replace=()=>'';\n"+addition+";return telegraphCore");
 source=replaceOnce(source,"const g=read('tools/qa/check-role-fronts-baseline.cjs')",addition+"\nconst g=read('tools/qa/check-role-fronts-baseline.cjs')");
 source=replaceOnce(source,'hits=[],reflect=[],guards=[],pending=null','hits=[],reflect=[],guards=[],threatSteps=[],threatHits=[],threatShots=[],pending=null');
 source=replaceOnce(source,'env.__qaHit=x=>hits.push(x);',
