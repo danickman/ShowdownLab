@@ -1142,3 +1142,25 @@ jobs:
           name: first-ultimate-tier-spike
           path: first-ultimate-tier-spike.json
           if-no-files-found: error
+
+  ultimate-signature-spike-candidates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile bounded Goose and Barbarian ultimate prototypes
+        run: node --check tools/qa/check-ultimate-signature-spike-candidates.cjs
+      - name: Compare L4 L5 signature ability win flips and real front counterplay
+        env:
+          QA_ULTIMATE_PROTOTYPE_RECEIPT: ultimate-signature-spike-candidates.json
+        run: node tools/qa/check-ultimate-signature-spike-candidates.cjs
+      - name: Archive source-only physical HP and first-tier ultimate candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ultimate-signature-spike-candidates
+          path: ultimate-signature-spike-candidates.json
+          if-no-files-found: error

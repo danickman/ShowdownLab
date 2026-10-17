@@ -24,3 +24,23 @@ Provisional *directional design goals*, not yet a pass/fail CI threshold: at app
 ## Status
 
 This is an actual test/docs commit on QA only; CI results **PENDING exact HEAD**. It does not alter playable abilities, art, runtime, Guide, SW/pins, main or production. Existing bounded Assassin Dragon-charge research becomes a *secondary tactic* whose value should now be assessed in the broader first-to-tier context, rather than being allowed to dominate the entire balance program. The main progression goal is empowering **all ten** L4/L5 releases as decisive late-game unlocks while retaining legitimate counterplay.
+
+
+## Verified baseline and targeted prototype continuation
+Controlled symmetric 20/40 tests: hold baseline 80/160 wins (50%), first-tier evolution 121/160 wins (75.6%), peer both evolved 80/160 (50%), evolved team against doubled *opposing nominated family* 101/160 (63.1%). First L4 64/80 (80%); first L5 57/80 (71.25%). **Important:** L5 is less impactful than L4 in these fixtures, contrary to intended increasing spectacle/power. The ×2 case doubles only the nominated enemy family (13-vs-10 and 26-vs-20), not the full opposing army: do not label it a full army ×2. Severe asymmetric three-evolved-vs-15 tests: L4 3/40 wins, L5 1/40 wins—numerical limits already work.
+
+| Unit | First L4 (of 8) | First L5 (of 8) | Next action |
+|---|---:|---:|---|
+| Knight | 8 | 8 | Preserve strong guard character |
+| Sniper | 8 | 6 | Protect L4 and measure L5 presentation |
+| Dragon | 8 | 8 | Preserve superpower / counters |
+| Assassin | 8 | 8 | Do not buff from same-tier Beetank comparisons alone |
+| Beetank | 7 | **4** | L5 first-unlock power spike investigation |
+| Mole | 6 | **4** | L5 first-unlock power spike investigation |
+| Turtle | 7 | 6 | Refine spectacle/front tradeoffs, not generic power |
+| Goblin | 5 | 5 | L4/L5 signature Pack Ambush redesign |
+| Barbarian | **4** | **4** | High-priority Blood Cleave role expression |
+| Goose | **3** | **4** | High-priority Thunder Honk role expression |
+
+Every unit row has only 8 mirrored/seeded fixtures; these are directional QA examples, not universal ability win probabilities. Original peer mirror returning 50% is expected, because the relative advantage disappears. **Different-source role upgrades should intentionally swing fair wins**, whereas severe numerical counters may still win.
+

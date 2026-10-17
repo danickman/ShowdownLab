@@ -907,3 +907,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] First-to-tier source-real audit across 10 fighter families x L3->L4 and L4->L5 x 20/40, 1337/2017 mirror x hold/first L4/L5/peer L4/L5/foe x2 = 640 genuine terminal matches, plus 80 true severe 3-evolved-vs-15 exceptions, 24 exact RAF physics SHA parity pairs
 - [ ] Directional design: first L4 should usually swing equal-force rounds (approximately 75%+) and first L5 stronger still (approximately 80%+), but retain countervailing peer evolutions, x2 family and overwhelming odds. These are initial design goals **not** unjustified CI fail floors; log each role, exceptions and genuine fronts.
 - [ ] Re-evaluate prior Assassin and Turtle same-tier ROI research as **secondary**, since opposing L4s already present invalidates treating these as first-unlock tests; preserve complete battle quality and physical iPhone 14 Pro Max Safari release gates.
+
+
+### Oct 17 — VERIFIED first L4/L5 transformational power spike
+- [x] 720/720 real complete matches / 24 original-observer physical RAF SHA parity on exact QA `c703b91` ([push](https://github.com/danickman/ShowdownLab/actions/runs/39001984770), [PR](https://github.com/danickman/ShowdownLab/actions/runs/39001987803)), both 46 required successful
+- [x] Baseline first unlock L4 64/80, L5 57/80; peer 40/80 both tiers; doubled enemy nominated family counter 52/80 and 49/80; 3 evolved vs 15 only 3/40 L4 and 1/40 L5. Treat mirrored small-N directional, not universal rates.
+- [ ] New Goose Thunder echo and Barbarian Blood Cleave staggering sweep source-only 4-tier A/B, 20/40 and peer-/nominated-family double and 3-v-15 real terminal outcomes; 8 RAF source instrumentation SHA parity pairs. **Exact-head CI pending**; reject absent actual ability wins/role counters; no gameplay/pins/source modified.
