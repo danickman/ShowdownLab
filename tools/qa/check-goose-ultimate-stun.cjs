@@ -9,7 +9,14 @@ const now="v.stun=Math.max(v.stun,r===2?64:44);";
 assert.equal(live.split(now).length,2,'Goose actual stun timing changed: review duration/role counterplay');
 const former=read('tools/qa/fixtures/goose-before-impact-ultimate.js');
 assert.equal(former.split(now).length,2,'former Goose primary stun baseline moved');
-const legacy=former.replace(now,old);
+// Old Goose-only behavior projected into the CURRENT premium-Barbarian
+// source. Merely loading the full historic Ultimate would also remove
+// Premium Cleave, falsely failing the no-Goose physics parity contract.
+const priorGoose=former.replace(now,old);
+const from=priorGoose.indexOf('function honk(u,units,tick){'),to=priorGoose.indexOf('function burn(u)',from);
+const lo=live.indexOf('function honk(u,units,tick){'),hi=live.indexOf('function burn(u)',lo);
+assert(from>0&&to>from&&lo>0&&hi>lo,'Goose honk source boundaries must remain stable');
+const legacy=live.slice(0,lo)+priorGoose.slice(from,to)+live.slice(hi);
 assert.equal(legacy.split(old).length,2,'historic Goose duration must be reconstructable');
 const mixed=['goose','goose','knight','barbarian','goblin','assassin','mole','sniper','dragon','turtle'];
 const modes={
@@ -112,7 +119,7 @@ for(const count of [80,120,300])for(const speed of [1,10]){
  const cfg={count,mode:'noGoose',level:5,seed:1337,mirror:true,speed,frames:count===300?12:25};
  assert.equal(trial(live,cfg).sha,trial(legacy,cfg).sha,'no-Goose 80/120/300 full state parity '+JSON.stringify(cfg));
 }
-const report={status:'QA-only Goose Thunder Honk duration alignment with published L4/L5 power',
+const report={status:'QA-only live Goose Impact CC timing and genuine counterplay; frozen legacy Goose function on current premium-Barbarian source',
  summary,rows,caveats:'Seeded 20/40/80 samples are censored; not an absolute win-rate, no Safari FPS measure. Normal L1-L3 honk, radius, damage and cadence unchanged.'};
 if(process.env.QA_GOOSE_ULT_RECEIPT)fs.writeFileSync(process.env.QA_GOOSE_ULT_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('GOOSE ULTIMATE STUN COUNTERPLAY '+JSON.stringify(summary));

@@ -972,3 +972,9 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [ ] Exact-head updated Goose 20 full-RAF off-target parity comparing only old/new Honk on otherwise IDENTICAL current Premium Barbarian source
 - [ ] Historical Assassin L5 strict fixed witness on frozen pre-premium Ultimate source and separately logged real current Premium-Barbarian cross-evolution 20/40 HP/front/winner effects (no hidden acceptance of collapsed fronts)
 - [ ] Source first L4/L5 winners, actual multi-front ecology, 300 CPU 10x and physical iPhone 14 Pro Max Safari still separate gates; no main/prod merge.
+
+
+### Oct 17 — post-Premium source-isolated Goose and Turtle research
+- [ ] Goose current real physical stun/hit changes and ranged counters compared against **Goose-only historical honk on current Premium Barbarian**; no-Goose at 80/120/300 1×/10× must be bitwise identical
+- [ ] Historical Turtle .09→.10 Ricochet original front/winner/reflect floors unchanged on frozen pre-premium sources, plus 32 true terminal modern Turtle cross-Premium diagnostics at 20/40 logged separately
+- [ ] Modern actual independent-front metrics must be reviewed for meaningful lost simultaneous engagements before main/prod; iPhone 14 Pro Max Safari remains OPEN.

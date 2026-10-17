@@ -3,12 +3,17 @@
 // A/B against exact prior 0.09 radius, with fully terminal true damage-front scoring.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const shippedAbility=read('v3/ultimate-abilities.js'),shippedCore=read('v3/legacy-sim-core.js');
+// Fixed 0.09→0.10 Ricochet history must remain an identical controlled
+// experiment after premium Barbarian was independently introduced.
+const modernAbility=read('v3/ultimate-abilities.js'),
+ shippedAbility=read('tools/qa/fixtures/barbarian-before-premium-ultimate.js'),
+ shippedCore=read('v3/legacy-sim-core.js');
 const {withoutGuardian}=require('./historical-guardian-control.cjs');
 // Isolate original 0.09→0.10 Ricochet range A/B from subsequent Guardian capability.
 const {core,ability}=withoutGuardian(shippedCore,shippedAbility);
 const oldRadius='near(a,t,.09)&&dealt>0',newRadius='near(a,t,.10)&&dealt>0';
-assert.equal(ability.split(newRadius).length,2,'actual Turtle Ricochet .10 source changed, update A/B');
+assert.equal(ability.split(newRadius).length,2,'historical Turtle Ricochet .10 anchor');
+assert.equal(modernAbility.split(newRadius).length,2,'modern live Turtle .10 contract must remain');
 const control=ability.replace(newRadius,oldRadius);
 assert.equal(control.split(oldRadius).length,2,'source old radius cannot be reconstructed');
 const graph=read('tools/qa/check-role-fronts-baseline.cjs');
@@ -123,8 +128,35 @@ for(const count of [20,40,80,120,300])for(const speed of [1,10]){
  const before=battle(control,cfg,false),after=battle(ability,cfg,false);
  assert.equal(after.hash,before.hash,'unaffected physical states drifted '+JSON.stringify(cfg));
 }
-const report={status:'Turtle L4/L5 true Ricochet contact improvement on QA; other 9 roles unchanged',
- summary,solo,rows,
+
+// New live-premium-Barbarian cross-ability counterplay diagnostics. Existing
+// strict historical Turtle reflection, winner, and genuine-front thresholds
+// above stay unchanged. These true terminal modern fixtures document any
+// front ecology loss without pretending a new Barbarian Ultimate is Turtle.
+const {ability:modern}=withoutGuardian(shippedCore,modernAbility);
+const modernControl=modern.replace(newRadius,oldRadius);
+assert(modern!==modernControl,'modern Ricochet .09/.10 observer source drift');
+const contemporary={};
+for(const n of [20,40]){
+ const rr=[];
+ for(const mode of ['mixed','swarm','heavy','ranged'])
+  for(const seed of [1337,9917])for(const mirror of [false,true]){
+   const cfg={count:n,mode,seed,mirror},before=battle(modernControl,cfg),after=battle(modern,cfg);
+   assert(before.winner&&after.winner,'modern premium-barbarian cross-role comparisons must be terminal');
+   rr.push({cfg,before,after});
+  }
+ const total=(key,field)=>+rr.reduce((sum,r)=>sum+(r[key][field]||0),0).toFixed(2);
+ contemporary[n]={completed:rr.length,
+   beforeReflectedHp:total('before','realReflection'),afterReflectedHp:total('after','realReflection'),
+   baselinePersistentFronts:total('before','persistent'),currentPersistentFronts:total('after','persistent'),
+   baselineSeparatedHpWindows:total('before','realSeparated'),currentSeparatedHpWindows:total('after','realSeparated'),
+   winnerFlips:rr.filter(r=>r.before.winner!==r.after.winner).length};
+ assert.equal(rr.length,16,'contemporary Turtle diagnostic count');
+}
+console.log('TURTLE RICOCHET PREMIUM-BARBARIAN CONTEMPORARY FRONT DIAGNOSTIC '+JSON.stringify(contemporary));
+
+const report={status:'Turtle 0.09→0.10 Ricochet original historical evidence and current Premium Barbarian cross-ability diagnostics',
+ summary,contemporary,solo,rows,
  note:'Both sides tested to a terminal winner. True reflected HP delta measured after the actual secondary hurt path, including recipient defenses; source-less reflected damage is intentionally not incorrectly attributed as direct Turtle hit DPS. Counterplay, real damage-front connected graphs and unaffected 300 1x/10x physical parity enforced. iPhone 14 Pro Max physical Safari not tested.'};
 if(process.env.QA_TURTLE_REFLECTION_RECEIPT)fs.writeFileSync(process.env.QA_TURTLE_REFLECTION_RECEIPT,JSON.stringify(report,null,2)+'\n');
 console.log('TURTLE REAL RICOCHET VALUE '+JSON.stringify(summary));
