@@ -10,7 +10,7 @@ const specs={
  turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Axe swings splash 40% damage onto up to three nearby enemies.',l5:'Wider cleave splashes 65% damage onto up to five enemies.'},
- goose:{name:'Thunder Honk',l4:'Thunder Honk deals 45% attack damage and stuns enemies for 44 ticks (about 0.73 seconds).',l5:'75% attack damage, wider radius and 64-tick stun (about 1.07 seconds).'}
+ goose:{name:'Impact Shockwave',l4:'Thunder Honk blasts up to five nearby foes, then sends a damaging echo into up to three more with only a brief stagger.',l5:'An ascended sonic crash hits up to six nearby foes and echoes into up to four more with powerful damage, without a long secondary stun.'}
 };
 const near=(a,b,r)=>Math.hypot(a.x-b.x,a.y-b.y)<=r;
 function cue(u,kind,tick,target){if(tick-(u.ultimateTick??-1000)<12)return;u.ultimateTick=tick;u.ultimateKind=kind;u.ultimateTarget=target?.id??null}
@@ -59,7 +59,16 @@ function afterHit(a,t,dealt,units,tick){
 }
 function honk(u,units,tick){
  const r=rank(u);if(!r)return [];
- const hits=units.filter(v=>v.team!==u.team&&v.hp>0&&v.burrow<=0&&near(v,u,r===2?.22:.18)).map(v=>{v.stun=Math.max(v.stun,r===2?64:44);return{target:v,source:u,damage:u.dmg*(r===2?.75:.45)}});
+ const enemies=units.filter(v=>v.team!==u.team&&v.hp>0&&v.burrow<=0)
+  .sort((x,y)=>Math.hypot(x.x-u.x,x.y-u.y)-Math.hypot(y.x-u.x,y.y-u.y)||x.id-y.id);
+ const first=enemies.filter(v=>near(v,u,r===2?.255:.23)).slice(0,r===2?6:5);
+ const echo=enemies.filter(v=>!first.includes(v)&&first.some(t=>near(t,v,r===2?.16:.11)))
+  .slice(0,r===2?4:3);
+ const hits=[];
+ for(const v of first){v.stun=Math.max(v.stun,r===2?64:44);
+  hits.push({target:v,source:u,damage:u.dmg*(r===2?1.10:.75)})}
+ for(const v of echo){v.stun=Math.max(v.stun,4);
+  hits.push({target:v,source:u,damage:u.dmg*(r===2?.83:.60)})}
  if(hits.length)cue(u,'thunder',tick,hits[0].target);return hits;
 }
 function burn(u){if(!(u.burnTicks>0)||u.hp<=0)return 0;u.burnTicks--;return u.burrow>0?0:u.burnTicks%15===0?u.burnPower:0}

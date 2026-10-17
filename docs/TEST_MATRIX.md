@@ -941,3 +941,10 @@ Dragon Base refresh is separately published at `463b203`. Goblin and Barbarian c
 - [x] Source-only 416 true fully terminal impact A/B and 16 read-only exact-RAF physical state parity pairs at fb11a07 PR CI; held-out L5 first 3/8→8/8, true independent fronts 8→9 but separated windows 86→51
 - [ ] New 80/120/300 actual fighter smoke, Goose-heavy mixed rosters, two seeds, original and Impact source, 16 1x/8 10x physical RAF frames each, finite HP/world excursion and Node CPU p50/p95, catastrophic >15x guard. CI pending.
 - [ ] Actual mobile iPhone 14 Pro Max Safari viewport, browser sprite-heavy 300 population FPS, cache hashes/Guide effects and main/prod unchanged. No claim Node equals Safari.
+
+
+### Oct 17 — Goose Impact original core authorized QA only
+- [x] Source A/B 416 full terminal, 16 read-only full RAF parity; unseen first L5 3/8→8/8, authentic damage fronts 8→9; complete enemy army x2 and 3-v-15 can counter.
+- [x] Synthetic Node CPU on true 80/120/300 population 1x/10x Impact near original, no non-finite physical state. 300 at 10x p95 ~340ms and not suitable as 60 FPS claim.
+- [ ] Fresh exact-head actual `v3/ultimate-abilities.js` QA first-tier, Goose counterplay, SW SHA256 verify/atomic PWA update, effect preview and portrait browser. Updated index and SW pins with goosestun Impact URL gooseimpact1.
+- [ ] Physical iPhone 14 Pro Max Safari, original main/prod unchanged, no deployment.

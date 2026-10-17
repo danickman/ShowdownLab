@@ -17,6 +17,13 @@ function draw(c,f,age,tier='full'){
  }else if(['seismic','thunder','pack'].includes(f.ability)){
   const r=size*(.45+spread*(f.ability==='thunder'?1.3:.8));c.beginPath();c.ellipse(x,y,r,r*.22,0,0,Math.PI*2);c.stroke();
   if(rank===2&&!reduced){c.beginPath();c.ellipse(x,y,r*.7,r*.15,0,0,Math.PI*2);c.stroke()}
+  // An authored-looking second ground-level shock ring depicts the bounded
+  // one-hop Goose echo without covering fighters or flashing the whole view.
+  if(f.ability==='thunder'&&!reduced&&age>.14){
+   const a=(age-.14)/.86,echoR=size*(.28+a*(rank===2?1.5:1.2));
+   c.save();c.globalAlpha*=1-a*.7;c.lineWidth=Math.max(1.2,size*.036*(1-age));c.strokeStyle='#fff1c1';
+   c.beginPath();c.ellipse(x,y+size*.025,echoR,echoR*.21,0,0,Math.PI*2);c.stroke();c.restore();
+  }
  }else if(f.ability==='inferno'){
   for(let i=0;i<(reduced?2:rank+2);i++){const xx=x+(i-1)*size*.18;c.beginPath();c.moveTo(xx,y-size*.1);c.quadraticCurveTo(xx-size*.1,y-size*.4,xx+size*.08,y-size*(.5+spread*.4));c.stroke()}
  }else if(f.ability==='cleave'||f.ability==='execution'){

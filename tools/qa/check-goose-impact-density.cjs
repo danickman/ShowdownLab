@@ -8,7 +8,7 @@ const impactStudy=read('tools/qa/check-goose-impact-shockwave-ab.cjs');
 const from=impactStudy.indexOf('const honkImpact=['),to=impactStudy.indexOf('const insert=',from);
 assert(from>=0&&to>from,'source A/B proposed Impact Honk block drift');
 const hitSource=vm.runInNewContext(impactStudy.slice(from,to)+';honkImpact',{});
-const originalUltimate=read('v3/ultimate-abilities.js');
+const originalUltimate=read('tools/qa/fixtures/goose-before-impact-ultimate.js');
 const h0=originalUltimate.indexOf('function honk(u,units,tick){'),h1=originalUltimate.indexOf('function burn(u)',h0);
 assert(h0>=0&&h1>h0,'authoritative honk boundaries changed');
 const impactUltimate=originalUltimate.slice(0,h0)+hitSource+'\n'+originalUltimate.slice(h1);
