@@ -1721,3 +1721,25 @@ jobs:
           name: dragon-l4-numerical-fairness
           path: dragon-l4-numerical-fairness.json
           if-no-files-found: warn
+
+  nearest-allocation-lean-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check allocation-free targeting and source equivalence
+        run: node --check tools/qa/check-nearest-allocation-lean-parity.cjs
+      - name: Preserve real-target whole-RAF parity and 80/120/300 source timing
+        env:
+          QA_TARGET_SCAN_RECEIPT: nearest-allocation-lean-parity.json
+        run: node tools/qa/check-nearest-allocation-lean-parity.cjs
+      - name: Preserve verified target scan receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nearest-allocation-lean-parity
+          path: nearest-allocation-lean-parity.json
+          if-no-files-found: warn

@@ -1111,3 +1111,12 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Preserve already verified Assassin L5 15/24 contested and Turtle reflected/saved HP versus Beetank assault roles
 - [ ] OPEN: Dragon L4 source-specific burn/survival/counterplay explanation and mitigation if evidenced, to consider at release QA rather than unscheduled endless hypotheses
 - [ ] Release physical iPhone Safari and genuine 80/120/300 device-performance checks still required
+
+
+### Turn 7 — crowded engine and draft cap (pending exact head CI)
+- [x] Audit existing x2 cap 120 projected entire battle and existing 100/119/120/180/300 offer checks, 1-round Jam/Thin expiry
+- [x] Protect original collision pair order and axis-pruning; no speculative position rebalance
+- [ ] Prove new allocation-free pressure-cached nearest exactly matches original full-RAF at 20/40/80/120/300 with 1× and 10× two mirrors and historical/current seeded lines (96 traces)
+- [ ] Compare credible Node VM ABBA timing without representing as Safari FPS
+- [ ] Full source CI regression true 20/40 independent damaging fronts, extreme 300, browser portrait and offline integrity on current QA SHA
+- [ ] Native Safari performance on iPhone 14 Pro Max remains physical acceptance, not reachable from GitHub Actions
