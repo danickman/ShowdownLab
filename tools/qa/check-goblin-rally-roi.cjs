@@ -11,8 +11,8 @@ const warband="if(a.type==='goblin'&&a.action==='stab'){const companions=Math.mi
 patch("const choices=['hold','firstUnlock','matchedUnlock','foeDouble'];",
  "const goblinOriginal="+JSON.stringify(existing)+";const goblinWarband="+JSON.stringify(warband)+";"+
  "assert.equal(ult.split(goblinOriginal).length,2,'Goblin live source moved');"+
- "const originalNearest="+JSON.stringify("const pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+")+";"+
-"const focusedNearest="+JSON.stringify("const pressure=pressureByTarget.get(v.id)||0,focus=u.type==='goblin'&&ultimate.rank(u)>0&&d<.25?Math.min(2,Math.max(0,pressure-1))*(ultimate.rank(u)===2?.085:.05):0,s=d-focus+Math.max(0,pressure-2)*.035+")+";"+
+ "const originalNearest="+JSON.stringify("pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+")+";"+
+"const focusedNearest="+JSON.stringify("pressure=pressureByTarget.get(v.id)||0,focus=u.type==='goblin'&&ultimate.rank(u)>0&&d<.25?Math.min(2,Math.max(0,pressure-1))*(ultimate.rank(u)===2?.085:.05):0,s=d-focus+Math.max(0,pressure-2)*.035+")+";"+
 "assert.equal(live.split(originalNearest).length,2,'target source anchor moved');"+
 "const variants={current:{ult,core:live},warband:{ult:ult.replace(goblinOriginal,goblinWarband),core:live.replace(originalNearest,focusedNearest)}};"+
  "const choices=['hold','firstUnlock','matchedUnlock','foeDouble','foeArmyDouble','recruit2','alternativeEvolution'];");
