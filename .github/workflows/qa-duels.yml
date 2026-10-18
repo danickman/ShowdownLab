@@ -1581,8 +1581,7 @@ jobs:
           if-no-files-found: warn
 
   beetank-l5-reach-roi:
-    # Complete research gate is run once on demand, not per QA edit.
-    if: github.event_name == 'workflow_dispatch'
+    # One-time four-arm heavy-target ROI acceptance on the corrected implementation.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -1605,6 +1604,8 @@ jobs:
           if-no-files-found: warn
 
   beetank-siege-front-diagnostic:
+    # Previous full physical quality diagnosis complete; keep for manual research only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:

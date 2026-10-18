@@ -1,3 +1,5 @@
+**Oct 18 Siege Breaker corrected:** full L5 contact rejected after 20-pop true-front P1. Heavy-target-only L5 reach restores 1 true persistent damaging front; 40 remains 56. Fresh four-arm current-source ROI pending, PWA pins and cache beetsiege2; no prod. See BEETANK_SIEGE_BREAKER_2026-10-18.md.
+
 **18 October Turn 2 VERIFIED:** [LIVE_ALL_FIGHTER_ROI_2026-10-18.md](LIVE_ALL_FIGHTER_ROI_2026-10-18.md) — 2,440 full terminal/RAF tests, ten fighters L4/L5. Beetank L5 6/8, Goblin L5 6/8, Barbarian L5 3/8 on holdout, with Dragon L4 overdominance counterexample flagged. Turn 3 current-source Beetank physical contact ROI study (unshipped) added to CI; await exact-head decision before playable changes. [13-turn plan](THIRTEEN_TURN_RELEASE_PLAN_2026-10-18.md).
 
 **CURRENT ACTIVE RELEASE PLAN:** [13-turn ledger](THIRTEEN_TURN_RELEASE_PLAN_2026-10-18.md), authorized 18 Oct 2026. Adds dedicated post-ROI Beetank, Goblin and Barbarian build turns #3–#5 and shifts the final release to #13. Historical ten-turn notes below do not override it.

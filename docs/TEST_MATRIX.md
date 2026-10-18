@@ -1070,3 +1070,7 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Full enemy army doubled and severe 3-v-15 still counter L5, matched peer 4/8; post-cap horn HP and true separate fronts measured.
 - [ ] Required exact **integration-head** CI: source, physical RAF, root manifest 42 SHA256 assets, service-worker release, 300 fighter performance; do not claim green early.
 - [ ] Physical iPhone 14 Pro Max 430x932 DPR3: burst/rock legibility at 1x, cue aligned to real L5 contact, no crop, no FPS regression.
+
+
+- [x] Source-real Siege diagnostics: full L5 contact breaks 20-body persistent independent HP front floor; anti-heavy-only correction restores 1 front, 40-body 56. Main release floor unchanged.
+- [ ] Corrected four-arm true terminal first-L5 ROI, peer, recruits/alternative, enemy family and whole-army x2, severe 3v15 and raw/frame parity; exact-head full root release CI.

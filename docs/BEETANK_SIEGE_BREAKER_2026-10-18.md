@@ -19,3 +19,16 @@ Calibration first L5 baseline 4/8, partial 8/8, full 7/8; hold, recruit and alte
 **Accepted live gameplay patch:** at L5 only, Beetank's actual melee eligibility uses a collision-aware contact radius: `Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002)`. L1-L4 Beetank and all unrelated fighters retain original contact rule. The same bound also influences the L5 charged-ram contact threshold; there is NO global range/HP/armor multiplier, no recursive splash, no movement teleport, no target rule rewrite. Existing every-second-horn bounded 55% splash continues to apply; its increased actual triggering, rather than invented area damage, creates the power spike. L5 Seismic cue named **Siege Breaker**, with a local ground plate fracture, radiating cracked lines and restrained rock shards; L4 still retains normal `seismic` cue. Guide dynamically reads updated `ShowdownUltimates.specs.beetank.l5`.
 
 PWA integration in same atomic QA commit: root HTML URL versions, SW 42 pinned SHA256 releases and version `showdown-lab-release-beetsiege1`; no duplicate v3/index, no manual/preview/prod deployment. Stronger L5 is deliberately spectacular but whole-army x2 and severe 3-v-15 counters remain available. Source Node timing is not physical iPhone FPS. **Exact new-head CI and physical iPhone 14 Pro Max visuals still pending**, don't call production approved until release gate #13.
+
+
+## Source-real 20/40 multi-front correction: heavy-target siege
+Full L5 contact had improved first-L5 wins to 7/8 but **failed the unchanged authentic 20-fighter persistent-front quality gate** (zero fronts, required one). Genuine complete-match source-only diagnostic [run 39148151701](https://github.com/danickman/ShowdownLab/actions/runs/39148151701), job 117736138438 PASS:
+
+| L5 contact policy | 20 persistent real fronts | 20 separate HP windows | 40 persistent real fronts | 40 separate HP windows |
+|---|---:|---:|---:|---:|
+| Original | 1 | 25 | 58 | 192 |
+| Partial | 1 | 25 | 58 | 199 |
+| Full | **0** | 22 | 61 | 204 |
+| **Heavy targets only** | **1** | 25 | 56 | 194 |
+
+**Live correction:** L5 collision-aware contact now only triggers against Beetank, Turtle and Dragon, so Siege Breaker is distinctly anti-heavy; all other opponents retain standard nominal horn reach. This restores the 20-body authentic front while leaving existing QA quality floors UNCHANGED, and retains the bounded L5 blast/cinematic earth fracture. Automatic 42 SHA256 PWA pins and cache advanced to `beetsiege2`. Source-real four-arm terminal ROI comparison current/partial/full/heavy-only is PENDING new exact-head CI; previous full candidate 7/8 is **not** claimed for heavy-only. No production/preview build.

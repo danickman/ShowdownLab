@@ -58,7 +58,7 @@ let knight=unit('knight',4),ally=unit('goose',1,'blue',2,.55),enemy=unit('sniper
 
 // Siege Breaker physical melee contact is strictly an L5-only engine gate.
 {const core=fs.readFileSync('v3/legacy-sim-core.js','utf8');
- assert(core.includes("function beetankStep(u,t,d){const r=ultimate.rank(u)===2?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;"),'L5 Beetank contact must match tested collision radius');
+ assert(core.includes("function beetankStep(u,t,d){const r=ultimate.rank(u)===2&&['beetank','turtle','dragon'].includes(t.type)?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;"),'L5 Beetank contact must match tested collision radius');
  assert(!core.includes('function beetankStep(u,t,d){const r=u.range/500;'),'old unreachable heavy contact rule reappeared');
  assert.equal((core.match(/function beetankStep\(/g)||[]).length,1);
 }

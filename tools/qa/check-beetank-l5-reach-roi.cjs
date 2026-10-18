@@ -5,7 +5,7 @@ const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(roo
 const baseline=read('tools/qa/check-first-ultimate-tier-spike.cjs'),cut='const matched=[];';
 assert.equal(baseline.split(cut).length,2,'canonical full-match runner changed');
 let h=baseline.slice(0,baseline.indexOf(cut));
-const shipped="function beetankStep(u,t,d){const r=ultimate.rank(u)===2?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;",previous="function beetankStep(u,t,d){const r=u.range/500;";
+const shipped="function beetankStep(u,t,d){const r=ultimate.rank(u)===2&&['beetank','turtle','dragon'].includes(t.type)?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;",previous="function beetankStep(u,t,d){const r=u.range/500;";
 const coreRead="const live=read('v3/legacy-sim-core.js')";
 if(h.includes(coreRead+';')){
  h=h.replace(coreRead+';',coreRead+'.replace('+JSON.stringify(shipped)+','+JSON.stringify(previous)+');');
@@ -15,7 +15,7 @@ const declarations=[
  "const beetankOld="+JSON.stringify("function beetankStep(u,t,d){const r=u.range/500;")+";",
  "assert.equal(live.split(beetankOld).length,2,'current Beetank core changed');",
  "const next=r=>\"function beetankStep(u,t,d){const r=ultimate.rank(u)===2?Math.max(u.range/500,\"+r+\"):u.range/500;\";",
- "const cores={current:live,partial:live.replace(beetankOld,next(\"visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22+.002\")),full:live.replace(beetankOld,next(\"visualSpacingRadius(u)+visualSpacingRadius(t)+.002\"))};"
+ "const cores={current:live,partial:live.replace(beetankOld,next(\"visualSpacingRadius(u)+visualSpacingRadius(t)-(bodyRadius(u)+bodyRadius(t))*.22+.002\")),full:live.replace(beetankOld,next(\"visualSpacingRadius(u)+visualSpacingRadius(t)+.002\")),heavyOnly:live.replace(beetankOld,\"function beetankStep(u,t,d){const r=ultimate.rank(u)===2&&['beetank','turtle','dragon'].includes(t.type)?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;\")};"
 ].join('\n');
 swap("const choices=['hold','firstUnlock','matchedUnlock','foeDouble'];",
  declarations+"\nconst choices=['hold','firstUnlock','matchedUnlock','foeDouble','foeArmyDouble','recruit2','alternativeEvolution'];");
@@ -47,7 +47,7 @@ swap("selectedPositiveHits:hits.filter(x=>selected.has(x.attacker)).length,",
 new Function('require','__dirname','console','process',h+';return true;');
 const {simulate,roles,choices}=vm.runInNewContext(h+';({simulate,roles,choices})',{require,__dirname,console,process});
 assert.equal(roles.length,10);assert.equal(choices.length,7);
-const arms=['current','partial','full'],seeds=[26017,32417,73813,86417],unseen=new Set(seeds.slice(2)),cases=[],severe=[];
+const arms=['current','partial','full','heavyOnly'],seeds=[26017,32417,73813,86417],unseen=new Set(seeds.slice(2)),cases=[],severe=[];
 const started=process.hrtime.bigint(),round=n=>+n.toFixed(2);
 for(const count of [20,40])for(const seed of seeds)for(const side of ['blue','red']){
  const fixture={role:'beetank',level:4,count,seed,side},scenarios={};
@@ -85,7 +85,7 @@ for(const count of [20,40])for(const seed of seeds.slice(2))for(const side of ['
   assert.equal(simulate({...other,arm},'firstUnlock',false,true).digest,base,'non-Beetank L5 unchanged');offTargetParity++;
  }
 }
-assert.equal(observerParity,6);assert.equal(l4Parity,16);assert.equal(offTargetParity,16);
+assert.equal(observerParity,8);assert.equal(l4Parity,24);assert.equal(offTargetParity,24);
 const fields=['win','selectedRealHp','selectedHornHp','selectedHornHits','genuinePersistentFronts','realSeparateHpWindows','ticks'];
 function aggregate(rows){
  const summary={fixtures:rows.length,choices:{}};

@@ -58,3 +58,7 @@ Desired experience: a close-range berserker with escalating short-lived rage/mom
 - **Costs and release:** no automatic Vercel preview deployments, no extra test-only Vercel builds, no manual production deployment before Turn 13. Preserve branch gate in vercel.json and verify if possible (Vercel team API previously 403). Archive old expensive research jobs; keep critical CI. Main and production untouched until explicit release gate.
 
 Historical ten-turn ledgers in older notes are retained as chronological records, NOT competing current plans. **Only this thirteen-turn ledger controls work going forward.**
+
+
+### Oct 18 Turn 3 safety amendment
+Full-contact L5 Beetank 7/8 initial ROI was **not releasable** due to 20-pop actual front regression. A measured heavy-target-only correction passes the 20/40 genuine-front budget. Its own exact-head matched full-battle ROI is pending before Turn 3 closure; earlier full-reach 7/8 does not transfer automatically. This amendment supersedes the earlier Turn 3 status row. Next Goblin only after passing acceptance.
