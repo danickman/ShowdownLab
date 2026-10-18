@@ -1091,3 +1091,13 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Exact PR 39154536877 13 CI required green, repaired browser-upgrade SHA/cache cleanup waits and passed
 - [ ] Playable Goblin L4/L5 first-to-tier is still strategically modest; explicit future architecture redesign only, no more Turn 4 loops
 - [ ] Native iPhone 14 Pro Max Safari acceptance remains physical-only gate, no production release
+
+
+### 18 Oct — Turn 5 Barbarian Bloodstorm final QA source gate
+- [x] Exactly bounded current / L5 collision contact / contact + 75-tick hit-started rage & every-third real-hit finisher comparative study
+- [x] 336 actual terminal options +12 real 3 vs 15 matches, both team mirrors at 20/40, distinct unseen 78511/95261
+- [x] Six full observer/raw RAF parity, sixteen unchanged L4 and sixteen unrelated-role full RAF parity, three exact repeats
+- [x] L5 peer 4/8, whole-enemy army x2 0/8 and severe 3v15 0/4 in heldout; no recursion or global damage
+- [x] **Rejected** trial because heldout first L5 stays 8/8 and actual independent battle fronts regress 13→8, windows 68→50
+- [ ] Barbarian baseline varies materially between older heldout 3/8 and this new 8/8; address broad cross-seed fairness in Turn 6 without another multi-arm Barbarian loop
+- [ ] Physical iPhone 14 Pro Max Safari visual/performance validation remains open
