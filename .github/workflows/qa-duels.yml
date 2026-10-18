@@ -1329,3 +1329,25 @@ jobs:
           name: mole-l5-low-collateral
           path: mole-l5-low-collateral.json
           if-no-files-found: warn
+
+  mole-l5-twin-density-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate actual source CPU and off-target physics
+        run: node --check tools/qa/check-mole-l5-twin-density.cjs
+      - name: Measure 80 120 300 real fighters at 1x and 10x with Twin activation
+        env:
+          QA_MOLE_TWIN_DENSITY_RECEIPT: mole-twin-density.json
+        run: node tools/qa/check-mole-l5-twin-density.cjs
+      - name: Retain physical SHA and Node p95 source CPU receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-twin-density
+          path: mole-twin-density.json
+          if-no-files-found: warn
