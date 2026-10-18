@@ -1554,3 +1554,26 @@ jobs:
           name: goblin-l5-stagger-isolation
           path: goblin-l5-stagger.json
           if-no-files-found: warn
+
+  consolidated-live-evolution-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate current-source ROI script syntax
+        run: node --check tools/qa/check-consolidated-live-evolution-roi.cjs
+      - name: Run full terminal ten-family L4/L5 alternatives and counters
+        env:
+          QA_SHA: ${{ github.sha }}
+          QA_CONSOLIDATED_ROI_RECEIPT: consolidated-live-evolution-roi.json
+        run: node tools/qa/check-consolidated-live-evolution-roi.cjs
+      - name: Upload complete source SHA and terminal match evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: consolidated-live-evolution-roi
+          path: consolidated-live-evolution-roi.json
+          if-no-files-found: warn
