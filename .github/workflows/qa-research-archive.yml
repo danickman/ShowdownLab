@@ -1,23 +1,5 @@
 name: Historical combat source studies
 on:
-  push:
-    branches: [qa-turn1-duel-baseline]
-    paths:
-      - 'v3/legacy-sim-core.js'
-      - 'v3/ultimate-abilities.js'
-      - 'v3/evolution-rules.js'
-      - 'tools/qa/check-assassin-l4-target-focus.cjs'
-      - 'tools/qa/check-assassin-l4-trigger-study.cjs'
-      - 'tools/qa/check-turtle-timed-shell-study.cjs'
-      - 'tools/qa/check-turtle-l4-investment.cjs'
-      - 'tools/qa/check-small-army-pressure-study.cjs'
-      - 'tools/qa/check-draft-evolution-choice-value.cjs'
-      - 'tools/qa/check-evolution-choice-investment.cjs'
-      - 'tools/qa/check-borderline-draft-decisions.cjs'
-      - 'tools/qa/check-ultimate-signature-spike-candidates.cjs'
-      - 'tools/qa/check-goose-echo-falloff-ab.cjs'
-      - 'tools/qa/check-beetank-seismic-first-ultimate-ab.cjs'
-      - 'tools/qa/check-beetank-seismic-breach-ab.cjs'
   workflow_dispatch:
     inputs:
       study:
@@ -41,7 +23,8 @@ on:
           - beetank-seismic-breach-source
 permissions:
   contents: read
-# Run rejected source A/B variants on physical COMBAT SOURCE changes, not every QA document/experiment.
+# Historical experiments are intentionally MANUAL ONLY during the 13-turn release countdown.
+# Re-testing rejected prototypes on every live-source commit consumed 12 parallel CI jobs.
 # workflow_dispatch control is visible after this workflow exists on the default branch.
 concurrency:
   group: showdown-archive-${{ github.ref }}
