@@ -5,7 +5,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 const {performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 
-const ult=read('v3/ultimate-abilities.js'),core=read('v3/legacy-sim-core.js'),evo=read('v3/evolution-rules.js');
+const ult=read('tools/qa/fixtures/mole-before-twin-ultimate.js'),core=read('v3/legacy-sim-core.js'),evo=read('v3/evolution-rules.js');
 const study=read('tools/qa/check-mole-l5-low-collateral-ab.cjs');
 const first=study.indexOf('function fissure('),last=study.indexOf('const inject=[',first);
 assert(first>=0&&last>first,'accepted candidate generator moved');

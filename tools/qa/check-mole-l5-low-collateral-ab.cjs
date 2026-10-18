@@ -7,6 +7,7 @@ const cutoff='const matched=[];';
 assert.equal(baseline.split(cutoff).length,2,'canonical full-terminal source harness moved');
 const one=(s,a,b)=>{assert.equal(s.split(a).length,2,'unique source anchor changed: '+a.slice(0,100));return s.replace(a,b)};
 let pre=baseline.slice(0,baseline.indexOf(cutoff));
+pre=one(pre,"ult=read('v3/ultimate-abilities.js')","ult=read('tools/qa/fixtures/mole-before-twin-ultimate.js')");
 const start="if(a.type==='beetank'&&['ram','horn'].includes(a.action)){";
 const stop="if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){";
 function fissure(length,width,cap,damage,stagger){
