@@ -1,5 +1,7 @@
 # Showdown Lab — recovered current development checkpoint
 
+**CURRENT ACTIVE PLAN: [13-TURN RELEASE LEDGER](THIRTEEN_TURN_RELEASE_PLAN_2026-10-18.md).** On 18 October user added three ambitious but bounded post-ROI fighter tuning turns: #3 Beetank, #4 Goblin, #5 Barbarian. Original #3–#10 become #6–#13; original ten-turn ledger below is historical, not active. Confirm Turn 2 CI receipt before acting on any tuning diagnosis. No QA preview deployments or production release before #13.
+
 **Reconstructed 16 October 2026 from live Git history, source documents and exact-head GitHub Actions; reliable successor to any missing conversation transcript.** This checkpoint is deliberately short. For the deep chronological narrative, use [QA_IMPLEMENTATION_HANDOFF.md](QA_IMPLEMENTATION_HANDOFF.md), [ROADMAP.md](ROADMAP.md), and [TEST_MATRIX.md](TEST_MATRIX.md). **Always fetch branch HEAD afresh**—the SHA below is the verified source HEAD **before this checkpoint is committed**, not a permanent HEAD.
 
 ## Branch, product, and release boundary
