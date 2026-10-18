@@ -18,7 +18,7 @@ for(const level of [4,5]){
  t.hp=74;assert.equal(U.outgoing(assassin,t,100,[assassin,t],61),rank===2?220.00000000000003:100,'L5 Execution triggers below 75%; L4 remains below 40%');
  t.hp=75;assert.equal(U.outgoing(assassin,t,100,[assassin,t],75),100,'75% boundary is strictly below');
  t.hp=40;assert.equal(U.outgoing(assassin,t,100,[assassin,t],89),rank===2?220.00000000000003:100,'L4 40% boundary unchanged');
- const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);
+ const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);assert.equal(beetank.ultimateKind,rank===2?'siege':'seismic','L5 distinct contact-breach cue; preserve L4');
  const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,1);close(hits[0].damage,rank===2?18:12);
  attacker.x=turtle.x+.095;hits=U.afterHit(attacker,turtle,40,[attacker,turtle],45);assert.equal(hits.length,1,'close collision-edge attacker should trigger Ricochet');close(hits[0].damage,rank===2?18:12);
  attacker.x=turtle.x+.101;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0,'outside 0.10 Ricochet radius must preserve ranged counterplay');
@@ -55,3 +55,10 @@ let sniper=unit('sniper',4),target=unit('goose',1,'red',2,.6),behind=unit('goose
 console.log('PASS: ten role-specific L4 abilities and stronger L5 variants; no L1–3 abilities; actual resistance/reflection/piercing paths, finite splash and burrow-safe burns');
 
 let knight=unit('knight',4),ally=unit('goose',1,'blue',2,.55),enemy=unit('sniper',1,'red',3,.6);e.TestCombat.setUnits([knight,ally,enemy]);e.TestCombat.hurt(ally,100,enemy);assert.equal(ally.hp,20,'actual Bastion protection uses prepared roster');
+
+// Siege Breaker physical melee contact is strictly an L5-only engine gate.
+{const core=fs.readFileSync('v3/legacy-sim-core.js','utf8');
+ assert(core.includes("function beetankStep(u,t,d){const r=ultimate.rank(u)===2?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;"),'L5 Beetank contact must match tested collision radius');
+ assert(!core.includes('function beetankStep(u,t,d){const r=u.range/500;'),'old unreachable heavy contact rule reappeared');
+ assert.equal((core.match(/function beetankStep\(/g)||[]).length,1);
+}

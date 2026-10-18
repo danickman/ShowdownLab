@@ -5,7 +5,7 @@ const specs={
  sniper:{name:'Piercing Verdict',l4:'Rifle shots ignore 60% of armor and pierce one enemy behind the target for 55% damage.',l5:'Shots ignore all armor; the piercing hit deals 80% damage.'},
  dragon:{name:'Inferno',l4:'Breath ignites targets for another 45% attack damage over 3 seconds.',l5:'Burn damage rises to 75% of attack damage.'},
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
- beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'},
+ beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Siege Breaker: at L5, horn strikes reach opponents at real heavy-body contact. Each second hit triggers a wider 55% Seismic blast with a brief stagger.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage; after burrow eruptions, Twin Rift cracks forward to damage up to two additional foes for 62% attack damage with a brief stagger.'},
  turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
@@ -49,7 +49,7 @@ function afterHit(a,t,dealt,units,tick){
  if(a.type==='dragon'&&a.action==='fire'&&t.hp>0){t.burnTicks=90;t.burnPower=a.dmg*(r===2?.125:.075);t.burnTeam=a.team;cue(a,'inferno',tick,t)}
  if(a.type==='beetank'&&['ram','horn'].includes(a.action)){
   a.ultimateHits=(a.ultimateHits||0)+1;
-  if(a.action==='ram'||a.ultimateHits%(r===2?2:3)===0){for(const v of enemies.filter(v=>near(v,t,r===2?.14:.11))){v.stun=Math.max(v.stun,r===2?20:12);hits.push({target:v,source:a,damage:a.dmg*(r===2?.55:.35)})}cue(a,'seismic',tick,t)}
+  if(a.action==='ram'||a.ultimateHits%(r===2?2:3)===0){for(const v of enemies.filter(v=>near(v,t,r===2?.14:.11))){v.stun=Math.max(v.stun,r===2?20:12);hits.push({target:v,source:a,damage:a.dmg*(r===2?.55:.35)})}cue(a,r===2?'siege':'seismic',tick,t)}
  }
  if(a.type==='mole'&&r===2&&a.action==='erupt'){
  const dir=a.team==='blue'?1:-1;

@@ -1556,6 +1556,8 @@ jobs:
           if-no-files-found: warn
 
   consolidated-live-evolution-roi:
+    # Complete research gate is run once on demand, not per QA edit.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -1579,6 +1581,8 @@ jobs:
           if-no-files-found: warn
 
   beetank-l5-reach-roi:
+    # Complete research gate is run once on demand, not per QA edit.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4',fissure:'#ad8255'};
+const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',siege:'#edb465',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4',fissure:'#ad8255'};
 
 function drawFissure(c,f,age,reduced,size,x,y){
  const px=f.end?.x??x,py=f.end?.y??y,dir=f.team==='red'?-1:1;
@@ -57,9 +57,28 @@ function draw(c,f,age,tier='full'){
  else if(['bastion','carapace','reflect','shelter'].includes(f.ability)){
   c.beginPath();c.moveTo(x-size*.35,y);c.quadraticCurveTo(x-size*.52,y-size*.85,x,y-size*1.05);c.quadraticCurveTo(x+size*.52,y-size*.85,x+size*.35,y);c.stroke();
   if(rank===2&&!reduced){c.beginPath();c.ellipse(x,y,size*.45,size*.09,0,0,Math.PI*2);c.stroke()}
- }else if(['seismic','thunder','pack'].includes(f.ability)){
+ }else if(['seismic','siege','thunder','pack'].includes(f.ability)){
   const r=size*(.45+spread*(f.ability==='thunder'?1.3:.8));c.beginPath();c.ellipse(x,y,r,r*.22,0,0,Math.PI*2);c.stroke();
   if(rank===2&&!reduced){c.beginPath();c.ellipse(x,y,r*.7,r*.15,0,0,Math.PI*2);c.stroke()}
+  // Siege Breaker: readable local plate-split and earth shards, never full-screen.
+  if(f.ability==='siege'&&!reduced){
+   const dir=f.team==='red'?-1:1,burst=Math.min(1,age*3),reach=size*(.28+burst*.88);
+   c.save();c.strokeStyle='#5e382c';c.lineWidth=Math.max(2,size*.075*(1-age*.55));
+   for(let j=-1;j<=1;j++){
+    c.beginPath();c.moveTo(x,y+size*.07*j);
+    c.lineTo(x+dir*reach*.42,y+size*(.12*j-.04));
+    c.lineTo(x+dir*reach,y+size*(.20*j+.035));c.stroke();
+   }
+   c.strokeStyle='#ffdba0';c.lineWidth=Math.max(1,size*.024);
+   c.beginPath();c.ellipse(x,y+size*.05,reach*.82,reach*.19,0,0,Math.PI*2);c.stroke();
+   for(let i=0;i<5;i++){
+    const px=x+dir*reach*(.22+.15*i),py=y+size*((i%2?1:-1)*(.12+.025*i)),
+       rock=size*(.04+.012*(i%3))*(1-age*.7);
+    c.fillStyle=i%2?'#b98655':'#78513b';
+    c.beginPath();c.moveTo(px-rock,py);c.lineTo(px,py-rock*1.8);c.lineTo(px+rock,py+rock*.2);c.closePath();c.fill();
+   }
+   c.restore();
+  }
   // An authored-looking second ground-level shock ring depicts the bounded
   // one-hop Goose echo without covering fighters or flashing the whole view.
   if(f.ability==='thunder'&&!reduced&&age>.14){

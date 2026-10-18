@@ -5,6 +5,11 @@ const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(roo
 const baseline=read('tools/qa/check-first-ultimate-tier-spike.cjs'),cut='const matched=[];';
 assert.equal(baseline.split(cut).length,2,'canonical full-match runner changed');
 let h=baseline.slice(0,baseline.indexOf(cut));
+const shipped="function beetankStep(u,t,d){const r=ultimate.rank(u)===2?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;",previous="function beetankStep(u,t,d){const r=u.range/500;";
+const coreRead="const live=read('v3/legacy-sim-core.js')";
+if(h.includes(coreRead+';')){
+ h=h.replace(coreRead+';',coreRead+'.replace('+JSON.stringify(shipped)+','+JSON.stringify(previous)+');');
+}
 const swap=(a,b)=>{assert.equal(h.split(a).length,2,'harness source anchor moved '+a.slice(0,80));h=h.replace(a,b)};
 const declarations=[
  "const beetankOld="+JSON.stringify("function beetankStep(u,t,d){const r=u.range/500;")+";",

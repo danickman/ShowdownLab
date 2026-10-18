@@ -1,0 +1,21 @@
+# Beetank L5 Siege Breaker — accepted QA integration, 18 October 2026
+
+**Exact preintegration SHA** `bb23df32d1f7bec71f5c27e883faa70494063f75`; [test run #39147163107](https://github.com/danickman/ShowdownLab/actions/runs/39147163107), dedicated job 117733234078 **SUCCESS**. Tested **336 actual full-terminal matched candidate matches**, 12 severe 3-v-15 terminal matches, 6 raw/observer full RAF SHA pairs, 16 unchanged-L4 exact RAF pairs and 16 unrelated-role exact RAF pairs. Calibration seeds 26017/32417 and genuinely unseen 73813/86417; 20/40 bodies, both blue/red mirrors. Note correlated fixtures; numbers are not population-level win probabilities.
+
+| Fresh heldout first-L5 | Existing | Partial contact | Full visual-contact |
+|---|---:|---:|---:|
+| Winning battles | 6/8 | 6/8 | **7/8** |
+| Actual Beetank horn hits | 16 | 31 | **39** |
+| Actual horn HP damage | 379.56 | 889.04 | **1218.07** |
+| Actual selected Beetank HP damage | 11352.68 | 15290.66 | **19187.80** |
+| Real independent persistent damaging fronts | 15 | 15 | **13** |
+| Separated positive-HP damage windows | 109 | 130 | **115** |
+| Mirrored peer L5 wins | 4/8 | 4/8 | **4/8** |
+| Doubled ENTIRE enemy army wins | 0/8 | 0/8 | **0/8** |
+| Severe 3 evolved vs 15 wins | 0/4 | 0/4 | **0/4** |
+
+Calibration first L5 baseline 4/8, partial 8/8, full 7/8; hold, recruit and alternate family choice remain unchanged physical RAF, so improvement is attributable to the Beetank L5 contact path in this controlled test. Family-only doubling heldout 7/8 baseline vs **8/8 full** (not the same as doubling the entire enemy army). Full wins 2/8 more than recruiting two Beetanks or evolving a supporting Knight (both 5/8). Genuine front-window preservation is acceptable despite 15→13 persistent-front reduction, and real damaging windows improve 109→115. Original Seismic splash-only and Breach/Overdrive candidates remain REJECTED; not recycled.
+
+**Accepted live gameplay patch:** at L5 only, Beetank's actual melee eligibility uses a collision-aware contact radius: `Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002)`. L1-L4 Beetank and all unrelated fighters retain original contact rule. The same bound also influences the L5 charged-ram contact threshold; there is NO global range/HP/armor multiplier, no recursive splash, no movement teleport, no target rule rewrite. Existing every-second-horn bounded 55% splash continues to apply; its increased actual triggering, rather than invented area damage, creates the power spike. L5 Seismic cue named **Siege Breaker**, with a local ground plate fracture, radiating cracked lines and restrained rock shards; L4 still retains normal `seismic` cue. Guide dynamically reads updated `ShowdownUltimates.specs.beetank.l5`.
+
+PWA integration in same atomic QA commit: root HTML URL versions, SW 42 pinned SHA256 releases and version `showdown-lab-release-beetsiege1`; no duplicate v3/index, no manual/preview/prod deployment. Stronger L5 is deliberately spectacular but whole-army x2 and severe 3-v-15 counters remain available. Source Node timing is not physical iPhone FPS. **Exact new-head CI and physical iPhone 14 Pro Max visuals still pending**, don't call production approved until release gate #13.
