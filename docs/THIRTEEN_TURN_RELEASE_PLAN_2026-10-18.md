@@ -7,14 +7,14 @@ Exactly THREE NEW BOUNDED IMPLEMENTATION TURNS are added after Turn 2 source-rea
 
 **Gameplay mandate:** L4 and especially L5 should feel overwhelming when obtained first in an otherwise comparable fight. Favor distinctive, spectacle-worthy powers and decisive winner flips rather than 5–15% stat boosts or artificially equal DPS. A fighter must still face counterplay from peer L5, coordinated opposing types, kiting and genuinely overwhelming numbers. No invulnerability, infinite proc chains, permanent global disables or arbitrary guaranteed wins.
 
-Turn 2's current-source consolidated ROI job (run 39103656753; committed at 367949c) was IN PROGRESS at the time of this plan amendment. **Do not call any new ability accepted or report unknown results until its exact-head Actions receipt is read.** Goblin Dry0/Pin2/Pin4 fixed-secondary-hit/stagger variants were REJECTED from genuine held-out evidence and are not to be recycled as the solution.
+Turn 2's current-source consolidated ROI job is now VERIFIED SUCCESS at exact QA 789f670 / PR run 39104433463. See LIVE_ALL_FIGHTER_ROI_2026-10-18.md. Turn 3 source-only Beetank reach experiments are pending CI before any playable integration. Goblin Dry0/Pin2/Pin4 fixed-secondary-hit/stagger variants were REJECTED from genuine held-out evidence and are not to be recycled as the solution.
 
 ## Authoritative thirteen-turn ledger
 
 | Turn | Work and bounded exit |
 |---|---|
 | 1 — done | Reject unsupported Goblin Fang/Stagger alternatives and install the repository Vercel non-main deployment guard. QA 571f6fc. |
-| 2 — underway | Single full consolidated live-source L4 and L5 ROI for all 10 families versus hold, +2 recruits, another family evolution, matched peer L5, doubled opposing fighter family, literal doubled whole enemy army, severe 3-v-15. Actual positive-HP and distinct damage fronts, seeded mirrors and full RAF parity. Commit 367949c; mark complete ONLY after receipt and documented findings. |
+| 2 — done | Single full consolidated live-source L4 and L5 ROI for all 10 families versus hold, +2 recruits, another family evolution, matched peer L5, doubled opposing fighter family, literal doubled whole enemy army, severe 3-v-15. Actual positive-HP and distinct damage fronts, seeded mirrors and full RAF parity. Commit 367949c; receipt verified via PR run 39104433463: 2,440 terminal, 40 observer/raw RAF pairs, 20 repeat pairs; see LIVE_ALL_FIGHTER_ROI_2026-10-18.md. |
 | **3 — ADDED: Beetank** | Ambitious L5 heavy-armored **Siege Breaker** concept, design chosen from ROI; implement ONE justified breach/charge ability with source-real win and counter tests, theatrical signature and updated Guide/PWA. |
 | **4 — ADDED: Goblin** | Ambitious L4/L5 **Warband** identity: even a modest local pack can coordinate a meaningful decisive breakthrough; implement ONE cohesive ability family and real team-win benefit, not previously rejected fixed Fang/stagger. |
 | **5 — ADDED: Barbarian** | Ambitious L5 **Bloodstorm** apex built on accepted Blood Cleave: explosive frontline melee pressure with bounded rage/finisher payoff; real full-match and combat-front verification, appropriate cinematic effects. |

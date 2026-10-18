@@ -1577,3 +1577,25 @@ jobs:
           name: consolidated-live-evolution-roi
           path: consolidated-live-evolution-roi.json
           if-no-files-found: warn
+
+  beetank-l5-reach-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check physical contact experiment syntax
+        run: node --check tools/qa/check-beetank-l5-reach-roi.cjs
+      - name: Matched real terminal physical contact Beetank L5 A/B
+        env:
+          QA_BEETANK_REACH_RECEIPT: beetank-l5-reach-roi.json
+        run: node tools/qa/check-beetank-l5-reach-roi.cjs
+      - name: Retain role-counter and RAF parity data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-l5-reach-roi
+          path: beetank-l5-reach-roi.json
+          if-no-files-found: warn
