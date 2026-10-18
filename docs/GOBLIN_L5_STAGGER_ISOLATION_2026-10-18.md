@@ -1,0 +1,9 @@
+# Goblin L5 exact-hit stagger isolation — October 18, 2026
+
+**Source only: no playable Goblin changes.** The approved current Goblin L5 passive wins 6/8 fresh first-tier scenarios, while experimental Pin4 reaches 7/8 with a 1.05x secondary same-target hit and four ticks of stagger. But Pin4 reduces separated genuine HP-damage windows from 81 to 63. A no-stun 1.2x raw-damage Surge performs worse at 4/8.
+
+This study fixes every physical follow-up factor: one secondary 1.05-attack physical hit after an actual L5 Goblin stab against an alive defender when another live allied Goblin is within .16 of exactly that victim. Source variants differ *only* in defender stagger: Dry zero, Pin2 two ticks, Pin4 four ticks. No recursive hit chain, AoE, whole-army stun, teleport or L4 modifications.
+
+Run 16 mirrored real 20/40-fighter starting states on calibration seeds 11717/23771 and strictly new heldout seeds 71569/87071. Four counter conditions: first unlock L5, matching peer L5, lower-tier opposing Goblin family doubled, entire opposing army doubled. Original plus three variants =256 authentic full terminal games; additionally four three-L5-Goblins-vs-15 prior-tier roster severe fixtures x four sources =16, total 272. Require 16 read-only observed/raw entire-RAF SHA pairs and 24 exact L4 candidate/current whole-RAF SHA pairs.
+
+Measure actual positive-HP Goblin damage, secondary physical hits, authentic separated damaging fronts and windows, peer/number counterplay and win flips. Favor the *least* crowd control that produces round-changing first-L5 wins without erasing geographically distinct fights. If control costs remain excessive, investigate distinct same-target pressure rather than a wider stun. Larger 80/120/300 populations and physical iPhone 14 Pro Max Safari 430x932 DPR3 remain separate gates. CI pending. Main and production untouched.

@@ -1433,3 +1433,25 @@ jobs:
           name: goblin-l5-fang-refinement
           path: goblin-l5-fang-refinement.json
           if-no-files-found: warn
+
+  goblin-l5-stagger-isolation-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check exact-damage Goblin stun-isolation suite
+        run: node --check tools/qa/check-goblin-l5-stagger-isolation.cjs
+      - name: Execute 272 real Goblin terminal matches and entire RAF controls
+        env:
+          QA_GOBLIN_STAGGER_RECEIPT: goblin-l5-stagger.json
+        run: node tools/qa/check-goblin-l5-stagger-isolation.cjs
+      - name: Upload actual win and genuine damaging-front physical receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-stagger-isolation
+          path: goblin-l5-stagger.json
+          if-no-files-found: warn
