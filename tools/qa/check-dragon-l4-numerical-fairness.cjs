@@ -76,12 +76,12 @@ for(const arm of arms)for(const count of [20,40]){
  assert.equal(simulate(f,'firstUnlock',true,true).digest,simulate(f,'firstUnlock',false,true).digest,'raw/observed full RAF identity');observerPairs++;
 }
 for(const count of [20,40])for(const seed of seeds.slice(2))for(const side of ['blue','red']){
- const dragonL5={role:'dragon',level:4,count,seed,side},baselineL5=simulate({...dragonL5,arm:'current'},'firstUnlock',false,true).digest;
+ const dragonL5={role:'dragon',level:4,count,seed,side},baselineL5=simulate({...dragonL5,arm:'current'},'matchedUnlock',false,true).digest;
  const unrelated={role:'assassin',level:3,count,seed,side},unrelatedBase=simulate({...unrelated,arm:'current'},'firstUnlock',false,true).digest;
  const turtle={role:'turtle',level:3,count,seed,side},turtleBase=simulate({...turtle,arm:'current'},'firstUnlock',false,true).digest;
  const low={role:'dragon',level:2,count,seed,side},lowBase=simulate({...low,arm:'current'},'firstUnlock',false,true).digest;
  for(const arm of arms.slice(1)){
-  assert.equal(simulate({...dragonL5,arm},'firstUnlock',false,true).digest,baselineL5,'all L5 Dragon game states unchanged');unchangedL5++;
+  assert.equal(simulate({...dragonL5,arm},'matchedUnlock',false,true).digest,baselineL5,'L5-versus-L5 no-L4 battle states unchanged');unchangedL5++;
   assert.equal(simulate({...unrelated,arm},'firstUnlock',false,true).digest,unrelatedBase,'Assassin exact unchanged');unrelatedPairs++;
   assert.equal(simulate({...turtle,arm},'firstUnlock',false,true).digest,turtleBase,'Turtle exact unchanged');unrelatedPairs++;
   assert.equal(simulate({...low,arm},'firstUnlock',false,true).digest,lowBase,'Dragon L3 and lower unchanged');belowL4Pairs++;
@@ -105,7 +105,7 @@ function summarize(rows){
 }
 const summary={calibration:summarize(matches.filter(x=>!heldout.has(x.fixture.seed))),heldout:summarize(matches.filter(x=>heldout.has(x.fixture.seed)))};
 const severeWins=Object.fromEntries(arms.map(arm=>[arm,severe.reduce((n,x)=>n+x.options[arm].win,0)]));
-const counts={matchedGroups:matches.length,matchedTerminal:336,severeTerminal:12,observerRawRafPairs:observerPairs,unchangedL5RafPairs:unchangedL5,assassinTurtleExactRafPairs:unrelatedPairs,unchangedBelowL4RafPairs:belowL4Pairs,rawRepeatPairs:repeatPairs};
+const counts={matchedGroups:matches.length,matchedTerminal:336,severeTerminal:12,observerRawRafPairs:observerPairs,unchangedNoL4L5VersusL5RafPairs:unchangedL5,assassinTurtleExactRafPairs:unrelatedPairs,unchangedBelowL4RafPairs:belowL4Pairs,rawRepeatPairs:repeatPairs};
 const compact={};
 for(const phase of ['calibration','heldout']){const q=summary[phase].choices;compact[phase]={};
  for(const choice of choices)compact[phase][choice]=Object.fromEntries(arms.map(arm=>[arm,q[choice][arm].win]));
@@ -114,11 +114,11 @@ for(const phase of ['calibration','heldout']){const q=summary[phase].choices;com
 }
 const evidence={
  status:'SOURCE ONLY: Dragon L4 fairness source-real, no gameplay/prod change',
- method:'Live Dragon cone hits any physically contacted enemy. Compare original against deterministic near-first (primary target then forward and side position) L4-only limit 4/6 cone recipients. Burn and L5 unchanged. Actual 20/40 red-blue terminal matches on calibration 35617/46219 and unseen 82531/93047, 7 draft choices, true entire enemy army double and 3v15, post-cap positive HP and connected distinct physical damage fronts. Exact unaffected full RAF for Dragon L5, Dragon L3, Assassin L4, Turtle L4 plus raw/observer parity. Fixture results do not equal universal randomized draft probability; no iPhone Safari FPS inferred.',
+ method:'Live Dragon cone hits any physically contacted enemy. Compare original against deterministic near-first (primary target then forward and side position) L4-only limit 4/6 cone recipients. Burn and L5 unchanged. Actual 20/40 red-blue terminal matches on calibration 35617/46219 and unseen 82531/93047, 7 draft choices, true entire enemy army double and 3v15, post-cap positive HP and connected distinct physical damage fronts. Exact unaffected full RAF for L5-vs-L5 Dragons with no L4 opponents, Dragon L3, Assassin L4, Turtle L4 plus raw/observer parity. Mixed L5-vs-L4 gameplay can rightly change when the opposing L4 breath changes; do not confuse this with changed L5 mechanics. Fixture results do not equal universal randomized draft probability; no iPhone Safari FPS inferred.',
  sources:Object.fromEntries(['v3/legacy-sim-core.js','v3/ultimate-abilities.js'].map(p=>[p,crypto.createHash('sha256').update(read(p)).digest('hex')])),
  seeds:{calibration:seeds.slice(0,2),heldout:seeds.slice(2)},counts,summary,severeWins,compact,
  nodeWallMs:round(Number(process.hrtime.bigint()-started)/1e6),matches,severe
 };
 if(process.env.QA_DRAGON_FAIRNESS_RECEIPT)fs.writeFileSync(process.env.QA_DRAGON_FAIRNESS_RECEIPT,JSON.stringify(evidence,null,2)+'\n');
 console.log('DRAGON L4 FAIRNESS SOURCE ROI '+JSON.stringify({compact,severeWins,counts,nodeWallMs:evidence.nodeWallMs}));
-console.log('PASS: 336 full terminal matched +12 severe; six exact raw/observed, 16 unchanged Dragon L5, 16 unchanged low-tier Dragon, 32 unchanged Assassin/Turtle and three exact raw repeats');
+console.log('PASS: 336 full terminal matched +12 severe; six exact raw/observed, 16 unchanged Dragon L5-vs-L5 without L4 opponents, 16 unchanged low-tier Dragon, 32 unchanged Assassin/Turtle and three exact raw repeats');
