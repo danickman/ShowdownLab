@@ -1699,6 +1699,8 @@ jobs:
           if-no-files-found: warn
 
   dragon-l4-numerical-fairness:
+    # Completed no-effect source comparison; archive expensive study for deliberate full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 16
     steps:

@@ -1101,3 +1101,13 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] **Rejected** trial because heldout first L5 stays 8/8 and actual independent battle fronts regress 13→8, windows 68→50
 - [ ] Barbarian baseline varies materially between older heldout 3/8 and this new 8/8; address broad cross-seed fairness in Turn 6 without another multi-arm Barbarian loop
 - [ ] Physical iPhone 14 Pro Max Safari visual/performance validation remains open
+
+
+### 18 October — Turn 6 verified real Dragon L4 numerical-counter gate
+- [x] 336 true terminal seven-draft-option matches plus 12 true 3-v-15, fresh calibration and unseen 20/40 red/blue mirrors
+- [x] Strict raw/observed entire RAF 6 pairs, unchanged L5-vs-L5 without L4 opponents 16, L3 Dragon 16, Assassin L4 plus Turtle L4 32, repeated 3
+- [x] Reject 4/6 victim cone caps as physically ineffective; no playable/PWA update
+- [x] Confirm overdominance still 8/8 wins against **entire** doubled enemy army and 4/4 in severe 3v15, not just a family-only double
+- [x] Preserve already verified Assassin L5 15/24 contested and Turtle reflected/saved HP versus Beetank assault roles
+- [ ] OPEN: Dragon L4 source-specific burn/survival/counterplay explanation and mitigation if evidenced, to consider at release QA rather than unscheduled endless hypotheses
+- [ ] Release physical iPhone Safari and genuine 80/120/300 device-performance checks still required
