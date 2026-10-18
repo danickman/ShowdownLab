@@ -58,7 +58,7 @@ for(const count of populations){
     performanceRatio:+(candidate/Math.max(.0001,baseline)).toFixed(3),exactWholeRafSha:true});
  }
 }
-assert.equal(data.length,24,'2 small populations x 1 seed and 3 large x 2 seeds, 2 mirrors, 2 speeds');
+assert.equal(data.length,32,'2 small populations x 1 seed and 3 large x 2 seeds, 2 mirrors, 2 speeds');
 const summary=populations.map(count=>{
  const a=data.filter(x=>x.count===count),ratios=a.map(x=>x.performanceRatio).sort((a,b)=>a-b);
  return{count,scenarios:a.length,medianRatio:ratios[Math.floor(ratios.length/2)],
@@ -70,4 +70,4 @@ const receipt={status:'shipped source target selection vs byte-for-byte previous
  pairs:data.length,simulations:data.length*4,summary,scenarios:data,elapsedMs:+(performance.now()-t0).toFixed(2)};
 if(process.env.QA_TARGET_SCAN_RECEIPT)fs.writeFileSync(process.env.QA_TARGET_SCAN_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('ALLOC-FREE NEAREST WHOLE-RAF PARITY '+JSON.stringify({summary,pairs:receipt.pairs,simulations:receipt.simulations,elapsedMs:receipt.elapsedMs}));
-console.log('PASS: exact snapshots across 96 real frame traces, 20/40/80/120/300 at 1x/10x, red-blue mirrors; perf directional only');
+console.log('PASS: exact snapshots across 128 real frame traces, 20/40/80/120/300 at 1x/10x, red-blue mirrors; perf directional only');
