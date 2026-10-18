@@ -1307,3 +1307,25 @@ jobs:
           name: mole-l5-fissure-source
           path: mole-l5-fissure-source.json
           if-no-files-found: warn
+
+  mole-l5-low-collateral-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify smaller physically grounded Mole eruption source A/B syntax
+        run: node --check tools/qa/check-mole-l5-low-collateral-ab.cjs
+      - name: Compare original with Shard and Twin L5 effects against peer and number counters
+        env:
+          QA_MOLE_LOW_COLLATERAL_RECEIPT: mole-l5-low-collateral.json
+        run: node tools/qa/check-mole-l5-low-collateral-ab.cjs
+      - name: Preserve complete real-winner hit and separate-front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-l5-low-collateral
+          path: mole-l5-low-collateral.json
+          if-no-files-found: warn
