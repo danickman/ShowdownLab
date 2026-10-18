@@ -1,0 +1,12 @@
+# Barbarian L5 Bloodstorm — Turn 5 bounded development (18 October 2026)
+
+**Pre-test exact QA:** `7a02ba76bccf9db12c8883eab3fa635f17a6d5e6`, PR #14. Existing playable L4 Blood Cleave and L5 premium Cleave preserved as the control. All-ten source-real heldout before this study showed Barbarian L4 and L5 **3/8 first-upgrade wins** each versus **4/8 hold**; L5 was **3/8 versus 4/8 each for two-recruits and an alternate Beetank evolution**. The design needs a leap in winner flips, not another invisible splash damage buff.
+
+### One cohesive L5 Bloodstorm hypothesis
+- L5-only physical collision-aware melee contact, analogous to validated collision spacing, but NEVER a long-range/arena-wide attack; preserves L4 and all other fighter physics.
+- Upon an actual L5 Barbarian primary axe HP hit, arm **75 ticks** of berserker momentum; while active the existing HP-low rage charge, swing timing and 1.45× attack work, without requiring the Barbarian first fall below 48% health.
+- Existing premium Cleave remains limited to **five nearby physically reached enemies**; only every **third genuinely landed L5 primary swing** becomes a 1.7× damage Bloodstorm finisher (other L5 cleaves 1.1×). No recursive secondary hits, unbounded stacks, teleport, global damage, or long-disable increase. Cue must be grounded to actual finisher event.
+- Source-only A/B compares baseline, L5 contact alone, and bounded Bloodstorm, with exact untouched L4 and Beetank full RAF fingerprints.
+- Calibration 22483/36991, fresh heldout 78511/95261; 20/40 combatant mixed armies, blue/red mirrors, seven true draft decisions including hold/first L5/recruits/alternative Beetank/peer L5/family ×2/entire enemy army ×2; additionally 3 evolved versus 15 actual opponents; true positive HP and geographically independent persistent damage fronts and windows. **336 matched terminal +12 severe, six observer/raw RAF pairs, 16 unaffected L4 and 16 unaffected other-role full-RAF hashes, three deterministic raw-repeat comparisons.**
+- Accept only if first L5 victory and investment advantage improve substantively, peer L5 remains contested, whole opposing army ×2 and 3v15 can counter, real fronts and 80/120/300 simulation are not materially harmed. True Safari FPS unverified; Node time isn't mobile FPS. If neither candidate earns acceptance, retain original and mark the quality issue openly within Turn 5. No further costly A/B loops.
+- **Status:** source-only CI queued, not playable. No production, preview builds, or main merge before Turn 13.

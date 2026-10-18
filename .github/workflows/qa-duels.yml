@@ -1673,3 +1673,25 @@ jobs:
           name: goblin-rally-roi
           path: goblin-rally-roi.json
           if-no-files-found: warn
+
+  barbarian-bloodstorm-source-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check current-source bounded Barbarian Bloodstorm
+        run: node --check tools/qa/check-barbarian-bloodstorm-roi.cjs
+      - name: Full match evidence including real fronts and counterplay
+        env:
+          QA_BLOODSTORM_RECEIPT: barbarian-bloodstorm-roi.json
+        run: node tools/qa/check-barbarian-bloodstorm-roi.cjs
+      - name: Preserve real heldout ROI and exact unaffected frame parity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-bloodstorm-roi
+          path: barbarian-bloodstorm-roi.json
+          if-no-files-found: warn
