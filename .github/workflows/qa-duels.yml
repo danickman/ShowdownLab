@@ -1603,3 +1603,23 @@ jobs:
           name: beetank-l5-reach-roi
           path: beetank-l5-reach-roi.json
           if-no-files-found: warn
+
+  beetank-siege-front-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compare genuine 20 and 40 fighter damage-front scenarios
+        env:
+          QA_SIEGE_FRONT_RECEIPT: siege-front-diagnostic.json
+        run: node tools/qa/check-beetank-siege-front-variants.cjs
+      - name: Upload measured full-match front-quality alternatives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siege-front-diagnostic
+          path: siege-front-diagnostic.json
+          if-no-files-found: warn

@@ -8,7 +8,12 @@ const oldSpec="mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, 
 const body=make('.20','.060','2','.62','3').replace("cue(a,'carapace',tick,t)","cue(a,'fissure',tick,t)");
 const expected=frozen.replace("['sniper','dragon','beetank','barbarian']","['sniper','dragon','beetank','mole','barbarian']")
  .replace("if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){",body+'\n'+"if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){").replace(oldSpec,newSpec);
-assert.strictEqual(live,expected,'QA runtime diverged from source-exact validated Twin A/B mechanics');
+// Normalize only the independent post-Twin Beetank changes, preserving strict Mole mechanics.
+const historicalBee="l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'";
+const siegeBee="l5:'Siege Breaker: at L5, horn strikes reach opponents at real heavy-body contact. Each second hit triggers a wider 55% Seismic blast with a brief stagger.'";
+assert(live.includes(siegeBee)&&live.includes("cue(a,r===2?'siege':'seismic',tick,t)}"),'expected Siege Breaker not found');
+const moleExact=live.replace(siegeBee,historicalBee).replace("cue(a,r===2?'siege':'seismic',tick,t)}","cue(a,'seismic',tick,t)}");
+assert.strictEqual(moleExact,expected,'QA Mole Twin full-source mechanics changed outside the independently integrated Beetank L5 scope');
 const fx=read('v3/ultimate-effects.js'),renderer=read('v3/v3.js');
 assert(fx.includes("f.ability==='fissure'")&&fx.includes("f.team==='red'?-1:1"));
 assert(renderer.includes('Twin Rift cracks forward')&&renderer.includes('ability:u.ultimateKind,team:u.team,level:u.level'));
