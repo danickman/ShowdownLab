@@ -1625,3 +1625,25 @@ jobs:
           name: siege-front-diagnostic
           path: siege-front-diagnostic.json
           if-no-files-found: warn
+
+  goblin-warband-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate current source matched Warband script
+        run: node --check tools/qa/check-goblin-warband-roi.cjs
+      - name: Measure heldout first L4 L5 and true numerical counters
+        env:
+          QA_WARBAND_RECEIPT: goblin-warband-roi.json
+        run: node tools/qa/check-goblin-warband-roi.cjs
+      - name: Archive current source matched full battle and RAF receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-warband-roi
+          path: goblin-warband-roi.json
+          if-no-files-found: warn
