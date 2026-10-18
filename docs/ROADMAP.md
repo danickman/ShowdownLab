@@ -1,3 +1,5 @@
+**18 Oct Turn 4 FINAL:** [Rally evidence](GOBLIN_RALLY_TURN4_2026-10-18.md) and [power-only evidence](GOBLIN_WARBAND_TURN4_2026-10-18.md) — two bold real-source candidates rejected for worse L5 full-match wins, second also 24→8 true independent HP-damaging fronts. Original Pack Ambush remains in QA; no gameplay/pins changed. [13-turn ledger](THIRTEEN_TURN_RELEASE_PLAN_2026-10-18.md) advances to #5 Barbarian Bloodstorm.
+
 **Turn 3 QA accepted 18 October:** Beetank L5 heavy-target Siege Breaker, 7/8 heldout first-L5 vs 6/8 baseline, peer 4/8, whole opposing army x2 0/8, no 3v15 wins, actual physical 20/40 separate-front gates passed. Exact source PR CI 39148932682 13 required green. [Full results](BEETANK_SIEGE_BREAKER_2026-10-18.md). Turn 4 Goblin Warband next then Turn 5 Barbarian Bloodstorm. Historical ROI gated manual, no deployment.
 
 **Oct 18 Siege Breaker corrected:** full L5 contact rejected after 20-pop true-front P1. Heavy-target-only L5 reach restores 1 true persistent damaging front; 40 remains 56. Fresh four-arm current-source ROI pending, PWA pins and cache beetsiege2; no prod. See BEETANK_SIEGE_BREAKER_2026-10-18.md.

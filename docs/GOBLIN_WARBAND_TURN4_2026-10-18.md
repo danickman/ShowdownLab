@@ -5,3 +5,7 @@ Baseline QA: 35eefd4321b5b0748718aad3d8a44804933d9a44. The original Pack Ambush 
 One CI study tools/qa/check-goblin-warband-roi.cjs tests 448 real complete source battles (2 tiers × 20/40 × calibration 23791/31891 × genuinely fresh heldout 72311/86519 × both side mirrors × seven choices × current/Warband) plus 16 severe 3v15, eight exact raw/observer full RAF SHA, eight unchanged L1–L3 exact RAF checks and four repeated raw SHA pairs. Choices: hold, first evolution, equal peer evolution, enemy Goblin-family x2, entire opposing army x2, recruit two more Goblins and evolve a supporting Beetank family. Actual post-cap HP direct stab damage and physically separated front evidence. Need wins, alternative ROI, numeric and peer counterplay, and no catastrophic drop in genuine damaging fronts/windows. CI study results PENDING; do not misrepresent this candidate as playable.
 
 If evidence justifies the ability: same bounded turn integrate source, Guide, local cue, runtime QA and regenerate atomic 42 SHA256 pins and SW cache version. If not, retain playable baseline and record the failed idea; do not pursue another lengthy Fang tuning loop.
+
+
+## Final power-only verdict: rejected
+Dedicated source job 117752542322 (448 +16 terminal) succeeded, heldout first L4 2→4/8, L5 6→5/8, actual L5 stab HP 2320.31→3636.3, authentic HP front windows 75→82. Real HP increased without game-win return. No playable source change.

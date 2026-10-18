@@ -1081,3 +1081,13 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Heavy-only L5 first heldout wins 7/8 vs baseline6/8, recruits5/8, allied Knight5/8, peer4/8; whole enemy army doubled0/8, severe3v15 0/4.
 - [x] 20-body genuine persistent fronts remain 1, 40-body56; no quality threshold weakened. PWA 42 SHA256 pins/service-worker cache beetsiege2 checked.
 - [ ] Real iPhone 14 Pro Max 430×932 DPR3 physical Safari, visual readability, FPS and thermal acceptance still open for Turn12.
+
+
+### 18 Oct — Turn 4 Goblin decision (P2 gameplay quality open, not shipping unsafe candidate)
+- [x] Two bounded actual full terminal candidate studies: each 448 matched +16 3v15, 8 observer/raw whole RAF pairs, 8 unchanged pre-L4 pairs and 4 raw replay pairs
+- [x] Warband power-only rejected: L5 heldout 6→5/8 despite more HP
+- [x] Rally cohesion rejected: L4 2→7/8 but L5 5→4/8, genuine persistent damaging fronts 24→8
+- [x] Peer 4/8, whole enemy army x2 and severe 3v15 counter availability preserved under tested candidates
+- [x] Exact PR 39154536877 13 CI required green, repaired browser-upgrade SHA/cache cleanup waits and passed
+- [ ] Playable Goblin L4/L5 first-to-tier is still strategically modest; explicit future architecture redesign only, no more Turn 4 loops
+- [ ] Native iPhone 14 Pro Max Safari acceptance remains physical-only gate, no production release
