@@ -1123,3 +1123,12 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 
 - [x] Reverted experimental `nearest()`, `index.html`, `sw.js` and **all 42 pinned release asset hashes** to preturn good source; expensive A/B manually dispatchable only
 - [ ] Verify **rollback HEAD** CI core, browser, portrait and 300 exact release gate before calling ready for Turn 8
+
+
+### 18 Oct Turn 8 — lifecycle and three-mode release gate (QA CI pending)
+- [x] All add/mult/up/disruption choices now phase-guarded round_over (no idle/battle/post-game)
+- [x] Exactly one accepted Blue and Red bot choice per round, rejected invalid entries do not lock valid next choice, reset on deploy/reset/stop
+- [ ] New-head CI tests exact terminal idempotence and stale callbacks after round restart; one-round Jam/Thin persistence not a permanent enemy mutation
+- [ ] Reconfirm 300 duel and 300 dense adapter, no zombies or round leakage, browser offline/PWA 42 SHA integrity and three modes
+- [x] Already shipped Ultimate Lab nested Choose Your Enemies page, all ten types +1/+5/− and 60 cap; source/batch and 430×932 Chromium tests already exist
+- [ ] Physical iPhone 14 Pro Max Safari 430×932 DPR3 remains mandatory human-device gate
