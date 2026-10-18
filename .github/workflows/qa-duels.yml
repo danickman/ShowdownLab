@@ -138,12 +138,15 @@ jobs:
           node --check tools/qa/check-population-draft.cjs
           node --check tools/qa/check-lab-enemy-batch.cjs
           node --check tools/qa/check-round-lifecycle-guards.cjs
+          node --check tools/qa/check-double-ko-terminal.cjs
       - name: Verify projected cap and one-round nonpermanent sabotage
         run: node tools/qa/check-population-draft.cjs
       - name: Verify round winner, losing-side lives and mirrored match results
         run: node tools/qa/check-round-winner-lives.cjs
       - name: Verify phase-gated one-pick drafting, stale events and round leakage
         run: node tools/qa/check-round-lifecycle-guards.cjs
+      - name: Resolve real L4 Turtle simultaneous eliminations and unbiased final draws
+        run: node tools/qa/check-double-ko-terminal.cjs
       - name: Verify Lab batch enemy types, single counts and cap
         run: node tools/qa/check-lab-enemy-batch.cjs
   extreme-300-fighters:

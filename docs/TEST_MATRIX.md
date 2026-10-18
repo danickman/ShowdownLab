@@ -1132,3 +1132,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [ ] Reconfirm 300 duel and 300 dense adapter, no zombies or round leakage, browser offline/PWA 42 SHA integrity and three modes
 - [x] Already shipped Ultimate Lab nested Choose Your Enemies page, all ten types +1/+5/− and 60 cap; source/batch and 430×932 Chromium tests already exist
 - [ ] Physical iPhone 14 Pro Max Safari 430×932 DPR3 remains mandatory human-device gate
+
+
+### Oct 18 — Turn 8 real dual-death terminal source regression
+- [ ] Exact-source L4 Turtle vs Turtle seed103 physically both HP zero and core `winner='draw'`, `running=false` (no zombie tick loop)
+- [ ] Adapter decrements exactly one life for BOTH teams, emits terminal once, advances from draw if each side survives
+- [ ] Simultaneous final elimination results in **DRAW**, UI/Quick/Draft/Lab visibly identifies double K.O., grants no Parts, no phantom MVP
+- [ ] Existing all ten L1→L5 evolution progression now uses legal rounds; 300 population/duels, authentic fronts, browser offline and 42 SHA PWA CI pass
