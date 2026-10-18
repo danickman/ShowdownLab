@@ -1697,3 +1697,25 @@ jobs:
           name: barbarian-bloodstorm-roi
           path: barbarian-bloodstorm-roi.json
           if-no-files-found: warn
+
+  dragon-l4-numerical-fairness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check current-source L4-only cone-cap fairness code
+        run: node --check tools/qa/check-dragon-l4-numerical-fairness.cjs
+      - name: Run real full battle and true numeric-counter fairness fixtures
+        env:
+          QA_DRAGON_FAIRNESS_RECEIPT: dragon-l4-numerical-fairness.json
+        run: node tools/qa/check-dragon-l4-numerical-fairness.cjs
+      - name: Save current source damage, objective wins and parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-l4-numerical-fairness
+          path: dragon-l4-numerical-fairness.json
+          if-no-files-found: warn
