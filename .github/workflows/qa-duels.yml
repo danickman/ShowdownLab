@@ -1581,7 +1581,8 @@ jobs:
           if-no-files-found: warn
 
   beetank-l5-reach-roi:
-    # One-time four-arm heavy-target ROI acceptance on the corrected implementation.
+    # Verified four-arm ROI at cca94d5. Archived for manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

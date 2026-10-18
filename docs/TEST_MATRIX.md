@@ -1074,3 +1074,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 
 - [x] Source-real Siege diagnostics: full L5 contact breaks 20-body persistent independent HP front floor; anti-heavy-only correction restores 1 front, 40-body 56. Main release floor unchanged.
 - [ ] Corrected four-arm true terminal first-L5 ROI, peer, recruits/alternative, enemy family and whole-army x2, severe 3v15 and raw/frame parity; exact-head full root release CI.
+
+
+### Turn 3 FINAL acceptance (18 Oct)
+- [x] QA `cca94d527a948e73846dd4a76adec251f85dce59` 13/13 required CI green; source 448 matched terminal/16 severe, 8 observed/raw full RAF parity and 24+24 L4/offtarget exact source controls.
+- [x] Heavy-only L5 first heldout wins 7/8 vs baseline6/8, recruits5/8, allied Knight5/8, peer4/8; whole enemy army doubled0/8, severe3v15 0/4.
+- [x] 20-body genuine persistent fronts remain 1, 40-body56; no quality threshold weakened. PWA 42 SHA256 pins/service-worker cache beetsiege2 checked.
+- [ ] Real iPhone 14 Pro Max 430×932 DPR3 physical Safari, visual readability, FPS and thermal acceptance still open for Turn12.

@@ -15,7 +15,7 @@ Turn 2's current-source consolidated ROI job is now VERIFIED SUCCESS at exact QA
 |---|---|
 | 1 — done | Reject unsupported Goblin Fang/Stagger alternatives and install the repository Vercel non-main deployment guard. QA 571f6fc. |
 | 2 — done | Single full consolidated live-source L4 and L5 ROI for all 10 families versus hold, +2 recruits, another family evolution, matched peer L5, doubled opposing fighter family, literal doubled whole enemy army, severe 3-v-15. Actual positive-HP and distinct damage fronts, seeded mirrors and full RAF parity. Commit 367949c; receipt verified via PR run 39104433463: 2,440 terminal, 40 observer/raw RAF pairs, 20 repeat pairs; see LIVE_ALL_FIGHTER_ROI_2026-10-18.md. |
-| **3 — ADDED: Beetank** | **Integrated QA; exact-new-head CI pending.** Full physical-contact Siege Breaker: 7/8 heldout first L5 vs baseline 6/8, peer 4/8, whole army x2 0/8, severe 0/4, distinct visual cue and atomic PWA pins. [Evidence](BEETANK_SIEGE_BREAKER_2026-10-18.md). |
+| **3 — COMPLETE: Beetank** | Heavy-only L5 **Siege Breaker** accepted on QA. Heldout 7/8 first L5 vs 6/8 baseline, recruits 5/8, allied Knight 5/8; peer 4/8, whole opposing army doubled 0/8, 3v15 0/4. Exact 448-match ROI plus RAF and real 20/40-front safety gates passed. Local Siege FX and 42 pinned PWA assets; [decision](BEETANK_SIEGE_BREAKER_2026-10-18.md). Physical Safari remains open; no production. |
 | **4 — ADDED: Goblin** | Ambitious L4/L5 **Warband** identity: even a modest local pack can coordinate a meaningful decisive breakthrough; implement ONE cohesive ability family and real team-win benefit, not previously rejected fixed Fang/stagger. |
 | **5 — ADDED: Barbarian** | Ambitious L5 **Bloodstorm** apex built on accepted Blood Cleave: explosive frontline melee pressure with bounded rage/finisher payoff; real full-match and combat-front verification, appropriate cinematic effects. |
 | 6 | Original Turn 3: repair only other MATERIAL ROI outliers, especially Assassin/Turtle distinct roles, and preserve broad fighter viability without flattening diverse counters. Do not reopen the three dedicated roles absent a P0/P1 regression. |
@@ -62,3 +62,7 @@ Historical ten-turn ledgers in older notes are retained as chronological records
 
 ### Oct 18 Turn 3 safety amendment
 Full-contact L5 Beetank 7/8 initial ROI was **not releasable** due to 20-pop actual front regression. A measured heavy-target-only correction passes the 20/40 genuine-front budget. Its own exact-head matched full-battle ROI is pending before Turn 3 closure; earlier full-reach 7/8 does not transfer automatically. This amendment supersedes the earlier Turn 3 status row. Next Goblin only after passing acceptance.
+
+
+### 18 Oct authoritative Turn 3 final verdict
+This overrides the older provisional safety amendment: corrected heavy-target Beetank now passes full current-source match ROI, peer/number counters, exact unchanged-L4/full RAF parity, standard 20/40 persistent damaging fronts, 300-body and root PWA SHA checks at PR 39148932682. **Turn 3 complete, Turns 4–13 remain.** No Beetank re-experiments; next Goblin Warband then Barbarian Bloodstorm.
