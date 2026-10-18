@@ -1370,3 +1370,22 @@ jobs:
         run: node tools/qa/check-mole-l5-playable-integration.cjs
       - name: Verify atomic versioned PWA integrity
         run: node tools/qa/release-hashes.cjs --verify
+
+  mole-twin-ground-theatre:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Confirm dramatic real-event local fracture and crowded/reduced motion safeguards
+        run: |
+          node --check v3/ultimate-effects.js
+          node --check v3/v3.js
+          node --check tools/qa/check-mole-rift-spectacle.cjs
+          node tools/qa/check-mole-rift-spectacle.cjs
+      - name: Confirm gameplay unchanged and atomic pinned bundle
+        run: |
+          node tools/qa/check-mole-l5-playable-integration.cjs
+          node tools/qa/release-hashes.cjs --verify
