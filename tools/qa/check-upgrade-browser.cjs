@@ -40,7 +40,8 @@ const sleep=ms=>new Promise(done=>setTimeout(done,ms));
   await page.evaluate(async()=>{const reg=await navigator.serviceWorker.getRegistration();await reg.update()});
   for(let i=0;i<25&&failedFetches===0;i++)await sleep(400);
   assert(failedFetches>0,'candidate SHA-256 mismatch was never exercised');
-  await sleep(500);
+  // Wait for failed SW install cleanup rather than racing on a 500ms sleep.
+  await page.waitForFunction(async version=>{const reg=await navigator.serviceWorker.getRegistration();return !(await caches.keys()).includes(version)&&!reg?.installing},{timeout:15000},newVersion);
   const state=await page.evaluate(async()=>{
    const reg=await navigator.serviceWorker.getRegistration();
    return {keys:await caches.keys(),active:!!reg.active,waiting:!!reg.waiting};

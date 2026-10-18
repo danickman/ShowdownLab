@@ -1,0 +1,9 @@
+# Turn 4 Goblin FINAL alternative: Rally Cohesion
+
+The first bold pure-damage Warband failed unseen first-L5 ROI: **6/8 baseline, 5/8 amplified**, despite stab HP damage 2320.31 to 3636.30, so do not ship it. Heldout L4 first evolved 2/8 to 4/8, peer 4/8, full army x2 0/8, severe 0/4. Job 117752542322 passed 448 real matched and 16 severe battles plus full RAF controls.
+
+The second and LAST permitted candidate adds local coordination, instead of repeating a damage-only fix. Evolved Goblins within .25 of a target prefer locally already-engaged targets by bounded pressure-bias (L4 max .10, L5 max .17), using existing target-pressure cache, no O(N squared) additional scans. Physical Goblin stabs with 1/2 living Goblin companions within .23 hit 2.2x/2.9x at L4 or 4.2x/5.65x at L5 and grant just the attacker's existing 38%-damage-reduction ward for 10/17 ticks; lone Goblins remain unbuffed, never invulnerable. No recursive side damage, teleport or stun. Candidate fully isolated in new current-source read-only test tools/qa/check-goblin-rally-roi.cjs.
+
+Exactly 448 complete 7-option mirrored 20/40 battles + 16 literal 3v15; fresh calibrating seeds 31543/44287 and untouched heldout 80777/97157, direct HP and authentic independent spatial fronts, peer and whole-army counters, raw/observed and L1–3 unchanged exact RAF. This final experimental candidate must materially improve first-tier draft wins and keep fair counterplay without destroying local fronts to merit playable integration. No more Warband variant loops this turn. Expected CI pending, playable unchanged.
+
+The Chromium offline-upgrade QA previously failed at fixed 500 ms while old release remained active. Change uses a 15s condition wait for candidate cleanup, preserving the same strict SHA and old-version assertions; still a test failure if staged cache persists.

@@ -1627,6 +1627,8 @@ jobs:
           if-no-files-found: warn
 
   goblin-warband-roi:
+    # Completed failed physical-DPS hypothesis; manual only
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -1646,4 +1648,26 @@ jobs:
         with:
           name: goblin-warband-roi
           path: goblin-warband-roi.json
+          if-no-files-found: warn
+
+  goblin-rally-coordination-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source check Goblin Rally conditional local cohesion
+        run: node --check tools/qa/check-goblin-rally-roi.cjs
+      - name: Complete real L4 and L5 draft outcome and true-front cases
+        env:
+          QA_WARBAND_RECEIPT: goblin-rally-roi.json
+        run: node tools/qa/check-goblin-rally-roi.cjs
+      - name: Preserve complete Goblin Rally physical ROI receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-rally-roi
+          path: goblin-rally-roi.json
           if-no-files-found: warn
