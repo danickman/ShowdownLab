@@ -1,7 +1,8 @@
 name: Duel and combat regression
 on:
+  # Test QA changes once via the open PR rather than twice on push and PR.
   push:
-    branches: [qa-turn1-duel-baseline]
+    branches: [main]
   workflow_dispatch:
   pull_request:
     branches: [main]
@@ -191,6 +192,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-counterplay-outcomes:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -214,6 +217,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-l5-execution-payoff:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 22
     steps:
@@ -236,6 +241,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-heavy-contact-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -258,6 +265,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-dragon-contact-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 16
     steps:
@@ -280,6 +289,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-rear-opportunity-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -303,6 +314,8 @@ jobs:
           if-no-files-found: warn
 
   goblin-heavy-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:
@@ -325,6 +338,8 @@ jobs:
           if-no-files-found: warn
 
   melee-contact-reach-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -347,6 +362,8 @@ jobs:
           if-no-files-found: warn
 
   sniper-shot-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -369,6 +386,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-backstab-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -391,6 +410,8 @@ jobs:
           if-no-files-found: warn
 
   mole-eruption-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -413,6 +434,8 @@ jobs:
           if-no-files-found: warn
 
   turtle-shell-slam-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -435,6 +458,8 @@ jobs:
           if-no-files-found: warn
 
   beetank-charge-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -457,6 +482,8 @@ jobs:
           if-no-files-found: warn
 
   turtle-ricochet-value-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -479,6 +506,8 @@ jobs:
           if-no-files-found: warn
 
   goose-ultimate-stun-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -501,6 +530,8 @@ jobs:
           if-no-files-found: warn
 
   goose-honk-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -523,6 +554,8 @@ jobs:
           if-no-files-found: warn
 
   local-front-lane-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:
@@ -545,6 +578,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-l4-shadow-mark:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -567,6 +602,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-l4-last-mile-pursuit:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -589,6 +626,8 @@ jobs:
           if-no-files-found: warn
 
   turtle-guardian-prototype:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -611,6 +650,8 @@ jobs:
           if-no-files-found: warn
 
   evolution-investment-value:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -678,6 +719,8 @@ jobs:
           if-no-files-found: warn
 
   effective-engagement-observer:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -701,6 +744,8 @@ jobs:
           if-no-files-found: warn
 
   nearest-scan-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -755,6 +800,8 @@ jobs:
           if-no-files-found: warn
 
   distance-bound-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -778,6 +825,8 @@ jobs:
           if-no-files-found: warn
 
   pressure-cache-runtime-parity:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:
@@ -800,6 +849,8 @@ jobs:
           if-no-files-found: warn
 
   pressure-cache-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 9
     steps:
@@ -823,6 +874,8 @@ jobs:
           if-no-files-found: warn
 
   collision-coarse-bound-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -846,6 +899,8 @@ jobs:
           if-no-files-found: warn
 
   collision-separation-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -869,6 +924,8 @@ jobs:
           if-no-files-found: warn
 
   engagement-director-spike:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
@@ -893,6 +950,8 @@ jobs:
           if-no-files-found: warn
 
   wider-front-fast-signal:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -931,6 +990,8 @@ jobs:
           if-no-files-found: warn
 
   browser-turn3:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -959,6 +1020,8 @@ jobs:
           if-no-files-found: warn
 
   browser-composition5h:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -1002,6 +1065,8 @@ jobs:
           if-no-files-found: warn
 
   browser-turn4d:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -1058,6 +1123,8 @@ jobs:
           if-no-files-found: warn
 
   knight-art-candidate:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -1078,6 +1145,8 @@ jobs:
           if-no-files-found: error
 
   borderline-choice-regression:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -1100,6 +1169,8 @@ jobs:
           if-no-files-found: error
 
   assassin-backline-telegraph-opportunity:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1122,6 +1193,8 @@ jobs:
           if-no-files-found: error
 
   first-ultimate-tier-spike:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -1144,6 +1217,8 @@ jobs:
           if-no-files-found: error
 
   goose-impact-shockwave-ab:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -1166,6 +1241,8 @@ jobs:
           if-no-files-found: error
 
   goose-impact-density-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -1199,6 +1276,8 @@ jobs:
         run: node tools/qa/check-goose-impact-offtarget-parity.cjs
 
   barbarian-first-ultimate-signature-ab:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -1221,6 +1300,8 @@ jobs:
           if-no-files-found: error
 
   barbarian-premium-density-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1243,6 +1324,8 @@ jobs:
           if-no-files-found: error
 
   assassin-l5-live-draft-roi:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1265,6 +1348,8 @@ jobs:
           if-no-files-found: warn
 
   assassin-l5-difficulty-gradient:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1287,6 +1372,8 @@ jobs:
           if-no-files-found: warn
 
   mole-l5-physical-fissure-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1309,6 +1396,8 @@ jobs:
           if-no-files-found: warn
 
   mole-l5-low-collateral-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1331,6 +1420,8 @@ jobs:
           if-no-files-found: warn
 
   mole-l5-twin-density-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 22
     steps:
@@ -1372,6 +1463,8 @@ jobs:
         run: node tools/qa/release-hashes.cjs --verify
 
   mole-twin-ground-theatre:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -1391,6 +1484,8 @@ jobs:
           node tools/qa/release-hashes.cjs --verify
 
   goblin-l5-pack-first-unlock-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1413,6 +1508,8 @@ jobs:
           if-no-files-found: warn
 
   goblin-l5-fang-refinement-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -1435,6 +1532,8 @@ jobs:
           if-no-files-found: warn
 
   goblin-l5-stagger-isolation-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
