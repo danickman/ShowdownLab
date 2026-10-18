@@ -6,7 +6,7 @@ const specs={
  dragon:{name:'Inferno',l4:'Breath ignites targets for another 45% attack damage over 3 seconds.',l5:'Burn damage rises to 75% of attack damage.'},
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
  beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'},
- mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},
+ mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage; after burrow eruptions, Twin Rift cracks forward to damage up to two additional foes for 62% attack damage with a brief stagger.'},
  turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Sweeping axe strikes splash 58% attack damage onto up to three nearby foes and stagger them for 8 ticks.',l5:'A giant sweeping strike splashes 100% attack damage onto up to five foes across a wider arc, staggering them for 12 ticks.'},
@@ -38,7 +38,7 @@ function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){
 function afterHit(a,t,dealt,units,tick){
  const hits=[],r=rank(a);
  if(rank(t)&&t.type==='turtle'&&a&&a.hp>0&&near(a,t,.10)&&dealt>0){hits.push({target:a,source:null,damage:dealt*(rank(t)===2?.45:.3)});cue(t,'reflect',tick,a)}
- if(!r||!['sniper','dragon','beetank','barbarian'].includes(a.type))return hits;
+ if(!r||!['sniper','dragon','beetank','mole','barbarian'].includes(a.type))return hits;
  const enemies=units.filter(v=>v!==t&&v.team!==a.team&&v.hp>0&&v.burrow<=0);
  if(a.type==='sniper'&&a.action==='attack'){
   const dx=t.x-a.x,dy=t.y-a.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
@@ -51,7 +51,16 @@ function afterHit(a,t,dealt,units,tick){
   a.ultimateHits=(a.ultimateHits||0)+1;
   if(a.action==='ram'||a.ultimateHits%(r===2?2:3)===0){for(const v of enemies.filter(v=>near(v,t,r===2?.14:.11))){v.stun=Math.max(v.stun,r===2?20:12);hits.push({target:v,source:a,damage:a.dmg*(r===2?.55:.35)})}cue(a,'seismic',tick,t)}
  }
- if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){
+ if(a.type==='mole'&&r===2&&a.action==='erupt'){
+ const dir=a.team==='blue'?1:-1;
+ const lined=enemies.map(v=>({v,forward:(v.x-t.x)*dir,side:Math.abs(v.y-t.y)}))
+  .filter(p=>p.forward>=-.025&&p.forward<=.20&&p.side<=.060)
+  .sort((p,q)=>p.forward-q.forward||p.side-q.side||p.v.id-q.v.id)
+  .slice(0,2);
+ for(const p of lined){p.v.stun=Math.max(p.v.stun,3);hits.push({target:p.v,source:a,damage:a.dmg*.62})}
+ if(lined.length)cue(a,'fissure',tick,t);
+}
+if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){
   const targets=enemies.filter(v=>near(v,t,r===2?.205:.135))
    .sort((x,y)=>Math.hypot(x.x-t.x,x.y-t.y)-Math.hypot(y.x-t.x,y.y-t.y)||x.id-y.id)
    .slice(0,r===2?5:3);

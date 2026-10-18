@@ -25,6 +25,18 @@ for(const level of [4,5]){
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
  const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>Math.abs(h.damage-(rank===2?100:58))<1e-9),'premium Cleave physical secondary damage');
  assert(hits.every(h=>h.target.stun===(rank===2?12:8)),'premium Cleave stagger on real splash victims');
+
+ const twinMole=unit('mole',5,'blue',100,.2,.5);twinMole.action='erupt';
+ const primaryMole=unit('knight',1,'red',101,.5,.5);
+ const f1=unit('goblin',1,'red',102,.56,.5),f2=unit('goblin',1,'red',103,.68,.54);
+ const f3=unit('goblin',1,'red',104,.75,.5),back=unit('goblin',1,'red',105,.4,.5);
+ hits=U.afterHit(twinMole,primaryMole,40,[twinMole,primaryMole,f3,f2,back,f1],99);
+ assert.equal(hits.length,2);assert.equal(hits.map(h=>h.target.id).join(','),'102,103');
+ assert(hits.every(h=>Math.abs(h.damage-62)<1e-9),'Twin L5 physical source contract');
+ assert.equal(f1.stun,3);assert.equal(f2.stun,3);assert.equal(f3.stun,0);assert.equal(back.stun,0);
+ assert.equal(twinMole.ultimateKind,'fissure');
+ const oldMole=unit('mole',4,'blue',106,.2,.5);oldMole.action='erupt';
+ assert.equal(U.afterHit(oldMole,primaryMole,40,[oldMole,primaryMole,f1,f2],100).length,0);
  const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);
  close(hits[0].damage,rank===2?110:75);assert.equal(t.stun,rank===2?64:44);
  const direct=unit('knight',1,'red',45,rank===2?.73:.68),echo=unit('goblin',1,'red',46,rank===2?.86:.77);

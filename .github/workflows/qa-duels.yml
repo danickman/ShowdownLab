@@ -1351,3 +1351,22 @@ jobs:
           name: mole-twin-density
           path: mole-twin-density.json
           if-no-files-found: warn
+
+  mole-l5-playable-twin-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse playable Twin, presentation, and source provenance
+        run: |
+          node --check v3/ultimate-abilities.js
+          node --check v3/ultimate-effects.js
+          node --check v3/v3.js
+          node --check tools/qa/check-mole-l5-playable-integration.cjs
+      - name: Assert exact proven Twin source and grounded effects
+        run: node tools/qa/check-mole-l5-playable-integration.cjs
+      - name: Verify atomic versioned PWA integrity
+        run: node tools/qa/release-hashes.cjs --verify

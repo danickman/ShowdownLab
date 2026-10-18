@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4'};
+const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4',fissure:'#ad8255'};
 function draw(c,f,age,tier='full'){
  if(age<0||age>=1)return;
  const reduced=tier==='minimal'||tier==='reduced'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -10,7 +10,24 @@ function draw(c,f,age,tier='full'){
   const a=-Math.PI+i*Math.PI*2/(rank===2?7:5),r=size*(.48+age*.32),d=size*(.12+rank*.035);
   c.beginPath();c.moveTo(x+Math.cos(a)*r,y-size*.38+Math.sin(a)*r*.65);c.lineTo(x+Math.cos(a)*(r+d),y-size*.38+Math.sin(a)*(r+d)*.65);c.stroke();
  }}
- if(f.ability==='pierce'&&f.end){c.beginPath();c.moveTo(x+(f.cueX||0),y+(f.cueY||0));c.lineTo(f.end.x,f.end.y-size*.45);c.stroke()}
+ if(f.ability==='fissure'){
+  // Playable L5 Mole eruption cracks forward from the actual struck defender.
+  const px=f.end?.x??x,py=f.end?.y??y,dir=f.team==='red'?-1:1;
+  const reach=size*(reduced?.65:2.05),grow=Math.min(1,Math.max(.15,age*3.2));
+  c.save();c.globalAlpha*=1-age*.5;c.strokeStyle='#78543b';
+  c.lineWidth=Math.max(1.2,size*.06*(1-age*.5));
+  c.beginPath();c.moveTo(px-dir*size*.12,py);
+  c.lineTo(px+dir*reach*.3*grow,py-size*.04);
+  c.lineTo(px+dir*reach*.58*grow,py+size*.045);
+  c.lineTo(px+dir*reach*grow,py);c.stroke();
+  if(!reduced){
+   c.strokeStyle='#e7bd87';c.lineWidth=Math.max(1,size*.03*(1-age));
+   c.beginPath();c.moveTo(px+dir*reach*.42*grow,py);
+   c.lineTo(px+dir*reach*.57*grow,py-size*.17*grow);
+   c.moveTo(px+dir*reach*.67*grow,py+size*.02);
+   c.lineTo(px+dir*reach*.8*grow,py+size*.16*grow);c.stroke();
+  }c.restore();
+ }else if(f.ability==='pierce'&&f.end){c.beginPath();c.moveTo(x+(f.cueX||0),y+(f.cueY||0));c.lineTo(f.end.x,f.end.y-size*.45);c.stroke()}
  else if(['bastion','carapace','reflect','shelter'].includes(f.ability)){
   c.beginPath();c.moveTo(x-size*.35,y);c.quadraticCurveTo(x-size*.52,y-size*.85,x,y-size*1.05);c.quadraticCurveTo(x+size*.52,y-size*.85,x+size*.35,y);c.stroke();
   if(rank===2&&!reduced){c.beginPath();c.ellipse(x,y,size*.45,size*.09,0,0,Math.PI*2);c.stroke()}
