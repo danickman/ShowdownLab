@@ -1411,3 +1411,25 @@ jobs:
           name: goblin-l5-pack-first-unlock
           path: goblin-l5-pack-first-unlock.json
           if-no-files-found: warn
+
+  goblin-l5-fang-refinement-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check source-only Goblin Fang Surge and Pin refinements
+        run: node --check tools/qa/check-goblin-l5-fang-refinement.cjs
+      - name: Measure real terminal first-L5 peer and whole-army doubling outcomes and true damaging fronts
+        env:
+          QA_GOBLIN_FANG_REFINEMENT_RECEIPT: goblin-l5-fang-refinement.json
+        run: node tools/qa/check-goblin-l5-fang-refinement.cjs
+      - name: Preserve 204 authentic terminal matches and full physical RAF parity receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-fang-refinement
+          path: goblin-l5-fang-refinement.json
+          if-no-files-found: warn

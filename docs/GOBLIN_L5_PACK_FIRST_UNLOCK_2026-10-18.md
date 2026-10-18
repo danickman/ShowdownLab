@@ -13,3 +13,19 @@ Both candidates use **CURRENT live source including Mole Twin** and current Goos
 Score actually resolved post-cap Goblin HP, any genuine secondary HP, *independent persistent* geographically distinct HP-positive damaging fronts/windows, real terminal wins, no race to wipe whole arena. First-to-L5 should be round changing; peer L5 and sheer numerical advantage remain valid counters. Do not choose based on damage totals alone. If promising, test holdout roster gradients, draft ROI, 80/120/300-fighter source CPU, and physical iPhone 14 Pro Max Safari before playable QA integration.
 
 **CI pending.** Main and production remain protected. Mole Twin visual spectacle is a separate pure-renderer QA change.
+
+
+## Oct 18 dedicated exact-head first A/B results
+The [push Goblin dedicated job](https://github.com/danickman/ShowdownLab/actions/runs/39096398729/job/117583831543) at QA `631e9bd87e0e1fd4a42606986a3d86c07e877ce0` **passed**: 204 true completed combat matches, 12 original/raw observer whole-RAF SHA parity, and 16 exact L4 unaffected candidate/full-RAF physical SHA controls. These are *selected* mirrored seeds, not independent sampled universal odds; full push/PR workflow aggregate should be assessed separately.
+
+| NEW heldout condition | Current | Pack Hunt | Double Fang |
+|---|---:|---:|---:|
+| First-to-L5 | 4/8 | 5/8 | **6/8** |
+| Opponent also L5 | 4/8 | 4/8 | 4/8 |
+| Opponent lower-tier Goblin FAMILY doubled | 4/8 | 5/8 | **7/8** |
+| Opponent ENTIRE army doubled | 0/8 | 0/8 | 0/8 |
+| Severe three L5 against fifteen prior-tier foes | 0/4 | 0/4 | 0/4 |
+
+Real postcap extra positive-HP from first L5 Fang: **499.44 HP across 29 secondary hits**, not cosmetic FX; first-L5 true persistent independent HP-damage fronts **16 current, 11 Hunt, 19 Fang** and separate HP-damaging windows **69, 72, 68**. Fang foe-family doubling yields 868.56 secondary positive HP over 42 hits and 25 genuine damaging fronts vs 20 base. Hunt is much weaker and erases first-tier independent fronts. A 6/8 first spike is still marginal by requested round-changing standard; family doubled 7/8 may overrun the *particular* family ×2 counter, but entire army ×2 and severe 3 vs 15 retain counterplay. Do not claim these eight correlated fixtures prove universal odds.
+
+**Decision:** REJECT Pack Hunt for live integration; **retain Double Fang as research baseline, not shipped**. Next bounded [Fang refinement](GOBLIN_L5_FANG_REFINEMENT_2026-10-18.md) compares +1.20 attack no stun vs +1.05 attack/4-tick short pin on fresh heldout first-to-L5/peer/family ×2/whole-army ×2. No playable Goblin source/PWA/renderer/Guide changed.
