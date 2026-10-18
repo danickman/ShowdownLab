@@ -4,12 +4,12 @@
 const assert=require('assert/strict'),fs=require('fs'),path=require('path'),vm=require('vm'),crypto=require('crypto');
 const {performance}=require('perf_hooks');
 const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
-const optimized=read('legacy-sim-core');
+const original=read('legacy-sim-core');
 const fastNearest="function nearest(u,preferBack=false){if(pressureTick!==tick)refreshPressureCache();const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;let requireBack=false;if(preferBack)for(const v of units){if(v.team!==u.team&&v.hp>0&&v.burrow<=0&&Number.isFinite(v.x)&&Number.isFinite(v.y)&&BACK.has(v.type)){requireBack=true;break}}const pressureByTarget=pressureCache[u.team];let best=null,score=Infinity,bd=Infinity;for(const v of units){if(v.team===u.team||!(v.hp>0)||!(v.burrow<=0)||!Number.isFinite(v.x)||!Number.isFinite(v.y)||(requireBack&&!BACK.has(v.type)))continue;const dx=v.x-u.x,dy=v.y-u.y,bound=score+1e-12;if(dx*dx+dy*dy>=bound*bound)continue;const d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);if(s<score){score=s;bd=d;best=v}}return[best,bd]}";
 const oldNearest="function nearest(u,preferBack=false){if(pressureTick!==tick)refreshPressureCache();const laneWeight=units.length<=40?.12:units.length<60?(60-units.length)*.006:0;let pool=units.filter(v=>v.team!==u.team&&v.hp>0&&v.burrow<=0&&Number.isFinite(v.x)&&Number.isFinite(v.y));if(!pool.length)return[null,Infinity];if(preferBack){const backs=pool.filter(v=>BACK.has(v.type));if(backs.length)pool=backs}const pressureByTarget=pressureCache[u.team];let best=null,score=Infinity,bd=Infinity;for(const v of pool){const dx=v.x-u.x,dy=v.y-u.y,bound=score+1e-12;if(dx*dx+dy*dy>=bound*bound)continue;const d=Math.hypot(dx,dy),pressure=pressureByTarget.get(v.id)||0,s=d+Math.max(0,pressure-2)*.035+(laneWeight&&!BACK.has(u.type)&&u.type!=='assassin'&&u.type!=='mole'?Math.abs(dy)*laneWeight:0);if(s<score){score=s;bd=d;best=v}}return[best,bd]}";
-assert.equal(optimized.split(fastNearest).length,2,'live nearest implementation moved');
-assert(oldNearest.includes('units.filter')&&oldNearest.includes('pressureByTarget'),'original must preserve pressure semantics');
-const original=optimized.replace(fastNearest,oldNearest);
+assert.equal(original.split(oldNearest).length,2,'current fast original filter-target source changed');
+assert(oldNearest.includes('units.filter')&&oldNearest.includes('pressureByTarget'),'reference retains pressure cache semantics');
+const optimized=original.replace(oldNearest,fastNearest);
 function simulate(source,n,seed,mirror,speed,frames){
  let now=0,next=0,errors=[],queue=new Map();
  const sandbox={window:null,Math,performance:{now:()=>now},
@@ -65,9 +65,9 @@ const summary=populations.map(count=>{
   maxRatio:Math.max(...ratios),avgReferenceMs:+(a.reduce((s,x)=>s+x.referenceMs,0)/a.length).toFixed(2),
   avgOptimizedMs:+(a.reduce((s,x)=>s+x.optimizedMs,0)/a.length).toFixed(2)};
 });
-const receipt={status:'shipped source target selection vs byte-for-byte previous nearest original',
- method:'Source-only ABBA synthetic Node RAF comparing exact SHA256 of EVERY physical frame, 20/40/80/120/300 1x/10x, both mirror teams, 2 seeds at 80+, original pressure-cache/tie rules and backline precedence. Does not measure Canvas, GPU or native iPhone.',
+const receipt={status:'REJECTED source-only experiment; current live original versus hypothetical allocation-free candidate',
+ method:'Archived read-only ABBA synthetic Node RAF comparing exact SHA256 of EVERY physical frame, 20/40/80/120/300 1x/10x, both mirror teams, 2 seeds at 80+, original pressure-cache/tie rules and backline precedence. Does not measure Canvas, GPU or native iPhone.',
  pairs:data.length,simulations:data.length*4,summary,scenarios:data,elapsedMs:+(performance.now()-t0).toFixed(2)};
 if(process.env.QA_TARGET_SCAN_RECEIPT)fs.writeFileSync(process.env.QA_TARGET_SCAN_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 console.log('ALLOC-FREE NEAREST WHOLE-RAF PARITY '+JSON.stringify({summary,pairs:receipt.pairs,simulations:receipt.simulations,elapsedMs:receipt.elapsedMs}));
-console.log('PASS: exact snapshots across 128 real frame traces, 20/40/80/120/300 at 1x/10x, red-blue mirrors; perf directional only');
+console.log('PASS: hypothetical allocation-free target scan exact 128 RAF traces; candidate not shipped due slower 20/40/80/120/300 Node timing');

@@ -1723,6 +1723,8 @@ jobs:
           if-no-files-found: warn
 
   nearest-allocation-lean-parity:
+    # Proven exact, but slower at 20/40/80/120/300. Archive for explicit research dispatch only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

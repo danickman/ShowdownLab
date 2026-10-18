@@ -1116,7 +1116,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 ### Turn 7 — crowded engine and draft cap (pending exact head CI)
 - [x] Audit existing x2 cap 120 projected entire battle and existing 100/119/120/180/300 offer checks, 1-round Jam/Thin expiry
 - [x] Protect original collision pair order and axis-pruning; no speculative position rebalance
-- [ ] Prove new allocation-free pressure-cached nearest exactly matches original full-RAF at 20/40/80/120/300 with 1× and 10× two mirrors and historical/current seeded lines (128 traces)
-- [ ] Compare credible Node VM ABBA timing without representing as Safari FPS
+- [x] Proven allocation-free pressure-cached nearest exact original full-RAF at 20/40/80/120/300 with 1× and 10× two mirrors and historical/current seeded lines (128 traces)
+- [x] Node VM ABBA ratios measured 20=1.061,40=1.009,80=1.020,120=1.054,300=1.039 (all slower): reject and restore exact original; not Safari FPS
 - [ ] Full source CI regression true 20/40 independent damaging fronts, extreme 300, browser portrait and offline integrity on current QA SHA
 - [ ] Native Safari performance on iPhone 14 Pro Max remains physical acceptance, not reachable from GitHub Actions
+
+- [x] Reverted experimental `nearest()`, `index.html`, `sw.js` and **all 42 pinned release asset hashes** to preturn good source; expensive A/B manually dispatchable only
+- [ ] Verify **rollback HEAD** CI core, browser, portrait and 300 exact release gate before calling ready for Turn 8
