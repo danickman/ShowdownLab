@@ -1,0 +1,15 @@
+# Goblin L5 — Pack Hunt versus Double Fang
+18 October 2026. **Source-only A/B; no playable mechanics changed.** The prior first-L5 original Goblin benchmark won 5/8 selected mirrored fixtures, leaving Goblin behind the intended transformative L5 round swing. Current L4 Goblin nearby-family buff is 20% per up to 3 allies; L5 is 30% per up to 4 nearby allies. Those are useful auras but neither showcases a new L5 coordinated assault. Avoid another globally strong or unstoppably wide stun.
+
+## Two deliberately different coordinated ambush identities
+- **Pack Hunt:** On a genuine L5 Goblin stabbing target T, add a focused coordinated direct-damage bonus **58% per up to two OTHER alive Goblins**, ONLY if each ally physically is within .16 arena units of T and currently targets the exact same physical target ID. This stacks multiplicatively on existing 30%-per-nearby-Goblin L5 aura, remains capped, no RNG or global proximity buff. L4 unchanged.
+- **Double Fang:** Leave ordinary L5 outgoing aura intact. If another live Goblin is within .16 of the same still-living defender when an L5 stab genuinely hits, the L5 attacker makes exactly ONE secondary physical same-target .80× attack hit, resolving real post-armor HP through existing recursion-protected afterHit mechanism; no stun, teleport or cross-front AoE. It may finish a wounded armored enemy but cannot hit untargeted enemies.
+
+Both candidates use **CURRENT live source including Mole Twin** and current Goose/Barbarian premium signatures. No source is rewritten in browser: the study changes only VM-loaded temporary copies of `v3/ultimate-abilities.js`. Test source-only negative controls ensure L4 physics is **byte-for-byte identical** across every simulated RAF frame.
+
+## Fixed acceptance protocol
+`tools/qa/check-goblin-l5-pack-first-unlock.cjs` runs **16 seeded mirrored 20/40-fighter fixtures** with training seeds **11717/23771** and entirely new holdout **30971/44831**; each compares live baseline, Hunt and Fang in **four real terminal conditions**: first to L5, matching peer L5, doubled lower-tier Goblin enemy family, or doubled ENTIRE opposing army (distinct). 16 × 4 × 3 = **192 completed full battles**. Add four 3-L5-Goblins-versus-15 mixed L4-enemies severe matches × three source arms = **12 genuine terminal matches**, total **204**. Add 12 raw/observed whole RAF physical SHA pairs and 16 exact unchanged-L4 candidate/control SHA pairs.
+
+Score actually resolved post-cap Goblin HP, any genuine secondary HP, *independent persistent* geographically distinct HP-positive damaging fronts/windows, real terminal wins, no race to wipe whole arena. First-to-L5 should be round changing; peer L5 and sheer numerical advantage remain valid counters. Do not choose based on damage totals alone. If promising, test holdout roster gradients, draft ROI, 80/120/300-fighter source CPU, and physical iPhone 14 Pro Max Safari before playable QA integration.
+
+**CI pending.** Main and production remain protected. Mole Twin visual spectacle is a separate pure-renderer QA change.

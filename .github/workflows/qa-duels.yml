@@ -1389,3 +1389,25 @@ jobs:
         run: |
           node tools/qa/check-mole-l5-playable-integration.cjs
           node tools/qa/release-hashes.cjs --verify
+
+  goblin-l5-pack-first-unlock-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only Goblin L5 Pack Hunt vs Double Fang suite
+        run: node --check tools/qa/check-goblin-l5-pack-first-unlock.cjs
+      - name: Measure true first-L5 full-game win swings, peer and number counters and authentic fronts
+        env:
+          QA_GOBLIN_PACK_RECEIPT: goblin-l5-pack-first-unlock.json
+        run: node tools/qa/check-goblin-l5-pack-first-unlock.cjs
+      - name: Preserve all 204 terminal matches and untouched L4 whole-RAF fingerprints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-pack-first-unlock
+          path: goblin-l5-pack-first-unlock.json
+          if-no-files-found: warn
