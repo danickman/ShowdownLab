@@ -2,45 +2,68 @@
 const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',siege:'#edb465',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4',fissure:'#ad8255'};
 
 function drawFissure(c,f,age,reduced,size,x,y){
- const px=f.end?.x??x,py=f.end?.y??y,dir=f.team==='red'?-1:1;
- const phase=Math.min(1,age*3.5),reach=size*(reduced?1.8:4.15)*phase;
- const wide=size*(reduced?.18:.34)*(1-age*.35);
- const vertices=[[0,0],[.13,-.06],[.26,.10],[.4,-.09],[.55,.12],[.7,-.075],[.84,.08],[1,0]];
- const point=q=>[px+dir*reach*q[0],py+size*q[1]*phase];
- const trench=()=>{c.beginPath();let [a,b]=point(vertices[0]);c.moveTo(a,b);
-  for(let i=1;i<vertices.length;i++){[a,b]=point(vertices[i]);c.lineTo(a,b)}};
- c.save();c.lineJoin='round';c.lineCap='round';
- c.strokeStyle='#4b3024';c.lineWidth=Math.max(2.5,wide*1.55);trench();c.stroke();
- c.strokeStyle='#be7850';c.lineWidth=Math.max(1.6,wide*.84);trench();c.stroke();
- c.strokeStyle='#ffe3a1';c.lineWidth=Math.max(1.1,wide*.36);trench();c.stroke();
- c.save();c.globalAlpha*=Math.max(0,.85-age*.8);c.strokeStyle='#f1c78a';
- c.lineWidth=Math.max(1.5,size*.06*(1-age));
- const ring=size*(.38+(reduced?.54:1.60)*Math.min(1,age*2.1));
- c.beginPath();c.ellipse(px,py,ring,ring*.25,0,0,Math.PI*2);c.stroke();c.restore();
- if(!reduced){
-  c.strokeStyle='#654637';c.lineWidth=Math.max(1.7,size*.09*(1-age*.65));
-  for(const [at,side,long] of [[.26,-1,.30],[.41,1,.29],[.64,-1,.43],[.83,1,.32]]){
-   const [bx,by]=point([at,0]),span=size*long*phase;
-   c.beginPath();c.moveTo(bx,by);c.lineTo(bx+dir*span*.3,by+side*span*.55);
-   c.lineTo(bx+dir*span*.45,by+side*span);c.stroke();
+  const px=f.end?.x??x,py=f.end?.y??y,dir=f.team==='red'?-1:1;
+  const phase=Math.min(1,age*4),fade=Math.max(0,1-age),reach=size*(reduced?1.8:5.2)*phase;
+  const width=size*(reduced?.13:.39)*phase*(1-age*.24);
+  const path=[[0,0],[.12,-.08],[.25,.12],[.39,-.11],[.54,.13],[.68,-.09],[.82,.095],[.94,-.035],[1,0]];
+  const point=(v,side=0)=>[px+dir*reach*v[0],py+size*v[1]*phase+side*width];
+  function center(){c.beginPath();path.forEach((v,i)=>{const p=point(v);if(i)c.lineTo(...p);else c.moveTo(...p)})}
+  c.save();c.lineJoin='round';c.lineCap='round';
+  if(!reduced){
+    // Layer one: a jagged filled trench, not merely a faint narrow line.
+    c.fillStyle='#30221a';c.beginPath();
+    path.forEach((v,i)=>{const p=point(v,-(i%2?.69:.89));if(i)c.lineTo(...p);else c.moveTo(...p)});
+    for(let i=path.length-1;i>=0;i--)c.lineTo(...point(path[i],i%2?.86:.72));
+    c.closePath();c.fill();
   }
-  for(let i=0;i<7;i++){
-   const along=(.1+i*.12)*reach,side=i%2?1:-1;
-   const lift=size*(.14+.05*(i%3))*Math.sin(Math.PI*Math.min(1,age*1.4));
-   const xx=px+dir*along+side*size*.045,yy=py+side*size*(.13+.04*(i%3))-lift;
-   const rr=Math.max(1.4,size*(.075+.015*(i%3))*(1-age*.55));
-   c.fillStyle=i%3===0?'#f5d9a5':i%3===1?'#b88756':'#6c5141';
-   c.beginPath();c.moveTo(xx-rr,yy+rr*.55);c.lineTo(xx+dir*rr*.45,yy-rr);
-   c.lineTo(xx+rr,yy+rr*.55);c.closePath();c.fill();
+  c.strokeStyle='#33231d';c.lineWidth=Math.max(2.6,width*1.55);center();c.stroke();
+  c.strokeStyle='#a45a32';c.lineWidth=Math.max(1.5,width*.78);center();c.stroke();
+  c.strokeStyle='#ffe1a0';c.lineWidth=Math.max(1.0,width*.20);center();c.stroke();
+  if(!reduced){
+    c.strokeStyle='#62412d';c.lineWidth=Math.max(1.4,size*.075*fade);
+    for(let i=0;i<7;i++){
+      const q=.16+i*.115,side=i%2?1:-1,p=point([q,(i%3-1)*.05]),leg=size*(.36+(i%3)*.14)*phase;
+      c.beginPath();c.moveTo(...p);c.lineTo(p[0]+dir*leg*.24,p[1]+side*leg*.55);
+      c.lineTo(p[0]+dir*leg*.55,p[1]+side*leg);c.stroke();
+      if(i%2===0){c.beginPath();c.moveTo(p[0]+dir*leg*.24,p[1]+side*leg*.55);
+        c.lineTo(p[0]-dir*leg*.12,p[1]+side*leg*.89);c.stroke()}
+    }
+    c.strokeStyle='#fff0bf';c.lineWidth=Math.max(1,size*.035*fade);
+    for(const side of [-1,1]){c.beginPath();path.forEach((v,i)=>{const p=point(v,side*(i%2?.73:.63));if(i)c.lineTo(...p);else c.moveTo(...p)});c.stroke()}
   }
-  for(let i=0;i<3;i++){
-   const xx=px+dir*reach*(.16+i*.30),yy=py-size*(.04+i*.03);
-   const rr=size*(.18+.06*i)*(1+age*.45);
-   c.save();c.globalAlpha*=Math.max(0,.48-age*.5);c.fillStyle='#bba181';
-   c.beginPath();c.ellipse(xx,yy,rr,rr*.38,0,0,Math.PI*2);c.fill();c.restore();
+  const ring=size*(.4+(reduced?.55:1.85)*Math.min(1,age*2.25));
+  c.save();c.globalAlpha*=.68*fade;c.strokeStyle='#fce0a5';c.lineWidth=Math.max(1.3,size*.065*fade);
+  c.beginPath();c.ellipse(px,py,ring,ring*.25,0,0,Math.PI*2);c.stroke();c.restore();
+  if(!reduced){
+    const rise=Math.sin(Math.PI*Math.min(1,age*1.1));
+    for(let i=0;i<12;i++){
+      const p=point([.075+i*.075,(i%3-1)*.05]),r=Math.max(1.3,size*(.07+.015*(i%4))*fade),lift=size*(.20+.08*(i%3))*rise;
+      c.fillStyle=i%3===0?'#f8dba4':i%3===1?'#bb885a':'#594032';
+      c.beginPath();c.moveTo(p[0]-r,p[1]+r*.6-lift);c.lineTo(p[0]+dir*r*.35,p[1]-r*1.6-lift);
+      c.lineTo(p[0]+r,p[1]+r*.6-lift);c.closePath();c.fill();
+    }
+    for(let i=0;i<4;i++){
+      const p=point([.16+i*.23,0]),r=size*(.18+i*.055)*(1+age*.4);
+      c.save();c.globalAlpha*=Math.max(0,.52-age*.46);c.fillStyle='#d2b998';
+      c.beginPath();c.ellipse(p[0],p[1]-size*.23*rise,r,r*.37,0,0,Math.PI*2);c.fill();c.restore();
+    }
   }
- }
- c.restore();
+  c.restore();
+}
+function drawScar(c,m,age,tier='full'){
+  if(age<0||age>=1||tier==='minimal')return;
+  const fade=(1-age)*(1-age),x=m.x,y=m.y,size=Math.max(8,Math.min(60,m.size||30));
+  const dir=m.team==='red'?-1:1,len=size*(tier==='reduced'?2:3.6);
+  c.save();c.globalAlpha*=.50*fade;c.lineCap='round';c.lineJoin='round';
+  c.strokeStyle='#3d3026';c.lineWidth=Math.max(1.2,size*.16*fade);
+  c.beginPath();c.moveTo(x,y);c.lineTo(x+dir*len*.26,y-size*.1);
+  c.lineTo(x+dir*len*.53,y+size*.13);c.lineTo(x+dir*len*.78,y-size*.06);c.lineTo(x+dir*len,y);c.stroke();
+  if(tier!=='reduced'){
+    c.lineWidth=Math.max(1,size*.067*fade);
+    for(let i=1;i<=3;i++){const q=i*.24,side=i%2?1:-1;c.beginPath();
+      c.moveTo(x+dir*len*q,y);c.lineTo(x+dir*len*(q+.08),y+side*size*.43);c.stroke()}
+  }
+  c.restore();
 }
 
 function draw(c,f,age,tier='full'){
@@ -103,5 +126,5 @@ function draw(c,f,age,tier='full'){
  }
  c.restore();
 }
-window.UltimateEffects=Object.freeze({draw,life:(tier,ability)=>ability==='fissure'?(tier==='reduced'||tier==='minimal'?300:620):(tier==='reduced'||tier==='minimal'?220:360)});
+window.UltimateEffects=Object.freeze({draw,drawScar,life:(tier,ability)=>ability==='fissure'?(tier==='reduced'||tier==='minimal'?300:760):(tier==='reduced'||tier==='minimal'?220:360)});
 })();

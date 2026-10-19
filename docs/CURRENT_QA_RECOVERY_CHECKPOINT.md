@@ -1,6 +1,8 @@
+**CURRENT ACTIVE PLAN: [19-TURN RELEASE LEDGER](NINETEEN_TURN_RELEASE_PLAN_2026-10-18.md).** Turns 1–9 complete. #10–11 theatre, #12–13 Goblin L5, #14–15 Beetank L5, #16–17 actual ROI selected, #18 QA, #19 sole conditional release; no previews. Earlier 13-turn schedule below is historical only.
+
 # Showdown Lab — recovered current development checkpoint
 
-**CURRENT ACTIVE PLAN: [13-TURN RELEASE LEDGER](THIRTEEN_TURN_RELEASE_PLAN_2026-10-18.md).** On 18 October user added three ambitious but bounded post-ROI fighter tuning turns: #3 Beetank, #4 Goblin, #5 Barbarian. Original #3–#10 become #6–#13; original ten-turn ledger below is historical, not active. Confirm Turn 2 CI receipt before acting on any tuning diagnosis. No QA preview deployments or production release before #13.
+**HISTORICAL SUPERSEDED PLAN: [13-TURN RELEASE LEDGER](THIRTEEN_TURN_RELEASE_PLAN_2026-10-18.md).** On 18 October user added three ambitious but bounded post-ROI fighter tuning turns: #3 Beetank, #4 Goblin, #5 Barbarian. Original #3–#10 become #6–#13; original ten-turn ledger below is historical, not active. Confirm Turn 2 CI receipt before acting on any tuning diagnosis. No QA preview deployments or production release before #13.
 
 **Reconstructed 16 October 2026 from live Git history, source documents and exact-head GitHub Actions; reliable successor to any missing conversation transcript.** This checkpoint is deliberately short. For the deep chronological narrative, use [QA_IMPLEMENTATION_HANDOFF.md](QA_IMPLEMENTATION_HANDOFF.md), [ROADMAP.md](ROADMAP.md), and [TEST_MATRIX.md](TEST_MATRIX.md). **Always fetch branch HEAD afresh**—the SHA below is the verified source HEAD **before this checkpoint is committed**, not a permanent HEAD.
 
@@ -346,3 +348,7 @@ The first Turn 9 CI attempt failed only because a historical test hardcoded old 
 
 **Turn 10 NEXT:** highly visible Mole L5 ground rift/crack and local dirt/debris battle spectacle, sunny larger sky and wider-use battleground, bounded visual/performance risk. No evolution rebalancing, avoid new speculative multi-arm experiments, preserve physical determinism. Four turns remain in fixed 13-turn plan (#10–13). Controlled merge and one production deployment only in Turn 13 after complete release acceptance.
 
+
+
+## 18 Oct Turn 10 (new 19-turn ledger, candidate pending exact-head CI)
+Reworked actual Mole L5 fissure art with a filled jagged trench, long branching line, brighter rim, shards, dust; physical event now drops a 9-second bounded visual-only scar under combatants. 760ms full FX / reduced 300ms; sky adds warm shafts and visible multi-bank motion, density 80/120/300 throttled. No combat/physics numbers changed. PWA cache/version and all 42 SHA-256 runtime pins regenerated from actual content; exact-head CI + 430x932 Chromium still required, native Safari OPEN. See NINETEEN_TURN_RELEASE_PLAN_2026-10-18.md.

@@ -1499,6 +1499,8 @@ jobs:
           node --check v3/v3.js
           node --check tools/qa/check-mole-rift-spectacle.cjs
           node tools/qa/check-mole-rift-spectacle.cjs
+          node --check tools/qa/check-turn10-theatre.cjs
+          node tools/qa/check-turn10-theatre.cjs
       - name: Confirm gameplay unchanged and atomic pinned bundle
         run: |
           node tools/qa/check-mole-l5-playable-integration.cjs

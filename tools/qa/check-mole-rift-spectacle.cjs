@@ -4,7 +4,7 @@ const code=fs.readFileSync('v3/ultimate-effects.js','utf8'),renderer=fs.readFile
 const env={window:{matchMedia:()=>({matches:false})}};vm.createContext(env);vm.runInContext(code,env);
 assert(renderer.includes('window.UltimateEffects?.life(tier,f.ability)'));
 const U=env.window.UltimateEffects;
-assert(U.life('full','fissure')===620&&U.life('full','seismic')===360);
+assert(U.life('full','fissure')===760&&U.life('full','seismic')===360);
 assert(U.life('minimal','fissure')===300);
 function render(team='blue',tier='full',age=.38){
  const calls=[],c={globalAlpha:1,save(){calls.push(['save'])},restore(){calls.push(['restore'])},
@@ -24,4 +24,10 @@ assert(Math.min(...red.lines.map(v=>v[1]))<0,'red rift direction not reversed');
 assert(minimal.lines.length<blue.lines.length*.5,'minimal mode must skip the branches');
 assert(minimal.fills===0,'minimal mode must skip debris');
 assert(U.life('full','fissure')>U.life('full','cleave'));
-console.log('PASS: Mole L5 high-contrast forward rupture, branching trenches, rock debris, dust crown, ring, 620ms life and density guards');
+assert(renderer.includes("type:'mole-rift'")&&renderer.includes('UltimateEffects?.drawScar?.'),'event-based persistent scar not wired');
+const pts=[],c={globalAlpha:1,save(){},restore(){},beginPath(){},moveTo(...p){pts.push(p)},lineTo(...p){pts.push(p)},stroke(){}};
+U.drawScar(c,{x:120,y:240,team:'blue',size:40},.3,'full');
+assert(pts.length>=10&&pts.flat().every(Number.isFinite),'scar geometry missing/nonfinite');
+const before=pts.length;U.drawScar(c,{x:120,y:240,team:'blue',size:40},.3,'minimal');
+assert(before===pts.length,'minimal density must suppress scars');
+console.log('PASS: Mole L5 high-contrast forward rupture, branching trenches, rock debris, dust crown, ring, 760ms life and density guards');
