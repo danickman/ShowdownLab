@@ -1181,3 +1181,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Hold 4/8; playable first L5 6/8; Relay 5/8; +2 1/8; alternate Beetank 6/8; peer 4/8; whole army doubled 0/8; 3v15 0/4.
 - [x] Stab hit 75→91 / post-cap HP 2320.31→2351.89 / persistent separated fronts 12→15 / HP-front time windows 75→72. Reject higher hit count without better actual wins.
 - [x] Keep live Goblin/Guide/PWA untouched; move concluded source job to manual-only. One more distinct final Goblin L5 test in Turn 13, no old Pin/Rally replay.
+
+
+### Turn 13 /23 — Goblin Smoke Veil and urgent 300 fighter P95 user mandate
+- [x] Allocate 2 specifically measured 300-fighter 95th percentile frame-interval optimization turns #14–15. Profile same-run source before touching engine, measure 1×/10× (not 300 PR preview), verify true terminal physics/fronts and 80/120/300 parity.
+- [x] Shift Beetank to #16–17, Barbarian to #18–19, outliers to #20–21, full QA #22, sole gated merge/production #23.
+- [ ] One new L5 Goblin physical smoke-veil source experiment, not playable until exact heldout test + independent fronts: 224 full terminal +8 severe, unchanged L1–L4 + full RAW/observer RAF SHA.
+- [ ] Continue actual PWA/runtime source only after safe evidence; no third Goblin concept. Current gameplay, SW, 42 SHA digests remain frozen until promotion.

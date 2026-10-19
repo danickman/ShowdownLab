@@ -73,6 +73,29 @@ jobs:
           path: goblin-l5-relay-turn12.json
           if-no-files-found: warn
 
+  goblin-l5-smoke-veil-roi-turn13:
+    # ONE bounded final Goblin L5 concept. Does not mutate playable files.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate actual-source Goblin Smoke Veil experiment
+        run: node --check tools/qa/check-goblin-l5-smoke-veil-roi-turn13.cjs
+      - name: Match real terminal ROI, counterplay, full RAF and independent HP fronts
+        env:
+          QA_GOBLIN_VEIL_RECEIPT: goblin-l5-smoke-veil-turn13.json
+        run: node tools/qa/check-goblin-l5-smoke-veil-roi-turn13.cjs
+      - name: Preserve matched receipts for acceptance and rejection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-smoke-veil-turn13
+          path: goblin-l5-smoke-veil-turn13.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
