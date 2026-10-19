@@ -145,6 +145,29 @@ jobs:
           path: turn14-target-lists.json
           if-no-files-found: warn
 
+  turn15-live-slot-300-ab:
+    # One bounded new behavior-identical engaged-attacker hotpath source A/B.
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Turn 15 exact-source live slot grouping
+        run: node --check tools/qa/check-turn15-live-slots-300.cjs
+      - name: Matched real full-RAF SHA and 300 1x/10x CPU cost
+        env:
+          QA_TURN15_RECEIPT: turn15-live-slots-receipt.json
+        run: node tools/qa/check-turn15-live-slots-300.cjs
+      - name: Archive source receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn15-live-slots
+          path: turn15-live-slots-receipt.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
