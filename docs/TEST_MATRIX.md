@@ -1,3 +1,8 @@
+## Turn19 nearest-target spatial-grid source-only QA
+- [x] MessageChannel real 300 browser trial FAILED genuine tick throughput [CI 39306735031](https://github.com/danickman/ShowdownLab/actions/runs/39306735031); don't conflate smoother RAF with real 10x gameplay.
+- [ ] Per-team live target grid preserve exact 20/40/80/120/300 1x/10x full RAF SHA and 6 heldout 300 samples.
+- [ ] Candidate requires meaningful both-speed CPU speed first, then browser real >=40% P95 AND >=85% baseline physical tick/sec; no playable changes before acceptance.
+
 ## Turn19 NEW real 300 MessageChannel scheduling trial
 - [x] Prior-target anchored nearest full physical RAF SHA PASS but true 300 CPU speed REJECT [CI 39306248103](https://github.com/danickman/ShowdownLab/actions/runs/39306248103).
 - [ ] Browser source-only real 300 1× and 10×: >=40% matched P95 reduction and >=85% original physical ticks/sec simultaneously, two seeds, actual HP and 10s frames.

@@ -2353,6 +2353,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-message-channel-300-browser:
+    # Rejected due actual tick-per-second collapse; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
     # Source-only true-physics MessageChannel scheduling with strict TPS+P95 acceptance.
     # Do not infer victory from smooth rendering while combat speed collapses.
     runs-on: ubuntu-latest
@@ -2382,4 +2384,28 @@ jobs:
         with:
           name: turn19-channel-browser
           path: ${{ runner.temp }}/turn19-channel-browser
+          if-no-files-found: warn
+
+  turn19-live-target-grid-source:
+    # Speed up repeat nearest lookups, not collision, with exact dynamic target invalidations.
+    # No playable source changes; strict exact physical full RAF SHA 10+6 and real source CPU P95.
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-check spatial-nearest 300 research candidate
+        run: node --check tools/qa/check-turn19-live-target-grid.cjs
+      - name: Compare all 20/40/80/120/300 1x 10x exact full RAF SHA plus paired 300 CPU
+        env:
+          QA_TURN19_GRID_RECEIPT: turn19-target-grid.json
+        run: node tools/qa/check-turn19-live-target-grid.cjs
+      - name: Preserve full physical research receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-target-grid
+          path: turn19-target-grid.json
           if-no-files-found: warn
