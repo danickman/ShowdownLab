@@ -2094,3 +2094,26 @@ jobs:
           name: turn19-thread-raf
           path: ${{ runner.temp }}/turn19-browser
           if-no-files-found: warn
+
+  turn19-dense-solver-source:
+    # One distinct structure-of-arrays deterministic Gauss-Seidel acceleration candidate.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check exact full-RAF dense-300 solver candidate
+        run: node --check tools/qa/check-turn19-dense-solver-300.cjs
+      - name: Paired current versus structure-of-arrays original-contact-order physics
+        env:
+          QA_TURN19_DENSE_RECEIPT: turn19-dense-300.json
+        run: node tools/qa/check-turn19-dense-solver-300.cjs
+      - name: Archive real full RAF SHA and 1x/10x CPU P95
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-dense-solver
+          path: turn19-dense-300.json
+          if-no-files-found: warn
