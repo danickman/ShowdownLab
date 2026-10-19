@@ -1,4 +1,6 @@
-# Showdown Lab — AUTHORITATIVE TWENTY-FIVE-TURN RELEASE LEDGER
+> **SUPERSEDED — historical only.** The authoritative plan is [the 26-turn release ledger](TWENTY_SIX_TURN_RELEASE_PLAN_2026-10-19.md). No 25-turn merge/deploy is permitted.
+
+# Showdown Lab — HISTORICAL SUPERSEDED TWENTY-FIVE-TURN RELEASE LEDGER
 Approved 19 October 2026 Toronto. Supersedes historical 23-turn ledger; user expressly authorizes two new issue-repair turns immediately after Beetank #17. EIGHT additional bounded fighter turns in total: two Goblin L5, two Beetank L5, two Barbarian L5, and two evidence-selected; no open-ended experiment loops. Repository danickman/ShowdownLab; QA branch qa-turn1-duel-baseline; draft PR #14 into main. Main and production frozen until final release gate. No Vercel preview deployments.
 
 ## Turn-by-turn ledger

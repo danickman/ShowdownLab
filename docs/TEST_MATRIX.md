@@ -1,3 +1,11 @@
+## Turn19 FAILED acceptance — honest source and browser metrics
+- [x] 15/15 exact QA jobs at [39216570647](https://github.com/danickman/ShowdownLab/actions/runs/39216570647) green for tests/syntax, but P1 **remains unresolved** (not accepted).
+- [x] Y-band source exact 10+6 complete physical RAF parity, **REJECT**: 300 Node P95 1× 66.356→66.885ms; 10× 371.366→418.599ms. All six heldout trials slower, no browser promotion.
+- [x] Worker 300 actual Chromium P95 1× 366.6→766.7ms and 366.7→600ms; 10× 1116.7→866.7ms and 916.7→933.3ms, REJECT. 300 damage and ticks real, but no same-run BOTH-speed win.
+- [x] Dense source-only 10× modest 11–13% gain, inconsistent 1×, no browser acceptance; research only.
+- [ ] **P1 STILL OPEN**—fix 300 RAF 1× AND 10× with genuine full physics/fighters/FX before Turn26. Physical Safari remains a separate gate.
+- [ ] Turn20 current-live 40-front remediation still required, separate P1.
+
 ## Turn19 current measured candidate verdict
 - [x] Cooperative threaded CI 39215945265 genuine RAF 300 1× P95 366.6→766.7ms and 366.7→600ms; 10× 1116.7→866.7ms and 916.7→933.3ms. **REJECT** no both-speed repeatable benefit.
 - [x] Dense collision SoA exact full RAF 10 ordinary+6 heldout SHA PASS; 300 CPU P95 1× 47.575→40.565ms, 10× 357.677→340.15ms, 1× heldout 1 regression: research only.

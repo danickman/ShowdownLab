@@ -2121,6 +2121,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-yband-source:
+    # Rejected after source parity but measured repeated 300 slowdown.
+    if: github.event_name == 'workflow_dispatch'
     # Bounded ordered physical collision pruning by LIVE y-band membership.
     runs-on: ubuntu-latest
     timeout-minutes: 15
