@@ -2537,6 +2537,8 @@ jobs:
           if-no-files-found: warn
 
   turn20-local-commitment-research:
+    # REJECTED weak 40 persistence; archive to manual.
+    if: github.event_name == 'workflow_dispatch'
     # Source-only physical close-contact continuity after stronger lane penalty proved worse at 40.
     runs-on: ubuntu-latest
     timeout-minutes: 26
@@ -2557,4 +2559,28 @@ jobs:
         with:
           name: turn20-local-commitment
           path: turn20-local-commitment.json
+          if-no-files-found: warn
+
+  turn20-pressure-spread-research:
+    # Third distinct physical source-only hypothesis: distribute real melee target pressure;
+    # reject if true current-live 40 persistence target is not attained.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check real pressure-spread physical study syntax
+        run: node --check tools/qa/check-turn20-pressure-spread.cjs
+      - name: Compare full 20/40 all-role live battle positive-HP front graph
+        env:
+          QA_TURN20_FRONTS: turn20-pressure-spread.json
+        run: node tools/qa/check-turn20-pressure-spread.cjs
+      - name: Archive source-real full-terminal live metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-pressure-spread
+          path: turn20-pressure-spread.json
           if-no-files-found: warn
