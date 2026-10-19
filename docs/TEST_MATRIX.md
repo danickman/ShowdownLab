@@ -1218,3 +1218,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [ ] One distinct physically landed heavy fracture for 96 ticks, +65% subsequent ordinary natural damage against heavy only, no free new hits or global stat.
 - [ ] 224 true terminal control/variant full-match comparisons +8 severe and untouched low-tier/full-RAF observer parity, fresh 75973/89399 seeds 20/40 two sides, hold/recruit/alternate/peer/family x2/entire enemy x2.
 - [ ] Record exact-head CI wins, physically separated actual-HP damage fronts/windows, anti-numerical counterplay and explicit promote/reject. No main/prod/preview.
+
+### Turn 16 playable Beetank L5 Siege Fracture QA
+- [x] Genuine source current-vs-fracture 224 full terminal +8 severe, full RAF observer and L1-L4 parity; first-L5 7→8/8, peer 4/8, whole enemy army x2 still 7/8 counter, 3v15 always counters.
+- [x] Real independent persistent damage fronts 16→18, separated HP windows 117→118; current-live 20 1/1 persistent,26/26 windows, 40 30/30 persistent and178/177 windows (0.56%). Canonical historic fixed-Goose floor unchanged.
+- [x] Frozen original ultimate fixture, exact vetted playable ultimate mechanics and Guide spec, 42 atomically pinned root/runtime SHA PWA cache, no core physics change.
+- [ ] Exact new QA CI including source-live front case, Guide, offline hash/recovery, 300 fighters, browser density and full 12 standard jobs; native Safari OPEN.
+- [ ] No main, Vercel preview, production until Turn23 conditional release.

@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const read=p=>fs.readFileSync(path.resolve(__dirname,'../..',p),'utf8');
+const original=read('tools/qa/fixtures/beetank-prefracture-ultimate-turn16.js'),live=read('v3/ultimate-abilities.js');
+const a="function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){",b="if(!r||!['sniper','dragon','beetank','mole','barbarian'].includes(a.type))return hits;",o="l5:'Siege Breaker: at L5, horn strikes breach Beetank, Turtle and Dragon opponents at actual heavy-body contact. Each second hit triggers a wider 55% Seismic blast with a brief stagger.'",n="l5:'Siege Fracture: L5 horns and rams fracture actual heavy Beetank, Turtle or Dragon contact for 96 ticks, exposing the victim to 65% more ordinary allied damage. Every second horn retains 55% Seismic splash.'";
+assert.equal(original.split(a).length,2);assert.equal(original.split(b).length,2);assert.equal(original.split(o).length,2);
+const expected=original.replace(o,n).replace(a,a+'\n '+"if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type))damage*=1.65;").replace(b,"if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}"+'\n'+b);
+assert.equal(live,expected,'Real source must equal exactly vetted heavy-only physics plus Guide wording');
+assert.equal(live.split('siegeFractureUntil').length,4,'exactly one affected victim/time tracking path');
+assert(live.includes('65%')&&live.includes('96 ticks')&&live.includes('Beetank, Turtle or Dragon'));
+console.log('PASS: vetted actual playable Beetank L5 Siege Fracture source, no extra hits/changed roles, updated Guide');
