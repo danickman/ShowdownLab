@@ -50,6 +50,8 @@ jobs:
           node --check tools/qa/check-turn11-arena.cjs
           node tools/qa/check-turn11-arena.cjs
   goblin-l5-relay-roi-turn12:
+    # Completed rejected experiment; manual research only to conserve CI.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:

@@ -1173,3 +1173,11 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Turn 11 exact source PR CI 39189338910 green 12/12; 300 bodies and 42 SHA assets, native Safari still OPEN.
 - [ ] Run 224 real source-terminal L5 match variants +8 literal 3v15, hold/recruits/alternate/peer/doubled family/entire enemy x2, four observer-raw full RAF pairs, 12 unchanged L1–L4 RAF parity, authentic positive HP and separated front/window accounting.
 - [ ] Turn 12 candidate is TEST-ONLY, not playable. Use fresh heldout to select/reject and only one distinct Turn 13 follow-up.
+
+
+### Turn 12 Goblin L5 final actual-source receipt
+- [x] PR CI 39190999829 13/13 automatic jobs green including 224 matched +8 severe real terminal; 58 older research jobs skipped, no preview.
+- [x] 4 raw/observer complete RAF SHA parity, 12 exact untouched low-tier SHAs, 2 deterministic repeats, full population/positive HP and independent fronts.
+- [x] Hold 4/8; playable first L5 6/8; Relay 5/8; +2 1/8; alternate Beetank 6/8; peer 4/8; whole army doubled 0/8; 3v15 0/4.
+- [x] Stab hit 75→91 / post-cap HP 2320.31→2351.89 / persistent separated fronts 12→15 / HP-front time windows 75→72. Reject higher hit count without better actual wins.
+- [x] Keep live Goblin/Guide/PWA untouched; move concluded source job to manual-only. One more distinct final Goblin L5 test in Turn 13, no old Pin/Rally replay.
