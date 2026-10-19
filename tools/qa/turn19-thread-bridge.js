@@ -34,6 +34,8 @@ function startWorker(blue,red){
   last=m.snapshot;stats.workerSnapshots++;stats.workerTicks=last.tick;
   stats.workerDamage=last.units.reduce((s,u)=>s+Math.max(0,u.maxHp-u.hp),0);
   try{callback(last)}catch(err){console.error('[worker bridge] state subscriber',err)}
+  // Acknowledge only after all adapter listeners and state clone operations finish.
+  send('ack');
  };
  w.onerror=e=>{invokeFallback('worker runtime error: '+e.message)};
  send('init',{seed:settings.seed,speed:settings.speed});

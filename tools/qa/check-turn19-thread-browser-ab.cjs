@@ -21,7 +21,7 @@ const p95=x=>{const a=[...x].sort((a,b)=>a-b);return a[Math.floor((a.length-1)*.
    try{
     await page.setBypassServiceWorker(true);
     await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
-    page.on('pageerror',e=>errors.push('page: '+e.message));
+    page.on('pageerror',e=>errors.push('page: '+(e.stack||e.message)));
     page.on('workercreated',w=>w.on('error',e=>errors.push('worker: '+e.message)));
     await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownQA&&window.ShowdownAdapter,{timeout:90000});
@@ -45,21 +45,24 @@ const p95=x=>{const a=[...x].sort((a,b)=>a-b);return a[Math.floor((a.length-1)*.
      const before=ShowdownAdapter.getState(),startHp=before.units.reduce((s,u)=>s+u.hp,0);
      ShowdownQA.clearRenderProfile();
      ShowdownAdapter.setSpeed(speed);ShowdownAdapter.pauseBattle();
-     const observations=count===300?(speed===10?20:38):18,stamps=[],started=performance.now();let censored=false;
+     const observations=count===300?(speed===10?20:38):18,stamps=[],started=performance.now(),minElapsed=count===300?5500:0;let censored=false;
      await new Promise(resolve=>{
       let done=false;const timer=setTimeout(()=>{if(!done){done=true;censored=true;resolve()}},60000);
-      function frame(now){if(done)return;stamps.push(now);if(stamps.length>=observations+1){done=true;clearTimeout(timer);resolve();return}requestAnimationFrame(frame)}
+      function frame(now){if(done)return;stamps.push(now);if(stamps.length>=observations+1&&performance.now()-started>=minElapsed){done=true;clearTimeout(timer);resolve();return}requestAnimationFrame(frame)}
       requestAnimationFrame(frame);
      });
      const a=stamps.slice(1).map((v,i)=>v-stamps[i]),state=ShowdownAdapter.getState(),rp=ShowdownQA.renderProfile().slice(-Math.max(observations,20)).map(x=>x.total).filter(Number.isFinite);
      return{population:before.units.length,alive:state.units.filter(u=>u.hp>0).length,frames:a.length,censored:censored||a.length<observations,
-      tick:state.debug?.tick||0,snapshotHp:state.units.reduce((s,u)=>s+u.hp,0),startHp,
+      tick:state.debug?.tick||0,snapshotHp:state.units.reduce((s,u)=>s+u.hp,0),startHp,progressed:!!state.debug?.tick&&state.units.reduce((s,u)=>s+u.hp,0)<startHp,
       p50IntervalMs:[...a].sort((x,y)=>x-y)[Math.floor((a.length-1)*.5)]||null,p95IntervalMs:[...a].sort((x,y)=>x-y)[Math.floor((a.length-1)*.95)]||null,
       renderP95Ms:[...rp].sort((x,y)=>x-y)[Math.floor((rp.length-1)*.95)]||null,
       elapsedMs:performance.now()-started,worker:window.__showdownThreadStats||null};
     },{count,speed,rep});
     assert.equal(data.population,count,'true source match population');assert(data.frames>=12,'not enough real RAF samples');
-    if(mode==='worker'&&count===300)assert(data.worker?.workerSnapshots>0&&!data.worker.errors.length,'worker did not emit real states');
+    if(mode==='worker'&&count===300){
+     assert(data.worker?.workerSnapshots>=3&&!data.worker.errors.length,'worker did not emit multiple real states');
+     assert(data.progressed&&data.tick>25,'worker failed to advance genuine HP-damaging combat');
+    }
     return{mode,count,speed,rep,...data,errors};
    }finally{await page.close()}
   }
