@@ -122,7 +122,8 @@ jobs:
           if-no-files-found: warn
 
   turn14-targets-300-ab:
-    # Second independent bounded target-list cost attempt; one-shot research.
+    # Source exact-state safe but 300 P95 not improved; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:

@@ -1196,3 +1196,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] REJECT candidate, retain original L5 Pack Ambush; two Goblin turns now CLOSED, no third tuning loop.
 - [x] Re-disable expensive concluded source CI job except explicit manual dispatch, no PWA change.
 - [ ] T14/15 real 300-fighter 95th-percentile frame-interval improvements, same-run 1×/10× browser measurements and unchanged full-RAF simulation parity; Safari still separate physical device acceptance.
+
+
+### Turn 14/23 — 300-fighter performance attempts CLOSED, not promoted
+- [x] Source original-vs-live-spatial index study PR 39199905190: 10 authentic 20/40/80/120/300 × 1/10x full-RAF SHA matches + 6 fresh 300 heldout, no semantic drift. Rejected: 300 CPU P95 1× **47.08→79.12ms**, 10× **355.66→506.66ms**.
+- [x] Source original-vs-target-list study PR 39200312249: 10 full-RAF SHA matches + 6 heldout 300 matches, no semantic drift. Rejected: 300 Node CPU P95 1× **51.05→52.34ms**, 10× **362.99→387.52ms**, heldouts no reproducible speed gain.
+- [x] No runtime source, PWA 42 hashes, Guide, FX or fighter physics edited; archived both expensive completed studies behind manual workflow_dispatch. No preview/main/prod.
+- [ ] Turn 15 REAL Chromium 300 RAF p95 at 1× and 10×, same-host A/B and physics-safe substantive engine improvement. Node CPU time != browser RAF interval; native iPhone Safari still OPEN.
