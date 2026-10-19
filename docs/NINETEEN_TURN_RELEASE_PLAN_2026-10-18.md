@@ -13,8 +13,8 @@ Approved 18 October 2026 Toronto. Replaces the prior thirteen-turn release plan 
 | 7 — done | Performance 80/120/300 and draft ×2 projected limit 120; slower allocation-free targeting rejected. |
 | 8 — done | Legal one draft choice/team/round, deterministic true mutual KO DRAW, no zombie leakage. |
 | 9 — done | 430x932 DPR3 / 390 / 375 mobile Guide 340px L4 spotlight and safe draft CTA; native iPhone Safari OPEN. |
-| 10 — active | Bigger dramatic Mole L5 rift with jagged black chasm, seven branched faults, 12 stones/4 dust crowns and bounded 9s fading actual physical impact scar; warmer animated sky, dense and reduce-motion guards; unchanged battle physics; current-source CI needed. |
-| 11 | Daylight arena variety, skyline/floor polish, sprite crop repairs, separation/telegraph readability; 80/120/300 frame cost. |
+| 10 — COMPLETE (PR 39188323584: 12/12 green) | Bigger dramatic Mole L5 rift with jagged black chasm, seven branched faults, 12 stones/4 dust crowns and bounded 9s fading actual physical impact scar; warmer animated sky, dense and reduce-motion guards; unchanged battle physics; current-source CI needed. |
+| 11 — IMPLEMENTED, CI PENDING | Reuse one cached DPR-capped panorama per active arena; draw variant hue/sepia once, not each RAF. Crystal outer-lane spires and Solar radial sandstone marks painted once into floor cache. Source geometry/crowd/mobile checks mandatory; native Safari still open. |
 | 12 — Goblin L5-A NEW | Attribute small-pack first-L5 ROI; ONE ambitious synchronized pack contact mechanic, full source-real mirrors/fronts/number counters; no Pin2/Pin4 or Rally replay. |
 | 13 — Goblin L5-B NEW | ONE independent meaningful refinement or replacement; fresh matched heldout and safe playable selection/Guide/FX/PWA or baseline retention. |
 | 14 — Beetank L5-A NEW | Diagnose heavy-only ROI vs +2, alternates, equal L5, counters; ONE hard-hitting bounded heavy frontline-breaker concept, 20/40 true fronts and 300 safety. |

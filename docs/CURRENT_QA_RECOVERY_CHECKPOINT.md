@@ -355,3 +355,7 @@ Reworked actual Mole L5 fissure art with a filled jagged trench, long branching 
 
 ### Turn 10 required CI expansion (19 Oct UTC)
 Exact first-head PR [39187963564](https://github.com/danickman/ShowdownLab/actions/runs/39187963564) at f47998473e3f7c5344ec26b46a290fb7fdc9d047: completed SUCCESS, 12 required jobs green, 58 intentionally deferred; 300/portrait/browser/PWA/fronts succeeded. That run did not execute the two new theatre-only assertion scripts because their original job was manual research. This follow-up moves BOTH geometry/reduced-motion/density assertions into the always-on root-release-gate without enabling additional expensive jobs. Turn 10 completion requires the *new* exact-head PR success and both new scripts green. Native Safari and visual phone inspection remain OPEN.
+
+
+## Turn 11 implementation
+Active 19-turn ledger Turn 10 exact-head 39188323584 green; Turn 11 cached sky and two uniquely inlaid static arena floors implemented against dbc07a2584ec238d53f025420b76a0b09d5fe296. Exact new-head 12-job CI pending, no production. [Turn11 details](TURN11_ARENA_PERFORMANCE_2026-10-18.md).

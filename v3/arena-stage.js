@@ -109,7 +109,34 @@
       for(const side of [0,1])for(let i=0;i<5;i++){
         const x=side?w-rail-12:rail+12,y=h*(.14+i*.16);ctx.globalAlpha=.64;
         ctx.beginPath();ctx.moveTo(x,y-14);ctx.lineTo(x+7,y);ctx.lineTo(x,y+8);ctx.lineTo(x-7,y);ctx.closePath();ctx.fill();ctx.stroke();
-      }ctx.restore();
+      }
+      // The two final arenas have unmistakable cached floor material identities.
+      if(crystal){
+        ctx.fillStyle='#81c9d1';ctx.strokeStyle='#4c8795';ctx.lineWidth=1.4;
+        for(const side of [-1,1])for(let i=0;i<5;i++){
+          const x=w*.5+side*w*.42,y=h*(.14+i*.17),s=w*(.014+(i%2)*.006);
+          ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(x,y-s*2.5);
+          ctx.lineTo(x+s*.72,y-s*.35);ctx.lineTo(x,y+s*1.4);ctx.lineTo(x-s*.72,y-s*.35);
+          ctx.closePath();ctx.fill();ctx.stroke();
+          ctx.globalAlpha=.32;ctx.strokeStyle='#ecffff';ctx.beginPath();
+          ctx.moveTo(x,y-s*2.5);ctx.lineTo(x,y+s*1.4);ctx.stroke();ctx.strokeStyle='#4c8795';
+        }
+      }else{
+        ctx.strokeStyle='#bd8540';ctx.lineWidth=2;ctx.globalAlpha=.37;
+        for(let i=0;i<10;i++){
+          const a=i*Math.PI/5,inner=w*.30,outer=w*.36;
+          const x=w*.5+Math.cos(a)*inner,y=h*.58+Math.sin(a)*inner*.65;
+          ctx.beginPath();ctx.moveTo(x,y);
+          ctx.lineTo(w*.5+Math.cos(a)*outer,h*.58+Math.sin(a)*outer*.65);ctx.stroke();
+        }
+        for(const side of [-1,1])for(let i=0;i<4;i++){
+          const x=w*.5+side*w*.415,y=h*(.17+i*.20),r=w*.018;
+          ctx.fillStyle='#fff1b4';ctx.globalAlpha=.48;ctx.beginPath();
+          ctx.moveTo(x,y-r);ctx.lineTo(x+r*.7,y);ctx.lineTo(x,y+r);
+          ctx.lineTo(x-r*.7,y);ctx.closePath();ctx.fill();
+        }
+      }
+      ctx.restore();
     }
     // Dressed perimeter stones connect the floor to the distant courtyard wall.
     ctx.fillStyle=theme.stone;ctx.fillRect(0,0,rail,h);ctx.fillRect(w-rail,0,rail,h);

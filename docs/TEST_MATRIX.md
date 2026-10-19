@@ -1158,3 +1158,11 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Exact QA b5e5b2b real Chromium 430×932 DPR3, 390×844, 375×667, ten Guide cards, 3 draft offers plus CTA, no horizontal overflow or figure crop; screenshots uploaded in artifact of CI 39183539283
 - [x] All 42 SHA256 shell pins, offline rollback and full phone density performance/safety test jobs green in 12/12 CI
 - [ ] OPEN manual gate: real iPhone 14 Pro Max Safari Dynamic Island, home indicator, true touch input, sprite framing and frame-rate (Chromium is not Safari)
+
+
+### Turn 11 — scenic compositing / density performance
+- [x] Source sky compositor cache retains one active vista per arena/viewport; filter only on cold cache, with safe fallback and DPR cap.
+- [x] Cached arena stage has distinguishable Crystal spires and Solar radial masonry away from centre fight.
+- [x] Previously restored Turtle foot, 430x932 authored sprite envelopes and combat staging remain unchanged.
+- [ ] Exact-head PR job validates warm frame cost by canvas-call bound; all 42 PWA SHA pins, 300-body and 430/390/375 Chromium screenshot checks.
+- [ ] Real iPhone 14 Pro Max Safari interaction, crop, thermal and frame-time tests still OPEN. Separate CI p95 estimates are not verified comparative speedups.

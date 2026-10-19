@@ -43,6 +43,12 @@ jobs:
           node --check v3/v3.js
           node tools/qa/check-mole-rift-spectacle.cjs
           node tools/qa/check-turn10-theatre.cjs
+      - name: Turn 11 source-cached sky and crystal/solar floor integrity
+        run: |
+          node --check v3/arena-art.js
+          node --check v3/arena-stage.js
+          node --check tools/qa/check-turn11-arena.cjs
+          node tools/qa/check-turn11-arena.cjs
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
