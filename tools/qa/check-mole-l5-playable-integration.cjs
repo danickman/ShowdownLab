@@ -10,9 +10,13 @@ const expected=frozen.replace("['sniper','dragon','beetank','barbarian']","['sni
  .replace("if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){",body+'\n'+"if(a.type==='barbarian'&&['axe_swing','rage_swing'].includes(a.action)){").replace(oldSpec,newSpec);
 // Normalize only the independent post-Twin Beetank changes, preserving strict Mole mechanics.
 const historicalBee="l5:'Every second horn strike splashes 55% damage; wider radius and 0.67-second stun.'";
-const siegeBee="l5:'Siege Breaker: at L5, horn strikes breach Beetank, Turtle and Dragon opponents at actual heavy-body contact. Each second hit triggers a wider 55% Seismic blast with a brief stagger.'";
-assert(live.includes(siegeBee)&&live.includes("cue(a,r===2?'siege':'seismic',tick,t)}"),'expected Siege Breaker not found');
-const moleExact=live.replace(siegeBee,historicalBee).replace("cue(a,r===2?'siege':'seismic',tick,t)}","cue(a,'seismic',tick,t)}");
+const fractureBee="l5:'Siege Fracture: L5 horns and rams fracture actual heavy Beetank, Turtle or Dragon contact for 96 ticks, exposing the victim to 65% more ordinary allied damage. Every second horn retains 55% Seismic splash.'";
+const fractureIncoming="if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type))damage*=1.65;";
+const fractureAfter="if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}";
+assert(live.includes(fractureBee)&&live.includes('\n '+fractureIncoming)&&live.includes('\n '+fractureAfter)&&live.includes("cue(a,r===2?'siege':'seismic',tick,t)}"),'vetted Beetank fracture not found');
+const moleExact=live.replace(fractureBee,historicalBee)
+ .replace('\n '+fractureIncoming,'').replace('\n '+fractureAfter,'')
+ .replace("cue(a,r===2?'siege':'seismic',tick,t)}","cue(a,'seismic',tick,t)}");
 assert.strictEqual(moleExact,expected,'QA Mole Twin full-source mechanics changed outside the independently integrated Beetank L5 scope');
 const fx=read('v3/ultimate-effects.js'),renderer=read('v3/v3.js');
 assert(fx.includes("f.ability==='fissure'")&&fx.includes("f.team==='red'?-1:1"));
