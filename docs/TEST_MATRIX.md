@@ -1,3 +1,8 @@
+## Turn19 NEW real 300 MessageChannel scheduling trial
+- [x] Prior-target anchored nearest full physical RAF SHA PASS but true 300 CPU speed REJECT [CI 39306248103](https://github.com/danickman/ShowdownLab/actions/runs/39306248103).
+- [ ] Browser source-only real 300 1× and 10×: >=40% matched P95 reduction and >=85% original physical ticks/sec simultaneously, two seeds, actual HP and 10s frames.
+- [ ] Reject without runtime integration if candidate fails any real physical speed gate; preserve 42 SHA and main/prod.
+
 ## Turn19 bound-anchored nearest source-only 300 CPU trial
 - [ ] Exact original vs cached-prior-bound full RAF SHA at 20/40/80/120/300 and 1×/10× plus six 300 heldout samples.
 - [ ] Genuine paired Node 300 CPU P95 repeatable improvement BOTH speeds; if no meaningful win, reject without browser.

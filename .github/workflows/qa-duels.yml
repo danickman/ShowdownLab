@@ -2327,6 +2327,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-anchored-nearest-source:
+    # Rejected after true full-RAF parity but slower at 300; manual research archive only.
+    if: github.event_name == 'workflow_dispatch'
     # New deterministic previous-target distance bound with original target order and equal-score tie semantics.
     # Source-only, cheap parity+timing gate before any browser run.
     runs-on: ubuntu-latest
@@ -2348,4 +2350,36 @@ jobs:
         with:
           name: turn19-anchored-nearest
           path: turn19-anchored-nearest.json
+          if-no-files-found: warn
+
+  turn19-message-channel-300-browser:
+    # Source-only true-physics MessageChannel scheduling with strict TPS+P95 acceptance.
+    # Do not infer victory from smooth rendering while combat speed collapses.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify Chromium runtime
+        run: node tools/qa/setup-browser.cjs
+      - name: Source-exact physics step and strict channel A/B checks
+        run: node --check tools/qa/check-turn19-channel-browser.cjs
+      - name: Real 300 full FX 1x and 10x RAF plus >=85% baseline genuine TPS
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_CHANNEL_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-channel-browser
+        run: node tools/qa/check-turn19-channel-browser.cjs
+      - name: Preserve strict research receipt, even on rejected candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-channel-browser
+          path: ${{ runner.temp }}/turn19-channel-browser
           if-no-files-found: warn
