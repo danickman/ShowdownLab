@@ -33,6 +33,13 @@ const p95=x=>{const a=[...x].sort((a,b)=>a-b);return a[Math.floor((a.length-1)*.
      const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'],each=count/20;
      const army=Object.fromEntries(types.map(t=>[t,each])),levels=Object.fromEntries(types.map((t,i)=>[t,[1,4,5][i%3]]));
      ShowdownAdapter.startMatch({blue:army,red:army,blueLevels:levels,redLevels:levels,blueLives:1,redLives:1,seed:81337+rep});
+     // Dedicated Worker initial deployment emits asynchronously; never measure stale previous Quick Match 11-unit snapshot.
+     const deployedAt=performance.now();
+     while(ShowdownAdapter.getState().units.length!==count&&performance.now()-deployedAt<20000){
+       if(window.__showdownThreadStats?.errors.length)throw Error('Worker deployment: '+JSON.stringify(window.__showdownThreadStats));
+       await new Promise(r=>setTimeout(r,60));
+     }
+     if(ShowdownAdapter.getState().units.length!==count)throw Error('Timed out waiting for '+count+' real fighters: '+JSON.stringify(window.__showdownThreadStats||{}));
      ShowdownAdapter.setSpeed(1);ShowdownAdapter.pauseBattle();
      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
      const before=ShowdownAdapter.getState(),startHp=before.units.reduce((s,u)=>s+u.hp,0);

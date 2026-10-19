@@ -8,3 +8,6 @@ Until implemented and measured, this is **OPEN P1, NOT COMPLETED**. Next separat
 
 ## Source-only prototype
 QA-only test code under tools/qa/turn19-sim-worker.js and tools/qa/turn19-thread-bridge.js. Actual Chromium A/B job turn19-thread-browser-ab; **DO NOT confuse a successful test script with an adopted playable runtime.** All default v3 files, service worker and PWA SHA remain unchanged pending evidence. Browser test must demonstrate real positive tick/HP progression, adequate RAF observations, and correct Worker load. CastSpell async dispatch and fallback must be acceptance-tested separately before runtime promotion.
+
+## First real-browser harness correction
+[PR run 39214429306](https://github.com/danickman/ShowdownLab/actions/runs/39214429306) first 300 inline reference passed 38 genuine RAF samples at 1×, P95 450ms and 184 ticks with falling actual HP; worker arm failed harness setup 11!=300 because async worker deployment had not emitted initial snapshot and it read stale Quick Match. This does NOT establish worker performance failure. Harness now awaits exact 300 deployed game units or raises recorded worker error before arming and measuring. Retest exact-head CI; zero playable runtime files touched.
