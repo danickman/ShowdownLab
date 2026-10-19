@@ -7,6 +7,6 @@ const oldDescription="l5:'Siege Fracture: L5 horns and rams fracture actual heav
 assert.equal(before.split(oldIncoming).length,2);assert.equal(before.split(oldHit).length,2);assert.equal(before.split(oldDescription).length,2);
 const expected=before.replace(oldIncoming,newIncoming).replace(oldHit,newHit).replace(oldDescription,newDescription);
 assert.equal(actual,expected,'live ultimate must differ from accepted Siege Fracture by ONLY bounded Anvil physics and the L5 Guide description');
-assert.equal(actual.split('siegeAnvilCharges').length,4,'exactly one new charge consumer, one setter, one read');
+assert.equal(actual.split('siegeAnvilCharges').length,5,'exactly two consumer mentions and two setter mentions; no duplicate charge paths');
 assert(actual.includes('100 ticks')&&actual.includes('two real follow-up hits'));
 console.log('PASS: Beetank Hammer & Anvil actual source matches accepted physics overlay and Guide exactly; no L1-L4 / unrelated fighter changes');
