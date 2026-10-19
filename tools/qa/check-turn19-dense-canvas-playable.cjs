@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('fs'),crypto=require('crypto'),assert=require('node:assert/strict'),path=require('path');
+const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const src=read('v3/v3.js'),html=read('index.html'),sw=read('sw.js');
+const marker="function draw(time){if(current!=='battle'||!cam)return;",replacement="function draw(time){if(current!=='battle'||!cam)return;\n// Only exceptional full-arena stress density uses lower raster backing; positions, fighters, FX, and combat remain unchanged.\nconst __denseScale=state.units.length>=160?((state.speed||1)>=10?.85:1):Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);\nif(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}";
+assert.equal(src.split(replacement).length,2,'one exact density-aware theatre draw rule required');
+const historic=src.replace(replacement,marker);
+assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
+assert(html.includes('/v3/v3.js?v=turn19-dense-canvas1')&&sw.includes('/v3/v3.js?v=turn19-dense-canvas1'),'pinned HTML/SW cache must use new runtime URL');
+assert(sw.includes('showdown-lab-release-turn19-densecanvas1'),'new offline cache version');
+const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
+for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');
+assert.equal(scale(160,1,3),1);assert.equal(scale(300,1,3),1);assert.equal(scale(300,10,3),.85);assert.equal(scale(300,10,1),.85);
+console.log('PASS Turn19 playable density-aware canvas contract, preserved art source, 300 dual-speed and 80/120 full-resolution');

@@ -103,6 +103,9 @@ let vignetteCache={key:null,gradient:null};
 // QA-only timing: sampled after each pass; never allocated during normal gameplay.
 const renderProfiler=new URLSearchParams(location.search).has('qa')?{frames:[],max:360}:null;
 function draw(time){if(current!=='battle'||!cam)return;
+// Only exceptional full-arena stress density uses lower raster backing; positions, fighters, FX, and combat remain unchanged.
+const __denseScale=state.units.length>=160?((state.speed||1)>=10?.85:1):Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);
+if(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}
 const frameStart=renderProfiler?performance.now():0;if(!introSnapshot||lastRoundSeen!==(state.round||1)){window.FighterAssets?.resetPoseMemory?.();staging?.reset();lastRoundSeen=state.round||1;introSnapshot={round:lastRoundSeen,arena:arenaFor().name,blue:state.units.filter(u=>u.team==='blue'&&u.hp>0).map(u=>({type:u.type,level:u.level||1})),red:state.units.filter(u=>u.team==='red'&&u.hp>0).map(u=>({type:u.type,level:u.level||1})),t:performance.now()};battleIntroAt=introSnapshot.t}const live=renderSnapshot().live;cam.focus(live);staging?.prepare(live,cam,time);for(const[id,d]of defeated)if(time-d.t>900)defeated.delete(id);const sx=shake?(Math.random()-.5)*shake:0,sy=shake?(Math.random()-.5)*shake*.65:0;shake*=.80;ctx.save();ctx.translate(sx,sy);if(impactPunch){const age=(time-impactPunch.t)/150;if(age>=1)impactPunch=null;else if(age>=0){const strength=impactPunch.strength||1,curve=Math.sin(Math.min(1,age)*Math.PI)*(1-age),scale=1+curve*.018*strength,px=impactPunch.x||view.w*.5,py=impactPunch.y||view.h*.55;ctx.translate(px,py);ctx.scale(scale,scale);ctx.translate(-px,-py)}}const passStart=renderProfiler?performance.now():0;
 arena(time);
 const afterArena=renderProfiler?performance.now():0;

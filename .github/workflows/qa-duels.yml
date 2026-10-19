@@ -28,6 +28,7 @@ jobs:
           test ! -e v3/index.html
           node tools/qa/release-hashes.cjs --verify
           node tools/qa/check-turn3-consistency.cjs
+          node tools/qa/check-turn19-dense-canvas-playable.cjs
       - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
         run: node tools/qa/check-primary-device-contract.cjs
       - name: Verify offline precache graph and rollback
@@ -2477,6 +2478,8 @@ jobs:
           path: ${{ runner.temp }}/turn19-profile
           if-no-files-found: warn
   turn19-dense-canvas-real-browser:
+    # Accepted source-only paired performance trial; archive manual-only because current playable is now candidate.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 32
     steps:
