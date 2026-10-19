@@ -254,6 +254,8 @@ jobs:
           if-no-files-found: warn
 
   beetank-l5-anvil-roi-turn17:
+    # Completed 232 terminal candidate ROI: archive for explicit manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:
@@ -273,6 +275,28 @@ jobs:
         with:
           name: beetank-l5-anvil-turn17
           path: beetank-l5-anvil-turn17.json
+          if-no-files-found: warn
+
+  beetank-l5-anvil-front-gate-turn17:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate genuine live-source 20/40 Anvil quality gate
+        run: node --check tools/qa/check-beetank-anvil-live-fronts-turn17.cjs
+      - name: Real 32 full terminal matches per arm, no persistent-front loss
+        env:
+          QA_BEETANK_ANVIL_FRONTS: beetank-anvil-fronts-turn17.json
+        run: node tools/qa/check-beetank-anvil-live-fronts-turn17.cjs
+      - name: Archive real all-role damage-front counters
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-anvil-live-fronts-turn17
+          path: beetank-anvil-fronts-turn17.json
           if-no-files-found: warn
 
   node-regressions:

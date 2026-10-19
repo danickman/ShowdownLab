@@ -1240,3 +1240,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [ ] 224 real complete matched +8 severe, fresh 79777/95419 heldout, whole enemy army doubled, peer, +2, alternate Knight, full RAF parity, true positive-HP separated fronts.
 - [ ] Explicit promote or reject from genuine ROI and geographic front quality; do not add another Beetank turn.
 - [ ] Next NEW #18 real 300-fighter P95 1x and 10x; NEW #19 restore actual current-live 40-body independent damage fronts >=40.
+
+
+### Turn17 actual heldout ROI and strict live-front gate
+- [x] 224+8 true terminal source A/B at fresh seeds: first L5 5→6/8, peer 4/8 both, entire opposing army x2 0/8 both, real 3v15 0/4 both; plus two recruits 5/8, alternate Knight 4/8, hold 4/8.
+- [x] Real positive-HP damaging persistent fronts 20→23 and separated HP windows 125→130, while own horn HP 1590.52→1578.24. Genuine team utility, not a raw DPS-only decision.
+- [ ] 32 completed actual CURRENT-live all-role 20/40 battles PER ARM, current vs Anvil genuine physical persistence and separated windows, no persistent loss, at most 1% separated windows loss and 20-body absolute floor.
+- [ ] Decide promotion vs rejection, verify PWA atomic 42 SHA if promoted, exact head CI; no Vercel previews/main/prod.
