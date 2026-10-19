@@ -2387,6 +2387,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-live-target-grid-source:
+    # Source full RAF exact but browser speed inadequate; archive expensive research.
+    if: github.event_name == 'workflow_dispatch'
     # Speed up repeat nearest lookups, not collision, with exact dynamic target invalidations.
     # No playable source changes; strict exact physical full RAF SHA 10+6 and real source CPU P95.
     runs-on: ubuntu-latest
@@ -2411,6 +2413,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-target-grid-real-browser:
+    # REJECT: strict 300 P95 browser acceptance failed both speeds, archive manual-only.
+    if: github.event_name == 'workflow_dispatch'
     # Rigorous source-only real full 300 1x/10x P95 and >=85% genuine ticks-per-second,
     # prompted by 10+6 full-RAF SHA parity and large matched CPU gains.
     runs-on: ubuntu-latest
