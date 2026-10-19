@@ -2476,3 +2476,32 @@ jobs:
           name: turn19-mainthread-profile
           path: ${{ runner.temp }}/turn19-profile
           if-no-files-found: warn
+  turn19-dense-canvas-real-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare browser
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate exact physics and source-only dense canvas benchmark
+        run: node --check tools/qa/check-turn19-canvas-scale-browser.cjs
+      - name: Real 300 full FX 1x and 10x browser P95 versus authentic HP ticks
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_CANVAS_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-canvas
+        run: node tools/qa/check-turn19-canvas-scale-browser.cjs
+      - name: Archive 300 P95 and real tick-throughput evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-dense-canvas
+          path: ${{ runner.temp }}/turn19-canvas
+          if-no-files-found: warn
