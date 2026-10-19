@@ -2200,3 +2200,26 @@ jobs:
           name: turn19-wasm-browser
           path: ${{ runner.temp }}/turn19-wasm-browser
           if-no-files-found: warn
+
+  turn19-source-cpu-attribution:
+    # One source-only research diagnostic for next substantive hot function.
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check source function-level performance analysis
+        run: node --check tools/qa/check-turn19-cpu-attribution.cjs
+      - name: Attribute genuine 300 source target, collision, hit and state CPU
+        env:
+          QA_TURN19_PROFILE_RECEIPT: turn19-cpu-attribution.json
+        run: node tools/qa/check-turn19-cpu-attribution.cjs
+      - name: Preserve real-source attribution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-cpu-attribution
+          path: turn19-cpu-attribution.json
+          if-no-files-found: warn
