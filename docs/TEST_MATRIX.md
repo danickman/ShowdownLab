@@ -1233,3 +1233,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Frozen original ultimate fixture, exact vetted playable ultimate mechanics and Guide spec, 42 atomically pinned root/runtime SHA PWA cache, no core physics change.
 - [ ] Exact new QA CI including source-live front case, Guide, offline hash/recovery, 300 fighters, browser density and full 12 standard jobs; native Safari OPEN.
 - [ ] No main, Vercel preview, production until Turn23 conditional release.
+
+### Turn 17 /25 Beetank final source-only L5 test
+- [x] Current QA Siege Fracture baseline verified 13/13 exact head 39208907841.
+- [ ] Only ONE Hammer and Anvil source experiment: two enhanced natural heavy-victim hits, x1.35 extra, >=100 tick triggering attacker recharge; no new spawned damage, stun or nonheavy effects.
+- [ ] 224 real complete matched +8 severe, fresh 79777/95419 heldout, whole enemy army doubled, peer, +2, alternate Knight, full RAF parity, true positive-HP separated fronts.
+- [ ] Explicit promote or reject from genuine ROI and geographic front quality; do not add another Beetank turn.
+- [ ] Next NEW #18 real 300-fighter P95 1x and 10x; NEW #19 restore actual current-live 40-body independent damage fronts >=40.

@@ -253,6 +253,28 @@ jobs:
           path: beetank-fracture-strict-fronts.json
           if-no-files-found: warn
 
+  beetank-l5-anvil-roi-turn17:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify final Beetank one-candidate A/B source
+        run: node --check tools/qa/check-beetank-l5-anvil-roi-turn17.cjs
+      - name: Genuine matched 20/40 ROI and heavy fronts, counters, full RAF
+        env:
+          QA_BEETANK_ANVIL_RECEIPT: beetank-l5-anvil-turn17.json
+        run: node tools/qa/check-beetank-l5-anvil-roi-turn17.cjs
+      - name: Archive complete physics-based ROI receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-l5-anvil-turn17
+          path: beetank-l5-anvil-turn17.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
