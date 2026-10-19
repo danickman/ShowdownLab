@@ -2447,6 +2447,8 @@ jobs:
           path: ${{ runner.temp }}/turn19-grid-browser
           if-no-files-found: warn
   turn19-real-mainthread-profile:
+    # Completed sampled actual 300 browser attribution; archive manually, no automatic reruns.
+    if: github.event_name == 'workflow_dispatch'
     # One actual Chrome CPU profile of unmodified 300-fighter physics and UI,
     # strict 1x + 10x elapsed/ticks/HP; dedicated diagnostic, no source promotion.
     runs-on: ubuntu-latest

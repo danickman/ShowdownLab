@@ -80,7 +80,8 @@ const server=http.createServer((req,res)=>{
       if(u.x<0||u.x>1||u.y<0||u.y>1)outsideWorld++;
       rendered.add(Math.max(0,Math.min(3,Math.floor(u.screenX/Math.max(1,innerWidth)*4)))+':'+Math.max(0,Math.min(2,Math.floor(u.screenY/Math.max(1,innerHeight)*3))));
      }
-     return{speed,frames:frames.length,targetFrames:wanted,censored:frames.length<wanted,elapsedMs:+elapsed.toFixed(2),
+     const cv=document.querySelector('#battleCanvas'),cr=cv.getBoundingClientRect();
+     return{rasterScale:+(cv.width/Math.max(1,cr.width)).toFixed(3),speed,frames:frames.length,targetFrames:wanted,censored:frames.length<wanted,elapsedMs:+elapsed.toFixed(2),
       p50IntervalMs:percentile(frames,.5),p95IntervalMs:percentile(frames,.95),over33Ms:frames.filter(x=>x>33.3).length,
       over100Ms:frames.filter(x=>x>100).length,timings,
       onScreen:s.screen,phase:s.phase,aliveOrDrawn:units.length,clippedSpriteBoxes:clipped,outsideViewportCenters:outsideViewport,outsideNormalizedWorld:outsideWorld,occupiedViewportCells:rendered.size,effects:s.effects,viewport};
@@ -91,6 +92,8 @@ const server=http.createServer((req,res)=>{
      await page.screenshot({path:path.join(out,'density-'+count+'-portrait.png')});
     }
     assert(result.frames>0,'browser RAF did not produce frames at '+count+' fighters '+speed+'x');
+    const expectedScale=count>=160?(speed>=10?.85:1):2;
+    assert(Math.abs(result.rasterScale-expectedScale)<.05,'real browser backing scale mismatch at '+count+' units '+speed+'x: '+result.rasterScale+' expected '+expectedScale);
     assert(result.onScreen==='battle'||result.phase==='round_over'||result.phase==='match_over','browser navigated away unexpectedly');
     console.log('DENSITY BROWSER '+JSON.stringify({count,speed,frames:result.frames,p95IntervalMs:result.p95IntervalMs,renderP95Ms:result.timings.total.p95Ms,alive:result.aliveOrDrawn,clipped:result.clippedSpriteBoxes,censored:result.censored}));
    }
