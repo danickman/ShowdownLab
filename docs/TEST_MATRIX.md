@@ -1,3 +1,8 @@
+## Turn19 combined collision+nearest WASM actual 300 browser A/B — IN RESEARCH
+- [x] Source exact 10+6 RAF SHA, real 300 CPU paired original/combined at both rates [run 39221970050](https://github.com/danickman/ShowdownLab/actions/runs/39221970050).
+- [ ] **Actual Chromium 300 P95** 1× and 10× from same-host 2-seed alternating real HP fights; browser gain is NOT established by source CPU.
+- [ ] Do not integrate/release unless >=40% repeatable two-speed RAF lift with no loss of physical combat or counterplay; Safari remains separately open.
+
 ## Turn19 FAILED acceptance — honest source and browser metrics
 - [x] 15/15 exact QA jobs at [39216570647](https://github.com/danickman/ShowdownLab/actions/runs/39216570647) green for tests/syntax, but P1 **remains unresolved** (not accepted).
 - [x] Y-band source exact 10+6 complete physical RAF parity, **REJECT**: 300 Node P95 1× 66.356→66.885ms; 10× 371.366→418.599ms. All six heldout trials slower, no browser promotion.
