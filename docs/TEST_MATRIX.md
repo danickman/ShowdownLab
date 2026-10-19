@@ -1,3 +1,5 @@
+**TURN19 COOPERATIVE 300 SOURCE-ONLY VERDICT: REJECT FAKE FPS.** [Actual Chromium 39303801552](https://github.com/danickman/ShowdownLab/actions/runs/39303801552) P95 appeared to improve 51% at 1x and 77–78% at 10x; but **real simulation throughput collapsed** from 15.5–16.4→4.8–5.6 ticks/sec at 1x, and 77.9–79.9→4.8–5.4 at 10x. Actual combat progression slows 66–94%, so speed control is broken. Reject, add >=85% baseline TPS strict guard in source browser check, archive expensive candidate manual-only; do NOT ship. 300 performance P1 remains unresolved despite green research job; 42 PWA SHA/main/prod/previews unchanged. [Detailed evidence](TURN19_THREADED_300_PERFORMANCE_2026-10-19.md).
+
 ## Turn19 cooperative true simulation tick schedule — new 300 browser source-only A/B
 - [x] Core `step()` exact string preserved; all 300 units, 4 contact passes, all attack and HP semantics retained in source-only candidate.
 - [ ] 1x and 10x Chromium same-seed alternating actual 300 full-FX P95 and genuine ticks-per-second/HP, 10 seconds both speeds, no fake FPS.

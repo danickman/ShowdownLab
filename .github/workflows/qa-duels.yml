@@ -2293,6 +2293,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-cooperative-300-browser:
+    # Closed after FAILING real tick throughput; explicit workflow_dispatch archive only.
+    if: github.event_name == 'workflow_dispatch'
     # Source-only architecture: render RAF and complete real physics ticks scheduled separately.
     # Real 300 full-fighter FX, no faked speed or reduced physical contacts.
     runs-on: ubuntu-latest

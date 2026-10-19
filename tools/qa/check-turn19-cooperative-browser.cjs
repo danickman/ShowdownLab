@@ -75,6 +75,13 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
   report.cases.push({rep,speed,order,current:values.current,cooperative:values.cooperative,ratio:values.cooperative.p95IntervalMs/values.current.p95IntervalMs});
  }
  assert.deepEqual(report.failures,[]);
+ // A smooth RAF while legitimate simulation time collapses is NOT a performance fix.
+ for(const c of report.cases){
+  const originalTps=c.current.tick/(c.current.elapsedMs/1000),candidateTps=c.cooperative.tick/(c.cooperative.elapsedMs/1000);
+  assert(candidateTps>=originalTps*.85,'REJECT fake FPS: real combat tick throughput below 85% of baseline at '+c.speed+'x: '+candidateTps.toFixed(2)+' vs '+originalTps.toFixed(2));
+  assert(c.ratio<=.60,'REJECT insufficient >=40% browser P95 improvement at '+c.speed+'x');
+ }
+
  report.passed=true;
  console.log('TURN19 COOPERATIVE BROWSER MATCHED '+JSON.stringify(report.cases.map(x=>({rep:x.rep,speed:x.speed,currentP95:x.current.p95IntervalMs,cooperativeP95:x.cooperative.p95IntervalMs,ratio:+x.ratio.toFixed(3),censored:[x.current.censored,x.cooperative.censored]}))));
  }finally{fs.writeFileSync(path.join(output,'turn19-cooperative-browser.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
