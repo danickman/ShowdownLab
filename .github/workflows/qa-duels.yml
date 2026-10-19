@@ -223,6 +223,29 @@ jobs:
           path: beetank-l5-fracture-turn16.json
           if-no-files-found: warn
 
+  beetank-l5-fracture-front-gate-turn16:
+    # Actual CURRENT Goose/Beetank L5 ultimates under unchanged strict 20/40 front quality floors.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate exact live-source strict front gate
+        run: node --check tools/qa/check-beetank-fracture-strict-fronts-turn16.cjs
+      - name: Execute strict actual 20/40 multirole full-terminal live-ultimate source A/B
+        env:
+          QA_BEETANK_FRACTURE_FRONTS: beetank-fracture-strict-fronts.json
+        run: node tools/qa/check-beetank-fracture-strict-fronts-turn16.cjs
+      - name: Archive real front quality receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-fracture-strict-fronts
+          path: beetank-fracture-strict-fronts.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
