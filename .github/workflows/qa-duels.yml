@@ -2223,3 +2223,27 @@ jobs:
           name: turn19-cpu-attribution
           path: turn19-cpu-attribution.json
           if-no-files-found: warn
+
+  turn19-wasm-target-source:
+    # Compiled exact nearest-target ranking after physical collision profile confirmed 70%+ hotspot.
+    # Source-only, no gameplay promotion until full SHA parity and material dual-speed browser gains.
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate WASM combined collision and nearest source harness
+        run: node --check tools/qa/check-turn19-wasm-nearest.cjs
+      - name: Match true full RAF state and same-host 300 CPU both rates
+        env:
+          QA_TURN19_TARGET_RECEIPT: turn19-wasm-target.json
+        run: node tools/qa/check-turn19-wasm-nearest.cjs
+      - name: Preserve full source parity and CPU receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-target
+          path: turn19-wasm-target.json
+          if-no-files-found: warn
