@@ -2168,3 +2168,35 @@ jobs:
           name: turn19-wasm-300
           path: turn19-wasm-300.json
           if-no-files-found: warn
+
+  turn19-wasm-300-browser:
+    # Source-only same-host original/WASM actual 300 full-FX Chromium RAF, no preview.
+    # Distinguish real RAF intervals from CPU callback or physical iPhone Safari FPS.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify browser engine
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate exact WebAssembly browser A/B harness
+        run: node --check tools/qa/check-turn19-wasm-browser-ab.cjs
+      - name: Same-host 300 real fighters, 430x932 DPR3, matched both speeds
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_WASM_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-wasm-browser
+        run: node tools/qa/check-turn19-wasm-browser-ab.cjs
+      - name: Preserve full Chromium frame and physics receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-browser
+          path: ${{ runner.temp }}/turn19-wasm-browser
+          if-no-files-found: warn
