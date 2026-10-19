@@ -1,3 +1,8 @@
+## Turn19 current measured candidate verdict
+- [x] Cooperative threaded CI 39215945265 genuine RAF 300 1× P95 366.6→766.7ms and 366.7→600ms; 10× 1116.7→866.7ms and 916.7→933.3ms. **REJECT** no both-speed repeatable benefit.
+- [x] Dense collision SoA exact full RAF 10 ordinary+6 heldout SHA PASS; 300 CPU P95 1× 47.575→40.565ms, 10× 357.677→340.15ms, 1× heldout 1 regression: research only.
+- [ ] One-axis Y-band collision pruning exact-state source study under PR CI, then conditional Chromium browser proof. Turn19 P1 remains until fully fixed, never hide the problem.
+
 **USER-DIRECTED EXTENSION — 26 TURNS, October 19 2026.** Turn18 tested exact parity yet worsened actual 300 Node CPU at both 1× and 10×; unacceptable to leave P1 as a footnote. New **Turn19 solely to IMPLEMENT AND VERIFY a real architectural 300 RAF fix**, preferably off-main-thread full deterministic simulation under correct worker/fallback and offline semantics, tested against real 300 active fighters at 1×+10× (not a source-only CPU proxy). Original independent-live-front repair becomes **Turn20**, Barbarian **21–22**, Dragon L4/outliers **23–24**, final QA **25**, sole controlled conditional merge/deploy **26**. Original 25-turn schedule SUPERSEDED, not executed as release authorization. Quality gates NEVER lowered; do not claim a fix absent matched actual browser proof; release remains blocked until achieved. Main/prod/previews untouched.
 
 ## Turn18 CLOSED — source-exact bitlane rejected, 300 P95 P1 OPEN

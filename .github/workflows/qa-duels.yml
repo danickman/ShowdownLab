@@ -2061,6 +2061,7 @@ jobs:
           if-no-files-found: warn
 
   turn19-thread-browser-ab:
+    if: github.event_name == 'workflow_dispatch'
     # Source-only architectural worker alternative; full app, actual 300, matched RAF.
     # Promoting requires independent physics/spell/offline validation after measured success.
     runs-on: ubuntu-latest
@@ -2096,6 +2097,7 @@ jobs:
           if-no-files-found: warn
 
   turn19-dense-solver-source:
+    if: github.event_name == 'workflow_dispatch'
     # One distinct structure-of-arrays deterministic Gauss-Seidel acceleration candidate.
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -2116,4 +2118,27 @@ jobs:
         with:
           name: turn19-dense-solver
           path: turn19-dense-300.json
+          if-no-files-found: warn
+
+  turn19-yband-source:
+    # Bounded ordered physical collision pruning by LIVE y-band membership.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate one-axis band candidate syntax
+        run: node --check tools/qa/check-turn19-yband-300.cjs
+      - name: Full RAF exact parity and matched CPU P95 for physical 300 fighters
+        env:
+          QA_TURN19_YBAND_RECEIPT: turn19-yband-300.json
+        run: node tools/qa/check-turn19-yband-300.cjs
+      - name: Preserve source-real original-vs-yband receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-yband-300
+          path: turn19-yband-300.json
           if-no-files-found: warn
