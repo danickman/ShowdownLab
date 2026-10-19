@@ -1247,3 +1247,11 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Real positive-HP damaging persistent fronts 20→23 and separated HP windows 125→130, while own horn HP 1590.52→1578.24. Genuine team utility, not a raw DPS-only decision.
 - [ ] 32 completed actual CURRENT-live all-role 20/40 battles PER ARM, current vs Anvil genuine physical persistence and separated windows, no persistent loss, at most 1% separated windows loss and 20-body absolute floor.
 - [ ] Decide promotion vs rejection, verify PWA atomic 42 SHA if promoted, exact head CI; no Vercel previews/main/prod.
+
+
+### Turn17 Hammer and Anvil accepted QA-only, new-head CI pending
+- [x] 224+8 genuine terminal, fresh 79777/95419, first-L5 win 5→6/8, peer 4/8 both, entire enemy army doubled 0/8 both, severe 0/4 both, true HP persistent fronts 20→23, damage windows 125→130, full RAF and low tiers exact.
+- [x] 64 genuine all-role completed live-rule matches: at 20 bodies persistent 1→1, separate HP 26→26; 40 persistent 30→30 and separated windows 177→179. Historical frozen Goose quality floor unchanged, current-live 30<40 open P1.
+- [x] Playable only QA exact source+Guide and 42 atomic PWA SHA+SW cache version; frozen preAnvil fixture and prior exact Mole/Beetank tests protected; no main/prod previews.
+- [ ] Exact new-head PR CI mandatory root/pin+offline, portrait/browser density, 300 fighters, multi-front and damage attribution all pass.
+- [ ] NEXT user-funded #18 physical 300-fighter 1×/10× P95 meaningful real fix, then #19 real live 40-front restoration to >=40; no more Beetank experiments.

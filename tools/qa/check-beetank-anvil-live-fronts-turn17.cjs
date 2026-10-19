@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const real=read('tools/qa/check-completed-match-quality.cjs'),old=read('v3/ultimate-abilities.js');
+const real=read('tools/qa/check-completed-match-quality.cjs'),old=read("tools/qa/fixtures/beetank-preanvil-ultimate-turn17.js");
 const baseIncoming="if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type))damage*=1.65;",baseHit="if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}";
 const changedIncoming="if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type)){damage*=1.65;if(t.siegeAnvilCharges>0){damage*=1.35;t.siegeAnvilCharges--}}",changedHit="if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}\n if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)&&tick-(a.siegeAnvilTick??-1000)>=100){a.siegeAnvilTick=tick;t.siegeAnvilCharges=Math.min(2,(t.siegeAnvilCharges||0)+2)}";
 assert.equal(old.split(baseIncoming).length,2);assert.equal(old.split(baseHit).length,2);

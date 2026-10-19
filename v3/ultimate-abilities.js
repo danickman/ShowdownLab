@@ -5,7 +5,7 @@ const specs={
  sniper:{name:'Piercing Verdict',l4:'Rifle shots ignore 60% of armor and pierce one enemy behind the target for 55% damage.',l5:'Shots ignore all armor; the piercing hit deals 80% damage.'},
  dragon:{name:'Inferno',l4:'Breath ignites targets for another 45% attack damage over 3 seconds.',l5:'Burn damage rises to 75% of attack damage.'},
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
- beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Siege Fracture: L5 horns and rams fracture actual heavy Beetank, Turtle or Dragon contact for 96 ticks, exposing the victim to 65% more ordinary allied damage. Every second horn retains 55% Seismic splash.'},
+ beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Hammer & Anvil: real L5 horns or rams fracture Beetank, Turtle or Dragon for 96 ticks, adding 65% subsequent natural damage. Once per 100 ticks, two real follow-up hits gain another 35% damage; Seismic splash stays bounded.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage; after burrow eruptions, Twin Rift cracks forward to damage up to two additional foes for 62% attack damage with a brief stagger.'},
  turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
@@ -22,7 +22,7 @@ function outgoing(a,t,damage,units,tick){
  return damage;
 }
 function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){
- if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type))damage*=1.65;
+ if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type)){damage*=1.65;if(t.siegeAnvilCharges>0){damage*=1.35;t.siegeAnvilCharges--}}
  if(rank(t)&&t.type==='mole'){damage*=rank(t)===2?.5:.65;cue(t,'carapace',tick)}
  let protection=0,protector=null;
  for(const u of bastions)if(u.team===t.team&&u.hp>0&&u.type==='knight'&&rank(u)&&near(u,t,rank(u)===2?.12:.09)){
@@ -40,6 +40,7 @@ function afterHit(a,t,dealt,units,tick){
  const hits=[],r=rank(a);
  if(rank(t)&&t.type==='turtle'&&a&&a.hp>0&&near(a,t,.10)&&dealt>0){hits.push({target:a,source:null,damage:dealt*(rank(t)===2?.45:.3)});cue(t,'reflect',tick,a)}
  if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}
+ if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)&&tick-(a.siegeAnvilTick??-1000)>=100){a.siegeAnvilTick=tick;t.siegeAnvilCharges=Math.min(2,(t.siegeAnvilCharges||0)+2)}
  if(!r||!['sniper','dragon','beetank','mole','barbarian'].includes(a.type))return hits;
  const enemies=units.filter(v=>v!==t&&v.team!==a.team&&v.hp>0&&v.burrow<=0);
  if(a.type==='sniper'&&a.action==='attack'){

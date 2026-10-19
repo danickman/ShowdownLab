@@ -1,0 +1,12 @@
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const read=p=>fs.readFileSync(path.resolve(__dirname,'../..',p),'utf8');
+const before=read("tools/qa/fixtures/beetank-preanvil-ultimate-turn17.js"),actual=read('v3/ultimate-abilities.js');
+const oldIncoming="if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type))damage*=1.65;",oldHit="if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}",newIncoming="if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type)){damage*=1.65;if(t.siegeAnvilCharges>0){damage*=1.35;t.siegeAnvilCharges--}}",newHit="if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}\n if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)&&tick-(a.siegeAnvilTick??-1000)>=100){a.siegeAnvilTick=tick;t.siegeAnvilCharges=Math.min(2,(t.siegeAnvilCharges||0)+2)}";
+const oldDescription="l5:'Siege Fracture: L5 horns and rams fracture actual heavy Beetank, Turtle or Dragon contact for 96 ticks, exposing the victim to 65% more ordinary allied damage. Every second horn retains 55% Seismic splash.'",newDescription="l5:'Hammer & Anvil: real L5 horns or rams fracture Beetank, Turtle or Dragon for 96 ticks, adding 65% subsequent natural damage. Once per 100 ticks, two real follow-up hits gain another 35% damage; Seismic splash stays bounded.'";
+assert.equal(before.split(oldIncoming).length,2);assert.equal(before.split(oldHit).length,2);assert.equal(before.split(oldDescription).length,2);
+const expected=before.replace(oldIncoming,newIncoming).replace(oldHit,newHit).replace(oldDescription,newDescription);
+assert.equal(actual,expected,'live ultimate must differ from accepted Siege Fracture by ONLY bounded Anvil physics and the L5 Guide description');
+assert.equal(actual.split('siegeAnvilCharges').length,4,'exactly one new charge consumer, one setter, one read');
+assert(actual.includes('100 ticks')&&actual.includes('two real follow-up hits'));
+console.log('PASS: Beetank Hammer & Anvil actual source matches accepted physics overlay and Guide exactly; no L1-L4 / unrelated fighter changes');

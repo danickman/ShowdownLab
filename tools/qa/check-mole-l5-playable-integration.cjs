@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('assert');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const frozen=read('tools/qa/fixtures/mole-before-twin-ultimate.js'),live=read('v3/ultimate-abilities.js'),study=read('tools/qa/check-mole-l5-low-collateral-ab.cjs');
+const frozen=read('tools/qa/fixtures/mole-before-twin-ultimate.js'),live=read("tools/qa/fixtures/beetank-preanvil-ultimate-turn17.js"),study=read('tools/qa/check-mole-l5-low-collateral-ab.cjs');
 const i=study.indexOf('function fissure('),j=study.indexOf('const inject=[',i);
 assert(i>0&&j>i);const make=new Function(study.slice(i,j)+';return fissure')();
 const oldSpec="mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage.'},",newSpec="mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage; after burrow eruptions, Twin Rift cracks forward to damage up to two additional foes for 62% attack damage with a brief stagger.'},";

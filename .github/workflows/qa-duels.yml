@@ -32,11 +32,12 @@ jobs:
         run: node tools/qa/check-primary-device-contract.cjs
       - name: Verify offline precache graph and rollback
         run: node tools/qa/check-release4c.cjs
-      - name: Turn16 approved playable Beetank Siege Fracture source/Guide contract
+      - name: Turn16 historical Beetank source plus Turn17 playable Anvil exact contract
         run: |
           node --check v3/ultimate-abilities.js
-          node --check tools/qa/check-beetank-fracture-playable-turn16.cjs
           node tools/qa/check-beetank-fracture-playable-turn16.cjs
+          node --check tools/qa/check-beetank-anvil-playable-turn17.cjs
+          node tools/qa/check-beetank-anvil-playable-turn17.cjs
       - name: Verify Home art streaming
         run: node tools/qa/check-streaming.cjs
       - name: Verify launch guide and PWA hooks
@@ -278,6 +279,7 @@ jobs:
           if-no-files-found: warn
 
   beetank-l5-anvil-front-gate-turn17:
+    # Preserve accepted 64-match pre-Anvil vs Anvil A/B regression on every QA PR.
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:
