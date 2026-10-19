@@ -1,3 +1,9 @@
+## Turn18 source-only 300-body bitlane trial — IN TEST
+- [ ] Real 20/40/80/120/300 full-RAF original/candidate SHA exact parity at 1x/10x.
+- [ ] Three matched 300 CPU P95 heldouts both speeds; must be meaningfully faster before browser A/B.
+- [ ] Actual alternating same-host Chromium 430×932 DPR3 300 1×/10× RAF P95 and 80/120 controls before acceptance; no claimed Safari FPS.
+- [ ] If candidate rejected keep playable core and 42 pinned SHA untouched; if promoted rerun all QA and PWA verification.
+
 ## Turn17 COMPLETE — final Beetank L5 Hammer & Anvil accepted on QA
 - [x] [Exact-head CI 39210597651](https://github.com/danickman/ShowdownLab/actions/runs/39210597651): 14/14 automatic checks PASS at f760d0c; 42 pinned SHA+offline rollback, 300 stress, 430x932 portrait, Mole/Beetank exact source, real HP-damage attribution, and full live 20/40 front check.
 - [x] Source 224+8 genuine terminal, new 79777/95419 seeds: first L5 5→6/8, equal peer 4/8, whole foe army doubled 0/8, real severe 3v15 0/4, persistent genuine HP damaging fronts 20→23 and separate windows 125→130.

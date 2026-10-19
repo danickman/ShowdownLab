@@ -2033,3 +2033,27 @@ jobs:
           name: nearest-allocation-lean-parity
           path: nearest-allocation-lean-parity.json
           if-no-files-found: warn
+
+  turn18-bitlane-300-ab:
+    # One source-only synchronous integer-bitset broadphase, distinct from rejected Map/Set buckets.
+    # No runtime promotion without parity AND repeatable both-speed browser evidence.
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check bitset axis-index exact collision source trial
+        run: node --check tools/qa/check-turn18-bitlane-300.cjs
+      - name: Test 20/40/80/120/300 full RAF state parity and matched 300 CPU cost
+        env:
+          QA_TURN18_RECEIPT: turn18-bitlane.json
+        run: node tools/qa/check-turn18-bitlane-300.cjs
+      - name: Preserve source-exact physical benchmark evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn18-bitlane
+          path: turn18-bitlane.json
+          if-no-files-found: warn
