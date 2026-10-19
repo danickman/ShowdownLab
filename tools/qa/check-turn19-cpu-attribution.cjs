@@ -12,7 +12,7 @@ function instrument(src){
  for(const [name,args,passed,marker] of defs){
   const sig='function '+name+'('+args+'){',orig='function __original_'+name+'('+args+'){';
   assert.equal(s.split(sig).length,2,'signature moved '+name);s=s.replace(sig,orig);
-  const wrap='function '+name+'('+args+'){const z=performance.now();try{return __original_'+name+'('+passed+')}finally{__qaProfile.'+name+'.count++;__qaProfile.'+name+'.ms+=performance.now()-z}}';
+  const wrap='function '+name+'('+args+'){const z=__perfClock();try{return __original_'+name+'('+passed+')}finally{__qaProfile.'+name+'.count++;__qaProfile.'+name+'.ms+=__perfClock()-z}}';
   assert(s.includes(marker));s=s.replace(marker,wrap+marker);
  }
  s=s.replace('function __original_nearest(','const __qaProfile={nearest:{count:0,ms:0},separate:{count:0,ms:0},slotPoint:{count:0,ms:0},hurt:{count:0,ms:0},step:{count:0,ms:0},emit:{count:0,ms:0}};function __original_nearest(');
@@ -22,7 +22,7 @@ function instrument(src){
 const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
 function run(variant,speed,seed){
  let now=0,id=0,queue=new Map(),errors=[];
- const e={window:null,Math,WebAssembly,atob:globalThis.atob,performance,requestAnimationFrame:f=>{const i=++id;queue.set(i,f);return i},cancelAnimationFrame:i=>queue.delete(i),console:{error:(...x)=>errors.push(x.join(' '))}};e.window=e;vm.createContext(e);
+ const e={window:null,Math,WebAssembly,atob:globalThis.atob,performance:{now:()=>now},__perfClock:()=>performance.now(),requestAnimationFrame:f=>{const i=++id;queue.set(i,f);return i},cancelAnimationFrame:i=>queue.delete(i),console:{error:(...x)=>errors.push(x.join(' '))}};e.window=e;vm.createContext(e);
  for(const p of ['v3/evolution-rules.js','v3/ultimate-abilities.js'])vm.runInContext(read(p),e);
  vm.runInContext(instrument(variant==='wasm'?wasm:source),e);
  const sim=e.LegacySimCore,roster=()=>Array.from({length:150},(_,i)=>({type:types[i%10],level:[1,4,5][i%3],squad:Math.floor(i/5)}));
