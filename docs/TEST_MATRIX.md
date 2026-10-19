@@ -1188,3 +1188,11 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Shift Beetank to #16–17, Barbarian to #18–19, outliers to #20–21, full QA #22, sole gated merge/production #23.
 - [ ] One new L5 Goblin physical smoke-veil source experiment, not playable until exact heldout test + independent fronts: 224 full terminal +8 severe, unchanged L1–L4 + full RAW/observer RAF SHA.
 - [ ] Continue actual PWA/runtime source only after safe evidence; no third Goblin concept. Current gameplay, SW, 42 SHA digests remain frozen until promotion.
+
+
+### Turn 13 of 23 CLOSED — final Goblin Smoke Veil rejected
+- [x] Full CI 39198159208 13/13 jobs green, 224 matched +8 severe current-vs-variant source-real, 4 observed/raw full RAF SHAs, 12 unaffected L1–L4 SHAs, 2 repeats.
+- [x] Fresh first L5 wins current 6/8 vs Smoke Veil 4/8. Hold/peer 4/8; opposing whole army x2 0/8, 3v15 0/4. Actual stab HP +62.6% and hit count 82→147 fail actual investment ROI; independent HP-damage windows 77→74.
+- [x] REJECT candidate, retain original L5 Pack Ambush; two Goblin turns now CLOSED, no third tuning loop.
+- [x] Re-disable expensive concluded source CI job except explicit manual dispatch, no PWA change.
+- [ ] T14/15 real 300-fighter 95th-percentile frame-interval improvements, same-run 1×/10× browser measurements and unchanged full-RAF simulation parity; Safari still separate physical device acceptance.

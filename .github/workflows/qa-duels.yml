@@ -74,7 +74,8 @@ jobs:
           if-no-files-found: warn
 
   goblin-l5-smoke-veil-roi-turn13:
-    # ONE bounded final Goblin L5 concept. Does not mutate playable files.
+    # Completed rejected experiment; explicit manual research only to limit CI cost.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 18
     steps:

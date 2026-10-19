@@ -12,3 +12,10 @@ The original Pack Ambush multiplies physical stabbing damage; failed Pack Relay 
 
 ## Added performance mandate
 Dedicated 300 fighters P95 tail latency #14 and #15, same-run 1×/10× profiles and simulation/renderer attribution. Current Chromium 300 at 1× P95 633ms, 10× ~1333ms, renderer itself ~8ms. This is not claimed native iPhone Safari speed. Final QA #22; ONLY conditional one deployment #23.
+
+## Exact full-terminal Turn 13 verdict — REJECT Smoke Veil, NO third Goblin turn
+At source study QA 7d06a5b971e8f7e1cdbf4da0dc91534e23389b1c, [PR run 39198159208](https://github.com/danickman/ShowdownLab/actions/runs/39198159208) completed SUCCESS, 13/13 active jobs, 59 other manual/research jobs intentionally skipped. Dedicated job 117885317536 completed 224 complete actual terminal heldout control/candidate games plus 8 genuine 3v15, four observer/raw entire-RAF SHA pairs, 12 unchanged L1–L4 full RAF pairs, two deterministic repetitions, no missing bodies. Fresh calibration 29983/45821; unseen heldout 74231/93377; symmetric 20/40 and both sides.
+
+Fresh heldout first L5 **current 6/8, Smoke Veil 4/8**, hold 4/8 both, peer L5 4/8 both, opposing Goblin-family reinforcement 5/8 both, literally entire opposing army x2 0/8 both, recruit +2 2/8 both, alternate Beetank evolution 5/8 both and actual 3 evolved versus 15 0/4 both. Positive-HP Goblin stab actual damage **2444.83→3974.91**, landed stabs **82→147**, physically independent persistent damaging fronts **16→21**, but independent damaging time windows **77→74**. Defensively stronger raw HP and more attacking do not translate into higher real first-L5 winner ROI; losing TWO formerly won games is unacceptable for this final refinement. **REJECT**. Do not readjust small numbers to force acceptance or keep rejected variants in playable PWA.
+
+Turns #12–13 Goblin completed; existing live Pack Ambush unchanged. Return experiment to manual only. No changes to v3/ultimate-abilities.js, v3/legacy-sim-core.js, index.html, sw.js, or 42 runtime pins. Move directly to two dedicated 300-fighter P95 improvement turns #14–15.
