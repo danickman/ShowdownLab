@@ -1878,3 +1878,7 @@ Turn 7 experimental elimination of nearest() enemy filtered-array allocations pa
 
 ### Oct 18 Turn 8 COMPLETE — double K.O. terminal and round isolation
 Exact QA 6d4c4a26cb2615e262d3d07e761680f8cfcd5282 PR Actions 39176702050 **12 green / 0 failed / 58 intentionally skipped**. Prevent duplicate/mid-battle roster drafting, enforce one pick per color per round, clear old callbacks and one-round disruption. Reproduced REAL L4 Turtle dual elimination; physical core now declares DRAW at tick1164 and stops; both lose 1 life, if both run out final DRAW with proper Quick/Draft/Lab presentation and zero reward. Atomic 42 SHA PWA doubleko1 and full test coverage. No gameplay numerical retuning, no production/main. Next 9/13 primary 430x932 DPR3 iPhone 14 Pro Max UI, touch, fighter art crop and safe areas.
+
+
+### 18 October — Turn 9 native phone UI implementation ACCEPTED
+Exact QA `b5e5b2bb9f55df42154d1f7a712f028ed9b14cf0` PR #14 automatic [CI 39183539283](https://github.com/danickman/ShowdownLab/actions/runs/39183539283) passed 12/12 automatic jobs. `tools/qa/check-turn9-portrait.cjs` passes 430×932 DPR3 Guide L4 featured art 340px versus L1 184px, 390×844 L4 334px and 375×667 L4 319px, no crop, no horizontal overflow, safe 75/50 and 69/44px notch/home insets and reachable 48px CTA after scroll. Offline upgrade, full release hashes, 300 population and source determinism green. Previous obsolete hardcoded URL assertion and MIME in test harness corrected. **NOT native Safari.** Next Turn 10 ground cracks/sunlit theatre. Main/production unmodified.

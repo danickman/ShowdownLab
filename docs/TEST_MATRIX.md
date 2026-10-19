@@ -1144,9 +1144,9 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 **Turn 8 verification:** all 12 required jobs passed at exact gameplay SHA 6d4c4a26cb26 ([CI 39176702050](https://github.com/danickman/ShowdownLab/actions/runs/39176702050)). Physical iPhone 14 Pro Max native Safari remains an open release-only gate.
 
 
-### Oct 18 Turn 9 phone layout acceptance
+### Oct 18 Turn 9 phone layout acceptance — COMPLETE in Chromium
 - [x] L4 Guide spotlight instead of three tiny panels, preserved original fighter art
 - [x] Safe-area-aware between-round modal with bounded momentum scroll
-- [ ] New-head real Chromium 430×932 DPR3, 390×844, 375×667 Guide and draft safe inset test passes with screenshots
-- [ ] All 42 SHA256 shell pins, offline PWA and full phone density performance tests green
-- [ ] Real iPhone 14 Pro Max Safari Dynamic Island, home indicator, touch/sprite cropping manual gate still open
+- [x] Exact QA b5e5b2b real Chromium 430×932 DPR3, 390×844, 375×667, ten Guide cards, 3 draft offers plus CTA, no horizontal overflow or figure crop; screenshots uploaded in artifact of CI 39183539283
+- [x] All 42 SHA256 shell pins, offline rollback and full phone density performance/safety test jobs green in 12/12 CI
+- [ ] OPEN manual gate: real iPhone 14 Pro Max Safari Dynamic Island, home indicator, true touch input, sprite framing and frame-rate (Chromium is not Safari)
