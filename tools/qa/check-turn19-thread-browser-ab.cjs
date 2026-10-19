@@ -63,7 +63,7 @@ const p95=x=>{const a=[...x].sort((a,b)=>a-b);return a[Math.floor((a.length-1)*.
      assert(data.worker?.workerSnapshots>=3&&!data.worker.errors.length,'worker did not emit multiple real states');
      assert(data.progressed&&data.tick>25,'worker failed to advance genuine HP-damaging combat');
     }
-    return{mode,count,speed,rep,...data,errors};
+    return{mode,count,speed,rep,...data,actualTicksPerSecond:+(data.tick/(data.elapsedMs/1000)).toFixed(2),errors};
    }finally{await page.close()}
   }
   // Alternating same-host order at both speeds. 80/120 controls never trigger worker.
@@ -77,6 +77,6 @@ const p95=x=>{const a=[...x].sort((a,b)=>a-b);return a[Math.floor((a.length-1)*.
   }
   result.passed=result.cases.every(x=>x.control||x.worker?.worker?.errors?.length===0);result.failures.push(...result.cases.flatMap(x=>(x.control?[x.control]:[x.current,x.worker]).flatMap(v=>v.errors)));
   assert.deepEqual(result.failures,[],'browser/worker fatal errors');
-  console.log('TURN19 WORKER RAF MATCHED '+JSON.stringify(result.cases.filter(x=>x.count===300).map(x=>({speed:x.speed,rep:x.rep,currentP95:x.current.p95IntervalMs,workerP95:x.worker.p95IntervalMs,ratio:x.ratio,currentTick:x.current.tick,workerTick:x.worker.tick,currentHP:x.current.snapshotHp,workerHP:x.worker.snapshotHp,workerStates:x.worker.worker?.workerSnapshots,censored:[x.current.censored,x.worker.censored]}))));
+  console.log('TURN19 WORKER RAF MATCHED '+JSON.stringify(result.cases.filter(x=>x.count===300).map(x=>({speed:x.speed,rep:x.rep,currentP95:x.current.p95IntervalMs,workerP95:x.worker.p95IntervalMs,ratio:x.ratio,currentTps:x.current.actualTicksPerSecond,workerTps:x.worker.actualTicksPerSecond,currentTick:x.current.tick,workerTick:x.worker.tick,currentHP:x.current.snapshotHp,workerHP:x.worker.snapshotHp,workerStates:x.worker.worker?.workerSnapshots,censored:[x.current.censored,x.worker.censored]}))));
  }finally{fs.writeFileSync(path.join(output,'turn19-thread-raf.json'),JSON.stringify(result,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());

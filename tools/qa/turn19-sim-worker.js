@@ -11,7 +11,7 @@ self.onmessage=e=>{
  const m=e.data||{};
  try{
   if(m.type==='init'){
-   currentEpoch=m.epoch;yieldDelayMs=m.speed>=10?85:48;
+   currentEpoch=m.epoch;yieldDelayMs=m.speed>=10?180:110;
    awaitingAck=false;lastSnapshotSent=-Infinity;delivered=0;
    LegacySimCore.configure({seed:m.seed,speed:m.speed,onState:s=>{
     const now=performance.now(),terminal=!!s.winner||s.running===false;
@@ -25,7 +25,7 @@ self.onmessage=e=>{
   else if(m.type==='deploy')LegacySimCore.deploy(m.blue,m.red);
   else if(m.type==='running')LegacySimCore.setRunning(m.value);
   else if(m.type==='pause')LegacySimCore.pause();
-  else if(m.type==='speed'){yieldDelayMs=m.value>=10?85:48;LegacySimCore.setSpeed(m.value);}
+  else if(m.type==='speed'){yieldDelayMs=m.value>=10?180:110;LegacySimCore.setSpeed(m.value);}
   else if(m.type==='spell')self.postMessage({type:'spell',epoch:currentEpoch,spell:m.spell,power:m.power,result:LegacySimCore.castSpell(m.spell,m.team,m.power)});
  }catch(err){self.postMessage({type:'fatal',epoch:currentEpoch,message:String(err?.stack||err)})}
 };
