@@ -2059,3 +2059,38 @@ jobs:
           name: turn18-bitlane
           path: turn18-bitlane.json
           if-no-files-found: warn
+
+  turn19-thread-browser-ab:
+    # Source-only architectural worker alternative; full app, actual 300, matched RAF.
+    # Promoting requires independent physics/spell/offline validation after measured success.
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Puppeteer runtime and bundled Chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify actual thread bridge and browser A/B syntax
+        run: |
+          node --check tools/qa/turn19-thread-bridge.js
+          node --check tools/qa/turn19-sim-worker.js
+          node --check tools/qa/check-turn19-thread-browser-ab.cjs
+      - name: Paired original versus worker full browser 300 1x/10x RAF, 80/120 controls
+        env:
+          NODE_PATH: ${{ github.workspace }}/tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-browser
+        run: node tools/qa/check-turn19-thread-browser-ab.cjs
+      - name: Preserve real-browser receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-thread-raf
+          path: ${{ runner.temp }}/turn19-browser
+          if-no-files-found: warn
