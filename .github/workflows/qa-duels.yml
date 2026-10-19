@@ -98,6 +98,8 @@ jobs:
           if-no-files-found: warn
 
   turn14-spatial-300-ab:
+    # Verified exact but slower at 300; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -117,6 +119,29 @@ jobs:
         with:
           name: turn14-spatial-receipt
           path: turn14-spatial-receipt.json
+          if-no-files-found: warn
+
+  turn14-targets-300-ab:
+    # Second independent bounded target-list cost attempt; one-shot research.
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only target-list A/B harness
+        run: node --check tools/qa/check-turn14-targets-300.cjs
+      - name: Paired exact-RAF 300 / 1x+10x real-source target-list optimization
+        env:
+          QA_TURN14_RECEIPT: turn14-target-lists.json
+        run: node tools/qa/check-turn14-targets-300.cjs
+      - name: Archive source-only direct comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn14-target-lists
+          path: turn14-target-lists.json
           if-no-files-found: warn
 
   node-regressions:
