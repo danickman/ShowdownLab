@@ -36,6 +36,13 @@ jobs:
         run: node tools/qa/check-streaming.cjs
       - name: Verify launch guide and PWA hooks
         run: node tools/check-launch-guide.cjs
+      - name: Turn 10 visible Mole rupture, persistent scar and crowd-safe sunny sky
+        run: |
+          node --check v3/ultimate-effects.js
+          node --check v3/arena-ambience.js
+          node --check v3/v3.js
+          node tools/qa/check-mole-rift-spectacle.cjs
+          node tools/qa/check-turn10-theatre.cjs
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12

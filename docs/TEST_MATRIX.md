@@ -1,3 +1,11 @@
+## Turn 10 release gate — October 2026, 19-turn ledger
+- [x] QA source implementation: Mole L5 fracture polygon, forked fault, flying shards, fading event-ground scar (no combat stats changes).
+- [x] Increased sunny sky cloud visibility with dense-frame throttling, reduced-motion exit and conserved combat floor.
+- [x] Root HTML, SW runtime and 42 SHA-256 pins atomically updated and exact-first-head release gate passed.
+- [ ] **New exact-head CI**: auto-run check-mole-rift-spectacle.cjs and check-turn10-theatre.cjs under required root-release-gate.
+- [ ] Real iPhone 14 Pro Max native Safari Mole L5 effect visual and thermal/FPS acceptance (not proven by Chromium emulation).
+- [ ] 20/40 battle visual full-score screenshots with Mole L5 crack over real contact (manual/pending).
+
 # Showdown Lab — Test Matrix
 
 Status: **ACTIVE**
