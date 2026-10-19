@@ -7,7 +7,7 @@ const puppeteer=require('puppeteer');
 const root=path.resolve(__dirname,'../..'),output=path.resolve(process.env.QA_TURN19_CANVAS_BROWSER_OUTPUT||'/tmp/turn19-canvas-scale-browser');
 fs.mkdirSync(output,{recursive:true});
 const read=p=>fs.readFileSync(path.join(root,p),'utf8'),original=read('v3/legacy-sim-core.js');
-const originalArt=read('v3/v3.js'),marker="function draw(time){if(current!=='battle'||!cam)return;",replacement="function draw(time){if(current!=='battle'||!cam)return;const __denseScale=state.units.length>=160?1:Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);if(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}";assert.equal(originalArt.split(marker).length,2,'battle draw entry changed');const candidate=originalArt.replace(marker,replacement);assert(candidate.includes('__denseScale'),'dynamic viewport candidate');
+const originalArt=read('v3/v3.js'),marker="function draw(time){if(current!=='battle'||!cam)return;",replacement="function draw(time){if(current!=='battle'||!cam)return;const __denseScale=state.units.length>=160?((state.speed||1)>=10?.85:1):Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);if(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}";assert.equal(originalArt.split(marker).length,2,'battle draw entry changed');const candidate=originalArt.replace(marker,replacement);assert(candidate.includes('__denseScale'),'dynamic viewport candidate');
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.webmanifest':'application/manifest+json'};
 const server=http.createServer((req,res)=>{
  const u=new URL(req.url,'http://localhost'),pathname=decodeURIComponent(u.pathname).replace(/\/$/,'/index.html'),file=path.resolve(root,'.'+pathname);
@@ -58,7 +58,7 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
     const after=ShowdownAdapter.getState(),cv=document.querySelector('#battleCanvas');return{canvasPixels:[cv.width,cv.height],startHp:initial.units.reduce((s,u)=>s+u.hp,0),endHp:after.units.reduce((s,u)=>s+u.hp,0),count:initial.units.length,active:after.units.filter(x=>x.hp>0).length,frames:deltas.length,censored:timedOut||deltas.length<count,elapsedMs:performance.now()-begun,p50IntervalMs:p(.5),p95IntervalMs:p(.95),renderP95Ms:sorted[Math.floor((sorted.length-1)*.95)]||null,tick:after.debug?.tick||0,actualTicksPerSecond:+((after.debug?.tick||0)/((performance.now()-begun)/1000)).toFixed(2)};
    },{speed,rep});
    console.log('TURN19 CANVAS BROWSER RAW '+JSON.stringify({arm,speed,rep,...result}));assert.equal(result.count,300,'actual 300 deployed fighters required');
-   assert(!result.censored&&result.frames>=(speed===10?20:38),'insufficient uncensored real RAF observations');if(arm==='canvas')assert(result.canvasPixels[0]<=500,'dense candidate must genuinely reduce canvas backing');assert(result.endHp<result.startHp&&result.tick>25,'actual simulation must advance and inflict damage');
+   assert(!result.censored&&result.frames>=(speed===10?20:38),'insufficient uncensored real RAF observations');if(arm==='canvas')assert(result.canvasPixels[0]<=(speed===10?400:500),'dense candidate must genuinely reduce canvas backing');assert(result.endHp<result.startHp&&result.tick>25,'actual simulation must advance and inflict damage');
    return{arm,speed,rep,intercepted,...result};
   }finally{await page.close()}
  }
@@ -69,7 +69,7 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
  }
  assert.deepEqual(report.failures,[]);
  for(const c of report.cases){
-  const oldRate=c.current.tick/(c.current.elapsedMs/1000),canvasRate=c.grid.tick/(c.grid.elapsedMs/1000);
+  const oldRate=c.current.tick/(c.current.elapsedMs/1000),canvasRate=c.canvas.tick/(c.canvas.elapsedMs/1000);
   assert(canvasRate>=.85*oldRate,'REJECT insufficient 300 true physics tick throughput at '+c.speed+'x: '+canvasRate.toFixed(2)+' vs '+oldRate.toFixed(2));
   assert(c.ratio<=.60,'REJECT insufficient >=40% genuine Chromium 300 P95 gain at '+c.speed+'x: '+c.ratio.toFixed(3));
  }

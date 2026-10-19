@@ -1,3 +1,9 @@
+## Turn19 — DENSE CANVAS REAL 300 FIRST A/B, physical throughput PASS, 10x P95 borderline
+- [x] [CI 39334976723](https://github.com/danickman/ShowdownLab/actions/runs/39334976723) authentic 300 original vs 1x canvas: 1x P95 583→300ms and 600→283.5ms (49–53% faster), actual TPS 16.35→27.05 and 15.5→26.61 (faster, no fake frames).
+- [ ] 10x first matched was 1133.4→683.2ms (39.7% gain, just short of mandatory 40%); other 1850→683.3ms (63% faster), TPS 74→116/70.5→121 (faster). Do not claim release P1 fixed yet.
+- [ ] New strict source-only test: same 1x backing at speed 1 and 0.85x backing at speed 10, for population >=160 ONLY, 80/120 untouched; matched two-seed Chrome P95 and real TPS, then genuine visual/native Safari/offline QA and final release gate.
+- [ ] Previous CI study script failed after all data due c.grid summary typo; fixed without weakening either actual P95 or throughput gate.
+
 ## Turn19 live target spatial-grid — source CPU WIN but real 300 Chromium P95 FAIL
 - [x] [Source CI 39307209715](https://github.com/danickman/ShowdownLab/actions/runs/39307209715) 10+6 entire full RAF SHA pairs exact 20/40/80/120/300 at 1×/10×; same-host 300 source CPU P95 faster 46%/51%.
 - [x] [Real browser CI 39307561204](https://github.com/danickman/ShowdownLab/actions/runs/39307561204) 8 genuine 300 mixed-body full-FX Chromium trials 10+s, real falling HP and ≥85% original tick/sec every arm. P95 1× 649.9→650ms and 566.7→550ms (~0–3%); 10× 1533.3→1183.3ms, 1866.6→1300ms (23–30%). The strict dual-speed ≥40% P95 gate correctly FAILED despite authentic TPS success.
