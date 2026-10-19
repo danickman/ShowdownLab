@@ -1,8 +1,9 @@
-## Turn18 source-only 300-body bitlane trial — IN TEST
-- [ ] Real 20/40/80/120/300 full-RAF original/candidate SHA exact parity at 1x/10x.
-- [ ] Three matched 300 CPU P95 heldouts both speeds; must be meaningfully faster before browser A/B.
-- [ ] Actual alternating same-host Chromium 430×932 DPR3 300 1×/10× RAF P95 and 80/120 controls before acceptance; no claimed Safari FPS.
-- [ ] If candidate rejected keep playable core and 42 pinned SHA untouched; if promoted rerun all QA and PWA verification.
+## Turn18 CLOSED — source-exact bitlane rejected, 300 P95 P1 OPEN
+- [x] [Real PR CI 39213101930](https://github.com/danickman/ShowdownLab/actions/runs/39213101930), [research SHA f908460](https://github.com/danickman/ShowdownLab/commit/f908460f4a766a1143a29bafec852f423ea8b507): 10 full-RAF exact 20/40/80/120/300 1×/10× SHA pairs plus 6 heldout 300 SHA pairs, strict comparison PASS.
+- [x] 300 actual Node CPU P95 1× 46.324→52.746ms (+13.9%), 10× 361.064→408.981ms (+13.3%). Heldout 1× candidate/current ratios .976/1.293/.985, 10× 1.138/1.093/1.100; REJECT as slower at every 10× heldout.
+- [x] Source-only trial never integrated; prior accepted engine, full physics/FX, Guide, 42 SHA PWA, SW, main and production untouched. Costly study now workflow_dispatch only.
+- [ ] **OPEN P1** prior Chromium 300 genuine RAF P95 1× ~567–650ms and 10× ~1267–1317ms; study failed source CPU gate so Chromium A/B NOT RUN and no browser improvement claimed. Native iPhone 14 Pro Max Safari also unverified. BLOCK Turn25 release.
+- [ ] Turn19 NEXT: live 40-fighter persistent positive-HP-damaging fronts 30→>=40. Distinct P1, cannot certify 300 latency.
 
 ## Turn17 COMPLETE — final Beetank L5 Hammer & Anvil accepted on QA
 - [x] [Exact-head CI 39210597651](https://github.com/danickman/ShowdownLab/actions/runs/39210597651): 14/14 automatic checks PASS at f760d0c; 42 pinned SHA+offline rollback, 300 stress, 430x932 portrait, Mole/Beetank exact source, real HP-damage attribution, and full live 20/40 front check.

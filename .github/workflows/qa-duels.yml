@@ -2035,6 +2035,8 @@ jobs:
           if-no-files-found: warn
 
   turn18-bitlane-300-ab:
+    # Closed after deterministic parity PASS but 300 10x CPU slowdown; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
     # One source-only synchronous integer-bitset broadphase, distinct from rejected Map/Set buckets.
     # No runtime promotion without parity AND repeatable both-speed browser evidence.
     runs-on: ubuntu-latest
