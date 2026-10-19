@@ -42,5 +42,5 @@ for(let n=0;n<3;n++)for(const speed of [1,10]){
 }
 const result={sourceSHA:crypto.createHash('sha256').update(source).digest('hex'),kind:'Node JS source-real RAF callback CPU milliseconds, not Chromium actual RAF interval or Safari FPS',baseline,matched,wallMs:+(performance.now()-start).toFixed(1)};
 if(process.env.QA_TURN19_TARGET_RECEIPT)fs.writeFileSync(process.env.QA_TURN19_TARGET_RECEIPT,JSON.stringify(result,null,2)+'\n');
-console.log('TURN19_TARGET WASM SAME-RUN '+JSON.stringify({cases:baseline.map(r=>({count:r.count,speed:r.speed,old:r.current.p95,new:r.both.p95,ratio:+(r.both.p95/Math.max(.001,r.current.p95)).toFixed(3),tick:r.current.tick})),matched:matched.map(r=>({run:r.n,speed:r.speed,old:r.current.p95,new:r.both.p95,ratio:r.ratio})),wallMs:result.wallMs}));
+console.log('TURN19_TARGET WASM SAME-RUN '+JSON.stringify({cases:baseline.map(r=>({count:r.count,speed:r.speed,old:r.current.p95,new:r.wasm.p95,ratio:+(r.wasm.p95/Math.max(.001,r.current.p95)).toFixed(3),tick:r.current.tick})),matched:matched.map(r=>({run:r.n,speed:r.speed,old:r.current.p95,new:r.wasm.p95,ratio:r.ratio})),wallMs:result.wallMs}));
 console.log('PASS: 10 original-vs-candidate exact source RAF SHA pairs at 20/40/80/120/300 x 1/10x, six heldout 300 pairs; no claimed real iPhone FPS');
