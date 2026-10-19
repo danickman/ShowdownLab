@@ -1,3 +1,11 @@
+## ACTIVE 25-turn mandate — new #18 and #19 issue-remediation acceptance gates
+- [x] Two new user-funded implementation turns inserted after Beetank #17; historical 23-turn file superseded.
+- [ ] #18 real same-run 300-fighter Chromium 1× and 10× P95 performance improvement, ~40% repeatable target BOTH speeds, exact source full-RAF physics and 80/120/300 controls; never hide or degrade 10×.
+- [ ] #19 40 CURRENT-live genuinely persistent independent positive HP-damage fronts >=40 (now 30), separated real HP windows >=140 (now 178/177), 20 persistent>=1 and separate>=16 (now 1/26). New required real ultimate current-live test, old pre-Goose strict test unchanged.
+- [ ] Barbarian #20–21; fighter outliers #22–23, including Dragon L4 counter fairness.
+- [ ] QA #24 checks both P1s, phone Safari, all levels/modes/300 and 42 PWA hashes; #25 sole conditional QA-main + one Vercel prod or STOP if blockers remain.
+- [x] Exact original Beetank #16 QA CI 13/13 successful; no preview/main/prod deployment.
+
 ## Turn 10 release gate — October 2026, 19-turn ledger
 - [x] QA source implementation: Mole L5 fracture polygon, forked fault, flying shards, fading event-ground scar (no combat stats changes).
 - [x] Increased sunny sky cloud visibility with dense-frame throttling, reduced-motion exit and conserved combat floor.

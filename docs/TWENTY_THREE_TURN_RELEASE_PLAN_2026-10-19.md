@@ -1,3 +1,5 @@
+> **SUPERSEDED HISTORICAL PLAN (23 turns).** The NEW authoritative [25-turn release ledger](TWENTY_FIVE_TURN_RELEASE_PLAN_2026-10-19.md) inserts #18 300-fighter P95 and #19 40-body real HP front remediation after Beetank #17. Barbarian #20–21, outliers #22–23, QA #24, sole conditional release #25. Old numbers below must not guide new work.
+
 # Showdown Lab — AUTHORITATIVE TWENTY-THREE-TURN RELEASE LEDGER
 Approved 18–19 October 2026 Toronto. Replaces the prior thirteen-turn release plan (retained as historical evidence). EIGHT additional bounded fighter turns in total: two Goblin L5, two Beetank L5, two Barbarian L5, and two evidence-selected; no open-ended experiment loops. Repository danickman/ShowdownLab; QA branch qa-turn1-duel-baseline; draft PR #14 into main. Main and production frozen until final release gate. No Vercel preview deployments.
 
