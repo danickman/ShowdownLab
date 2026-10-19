@@ -2512,6 +2512,8 @@ jobs:
           if-no-files-found: warn
 
   turn20-live-cohesion-research:
+    # REJECTED 40-front penalty, archive manual-only.
+    if: github.event_name == 'workflow_dispatch'
     # One user-funded source-only study; no runtime mutation. Can become manual archive.
     runs-on: ubuntu-latest
     timeout-minutes: 26
@@ -2532,4 +2534,27 @@ jobs:
         with:
           name: turn20-live-fronts
           path: turn20-live-fronts.json
+          if-no-files-found: warn
+
+  turn20-local-commitment-research:
+    # Source-only physical close-contact continuity after stronger lane penalty proved worse at 40.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Turn20 local melee engagement continuity research syntax
+        run: node --check tools/qa/check-turn20-local-commitment.cjs
+      - name: Run real 20/40 mixed/heavy/swarm/ranged current-ultimate HP-front matches
+        env:
+          QA_TURN20_FRONTS: turn20-local-commitment.json
+        run: node tools/qa/check-turn20-local-commitment.cjs
+      - name: Preserve strict actual-HP attribution research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-local-commitment
+          path: turn20-local-commitment.json
           if-no-files-found: warn
