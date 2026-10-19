@@ -48,6 +48,11 @@ assert(ui.includes("'DOUBLE K.O. · DRAW'"),'results screen labels true drawn fi
 assert(ui.includes("winner&&winner!=='draw'"),'draws never grant Parts');
 assert(round.includes("win==='draw'?'DOUBLE K.O. · DRAW'"),'round-loop final UI handles draw');
 assert(round.includes("s.roundWinner==='draw'"),'intermission labels double KO without declaring losing side');
-assert(html.includes('/v3/round-loop.js?v=doubleko1'),'root loads pinned round UI version');
+const roundUrl=html.match(/\/v3\/round-loop\.js\?v=[^"]+/)?.[0],sw=fs.readFileSync(path.join(root,'sw.js'),'utf8');
+assert(roundUrl,'root has versioned round UI entry');
+const liveList=JSON.parse(sw.match(/const RUNTIME=(\[[\s\S]*?\]);/)[1]);
+const hashes=JSON.parse(sw.match(/const RELEASE_SHA256=(\{[^\n]*\});/)[1]);
+assert(liveList.includes(roundUrl),'round UI is present in actual SW runtime list');
+assert(/^[0-9a-f]{64}$/.test(hashes[roundUrl]),'current round UI has pinned integrity digest');
 console.log('REAL MUTUAL KO '+JSON.stringify(receipts));
 console.log('PASS: true Turtle L4 mutual death terminates once; both lives deducted; final DRAW and round continuation; no dead-unit zombie loop or Parts awarded for draw');

@@ -3,8 +3,9 @@
 // emulated CSS insets do not prove native iOS Safari UI.
 const fs=require('fs'),path=require('path'),http=require('http'),assert=require('assert/strict'),puppeteer=require('puppeteer');
 const root=path.resolve(__dirname,'../..'),output=path.resolve(process.env.QA_TURN9_OUTPUT||'/tmp/showdown-turn9');
+const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.webmanifest':'application/manifest+json'};
 fs.mkdirSync(output,{recursive:true});
-const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/\/$/,'/index.html'),file=path.resolve(root,'.'+name);if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end()}try{res.end(fs.readFileSync(file))}catch{res.writeHead(404);res.end()}});
+const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/\/$/,'/index.html'),file=path.resolve(root,'.'+name);if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end()}try{res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file))}catch{res.writeHead(404);res.end()}});
 (async()=>{await new Promise(ok=>server.listen(0,'127.0.0.1',ok));const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
 const out=[],errors=[];try{for(const [width,height] of [[430,932],[390,844],[375,667]]){const page=await browser.newPage();page.on('pageerror',e=>errors.push(e.message));
 await page.setViewport({width,height,deviceScaleFactor:3,isMobile:true,hasTouch:true});
