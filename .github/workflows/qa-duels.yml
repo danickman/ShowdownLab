@@ -2146,6 +2146,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-wasm-300-source:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
     # New architecture: WebAssembly exact-ordered numeric collision kernel, not a bucket heuristic.
     # Source-only candidate. Do not promote absent full physics SHA parity and true browser 1x/10x P95.
     runs-on: ubuntu-latest
@@ -2170,6 +2172,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-wasm-300-browser:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
     # Source-only same-host original/WASM actual 300 full-FX Chromium RAF, no preview.
     # Distinguish real RAF intervals from CPU callback or physical iPhone Safari FPS.
     runs-on: ubuntu-latest
@@ -2202,6 +2206,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-source-cpu-attribution:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
     # One source-only research diagnostic for next substantive hot function.
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -2225,6 +2231,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-wasm-target-source:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
     # Compiled exact nearest-target ranking after physical collision profile confirmed 70%+ hotspot.
     # Source-only, no gameplay promotion until full SHA parity and material dual-speed browser gains.
     runs-on: ubuntu-latest
@@ -2282,4 +2290,36 @@ jobs:
         with:
           name: turn19-wasm-combined-browser
           path: ${{ runner.temp }}/turn19-combined-browser
+          if-no-files-found: warn
+
+  turn19-cooperative-300-browser:
+    # Source-only architecture: render RAF and complete real physics ticks scheduled separately.
+    # Real 300 full-fighter FX, no faked speed or reduced physical contacts.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify browser engine
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify full source-exact physics step and cooperative browser A/B script
+        run: node --check tools/qa/check-turn19-cooperative-browser.cjs
+      - name: Run real current/cooperative Chromium RAF + tick throughput at 300, both rates
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_COOPERATIVE_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-cooperative-browser
+        run: node tools/qa/check-turn19-cooperative-browser.cjs
+      - name: Preserve actual 300 RAF and real throughput evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-cooperative-300
+          path: ${{ runner.temp }}/turn19-cooperative-browser
           if-no-files-found: warn
