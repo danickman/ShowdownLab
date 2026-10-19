@@ -1,3 +1,12 @@
+## Turn17 COMPLETE — final Beetank L5 Hammer & Anvil accepted on QA
+- [x] [Exact-head CI 39210597651](https://github.com/danickman/ShowdownLab/actions/runs/39210597651): 14/14 automatic checks PASS at f760d0c; 42 pinned SHA+offline rollback, 300 stress, 430x932 portrait, Mole/Beetank exact source, real HP-damage attribution, and full live 20/40 front check.
+- [x] Source 224+8 genuine terminal, new 79777/95419 seeds: first L5 5→6/8, equal peer 4/8, whole foe army doubled 0/8, real severe 3v15 0/4, persistent genuine HP damaging fronts 20→23 and separate windows 125→130.
+- [x] 64 real all-role live battles: at 20 bodies persistent 1→1, separated 26→26; at 40 persistent 30→30, separated 177→179, protecting genuine combat ecology.
+- [x] QA-only playable Guide, physics + limited 2-charge natural Anvil follow-through, 100-tick attacker refresh, prior one Fracture still bounded; no new recursive hit/stun, original old fixtures preserved.
+- [ ] Next #18: genuine measured 300 population P95 at BOTH 1× and 10×, same-run reproducible Chromium and no combat/counterplay regression.
+- [ ] Next #19: mandatory current-live all-role 40 persistent HP-damage fronts >=40, now 30; not the historical frozen Goose test.
+- [ ] Native physical iPhone 14 Pro Max Safari remains open; no production and no Vercel preview before fully conditional #25.
+
 ## ACTIVE 25-turn mandate — new #18 and #19 issue-remediation acceptance gates
 - [x] Two new user-funded implementation turns inserted after Beetank #17; historical 23-turn file superseded.
 - [ ] #18 real same-run 300-fighter Chromium 1× and 10× P95 performance improvement, ~40% repeatable target BOTH speeds, exact source full-RAF physics and 80/120/300 controls; never hide or degrade 10×.
