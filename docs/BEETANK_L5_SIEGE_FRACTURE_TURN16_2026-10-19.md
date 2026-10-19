@@ -1,0 +1,11 @@
+# Turn 16 /23 Beetank L5 Siege Fracture source-only candidate
+Prepared October 19 2026 Toronto, base fbcf76721701022c3a78434cfcf8435f86752e58.
+
+## Shipped reference and clear different mechanic
+Previously accepted Siege Breaker [evidence](BEETANK_SIEGE_BREAKER_2026-10-18.md) allows L5 contact extension ONLY against living Beetank, Turtle and Dragon opponents, with actual horn and bounded Seismic. Earlier fresh heldout first L5 was 7/8, peer 4/8, double entire enemy army 0/8, true 3 vs 15 0/4; 14 persistent damaging fronts and 115 independent damaging time windows. Unrestricted full contact destroyed the genuine 20-body front; rejected. Old Overdrive/Breach merely added HP damage without more wins; rejected.
+
+New source-only Siege Fracture attempts TEAM FOLLOW-THROUGH, not bonus direct hits: after an L5 Beetank physically lands positive HP horn or ram on a still-living Beetank/Turtle/Dragon, ONLY that struck heavy victim is marked to combat tick +96. Its subsequent naturally landed incoming damage is multiplied by 1.65 through the existing incoming path. No new spawned hit, recursion, extra stun, teleport, contact range, target changes, or non-heavy area aura. Renew requires actual hit. Other Beetanks and enemy peer have the same rule; baseline low tiers unchanged.
+
+Test: independent control/source-variant full terminal at 20/40 bodies, new training seeds 27643/32653, fresh heldout 75973/89399, blue and red mirrors. Seven actual draft strategies: hold/+2 Beetanks/alternate evolved Knight/first L5/equal peer L5/enemy Beetank family reinforcement/literally double entire enemy army. Exactly 16 fixtures x7x2 =224 full matches, plus 8 real 3-v-15 severe. Observer and raw full-RAF state parity, unchanged L1-L4 states, actual post-cap HP and genuinely separate HP-damaging front measurements.
+
+Gate: first L5 must be meaningfully worth investment relative to accepted heavy-only baseline and +2/Knight, without losing true independent frontline damage. Whole-enemy-army double and 3 vs 15 remain counters; peer retains even odds. Previous 7/8 is a prior DIFFERENT cohort, not presumed for these seeds. If worse or simply higher damage, reject, no live playable edits. One additional independently budgeted Beetank turn #17 only. Main and production frozen, no Vercel preview; pinned PWA untouched.

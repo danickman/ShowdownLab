@@ -1211,3 +1211,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] REJECT candidate due to 11.8–30.4% worse 10× RAF. Keep original engine; record provisional P1 300 crowd latency for final QA #22.
 - [x] Archive costly source/browser study CI jobs as manual-only; no playable runtime/PWA pin changes, no preview/production.
 - [ ] Physical iPhone 14 Pro Max Safari 300 and 10× performance acceptance; final release gate conditional.
+
+
+### Turn 16 Beetank heavy-only Siege Fracture source test
+- [x] Retain accepted heavy-only L5 Siege Breaker baseline, genuine 20/40 multi-front quality constraints.
+- [ ] One distinct physically landed heavy fracture for 96 ticks, +65% subsequent ordinary natural damage against heavy only, no free new hits or global stat.
+- [ ] 224 true terminal control/variant full-match comparisons +8 severe and untouched low-tier/full-RAF observer parity, fresh 75973/89399 seeds 20/40 two sides, hold/recruit/alternate/peer/family x2/entire enemy x2.
+- [ ] Record exact-head CI wins, physically separated actual-HP damage fronts/windows, anti-numerical counterplay and explicit promote/reject. No main/prod/preview.

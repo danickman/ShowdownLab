@@ -201,6 +201,28 @@ jobs:
           path: ${{ runner.temp }}/turn15-browser
           if-no-files-found: warn
 
+  beetank-l5-fracture-roi-turn16:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate heavy-only Siege Fracture study
+        run: node --check tools/qa/check-beetank-l5-siege-fracture-turn16.cjs
+      - name: Run real terminal Beetank ROI and RAF parity
+        env:
+          QA_BEETANK_FRACTURE_RECEIPT: beetank-l5-fracture-turn16.json
+        run: node tools/qa/check-beetank-l5-siege-fracture-turn16.cjs
+      - name: Archive actual-source ROI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-l5-fracture-turn16
+          path: beetank-l5-fracture-turn16.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
