@@ -1,3 +1,9 @@
+## Turn19 live target spatial-grid — source CPU WIN but real 300 Chromium P95 FAIL
+- [x] [Source CI 39307209715](https://github.com/danickman/ShowdownLab/actions/runs/39307209715) 10+6 entire full RAF SHA pairs exact 20/40/80/120/300 at 1×/10×; same-host 300 source CPU P95 faster 46%/51%.
+- [x] [Real browser CI 39307561204](https://github.com/danickman/ShowdownLab/actions/runs/39307561204) 8 genuine 300 mixed-body full-FX Chromium trials 10+s, real falling HP and ≥85% original tick/sec every arm. P95 1× 649.9→650ms and 566.7→550ms (~0–3%); 10× 1533.3→1183.3ms, 1866.6→1300ms (23–30%). The strict dual-speed ≥40% P95 gate correctly FAILED despite authentic TPS success.
+- [x] **REJECT playable promotion**. Source-only grid and browser jobs archived as manual research; no v3 change, Guide/SW 42 pins/main/prod/previews untouched. Genuine 300 P1 remains release blocker, conditional Turn26 cannot proceed.
+- [ ] Architectural profiling of event-loop/paint orchestration and whole-tick physics necessary. Do not repeat target-cache/worker/RAF-only shortcuts.
+
 ## Turn19 genuine 300 Chromium nearest live-grid dual acceptance
 - [x] All 10+6 source real entire-RAF SHA exact (20/40/80/120/300 both speeds), actual Node 300 CPU ~46/51% faster [39307209715](https://github.com/danickman/ShowdownLab/actions/runs/39307209715).
 - [ ] Real 300 full FX matched Chromium >=40% P95 faster at both 1x/10x AND >=85% current real ticks/sec; test rejects fake FPS.
