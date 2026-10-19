@@ -1,0 +1,11 @@
+# Turn 12 — Goblin L5 Pack Relay bounded source experiment
+Date: October 18 2026, Toronto. QA parent 0b0c555f0835f1438348584aeee60be9c75fb9e0. **Not playable** until exact-head CI evidence and a final Turn 13 selection.
+
+## Distinct physical mechanic
+Instead of recycled Pin2/Pin4, Double Fang or Rally damage inflation, a real positive-HP primary L5 Goblin stab triggers a **pack-timing relay**: up to TWO living allied Goblins within 0.15 physical arena distance from the actually struck target advance their normal remaining melee cooldown by 14 ticks. Triggering attacker gated to no more than once per 37 simulation ticks. Subsequent HP damage is the allies' actual attacks, subject to normal armor, proximity, target selection and mortality. No spawned hits, global buffs, recursive effects, forced targeting, stuns, teleport, or invulnerability; L1-L4 bitwise untouched.
+
+## Source-real run protocol
+Test tools/qa/check-goblin-l5-relay-roi-turn12.cjs is a current-source candidate injected only in a Node VM. Twenty/fourty-body symmetric teams, 2 calibration seeds 23791/31891 and truly fresh heldout seeds 72311/86519, blue/red mirrors, seven authentic choices (hold, evolve L5 first, +2 recruits, alternate Beetank evolve, peer L5, double opposing Goblin family, doubled entire enemy army). 16 fixtures ×7×2 arms = 224 *full terminal* outcomes; 4 mirrored severe 3 evolved vs 15 ×2 arms = 8; exact observer/raw whole-RAF parity (4), unaffected L1-L4 (12), and deterministic repeats (2). Measure actual capped HP and geographically separate positive HP damaging fronts/windows. Aspire genuine favorable first-L5 7–8/8, maintain peer and number counters and independent theater; accept only with evidence, not artificially. No game source, Guide, FX, SW/PWA asset bytes or production changes are made in Turn 12.
+
+## Additional Barbarian L5 authorisation
+Two NEW bounded turns #16 and #17; original first-L5 Barbarian was 3/8 vs hold 4/8 but recent fresh cohort 8/8, and rejected Bloodstorm reduced independent fronts 13→8. Diagnose role-contact opportunity and propose a DIFFERENT exciting evolution rather than simply rerunning the failed 75-tick momentum or arbitrary cleave. New final QA #20, controlled release #21. Cost guard: no QA preview deployments.

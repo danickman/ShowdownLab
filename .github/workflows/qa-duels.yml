@@ -49,6 +49,28 @@ jobs:
           node --check v3/arena-stage.js
           node --check tools/qa/check-turn11-arena.cjs
           node tools/qa/check-turn11-arena.cjs
+  goblin-l5-relay-roi-turn12:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only L5 Goblin pack timing candidate
+        run: node --check tools/qa/check-goblin-l5-relay-roi-turn12.cjs
+      - name: Match real 20/40 terminal ROI, peer, numeric counters, true fronts and RAF
+        env:
+          QA_GOBLIN_RELAY_RECEIPT: goblin-l5-relay-turn12.json
+        run: node tools/qa/check-goblin-l5-relay-roi-turn12.cjs
+      - name: Preserve physical matched source-only research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-relay-turn12
+          path: goblin-l5-relay-turn12.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12

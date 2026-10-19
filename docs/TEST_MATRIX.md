@@ -1166,3 +1166,10 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Previously restored Turtle foot, 430x932 authored sprite envelopes and combat staging remain unchanged.
 - [ ] Exact-head PR job validates warm frame cost by canvas-call bound; all 42 PWA SHA pins, 300-body and 430/390/375 Chromium screenshot checks.
 - [ ] Real iPhone 14 Pro Max Safari interaction, crop, thermal and frame-time tests still OPEN. Separate CI p95 estimates are not verified comparative speedups.
+
+
+### Turn 12 of 21: Goblin Pack Relay and extra Barbarian L5
+- [x] Add two bounded Barbarian L5 turns #16–17 separate from rejected Bloodstorm, move final QA to #20/release to #21.
+- [x] Turn 11 exact source PR CI 39189338910 green 12/12; 300 bodies and 42 SHA assets, native Safari still OPEN.
+- [ ] Run 224 real source-terminal L5 match variants +8 literal 3v15, hold/recruits/alternate/peer/doubled family/entire enemy x2, four observer-raw full RAF pairs, 12 unchanged L1–L4 RAF parity, authentic positive HP and separated front/window accounting.
+- [ ] Turn 12 candidate is TEST-ONLY, not playable. Use fresh heldout to select/reject and only one distinct Turn 13 follow-up.

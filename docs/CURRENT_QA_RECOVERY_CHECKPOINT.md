@@ -1,3 +1,5 @@
+**ACTIVE 21-TURN PLAN: [TWENTY_ONE_TURN_RELEASE_PLAN_2026-10-18.md](TWENTY_ONE_TURN_RELEASE_PLAN_2026-10-18.md)**. Prior 19/13 turn ledgers are archived history. Turns 1–11 complete: Turn 11 exact-head [PR CI 39189338910](https://github.com/danickman/ShowdownLab/actions/runs/39189338910) 12/12 green, 58 optional skips, 42 PWA SHA, 300 browser. Turn 12 source-only Goblin L5 Pack Relay study on QA (NOT playable); Turns 16–17 NEW Barbarian L5, #20 QA and #21 only controlled conditional release, zero QA preview deployments.
+
 **CURRENT ACTIVE PLAN: [19-TURN RELEASE LEDGER](NINETEEN_TURN_RELEASE_PLAN_2026-10-18.md).** Turns 1–9 complete. #10–11 theatre, #12–13 Goblin L5, #14–15 Beetank L5, #16–17 actual ROI selected, #18 QA, #19 sole conditional release; no previews. Earlier 13-turn schedule below is historical only.
 
 # Showdown Lab — recovered current development checkpoint
