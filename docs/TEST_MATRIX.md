@@ -1,3 +1,8 @@
+## Turn19 bound-anchored nearest source-only 300 CPU trial
+- [ ] Exact original vs cached-prior-bound full RAF SHA at 20/40/80/120/300 and 1×/10× plus six 300 heldout samples.
+- [ ] Genuine paired Node 300 CPU P95 repeatable improvement BOTH speeds; if no meaningful win, reject without browser.
+- [ ] Never claim browser FPS absent matched actual Chromium 300 RAF and >85% baseline real tick throughput; no playable source changed.
+
 **TURN19 COOPERATIVE 300 SOURCE-ONLY VERDICT: REJECT FAKE FPS.** [Actual Chromium 39303801552](https://github.com/danickman/ShowdownLab/actions/runs/39303801552) P95 appeared to improve 51% at 1x and 77–78% at 10x; but **real simulation throughput collapsed** from 15.5–16.4→4.8–5.6 ticks/sec at 1x, and 77.9–79.9→4.8–5.4 at 10x. Actual combat progression slows 66–94%, so speed control is broken. Reject, add >=85% baseline TPS strict guard in source browser check, archive expensive candidate manual-only; do NOT ship. 300 performance P1 remains unresolved despite green research job; 42 PWA SHA/main/prod/previews unchanged. [Detailed evidence](TURN19_THREADED_300_PERFORMANCE_2026-10-19.md).
 
 ## Turn19 cooperative true simulation tick schedule — new 300 browser source-only A/B

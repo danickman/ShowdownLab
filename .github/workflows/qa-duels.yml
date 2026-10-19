@@ -2325,3 +2325,27 @@ jobs:
           name: turn19-cooperative-300
           path: ${{ runner.temp }}/turn19-cooperative-browser
           if-no-files-found: warn
+
+  turn19-anchored-nearest-source:
+    # New deterministic previous-target distance bound with original target order and equal-score tie semantics.
+    # Source-only, cheap parity+timing gate before any browser run.
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source-nearest trial syntax
+        run: node --check tools/qa/check-turn19-anchored-nearest.cjs
+      - name: Check 20/40/80/120/300 1x and 10x exact full-RAF state, matched CPU P95
+        env:
+          QA_TURN19_ANCHORED_RECEIPT: turn19-anchored-nearest.json
+        run: node tools/qa/check-turn19-anchored-nearest.cjs
+      - name: Archive actual source parity and paired benchmark
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-anchored-nearest
+          path: turn19-anchored-nearest.json
+          if-no-files-found: warn
