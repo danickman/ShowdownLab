@@ -2144,3 +2144,27 @@ jobs:
           name: turn19-yband-300
           path: turn19-yband-300.json
           if-no-files-found: warn
+
+  turn19-wasm-300-source:
+    # New architecture: WebAssembly exact-ordered numeric collision kernel, not a bucket heuristic.
+    # Source-only candidate. Do not promote absent full physics SHA parity and true browser 1x/10x P95.
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check genuine WebAssembly collision parity trial
+        run: node --check tools/qa/check-turn19-wasm-300.cjs
+      - name: Match 20/40/80/120/300 real full-RAF physics and 300 CPU at both speeds
+        env:
+          QA_TURN19_WASM_RECEIPT: turn19-wasm-300.json
+        run: node tools/qa/check-turn19-wasm-300.cjs
+      - name: Preserve actual full-state comparisons and CPU receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-300
+          path: turn19-wasm-300.json
+          if-no-files-found: warn
