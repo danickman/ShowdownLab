@@ -97,6 +97,28 @@ jobs:
           path: goblin-l5-smoke-veil-turn13.json
           if-no-files-found: warn
 
+  turn14-spatial-300-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify spatial index source-study syntax
+        run: node --check tools/qa/check-turn14-spatial-300.cjs
+      - name: Run original-vs-spatial exact RAF and same-host 300 benchmark
+        env:
+          QA_TURN14_RECEIPT: turn14-spatial-receipt.json
+        run: node tools/qa/check-turn14-spatial-300.cjs
+      - name: Archive full matched source benchmark
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn14-spatial-receipt
+          path: turn14-spatial-receipt.json
+          if-no-files-found: warn
+
   node-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 12
