@@ -4,7 +4,7 @@
 // This is Chromium/Linux NOT iPhone Safari. No browser runtime files rewritten.
 const fs=require('fs'),path=require('path'),http=require('http'),assert=require('node:assert/strict');
 const puppeteer=require('puppeteer');
-const root=path.resolve(__dirname,'../..'),output=path.resolve(process.env.QA_TURN19 WASM_BROWSER_OUTPUT||'/tmp/turn19-wasm-browser');
+const root=path.resolve(__dirname,'../..'),output=path.resolve(process.env.QA_TURN19_WASM_BROWSER_OUTPUT||'/tmp/turn19-wasm-browser');
 fs.mkdirSync(output,{recursive:true});
 const read=p=>fs.readFileSync(path.join(root,p),'utf8'),original=read('v3/legacy-sim-core.js');
 const wasmHarness=read('tools/qa/check-turn19-wasm-300.cjs');
