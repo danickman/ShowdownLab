@@ -73,7 +73,7 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
  for(let rep=0;rep<2;rep++)for(const speed of [1,10]){
   const order=rep===0?['current','both']:['both','current'],values={};
   for(const arm of order){const result=await run(arm,speed,rep);values[arm]=result;console.log('TURN19 COMBINED BROWSER CASE '+JSON.stringify(result))}
-  report.cases.push({rep,speed,order,current:values.current,wasm:values.both,ratio:values.both.p95IntervalMs/values.current.p95IntervalMs});
+  report.cases.push({rep,speed,order,current:values.current,both:values.both,ratio:values.both.p95IntervalMs/values.current.p95IntervalMs});
  }
  assert.deepEqual(report.failures,[]);
  report.passed=true;

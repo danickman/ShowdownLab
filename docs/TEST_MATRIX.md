@@ -1,3 +1,5 @@
+**TURN19 300 REAL CHROMIUM COMBINED WASM VERDICT (19 Oct 2026):** [run 39302643355](https://github.com/danickman/ShowdownLab/actions/runs/39302643355) 8 complete 300 full-FX 10+s trials: 1x P95 416.7→400.1ms, 366.7→383.4ms (regression), 10x 1249.9→850.0ms, 1133.3→1116.6ms. NO repeatable >=40% improvement both rates; **REJECT**, P1 still open. CI research job failed only after collecting full raw results due `wasm`/ `both` summary key typo; corrected and archived behind manual dispatch. [Full evidence](TURN19_THREADED_300_PERFORMANCE_2026-10-19.md). Current QA playable/PWA 42 pins/main/production/previews not modified. Release #26 blocked until 300 and separate 40-body fronts P1 fixed.
+
 ## Turn19 combined collision+nearest WASM actual 300 browser A/B — IN RESEARCH
 - [x] Source exact 10+6 RAF SHA, real 300 CPU paired original/combined at both rates [run 39221970050](https://github.com/danickman/ShowdownLab/actions/runs/39221970050).
 - [ ] **Actual Chromium 300 P95** 1× and 10× from same-host 2-seed alternating real HP fights; browser gain is NOT established by source CPU.

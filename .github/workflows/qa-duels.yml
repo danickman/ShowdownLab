@@ -2249,6 +2249,8 @@ jobs:
           if-no-files-found: warn
 
   turn19-wasm-combined-browser:
+    # Completed underperforming 300 study; archive manual dispatch only, no routine high-cost repeats.
+    if: github.event_name == 'workflow_dispatch'
     # One actual same-host 300 real RAF test after full-RAF SHA source parity of both kernels.
     # Source-only via HTTP interception: no runtime or PWA mutation.
     runs-on: ubuntu-latest
