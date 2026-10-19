@@ -797,6 +797,21 @@ jobs:
           QA_DENSITY_OUTPUT: ${{ runner.temp }}/density-browser
           QA_DENSITY_COUNTS: '40,80,120,180,300'
         run: node tools/qa/check-density-browser.cjs
+      - name: Verify Guide Ultimate artwork and draft safe areas at three mobile widths
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN9_OUTPUT: ${{ runner.temp }}/turn9-portrait
+        run: |
+          node --check tools/qa/check-turn9-portrait.cjs
+          node tools/qa/check-turn9-portrait.cjs
+      - name: Upload Turn 9 phone gallery and reward safe-area evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn9-portrait
+          path: ${{ runner.temp }}/turn9-portrait
+          if-no-files-found: warn
       - name: Upload real Chromium receipts and 430x932 screenshots
         if: always()
         uses: actions/upload-artifact@v4

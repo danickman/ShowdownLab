@@ -1,0 +1,7 @@
+# Turn 9 — Portrait Guide and between-round safe areas
+
+18 October 2026, QA prechange `648813ee0935e24820f050d469626ed481d5307e`. Primary iPhone 14 Pro Max 430×932 DPR3 (physical 1290×2796). No changes to fighter art, balance or combat physics. Existing Guide squeezed three evolution art canvases into equal 155–185px columns. Now L4 gets a featured full-width 228–278px portrait above compact two-column L1/L2 comparison, with smaller 375/390px layouts and no horizontal crop. Existing authored forms, fighter info, scroll container and font hierarchy unchanged.
+
+The round-loop modal previously used static 22px/10px edge padding regardless of Dynamic Island and home indicator. Vertical padding now includes CSS safe-area custom properties with 16px/10px baseline; vertical scrolling handles tall three-offer drafts without losing the CTA. Quick/Draft/Lab semantics, 1× default, touch 48px targets and dual one-pick-per-round guard untouched.
+
+New in existing Chromium density job: `tools/qa/check-turn9-portrait.cjs` checks actual live DOM at 430×932 DPR3 touch, 390×844 and 375×667, ten cards, L4 gallery relative sizing and order, horizontal bounds, safe modal padding with simulated 59px top/34px bottom and button bounds. Stores proof screenshots. **Chromium emulation is not real iPhone Safari.** New PWA release `turn9-portrait1` with 42 pinned SHA-256 assets and fresh HTML CSS/runtime versions. **New-head CI acceptance pending.** No Vercel QA previews or production deployment.
