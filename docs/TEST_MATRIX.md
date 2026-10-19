@@ -1203,3 +1203,11 @@ Exact QA f96a686 push and PR workflows **passed** (54 green each, one skip), 204
 - [x] Source original-vs-target-list study PR 39200312249: 10 full-RAF SHA matches + 6 heldout 300 matches, no semantic drift. Rejected: 300 Node CPU P95 1× **51.05→52.34ms**, 10× **362.99→387.52ms**, heldouts no reproducible speed gain.
 - [x] No runtime source, PWA 42 hashes, Guide, FX or fighter physics edited; archived both expensive completed studies behind manual workflow_dispatch. No preview/main/prod.
 - [ ] Turn 15 REAL Chromium 300 RAF p95 at 1× and 10×, same-host A/B and physics-safe substantive engine improvement. Node CPU time != browser RAF interval; native iPhone Safari still OPEN.
+
+### Turn 15 CLOSED — 300 fighter real-browser P95 source A/B
+- [x] Full original/candidate RAF SHA identity at 20/40/80/120/300 1× and 10×, plus six heldout 300 pairs, all ten fighter families; 300 body count preserved.
+- [x] Node 300 callback P95 1× 47.330→49.877ms, 10× 364.767→352.026ms; these are not physical browser RAF or Safari FPS.
+- [x] Same-run real Chromium 430×932 DPR3: 1× current/candidate 650/516.7ms and 566.7/533.4ms; 10× 1266.6/1416.6ms and 1316.7/1716.7ms. Eight noncensored trials, both orders.
+- [x] REJECT candidate due to 11.8–30.4% worse 10× RAF. Keep original engine; record provisional P1 300 crowd latency for final QA #22.
+- [x] Archive costly source/browser study CI jobs as manual-only; no playable runtime/PWA pin changes, no preview/production.
+- [ ] Physical iPhone 14 Pro Max Safari 300 and 10× performance acceptance; final release gate conditional.

@@ -146,7 +146,8 @@ jobs:
           if-no-files-found: warn
 
   turn15-live-slot-300-ab:
-    # One bounded new behavior-identical engaged-attacker hotpath source A/B.
+    # Completed parity study; browser 10x P95 regressed; manual-only archive.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -169,7 +170,8 @@ jobs:
           if-no-files-found: warn
 
   turn15-browser-ab:
-    # Browser-real same-run 300 fighter P95, baseline and source-only candidate.
+    # Completed source A/B; manual-only to conserve CI.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 14
     steps:
