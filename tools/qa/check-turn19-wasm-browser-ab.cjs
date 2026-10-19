@@ -61,7 +61,7 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
     });
     const deltas=stamps.slice(1).map((x,i)=>x-stamps[i]);const ordered=[...deltas].sort((a,b)=>a-b),p=q=>ordered[Math.min(ordered.length-1,Math.floor((ordered.length-1)*q))]||null;
     const canvasSamples=ShowdownQA.renderProfile().slice(-count).map(v=>v.total).filter(Number.isFinite),sorted=[...canvasSamples].sort((a,b)=>a-b);
-    const after=ShowdownAdapter.getState();return{startHp:initial.units.reduce((s,u)=>s+u.hp,0),endHp:after.units.reduce((s,u)=>s+u.hp,0),count:initial.units.length,active:after.units.filter(x=>x.hp>0).length,frames:deltas.length,censored:timedOut||deltas.length<count,elapsedMs:performance.now()-begun,p50IntervalMs:p(.5),p95IntervalMs:p(.95),renderP95Ms:sorted[Math.floor((sorted.length-1)*.95)]||null,tick:after.tick};
+    const after=ShowdownAdapter.getState();return{startHp:initial.units.reduce((s,u)=>s+u.hp,0),endHp:after.units.reduce((s,u)=>s+u.hp,0),count:initial.units.length,active:after.units.filter(x=>x.hp>0).length,frames:deltas.length,censored:timedOut||deltas.length<count,elapsedMs:performance.now()-begun,p50IntervalMs:p(.5),p95IntervalMs:p(.95),renderP95Ms:sorted[Math.floor((sorted.length-1)*.95)]||null,tick:after.debug?.tick||0};
    },{speed,rep});
    console.log('TURN19 WASM BROWSER RAW '+JSON.stringify({arm,speed,rep,...result}));assert.equal(result.count,300,'actual 300 deployed fighters required');
    assert(!result.censored&&result.frames>=(speed===10?20:38),'insufficient uncensored real RAF observations');assert(result.endHp<result.startHp&&result.tick>25,'actual simulation must advance and inflict damage');
