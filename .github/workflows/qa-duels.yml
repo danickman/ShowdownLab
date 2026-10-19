@@ -2510,3 +2510,26 @@ jobs:
           name: turn19-dense-canvas
           path: ${{ runner.temp }}/turn19-canvas
           if-no-files-found: warn
+
+  turn20-live-cohesion-research:
+    # One user-funded source-only study; no runtime mutation. Can become manual archive.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check actual-live physical front cohesion study
+        run: node --check tools/qa/check-turn20-live-cohesion.cjs
+      - name: Run 64 full live ten-fighter terminal battles with physical actual HP fronts
+        env:
+          QA_TURN20_FRONTS: turn20-live-fronts.json
+        run: node tools/qa/check-turn20-live-cohesion.cjs
+      - name: Archive actual source front quality and per-role receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-live-fronts
+          path: turn20-live-fronts.json
+          if-no-files-found: warn
