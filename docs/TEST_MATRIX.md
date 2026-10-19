@@ -1,3 +1,8 @@
+## Turn19 genuine 300 Chromium nearest live-grid dual acceptance
+- [x] All 10+6 source real entire-RAF SHA exact (20/40/80/120/300 both speeds), actual Node 300 CPU ~46/51% faster [39307209715](https://github.com/danickman/ShowdownLab/actions/runs/39307209715).
+- [ ] Real 300 full FX matched Chromium >=40% P95 faster at both 1x/10x AND >=85% current real ticks/sec; test rejects fake FPS.
+- [ ] Do not integrate runtime until browser meets all gates, then 42 PWA SHA/offline/80/120/300/Guide/actual device tests.
+
 ## Turn19 nearest-target spatial-grid source-only QA
 - [x] MessageChannel real 300 browser trial FAILED genuine tick throughput [CI 39306735031](https://github.com/danickman/ShowdownLab/actions/runs/39306735031); don't conflate smoother RAF with real 10x gameplay.
 - [ ] Per-team live target grid preserve exact 20/40/80/120/300 1x/10x full RAF SHA and 6 heldout 300 samples.
