@@ -2709,3 +2709,26 @@ jobs:
           name: turn21-barbarian-first-fury
           path: turn21-barbarian-first-fury.json
           if-no-files-found: warn
+
+  turn22-barbarian-iron-tide-roi:
+    # One final user-funded L5 Barbarian candidate, source-real true terminals.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Turn22 bounded Iron Tide L5 source study
+        run: node --check tools/qa/check-turn22-barbarian-iron-tide.cjs
+      - name: Run 224 actual terminal 20/40 mixed-role draft choices plus 8 severe & all RAF parity
+        env:
+          QA_TURN22_RECEIPT: turn22-barbarian-iron-tide.json
+        run: node tools/qa/check-turn22-barbarian-iron-tide.cjs
+      - name: Archive physical Iron Tide counterplay, terminal and damaging-front results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn22-barbarian-iron-tide
+          path: turn22-barbarian-iron-tide.json
+          if-no-files-found: warn
