@@ -7,12 +7,18 @@ assert.equal(src.split(replacement).length,2,'one exact density-aware theatre dr
 // Strip ONLY documented live tactical tips, preserving the entire original physics,
 // renderer and density gate byte-for-byte. Any unrelated runtime change still fails.
 let historic=src.replace(replacement,marker);
+const resultCurrentStart="if(mvp&&art){art.style.visibility='visible';const mvpBadge=document.querySelector('.mvp-badge');if(mvpBadge)mvpBadge.style.visibility='visible';art.dataset.art=mvp.type;",resultLegacyStart="if(mvp&&art){art.dataset.art=mvp.type;";
+const resultCurrentEmpty="}else{if(art){art.style.visibility='hidden';art.getContext('2d').clearRect(0,0,art.width,art.height);staticCanvasKeys.delete(art);delete art.dataset.art;delete art.dataset.team;delete art.dataset.level}const mvpBadge=document.querySelector('.mvp-badge');if(mvpBadge)mvpBadge.style.visibility='hidden';document.querySelector('#resultMvp').textContent='BATTLE COMPLETE';",resultLegacyEmpty="}else{document.querySelector('#resultMvp').textContent='BATTLE COMPLETE';";
+for(const [current,legacy] of [[resultCurrentStart,resultLegacyStart],[resultCurrentEmpty,resultLegacyEmpty]]){
+ assert.equal(historic.split(current).length,2,'one exact accepted no-MVP presentation safety overlay');
+ historic=historic.replace(current,legacy);
+}
 for(const [current,legacy] of [["turtle:'Anchor the front beside wounded allies. Shell Rebound punishes real close-range hits on the Turtle or an ally it guards; distant ranged enemies can escape the retaliation.'","turtle:'Turtle is best against close attackers. Ricochet Shell reflects damage actually taken; distant ranged attacks avoid reflection.'"],["goblin:'Keep Goblins together for Pack Ambush, but watch enemy splash. At L5, the first landed damaging stab calls temporary L3 Rabble into the real fight; these fighters do not become permanent recruits.'","goblin:'Keep Goblins close enough to fight as a pack. Nearby allies boost damage, but clustering invites enemy splash attacks.'"],["barbarian:'L5 Measured Charge gets the Barbarian into actual contact faster and staggers its first axe victim. Line up clustered enemies for the existing Blood Cleave; a doubled opposing army is still dangerous.'","barbarian:'Send the Barbarian into crowds. Blood Cleave rewards axe swings that catch several enemies near the main target.'"]]){
  assert.equal(historic.split(current).length,2,'accepted L5 Guide delta must occur exactly once');
  historic=historic.replace(current,legacy);
 }
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
-assert(html.includes('/v3/v3.js?v=theatre-guide-truth1')&&sw.includes('/v3/v3.js?v=theatre-guide-truth1'),'pinned root and SW must include current Guide-truth runtime version');
+assert(html.includes('/v3/v3.js?v=theatre-mvp-reset1')&&sw.includes('/v3/v3.js?v=theatre-mvp-reset1'),'pinned root and SW must include current Guide-truth runtime version');
 const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^showdown-lab-release-[a-z0-9-]+$/.test(releaseCache[1])&&releaseCache[1]!=='showdown-lab-release-turn23-dragon-charge1','new Turtle runtime requires distinct, valid offline cache identity rather than silently reusing old release');
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');

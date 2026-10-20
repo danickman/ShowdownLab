@@ -55,7 +55,65 @@ const server=http.createServer((req,res)=>{
   if(width===430)for(const t of ['sniper','turtle','goblin','barbarian','dragon']){
     await(await page.$('.sl-guide-card[data-guide="'+t+'"] .guide-form-pair')).screenshot({path:path.join(out,'guide-'+t+'-430.png')});
   }
-  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow});
+  // Match the same authored actual image QA against Upgrade Bay and Draft.
+  // Unlike Guide, both use cropped square/wide thumbnails and sticky overlays.
+  const measure=selector=>page.evaluate(sel=>[...document.querySelectorAll(sel)].map(cv=>{
+    const r=cv.getBoundingClientRect(),ctx=cv.getContext('2d',{willReadFrequently:true}),buf=ctx.getImageData(0,0,cv.width,cv.height).data;
+    let opaque=0,edge=0;for(let y=0;y<cv.height;y+=3)for(let x=0;x<cv.width;x+=3){
+      const alpha=buf[(y*cv.width+x)*4+3];if(alpha<100)continue;opaque++;
+      if(x<cv.width*.008||x>cv.width*.992||y<cv.height*.008||y>cv.height*.992)edge++;
+    }
+    return{type:cv.dataset.art,opaque,edge,pixels:cv.width*cv.height,width:r.width,height:r.height};
+  }),selector);
+  const verify=(rows,count,stage)=>{assert.equal(rows.length,count,stage+' fighter art count');for(const r of rows){
+    assert(r.type&&r.opaque>Math.max(35,r.pixels/4000),stage+' blank art '+r.type);
+    assert(r.edge<Math.max(42,r.opaque*.09),stage+' fighter clipped by canvas '+r.type);
+    assert(r.width>40&&r.height>40,stage+' tiny touch art '+r.type);
+  }};
+  await page.click('[data-screen="guide"].active [data-go="home"]');
+  await page.click('[data-screen="home"].active [data-go="roster"]');
+  await page.waitForSelector('[data-screen="roster"].active .roster-card canvas');
+  await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
+  const rosterArt=await measure('[data-screen="roster"].active .roster-card canvas');
+  verify(rosterArt,10,'Upgrade Bay');
+  if(width===430)await(await page.$('[data-screen="roster"].active .fighter-bay')).screenshot({path:path.join(out,'upgrade-bay-430.png')});
+  await page.click('[data-screen="roster"].active [data-go="home"]');
+  await page.click('[data-screen="home"].active [data-go="draft"]');
+  await page.waitForSelector('[data-screen="draft"].active #draftGrid .fighter-card');
+  await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
+  const draftArt=await measure('[data-screen="draft"].active #draftGrid canvas[data-art]');
+  verify(draftArt,10,'Draft cards');
+  if(width===430)await(await page.$('[data-screen="draft"].active #draftGrid')).screenshot({path:path.join(out,'draft-cards-430.png')});
+  await page.click('[data-screen="draft"].active [data-unit="knight"]');
+  await page.click('[data-screen="draft"].active [data-unit="sniper"]');
+  await page.click('[data-screen="draft"].active #confirmDraft');
+  await page.waitForSelector('[data-screen="ready"].active .ready-showcase');
+  await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
+  const readyArt=await measure('[data-screen="ready"].active .ready-team canvas[data-art]');
+  verify(readyArt,2,'Ready duel');
+  if(width===430)await(await page.$('[data-screen="ready"].active .ready-showcase')).screenshot({path:path.join(out,'ready-duel-430.png')});
+  // A stopped/abandoned battle has no surviving MVP; a prior portrait must NEVER linger.
+  await page.evaluate(()=>{
+    const cv=document.querySelector('#resultArt');cv.dataset.art='dragon';cv.dataset.team='red';cv.dataset.level='5';
+    const ctx=cv.getContext('2d');ctx.fillStyle='#e33';ctx.fillRect(0,0,cv.width,cv.height);
+    document.querySelector('[data-screen="battle"] [data-go="results"]').click();
+  });
+  await page.waitForSelector('[data-screen="results"].active #resultArt');
+  const empty=await page.evaluate(()=>{
+    const cv=document.querySelector('#resultArt'),buf=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;
+    let painted=0;for(let i=3;i<buf.length;i+=4)if(buf[i])painted++;
+    return{artVisible:getComputedStyle(cv).visibility,badgeVisible:getComputedStyle(document.querySelector('.mvp-badge')).visibility,
+      painted,staleData:cv.hasAttribute('data-art')||cv.hasAttribute('data-team')||cv.hasAttribute('data-level'),
+      message:document.querySelector('#resultMvp').textContent};
+  });
+  assert.equal(empty.artVisible,'hidden','no-MVP results must hide prior art');
+  assert.equal(empty.badgeVisible,'hidden','no-MVP results must hide stale MVP badge');
+  assert.equal(empty.painted,0,'no-MVP results must clear prior fighter pixels');
+  assert.equal(empty.staleData,false,'no-MVP results must clear prior fighter metadata');
+  assert.equal(empty.message,'BATTLE COMPLETE','clear no-MVP copy');
+  if(width===430)await(await page.$('[data-screen="results"].active .podium')).screenshot({path:path.join(out,'no-mvp-result-430.png')});
+
+  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
   await page.close();
  }
  assert.deepEqual(errors,[],'no portrait rendering exceptions');

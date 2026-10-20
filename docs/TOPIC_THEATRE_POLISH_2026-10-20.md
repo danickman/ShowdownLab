@@ -19,3 +19,10 @@ Live Guide tactical tips for newly released Turtle L5 Shell Rebound, Barbarian L
 
 ## QA follow-up
 Initial theatre CI root gate failed a historical `check-turn19-dense-canvas-playable` byte-fingerprint because the newly corrected static tactical Guide tips live in the same `v3.js` module as the historic density optimization. Rather than removing source protection, the updated gate strips **only those exact three accepted strings** and then verifies the original byte-exact module SHA after also stripping the already-accepted density line. Changed battle physics or renderer logic will still fail. The pinned root/module integrity gate independently passed 42/42. The new browser artwork-gallery job is also an active release check.
+
+## Results screen and cross-surface verification, 20 October
+Source-level issue: `prepResults()` previously left the prior fighter bitmap and MVP badge visible when a round had no surviving winner/MVP (draw, cancelled/test exit). That misrepresented the result. Fix now hides the old portrait/badge, clears pixels and cached fighter metadata, and allows next genuine winner to restore its correct figure. This does not modify combat rules, rewards, winner logic or battle physics.
+
+Extended existing touch DPR3 Chromium gallery gate to **all ten Upgrade Bay Mastery thumbnails**, **all ten Draft cards**, **both Ready-showdown figures**, and the **no-MVP result reset** at 430×932, 390×844 and 375×667, in addition to the existing 90 actual Guide figure canvases. Capture new 430px screenshots and strict empty-result assertion. Native physical Safari signoff remains unverified; no production/main/preview.
+
+PWA: root HTML and JavaScript runtime version, immutable root+41 runtime SHA-256 pins, worker cache revision atomically changed. Historical Turn19 renderer integrity gate strips ONLY the two accepted results presentation statements and three previously accepted tactical Guide strings, still enforces the exact original source fingerprint after density rule removal. Full exact-head CI including 300-density performance and real live 40-fighter fronts required.
