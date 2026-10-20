@@ -2760,3 +2760,26 @@ jobs:
           name: turn23-dragon-telegraph
           path: turn23-dragon-telegraph.json
           if-no-files-found: warn
+
+  turn24-turtle-sanctuary-roi:
+    # One funded final fighter source-only ROI decision; archive manual-only afterward.
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate actual Turtle Guardian strict matched source harness
+        run: node --check tools/qa/check-turn24-turtle-sanctuary.cjs
+      - name: Run 224 true complete matches, severe 3v15, physical fronts and RAF parity
+        env:
+          QA_TURN24_RECEIPT: turn24-turtle-sanctuary.json
+        run: node tools/qa/check-turn24-turtle-sanctuary.cjs
+      - name: Retain per-match physical turtle guardian source receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn24-turtle-sanctuary
+          path: turn24-turtle-sanctuary.json
+          if-no-files-found: warn
