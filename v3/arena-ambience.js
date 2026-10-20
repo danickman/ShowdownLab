@@ -7,23 +7,14 @@
     ctx.save();ctx.beginPath();ctx.rect(0,0,w,h);ctx.clip();
     if(!dense){
       // Broad sunbeams remain strictly in the sky; no combat or camera reflow.
-      ctx.fillStyle='#fff1be';ctx.globalAlpha=.082;
+      ctx.fillStyle='#fff1be';ctx.globalAlpha=.035;
       for(let i=0;i<3;i++){const x=w*(.18+i*.31)+Math.sin(t*.06+i)*w*.012;
         ctx.beginPath();ctx.moveTo(x-12,0);ctx.lineTo(x+24,0);
         ctx.lineTo(x+w*.15,h*.69);ctx.lineTo(x-w*.10,h*.69);ctx.closePath();ctx.fill()}
     }
-    // Open sky is visibly alive, while 80/120/300 crowd modes throttle it.
-    ctx.fillStyle='#fffdf3';ctx.globalAlpha=dense?.12:.29;
-    for(let i=0;i<(dense?1:3);i++){
-      const x=((t*(4+i*1.2)+i*w*.43)%(w*1.65))-w*.29;
-      const y=h*(.18+i*.16),r=w*(.11+(i%2)*.025);
-      ctx.beginPath();ctx.ellipse(x,y,r,h*.04,-.05,0,Math.PI*2);
-      ctx.ellipse(x+r*.56,y-h*.02,r*.67,h*.047,0,0,Math.PI*2);
-      ctx.ellipse(x-r*.43,y+h*.01,r*.51,h*.03,0,0,Math.PI*2);ctx.fill();
-      if(!dense){ctx.globalAlpha=.14;ctx.fillStyle='#729ca9';ctx.beginPath();
-        ctx.ellipse(x+r*.14,y+h*.043,r*1.03,h*.016,0,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#fffdf3';ctx.globalAlpha=.29}
-    }
+    // Authored panoramas already contain detailed natural clouds. Ellipse banks
+    // over them appeared as floating flat discs in real Chromium screenshots.
+    // Keep the authored sky clear; birds and soft shafts still animate.
     ctx.strokeStyle=war?'#4e5348':'#5b7277';ctx.lineWidth=1.2;ctx.globalAlpha=.50;
     for(let i=0;i<(dense?1:3);i++){
       const x=((t*(5+i)+i*w*.28)%(w*1.25))-w*.12;
