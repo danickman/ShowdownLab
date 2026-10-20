@@ -2810,6 +2810,7 @@ jobs:
           if-no-files-found: warn
 
   turtle-topic-shell-reprisal-roi:
+    if: github.event_name == 'workflow_dispatch'
     # Source-only new mechanics; must not block future topic refinements.
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -2831,3 +2832,16 @@ jobs:
           name: turtle-topic-shell-reprisal
           path: turtle-topic-shell-reprisal.json
           if-no-files-found: warn
+
+  turtle-shell-rebound-playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-aligned tangible Turtle L5 behavior
+        run: node tools/qa/check-turtle-reprisal-playable.cjs
+      - name: Verify atomic 42 root and runtime release SHA pins
+        run: node tools/qa/release-hashes.cjs --verify

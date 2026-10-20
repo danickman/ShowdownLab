@@ -1,3 +1,5 @@
+**PLAYABLE REBOUND INTEGRATION UNDER EXACT-HEAD QA:** [Study 39369650993](https://github.com/danickman/ShowdownLab/actions/runs/39369650993) 16/16 PASS, Rebound heldout 8/8 first L5, physical fronts 22→28, current-live PWA integration underway. Shell Rebound full receipt: [TURTLE_SHELL_REBOUND_PLAYABLE_2026-10-20.md](TURTLE_SHELL_REBOUND_PLAYABLE_2026-10-20.md). Do not advance to next topic until exact-head playable CI green and implementation verified.
+
 # Showdown Lab — topic-based readiness and Turtle L5 ownership
 Approved direction 20 October 2026. **Overrides every numerical turn-budget / fixed-end condition** in [historic 31-turn schedule](THIRTY_ONE_TURN_P2_RELEASE_PLAN_2026-10-20.md). User specifically rejected auto-abandoning Turtle after candidates rejected. Do NOT advance to Goblin/Barbarian merely because a research variant failed. No production, main or Vercel previews permitted. Branch qa-turn1-duel-baseline, PR14.
 

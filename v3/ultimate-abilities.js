@@ -7,13 +7,13 @@ const specs={
  assassin:{name:'Execution',l4:'Backstabs deal 80% extra damage to enemies below 40% health.',l5:'120% extra damage to enemies below 75% health.'},
  beetank:{name:'Seismic Ram',l4:'Rams and every third horn strike splash 35% damage and stun nearby enemies for 0.4 seconds.',l5:'Hammer & Anvil: real L5 horns or rams fracture Beetank, Turtle or Dragon for 96 ticks, adding 65% subsequent natural damage. Once per 100 ticks, two real follow-up hits gain another 35% damage; Seismic splash stays bounded.'},
  mole:{name:'Nuclear Carapace',l4:'Ignore 35% of incoming damage, ranged or melee.',l5:'Ignore 50% of incoming damage; after burrow eruptions, Twin Rift cracks forward to damage up to two additional foes for 62% attack damage with a brief stagger.'},
- turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% in close contact; nearby allies below 60% HP take 28% less damage within 0.14 arena units (strongest guard only).'},
+ turtle:{name:'Ricochet Shell',l4:'Reflect 30% of actual close-contact damage; nearby allies below 60% HP take 18% less damage within 0.12 arena units (no stacking).',l5:'Reflect 45% close-contact damage; guard wounded allies for 28% mitigation within 0.14. SHELL REBOUND: when struck in close combat, the Turtle (or a wounded ally it guards) triggers a 145% counterhit plus two 65% splash hits and brief stagger, once every 54 ticks.'},
  goblin:{name:'Pack Ambush',l4:'Gain 20% damage per nearby allied Goblin, up to three allies.',l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'},
  barbarian:{name:'Blood Cleave',l4:'Sweeping axe strikes splash 58% attack damage onto up to three nearby foes and stagger them for 8 ticks.',l5:'A giant sweeping strike splashes 100% attack damage onto up to five foes across a wider arc, staggering them for 12 ticks.'},
  goose:{name:'Impact Shockwave',l4:'Thunder Honk blasts up to five nearby foes, then sends a damaging echo into up to three more with only a brief stagger.',l5:'An ascended sonic crash hits up to six nearby foes and echoes into up to four more with powerful damage, without a long secondary stun.'}
 };
 const near=(a,b,r)=>Math.hypot(a.x-b.x,a.y-b.y)<=r;
-function cue(u,kind,tick,target){if(tick-(u.ultimateTick??-1000)<12)return;u.ultimateTick=tick;u.ultimateKind=kind;u.ultimateTarget=target?.id??null}
+function cue(u,kind,tick,target){if(tick-(u.ultimateTick??-1000)<12&&!(kind==='reprisal'&&['reflect','shelter'].includes(u.ultimateKind)))return;u.ultimateTick=tick;u.ultimateKind=kind;u.ultimateTarget=target?.id??null}
 function armor(t,a){return (t.armor||0)*(rank(a)&&a.type==='sniper'&&a.action==='attack'?(rank(a)===2?0:.4):1)}
 function outgoing(a,t,damage,units,tick){
  const r=rank(a);if(!r)return damage;
@@ -41,7 +41,27 @@ function afterHit(a,t,dealt,units,tick){
  if(rank(t)&&t.type==='turtle'&&a&&a.hp>0&&near(a,t,.10)&&dealt>0){hits.push({target:a,source:null,damage:dealt*(rank(t)===2?.45:.3)});cue(t,'reflect',tick,a)}
  if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}
  if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)&&tick-(a.siegeAnvilTick??-1000)>=100){a.siegeAnvilTick=tick;t.siegeAnvilCharges=Math.min(2,(t.siegeAnvilCharges||0)+2)}
- if(!r||!['sniper','dragon','beetank','mole','barbarian'].includes(a.type))return hits;
+ 
+ // L5 SHELL REBOUND: an actual close-range enemy hit on this Turtle or an
+ // already-wounded warded ally provokes a bounded counterattack, not free DPS.
+ if(a&&a.team!==t.team&&a.hp>0&&dealt>0&&t.hp>0){
+  let guardian=t.type==='turtle'&&rank(t)===2?t:null;
+  if(!guardian&&t.hp/t.maxHp<.6){let best=Infinity;
+   for(const u of units)if(u!==t&&u.team===t.team&&u.hp>0&&u.type==='turtle'&&rank(u)===2&&near(u,t,.14)){
+    const d=Math.hypot(u.x-t.x,u.y-t.y);
+    if(d<best){best=d;guardian=u}
+   }
+  }
+  if(guardian&&near(guardian,a,.23)&&tick-(guardian.shellReprisalTick??-1000)>=54){
+   guardian.shellReprisalTick=tick;
+   hits.push({target:a,source:guardian,damage:guardian.dmg*1.45});
+   const ripple=units.filter(v=>v!==a&&v.team!==guardian.team&&v.hp>0&&v.burrow<=0&&near(v,a,.105))
+    .sort((x,y)=>Math.hypot(x.x-a.x,x.y-a.y)-Math.hypot(y.x-a.x,y.y-a.y)||x.id-y.id).slice(0,2);
+   for(const v of ripple){v.stun=Math.max(v.stun,8);hits.push({target:v,source:guardian,damage:guardian.dmg*.65})}
+   cue(guardian,'reprisal',tick,a);
+  }
+ }
+if(!r||!['sniper','dragon','beetank','mole','barbarian'].includes(a.type))return hits;
  const enemies=units.filter(v=>v!==t&&v.team!==a.team&&v.hp>0&&v.burrow<=0);
  if(a.type==='sniper'&&a.action==='attack'){
   const dx=t.x-a.x,dy=t.y-a.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;

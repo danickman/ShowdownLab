@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',siege:'#edb465',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4',fissure:'#ad8255'};
+const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',siege:'#edb465',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',reprisal:'#b8efc3',pack:'#b7b875',cleave:'#cf9361',thunder:'#e6dec4',fissure:'#ad8255'};
 
 function drawFissure(c,f,age,reduced,size,x,y){
   const px=f.end?.x??x,py=f.end?.y??y,dir=f.team==='red'?-1:1;
@@ -77,7 +77,18 @@ function draw(c,f,age,tier='full'){
   c.beginPath();c.moveTo(x+Math.cos(a)*r,y-size*.38+Math.sin(a)*r*.65);c.lineTo(x+Math.cos(a)*(r+d),y-size*.38+Math.sin(a)*(r+d)*.65);c.stroke();
  }}
  if(f.ability==='fissure'){drawFissure(c,f,age,reduced,size,x,y)}else if(f.ability==='pierce'&&f.end){c.beginPath();c.moveTo(x+(f.cueX||0),y+(f.cueY||0));c.lineTo(f.end.x,f.end.y-size*.45);c.stroke()}
- else if(['bastion','carapace','reflect','shelter'].includes(f.ability)){
+ else if(f.ability==='reprisal'){
+  // Emerald shell impact: two local elliptical outward ripples and angular shrapnel,
+  // no fullscreen flash. Minimal motion draws one simple visible ring.
+  const rad=size*(.40+age*(reduced?.3:1.35));
+  c.beginPath();c.ellipse(x,y-size*.12,rad,rad*.35,0,0,Math.PI*2);c.stroke();
+  if(!reduced){
+   c.beginPath();c.ellipse(x,y-size*.12,rad*.72,rad*.25,0,0,Math.PI*2);c.stroke();
+   for(let i=0;i<5;i++){const ang=Math.PI*(.06+i*.22),dx=Math.cos(ang),dy=Math.sin(ang);
+    c.beginPath();c.moveTo(x+dx*rad*.68,y-size*.12+dy*rad*.15);
+    c.lineTo(x+dx*rad*1.22,y-size*.12+dy*rad*.32);c.stroke()}
+  }
+ }else if(['bastion','carapace','reflect','shelter'].includes(f.ability)){
   c.beginPath();c.moveTo(x-size*.35,y);c.quadraticCurveTo(x-size*.52,y-size*.85,x,y-size*1.05);c.quadraticCurveTo(x+size*.52,y-size*.85,x+size*.35,y);c.stroke();
   if(rank===2&&!reduced){c.beginPath();c.ellipse(x,y,size*.45,size*.09,0,0,Math.PI*2);c.stroke()}
  }else if(['seismic','siege','thunder','pack'].includes(f.ability)){
