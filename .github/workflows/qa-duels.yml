@@ -2786,6 +2786,7 @@ jobs:
           if-no-files-found: warn
 
   turn25-turtle-lastwall-roi:
+    if: github.event_name == 'workflow_dispatch'
     # One bounded front-preserving P2 re-test; source-only and automatically archived after verdict.
     runs-on: ubuntu-latest
     timeout-minutes: 18
