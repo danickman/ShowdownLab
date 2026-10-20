@@ -2638,6 +2638,8 @@ jobs:
           if-no-files-found: warn
 
   turn20-formation-refinement-research:
+    # Completed source-only 58 persistent proof; archive after integration, no costly reruns.
+    if: github.event_name == 'workflow_dispatch'
     # One bounded followup of proven physical 40-body separation; no synthetic HP.
     runs-on: ubuntu-latest
     timeout-minutes: 26
@@ -2658,4 +2660,27 @@ jobs:
         with:
           name: turn20-formation-refined
           path: turn20-formation-refined.json
+          if-no-files-found: warn
+
+  turn20-current-live-hp-front-mandatory:
+    # Actual CURRENT live all-ten-role 32 completed 20+40; historical fixed-Goose mandatory unchanged.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate current-live physical front graph acceptance gate
+        run: node --check tools/qa/check-turn20-current-live-hp-fronts.cjs
+      - name: Require current all-ultimate 40 >=40 persistent true positive-HP windows
+        env:
+          QA_TURN20_LIVE_RECEIPT: turn20-current-live-fronts.json
+        run: node tools/qa/check-turn20-current-live-hp-fronts.cjs
+      - name: Preserve strict unaltered metric source result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-current-live-fronts
+          path: turn20-current-live-fronts.json
           if-no-files-found: warn
