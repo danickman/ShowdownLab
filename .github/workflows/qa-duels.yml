@@ -2905,3 +2905,25 @@ jobs:
         run: node tools/qa/check-barbarian-measured-playable.cjs
       - name: Full offline atomic pinned release integrity
         run: node tools/qa/release-hashes.cjs --verify
+
+  goblin-topic-frenzy-feast-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source syntax Goblin pack survival and self tempo
+        run: node --check tools/qa/check-goblin-topic-frenzy-feast.cjs
+      - name: 336 genuine terminals +12 severe with independent real positive HP fronts
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-frenzy-feast.json
+        run: node tools/qa/check-goblin-topic-frenzy-feast.cjs
+      - name: Keep real scenario ROI, counters and untouched-role traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-frenzy-feast
+          path: goblin-topic-frenzy-feast.json
+          if-no-files-found: warn
