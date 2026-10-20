@@ -26,7 +26,11 @@ const originalBarbarian="l5:'A giant sweeping strike splashes 100% attack damage
 const measuredBarbarian="l5:'Blood Cleave still hits up to five foes for full axe damage. MEASURED CHARGE: approach 70% faster (95% in rage); your first physically landed axe strike hits harder and staggers its target for 8 ticks.'";
 assert.equal(withoutTurtle.split(measuredBarbarian).length,2,'Barbarian Measured Charge Guide single accepted site');
 withoutTurtle=withoutTurtle.replace(measuredBarbarian,originalBarbarian);
-assert.equal(withoutTurtle,expected,'After only separately accepted Turtle Rebound and Barbarian Measured Charge Guide overlays are removed, Beetank Anvil and ALL other ultimate source must stay byte-for-byte frozen');
+const priorGoblinGuide="l5:'Gain 30% damage per nearby allied Goblin, up to four allies.'";
+const earnedGoblinGuide="l5:'Pack Ambush grants 30% bonus damage per nearby Goblin (up to four). EARNED RABBLE: your first true landed stab calls up to two temporary L3 Goblins with 72% HP; at most four extra Goblins per team, never permanent.'";
+assert.equal(withoutTurtle.split(earnedGoblinGuide).length,2,'only one accepted new Goblin Guide signature may differ');
+withoutTurtle=withoutTurtle.replace(earnedGoblinGuide,priorGoblinGuide);
+assert.equal(withoutTurtle,expected,'After ONLY accepted Goblin/Turtle/Barbarian Guide and Turtle physical overlays are removed, Beetank Anvil and other ultimate roles remain byte-for-byte frozen');
 assert.equal(actual.split('siegeAnvilCharges').length,5,'exactly two consumer mentions and two setter mentions; no duplicate charge paths');
 assert(actual.includes('100 ticks')&&actual.includes('two real follow-up hits'));
 console.log('PASS: Beetank Hammer & Anvil actual source matches accepted physics overlay and Guide exactly; no L1-L4 / unrelated fighter changes');

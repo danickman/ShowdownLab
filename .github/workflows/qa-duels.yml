@@ -3016,3 +3016,15 @@ jobs:
           name: goblin-topic-earned-warpack
           path: goblin-topic-earned-warpack.json
           if-no-files-found: warn
+  goblin-earned-rabble-playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Genuine playable L4-negative, L5 temporary fighters, 300 active, replay
+        run: node tools/qa/check-goblin-earned-rabble-playable.cjs
+      - name: Verify all 42 atomic PWA/root runtime module digests
+        run: node tools/qa/release-hashes.cjs --verify

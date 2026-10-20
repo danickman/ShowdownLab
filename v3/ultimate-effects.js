@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',siege:'#edb465',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',reprisal:'#b8efc3',pack:'#b7b875',cleave:'#cf9361',breakthrough:'#efb568',thunder:'#e6dec4',fissure:'#ad8255'};
+const colors={bastion:'#ebd28f',pierce:'#ffe7ac',inferno:'#ed9444',execution:'#ad8dbc',seismic:'#b18b58',siege:'#edb465',carapace:'#cfab65',reflect:'#9fb56e',shelter:'#91c6a4',reprisal:'#b8efc3',pack:'#b7b875',pack_call:'#bdd96b',cleave:'#cf9361',breakthrough:'#efb568',thunder:'#e6dec4',fissure:'#ad8255'};
 
 function drawFissure(c,f,age,reduced,size,x,y){
   const px=f.end?.x??x,py=f.end?.y??y,dir=f.team==='red'?-1:1;
@@ -97,6 +97,17 @@ function draw(c,f,age,tier='full'){
    c.beginPath();c.moveTo(x-dir*r*.62,y+r*.10);c.quadraticCurveTo(x,y-r*.55,x+dir*r*.76,y-r*.28);c.stroke();
    c.beginPath();c.ellipse(x,y+r*.24,r*.76,r*.22,0,0,Math.PI*2);c.stroke();
    for(let j=-1;j<=1;j++){const dx=dir*r*(.22+j*.26);c.beginPath();c.moveTo(x+dx,y+r*.2);c.lineTo(x+dx+dir*r*.22,y+r*(.35+j*.09));c.stroke()}
+  }
+ }else if(f.ability==='pack_call'){
+  // A small fan of 2 leaf-yellow ink signals around the actual bandit call.
+  const rad=size*(.32+(reduced?.26:1.05)*age),dir=f.team==='red'?-1:1;
+  c.beginPath();c.ellipse(x,y-size*.03,rad,rad*.28,0,0,Math.PI*2);c.stroke();
+  if(!reduced){
+   for(let j=-1;j<=1;j++){
+    const dx=dir*rad*(.45+j*.32);
+    c.beginPath();c.moveTo(x+dx,y-size*.13);c.lineTo(x+dx+dir*size*.15,y-size*(.65+.10*j));c.stroke();
+    c.beginPath();c.arc(x+dx+dir*size*.15,y-size*(.65+.10*j),Math.max(1,size*.055),0,Math.PI*2);c.stroke();
+   }
   }
  }else if(['bastion','carapace','reflect','shelter'].includes(f.ability)){
   c.beginPath();c.moveTo(x-size*.35,y);c.quadraticCurveTo(x-size*.52,y-size*.85,x,y-size*1.05);c.quadraticCurveTo(x+size*.52,y-size*.85,x+size*.35,y);c.stroke();
