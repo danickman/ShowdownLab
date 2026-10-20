@@ -39,6 +39,8 @@ jobs:
           node tools/qa/check-beetank-fracture-playable-turn16.cjs
           node --check tools/qa/check-beetank-anvil-playable-turn17.cjs
           node tools/qa/check-beetank-anvil-playable-turn17.cjs
+      - name: Turn23 Dragon L4 exposed charge physical 16/40/16 contract
+        run: node tools/qa/check-turn23-dragon-playable.cjs
       - name: Verify Home art streaming
         run: node tools/qa/check-streaming.cjs
       - name: Verify launch guide and PWA hooks
@@ -2736,6 +2738,7 @@ jobs:
           if-no-files-found: warn
 
   turn23-dragon-telegraph-roi:
+    if: github.event_name == 'workflow_dispatch'
     # Bounded source-only alternate charge fairness comparison. Once decided archive to manual-only.
     runs-on: ubuntu-latest
     timeout-minutes: 18
