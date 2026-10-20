@@ -2871,6 +2871,7 @@ jobs:
           if-no-files-found: warn
 
   barbarian-topic-refined-engagement-roi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -2891,3 +2892,16 @@ jobs:
           name: barbarian-topic-refined-engagement
           path: barbarian-topic-refined-engagement.json
           if-no-files-found: warn
+
+  barbarian-measured-playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Real source first impact, earlier collision, FX, exact L4 RAF parity
+        run: node tools/qa/check-barbarian-measured-playable.cjs
+      - name: Full offline atomic pinned release integrity
+        run: node tools/qa/release-hashes.cjs --verify

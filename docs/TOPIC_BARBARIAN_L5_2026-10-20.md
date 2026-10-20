@@ -1,3 +1,5 @@
+**ACTIVE BARBARIAN TOPIC: MEASURED CHARGE PLAYABLE QA CANDIDATE.** Source research [17/17](https://github.com/danickman/ShowdownLab/actions/runs/39458954568), 448 real terminal +16 severe. First L5 7→8/8 both cohorts; cal real persistent fronts 19→29 / windows 67→75, heldout fronts 23→25 / windows 71→65; peer remains 4/8 and whole foe army 2x/severe still counters. [Full research/implementation](BARBARIAN_MEASURED_CHARGE_PLAYABLE_2026-10-20.md). Source, first actual hit cue, Guide, all 42 PWA SHA pins, browser regression and L4 exact RAF tests staged. Don't declare topic complete until exact-head green CI. Topic-based ownership, no merge/main/prod/previews.
+
 # Barbarian L5 — topic-based breakthrough hypothesis and execution
 20 October 2026, branch qa-turn1-duel-baseline, PR #14. Topic-based user mandate controls over every rejected candidate/turn limit. **Barbarian stays OPEN until a satisfactory playable solution passes exact-head QA, or the user explicitly closes it.** Do not switch to Goblin because an attempt fails.
 
