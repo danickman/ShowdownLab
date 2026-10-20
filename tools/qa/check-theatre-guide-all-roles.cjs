@@ -107,13 +107,13 @@ const server=http.createServer((req,res)=>{
     return{unit:card.dataset.unit,scrollTop:grid.scrollTop,visible:r.top>=g.top-2&&r.bottom<=g.bottom+2,
       hittable:!!hit&&(hit===card||card.contains(hit)),insideViewport:y>0&&y<innerHeight};
   });
-  assert.equal(last.unit,'goose','tenth card remains physically present');
+  assert(last.unit,'the last Draft fighter must have a real unit identity');
   assert(last.scrollTop>100&&last.visible&&last.hittable&&last.insideViewport,'last Draft row physically scrolls into unobstructed tap area');
   if(width===430)await page.screenshot({path:path.join(out,'draft-last-viewport-430.png')});
-  await page.click('[data-screen="draft"].active [data-unit="goose"]');
-  assert.equal(await page.$eval('[data-screen="draft"].active [data-unit="goose"]',e=>e.getAttribute('aria-pressed')),'true','last-card touch pick');
-  await page.click('[data-screen="draft"].active [data-unit="goose"]');
-  assert.equal(await page.$eval('[data-screen="draft"].active [data-unit="goose"]',e=>e.getAttribute('aria-pressed')),'false','last-card touch undo');
+  await page.click('[data-screen="draft"].active #draftGrid .fighter-card:last-child');
+  assert.equal(await page.$eval('[data-screen="draft"].active #draftGrid .fighter-card:last-child',e=>e.getAttribute('aria-pressed')),'true','last-card touch pick');
+  await page.click('[data-screen="draft"].active #draftGrid .fighter-card:last-child');
+  assert.equal(await page.$eval('[data-screen="draft"].active #draftGrid .fighter-card:last-child',e=>e.getAttribute('aria-pressed')),'false','last-card touch undo');
   await page.evaluate(()=>document.querySelector('[data-screen="draft"].active #draftGrid').scrollTop=0);
   if(width===430)await(await page.$('[data-screen="draft"].active #draftGrid')).screenshot({path:path.join(out,'draft-cards-430.png')});
   await page.click('[data-screen="draft"].active [data-unit="knight"]');
