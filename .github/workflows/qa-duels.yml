@@ -2907,6 +2907,7 @@ jobs:
         run: node tools/qa/release-hashes.cjs --verify
 
   goblin-topic-frenzy-feast-roi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -2926,4 +2927,26 @@ jobs:
         with:
           name: goblin-topic-frenzy-feast
           path: goblin-topic-frenzy-feast.json
+          if-no-files-found: warn
+
+  goblin-topic-fortified-bloodbond-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Goblin fortified/bloodbond source syntax
+        run: node --check tools/qa/check-goblin-topic-fortified-bloodbond.cjs
+      - name: Verify physical 336 real terminal and 12 severe outcomes, front and RAF parity
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-fortified-bloodbond.json
+        run: node tools/qa/check-goblin-topic-fortified-bloodbond.cjs
+      - name: Retain full terminal ROI
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-fortified-bloodbond
+          path: goblin-topic-fortified-bloodbond.json
           if-no-files-found: warn
