@@ -2711,6 +2711,8 @@ jobs:
           if-no-files-found: warn
 
   turn22-barbarian-iron-tide-roi:
+    # Study complete/rejected; retained for manual audit only to avoid wasted CI.
+    if: github.event_name == 'workflow_dispatch'
     # One final user-funded L5 Barbarian candidate, source-real true terminals.
     runs-on: ubuntu-latest
     timeout-minutes: 18
