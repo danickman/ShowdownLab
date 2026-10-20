@@ -83,6 +83,38 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
   const draftArt=await measure('[data-screen="draft"].active #draftGrid canvas[data-art]');
   verify(draftArt,10,'Draft cards');
+  // Verify each real touch viewport; full-element screenshots alone hide sticky overlaps.
+  const draft=await page.evaluate(()=>{
+    const screen=document.querySelector('[data-screen="draft"].active'),h=screen.querySelector('.screen-head'),
+      grid=screen.querySelector('#draftGrid'),f=screen.querySelector('.draft-footer'),first=grid.firstElementChild;
+    const rect=e=>{const r=e.getBoundingClientRect();return{top:r.top,bottom:r.bottom}};
+    return{screenOverflow:getComputedStyle(screen).overflowY,gridOverflow:getComputedStyle(grid).overflowY,
+      range:grid.scrollHeight-grid.clientHeight,header:rect(h),grid:rect(grid),footer:rect(f),first:rect(first)};
+  });
+  assert.equal(draft.screenOverflow,'hidden','Draft chrome stays fixed');
+  assert.equal(draft.gridOverflow,'auto','Draft 10-card grid must scroll independently by touch');
+  assert(draft.range>150,'all five Draft rows need an actual scroll range');
+  assert(draft.header.bottom<=draft.grid.top+2,'header occludes first card');
+  assert(draft.grid.bottom<=draft.footer.top+2,'footer occludes bottom card');
+  assert(draft.first.top>=draft.header.bottom-2,'fighter head behind Draft header');
+  if(width===430)await page.screenshot({path:path.join(out,'draft-first-viewport-430.png')});
+  const last=await page.evaluate(async()=>{
+    const grid=document.querySelector('[data-screen="draft"].active #draftGrid');
+    grid.scrollTop=grid.scrollHeight;
+    await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+    const card=grid.lastElementChild,r=card.getBoundingClientRect(),g=grid.getBoundingClientRect(),
+      x=r.left+r.width/2,y=r.top+r.height/2,hit=document.elementFromPoint(x,y);
+    return{unit:card.dataset.unit,scrollTop:grid.scrollTop,visible:r.top>=g.top-2&&r.bottom<=g.bottom+2,
+      hittable:!!hit&&(hit===card||card.contains(hit)),insideViewport:y>0&&y<innerHeight};
+  });
+  assert.equal(last.unit,'goose','tenth card remains physically present');
+  assert(last.scrollTop>100&&last.visible&&last.hittable&&last.insideViewport,'last Draft row physically scrolls into unobstructed tap area');
+  if(width===430)await page.screenshot({path:path.join(out,'draft-last-viewport-430.png')});
+  await page.click('[data-screen="draft"].active [data-unit="goose"]');
+  assert.equal(await page.$eval('[data-screen="draft"].active [data-unit="goose"]',e=>e.getAttribute('aria-pressed')),'true','last-card touch pick');
+  await page.click('[data-screen="draft"].active [data-unit="goose"]');
+  assert.equal(await page.$eval('[data-screen="draft"].active [data-unit="goose"]',e=>e.getAttribute('aria-pressed')),'false','last-card touch undo');
+  await page.evaluate(()=>document.querySelector('[data-screen="draft"].active #draftGrid').scrollTop=0);
   if(width===430)await(await page.$('[data-screen="draft"].active #draftGrid')).screenshot({path:path.join(out,'draft-cards-430.png')});
   await page.click('[data-screen="draft"].active [data-unit="knight"]');
   await page.click('[data-screen="draft"].active [data-unit="sniper"]');
@@ -113,11 +145,11 @@ const server=http.createServer((req,res)=>{
   assert.equal(empty.message,'BATTLE COMPLETE','clear no-MVP copy');
   if(width===430)await(await page.$('[data-screen="results"].active .podium')).screenshot({path:path.join(out,'no-mvp-result-430.png')});
 
-  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
+  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,draftScroll:{initial:draft,final:last},extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
   await page.close();
  }
  assert.deepEqual(errors,[],'no portrait rendering exceptions');
  fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify({note:'Chromium DPR3 touch only; native Safari not tested',results},null,2)+'\n');
- console.log('PASS: 90 actual authored art canvases (10 fighters x3 forms x3 DPR3 viewports), panel geometry, nonblank full-body alpha, tactical Guide truth, zero missing art');
+ console.log('PASS: 90 actual authored art canvases (10 fighters x3 forms x3 DPR3 viewports), panel geometry, nonblank full-body alpha, tactical Guide truth, bottom-row Draft tapping, zero missing art');
  }finally{if(browser)await browser.close();server.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
