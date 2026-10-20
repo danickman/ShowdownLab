@@ -2847,6 +2847,7 @@ jobs:
         run: node tools/qa/release-hashes.cjs --verify
 
   barbarian-topic-breakthrough-roi:
+    if: github.event_name == 'workflow_dispatch'
     # Independently controlled, source-only geometry/engagement study; no previews or merges.
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -2867,4 +2868,26 @@ jobs:
         with:
           name: barbarian-topic-breakthrough
           path: barbarian-topic-breakthrough.json
+          if-no-files-found: warn
+
+  barbarian-topic-refined-engagement-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check refined Barbarian topic four-arm source study
+        run: node --check tools/qa/check-barbarian-topic-refined-engagement.cjs
+      - name: Compare real 448 terminal games and 16 severe plus source-parity and HP-front truth
+        env:
+          QA_BARBARIAN_REFINED_TOPIC_RECEIPT: barbarian-topic-refined-engagement.json
+        run: node tools/qa/check-barbarian-topic-refined-engagement.cjs
+      - name: Save full physical battle ROI and source states
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-topic-refined-engagement
+          path: barbarian-topic-refined-engagement.json
           if-no-files-found: warn
