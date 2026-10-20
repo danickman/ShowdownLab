@@ -2808,3 +2808,26 @@ jobs:
           name: turn25-turtle-lastwall
           path: turn25-turtle-lastwall.json
           if-no-files-found: warn
+
+  turtle-topic-shell-reprisal-roi:
+    # Source-only new mechanics; must not block future topic refinements.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check topic harness syntax
+        run: node --check tools/qa/check-turtle-topic-shell-reprisal.cjs
+      - name: Compare live Turtle versus genuine L5 counter-pulse variants
+        env:
+          QA_TURTLE_TOPIC_RECEIPT: turtle-topic-shell-reprisal.json
+        run: node tools/qa/check-turtle-topic-shell-reprisal.cjs
+      - name: Keep every actual terminal fixture, counter and HP-front receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-topic-shell-reprisal
+          path: turtle-topic-shell-reprisal.json
+          if-no-files-found: warn

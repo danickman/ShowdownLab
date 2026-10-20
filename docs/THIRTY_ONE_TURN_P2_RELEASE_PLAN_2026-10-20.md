@@ -1,3 +1,5 @@
+**SUPERSEDED BY TOPIC OWNERSHIP (20 October 2026):** The user removed turn limits and directs that Turtle remain the active subject until a genuinely worthwhile playable L5 is implemented and verified. [Read the controlling topic plan](TOPIC_BASED_RELEASE_AND_TURTLE_2026-10-20.md). Rows below are archival and MUST NOT advance the roadmap based on a declined candidate.
+
 # SHOWDOWN LAB — AUTHORITATIVE 31-TURN FINISH / P2 REMEDIATION
 Approved user steering: 20 October 2026. **Supersedes** the 26-turn release schedule for turns 24 onwards; the 26-turn document is historical and its existing test gates are NOT weakened. QA branch `qa-turn1-duel-baseline`, PR #14. Production, main, all Vercel preview deployments frozen. No merge until **Turn31**, conditional on gates.
 
