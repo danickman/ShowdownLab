@@ -2762,6 +2762,7 @@ jobs:
           if-no-files-found: warn
 
   turn24-turtle-sanctuary-roi:
+    if: github.event_name == 'workflow_dispatch'
     # One funded final fighter source-only ROI decision; archive manual-only afterward.
     runs-on: ubuntu-latest
     timeout-minutes: 19
@@ -2782,4 +2783,27 @@ jobs:
         with:
           name: turn24-turtle-sanctuary
           path: turn24-turtle-sanctuary.json
+          if-no-files-found: warn
+
+  turn25-turtle-lastwall-roi:
+    # One bounded front-preserving P2 re-test; source-only and automatically archived after verdict.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check moderated wounded-only Turtle L5 study
+        run: node --check tools/qa/check-turn25-turtle-lastwall.cjs
+      - name: Actual source 224 complete 20/40 matches, 8 severe and all RAF nonregression
+        env:
+          QA_TURN25_RECEIPT: turn25-turtle-lastwall.json
+        run: node tools/qa/check-turn25-turtle-lastwall.cjs
+      - name: Save seeded true-HP/counterplay/ROI receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn25-turtle-lastwall
+          path: turn25-turtle-lastwall.json
           if-no-files-found: warn
