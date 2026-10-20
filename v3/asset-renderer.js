@@ -63,9 +63,10 @@ function presentationInk(img){
   presentationInkCache.set(img,result);return result;
 }
 
-// Cached, bounded blue/red silhouette rim: computed once per real authored
-// pose and team, never as per-fighter per-frame Canvas filtering/blur.
-// The 300-body renderer keeps its original image-only fast path.
+// Bounded *composited* team-outline sprite: each active fighter still uses
+// exactly ONE Canvas drawImage on every hot frame. The rim and original art
+// are precombined once per actual authored pose/team, never blurred per unit.
+// >=160 bodies keep original high-density rendering unchanged.
 const teamRimCache=new Map(),TEAM_RIM_CACHE_LIMIT=96;
 function teamRim(img,team){
   if(team!=='blue'&&team!=='red')return null;
@@ -75,7 +76,7 @@ function teamRim(img,team){
   try{
     const maxSide=Math.max(img.naturalWidth,img.naturalHeight);
     if(maxSide>0){
-      const factor=Math.min(1,192/maxSide),w=Math.max(1,Math.round(img.naturalWidth*factor)),
+      const factor=Math.min(1,288/maxSide),w=Math.max(1,Math.round(img.naturalWidth*factor)),
         h=Math.max(1,Math.round(img.naturalHeight*factor)),pad=5;
       const mask=window.document?.createElement('canvas'),out=window.document?.createElement('canvas');
       if(mask&&out){
@@ -87,6 +88,9 @@ function teamRim(img,team){
           for(const [dx,dy] of [[-5,0],[5,0],[0,-5],[0,5],[-4,-4],[-4,4],[4,-4],[4,4]]){
             c.drawImage(mask,pad+dx,pad+dy);
           }
+          // One cached bitmap includes BOTH the colored rim and fully
+          // preserved original authored figure; no extra live sprite draw.
+          c.drawImage(img,pad,pad,w,h);
           result=out;
         }
       }
@@ -330,18 +334,14 @@ function drawAuthored(c,type,x,y,size,team,o){
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
   }
-  // Combat-only team edge survives body overlap where floor rings are hidden.
-  // Disabled entirely at >=160 bodies and on all presentation cards.
+  // Precombined team-colored rim + original image keeps hot-frame image
+  // drawing one-pass even at 40/120 bodies; 300 and all cards stay original.
   const crowd=Number(o.density)||0;
-  if(!o.presentation&&crowd<=120){
-    const rim=teamRim(img,team);
-    if(rim){
-      const bleed=Math.max(1.5,Math.min(3.5,size*.035));
-      c.drawImage(rim,-w*ax-bleed,-h*ay-bleed,w+bleed*2,h+bleed*2);
-    }
-  }
+  const ink=!o.presentation&&crowd<=120?teamRim(img,team):null;
+  const bleed=ink?Math.max(1.5,Math.min(3.5,size*.035)):0;
   drawLevelAccent(c,img,w,h,ax,ay,size,o,type);
-  c.drawImage(o.presentation&&!fighter.cleanSprite?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true
+  c.drawImage(ink||(o.presentation&&!fighter.cleanSprite?presentationInk(img):img),
+    -w*ax-bleed,-h*ay-bleed,w+bleed*2,h+bleed*2);c.restore();return true
 }
 function draw(c,type,x,y,size,team='blue',o={}){
   if(authored[type]){
