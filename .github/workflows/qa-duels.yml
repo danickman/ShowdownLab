@@ -2996,6 +2996,7 @@ jobs:
           path: goblin-topic-sabotage-focus.json
           if-no-files-found: warn
   goblin-topic-earned-warpack-roi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:

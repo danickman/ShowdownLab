@@ -43,7 +43,15 @@ function step(frames,speed){
   for(const fn of jobs)fn(now);
   durations.push(performance.now()-begin);
   const s=A.getState();
-  assert(s.units.length===300,'no simulated fighter objects may disappear');
+  // Never weaken deployed-body retention: ONLY bounded physically-real
+  // L5 Goblin recruits can add fighter objects after first actual contact.
+  const base=s.units.filter(u=>u.packEcho!==true),extra=s.units.filter(u=>u.packEcho===true);
+  assert.equal(base.length,300,'one of the original 300 fighter bodies disappeared');
+  assert.equal(new Set(base.map(u=>u.id)).size,300,'original 300 fighter IDs duplicated');
+  assert(base.every(u=>Number.isInteger(u.id)&&u.id>=1&&u.id<=300),'original 300 unique IDs must remain');
+  assert.equal(s.units.length,300+extra.length,'any extra body must be explicitly attributed');
+  assert(extra.length<=8&&extra.every(u=>u.id>300&&u.type==='goblin'&&u.level===3&&u.mastery===0&&Number.isFinite(u.hp)),'only capped 2x4 L3 Goblin echoes permitted');
+  for(const side of ['blue','red'])assert(extra.filter(u=>u.team===side).length<=4,'300-body source Goblin extra per-side cap');
   assert(s.units.every(u=>Number.isFinite(u.x)&&Number.isFinite(u.y)&&Number.isFinite(u.hp)));
   // Separation can push fighter centers outside [0,1] in severe crowding.
   // Measure instead of assuming that world bounds are a structural invariant.

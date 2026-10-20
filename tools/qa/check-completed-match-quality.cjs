@@ -74,7 +74,15 @@ function completed(source,c,watch=true){
  }
  assert.deepEqual(errors,[],'simulation errors '+JSON.stringify(c));
  assert(state&&state.winner,'battle did not actually terminate '+JSON.stringify(c));
- assert.equal(state.units.length,c.count,'fighters disappeared '+JSON.stringify(c));
+ // Earned Rabble creates new real combatants. Prove no ORIGINAL unit vanished,
+ // each extra is a unique/capped L3 spawned Goblin, and none is concealed.
+ const initial=state.units.filter(u=>u.packEcho!==true),summons=state.units.filter(u=>u.packEcho===true);
+ assert.equal(initial.length,c.count,'original fighter body was lost '+JSON.stringify(c));
+ assert.equal(new Set(initial.map(u=>u.id)).size,c.count,'duplicate original fighter ID '+JSON.stringify(c));
+ assert(initial.every(u=>Number.isInteger(u.id)&&u.id>=1&&u.id<=c.count),'all originally deployed physical IDs must persist');
+ assert(state.units.length===c.count+summons.length&&summons.length<=8,'unexplained/multiplying fighters');
+ for(const side of ['blue','red'])assert(summons.filter(u=>u.team===side).length<=4,'Goblin L5 summoned cap per side');
+ assert(summons.every(u=>u.type==='goblin'&&u.level===3&&u.mastery===0&&u.id>c.count&&Number.isFinite(u.hp)&&Number.isFinite(u.maxHp)&&u.maxHp>0),'only real unique L3 72%-HP Goblin recruits permitted');
  assert(state.units.every(u=>Number.isFinite(u.hp)&&Number.isFinite(u.x)&&Number.isFinite(u.y)),'nonfinite battle state');
  const trace=sha.digest('hex');
  if(!watch)return {trace,winner:state.winner,tick:state.tick};
