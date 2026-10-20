@@ -1,0 +1,18 @@
+# Barbarian L5 — topic-based breakthrough hypothesis and execution
+20 October 2026, branch qa-turn1-duel-baseline, PR #14. Topic-based user mandate controls over every rejected candidate/turn limit. **Barbarian stays OPEN until a satisfactory playable solution passes exact-head QA, or the user explicitly closes it.** Do not switch to Goblin because an attempt fails.
+
+## What is actually wrong
+Historical selected first-L5 values conflict across seed cohorts: Oct18 consolidated 3/8 versus 4/8 hold; later on different 20/40 full-terminal forms 7–8/8. No claim of globally weak Barbarian. Original L5 premium Blood Cleave already hits up to **five real secondary targets** for 100% axe damage and 12-tick stagger on actual physical primary axe hit. Previous overpowered 1.65x cleave/18-tick Iron Tide increased heldout damage 12.2% but reduced genuine persistent physical fronts 21→18 and separated damage windows 73→62 and yielded only one more win. Opening Fury early rage mostly redistributed wins 8→7 calibration and 7→8 heldout. Additional pure damage/rage modifiers are not the answer.
+
+Barbarian is still using nominal melee reach `u.range/500` despite crowd displacement; collision-aware Turtle, Knight and Beetank reach formulas are different. Hypothesis: surviving heavy foes/knockback and physically spread squads can reduce actual landed Barbarian attacks, creating high-variance L5 first-unlock value. Do NOT infer a proven reach bug without matchup tests.
+
+## Novel non-cheating candidates
+Exact original current vs **Reach**: L5 Barbarian only accepts physical collision boundary for its first/regular axe reach. No extra damage, speed, aura, target change, or L4 mutation.
+Exact original current vs **Breakthrough**: same bounded L5 contact reach plus 1.90x regular approach (2.20x while raged), and once per living L5 Barbarian a first physically landed primary axe gets 1.72x natural attack damage (2.05x if legitimately below 48% HP rage) and an **11-tick stagger only on the primary live target**. Existing five-victim Blood Cleave untouched. No teleport, invulnerability, recursive damage, free global stun, deterministic winner manipulation, or late broad explosion.
+
+## Measured source-only acceptance path
+tools/qa/check-barbarian-topic-breakthrough.cjs compares exact playable vs both L5 alternatives on fresh calibration seeds 60277/72817 and heldout 101101/136279, blue/red mirror, genuine 20/40 bodies, seven draft choices: hold, fair first L5, equal peer L5, L4 foe Barbarian-family double, literal entire opposing army double, +2 recruits and evolve allied Beetank. **336 real terminal +12 severe 3-v-15**, read-only observer vs full raw RAF SHA pairs, exact L4 and unrelated Beetank unchanged full-frame SHA, deterministic repeats. Independently measure actual positive HP axe hits, selected HP, geographically separated persistent damage fronts and windows; compare with hold, recruit, alternative, peer, doubled foe and severe. Reject one-sided first-L5 wins if physical fronts collapse, and retain whole-army 2x and peer L5 counters.
+
+If source results reveal a real improvement, implement ONLY selected L5 change with deterministic physics, observable FX/Guide and all 42 atomic offline PWA integrity pins, then fresh 16+ CI including 20/40 current-live fronts >=40/20 floor and 300-density 1x/10x browser. Native Safari cannot be falsely certified. If this doesn't address variance, continue Barbarian topic with genuinely different mechanics; don't quietly call the topic done or stage a new Vercel preview.
+
+Turtle L5 Shell Rebound was independently accepted [16/16 latest exact-head QA](https://github.com/danickman/ShowdownLab/actions/runs/39371329025) and remains protected. Production/main frozen.

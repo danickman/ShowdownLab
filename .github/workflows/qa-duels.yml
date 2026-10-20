@@ -2845,3 +2845,26 @@ jobs:
         run: node tools/qa/check-turtle-reprisal-playable.cjs
       - name: Verify atomic 42 root and runtime release SHA pins
         run: node tools/qa/release-hashes.cjs --verify
+
+  barbarian-topic-breakthrough-roi:
+    # Independently controlled, source-only geometry/engagement study; no previews or merges.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check Barbarian contact/entry source study
+        run: node --check tools/qa/check-barbarian-topic-breakthrough.cjs
+      - name: Genuine 336 full terminal matches and 12 severe, RAF and HP fronts
+        env:
+          QA_BARBARIAN_TOPIC_RECEIPT: barbarian-topic-breakthrough.json
+        run: node tools/qa/check-barbarian-topic-breakthrough.cjs
+      - name: Preserve detailed physical ROI and numeric-counter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-topic-breakthrough
+          path: barbarian-topic-breakthrough.json
+          if-no-files-found: warn
