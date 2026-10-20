@@ -2930,6 +2930,7 @@ jobs:
           if-no-files-found: warn
 
   goblin-topic-fortified-bloodbond-roi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -2949,4 +2950,25 @@ jobs:
         with:
           name: goblin-topic-fortified-bloodbond
           path: goblin-topic-fortified-bloodbond.json
+          if-no-files-found: warn
+  goblin-topic-trick-ambush-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check genuine source L5 Goblin Trick Ambush syntax
+        run: node --check tools/qa/check-goblin-topic-trick-ambush.cjs
+      - name: Simulate 336 complete 20/40 duels and 12 3v15, exact RAF and physical fronts
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-trick-ambush.json
+        run: node tools/qa/check-goblin-topic-trick-ambush.cjs
+      - name: Upload true attributed HP/wins and entire-foe counter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-trick-ambush
+          path: goblin-topic-trick-ambush.json
           if-no-files-found: warn
