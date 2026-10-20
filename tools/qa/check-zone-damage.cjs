@@ -1,7 +1,12 @@
 // Turn 5H: isolated deployment formation variant diagnostic; never patches runtime.
 'use strict';
 const fs=require('fs'),vm=require('vm'),path=require('path'),assert=require('assert');
-const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8'),source=read('legacy-sim-core');
+const root=path.resolve(__dirname,'../..'),read=n=>fs.readFileSync(path.join(root,'v3',n+'.js'),'utf8');
+// Historical Turn5H geometry experiment compares frozen pre-Turn20 placement;
+// confirm the actual playable engine has exactly the accepted Turn20 substitution.
+const deployed=read('legacy-sim-core'),newFormation="yStep=Math.min(entries.length<=20?.120:.065,(entries.length<=20?.78:.50)/Math.max(4,lanes-1))",oldFormation="yStep=Math.min(.065,.50/Math.max(4,lanes-1))";
+assert.equal(deployed.split(newFormation).length,2,'accepted live formation source changed');
+const source=deployed.replace(newFormation,oldFormation);
 const anchor='Math.min(9,Math.max(3,Math.ceil(Math.sqrt(group.length)*1.55)))';
 assert(source.includes(anchor),'deployment lane anchor changed');
 const vertical='Math.min(.065,.50/Math.max(4,lanes-1))',depth='xStep=.035';

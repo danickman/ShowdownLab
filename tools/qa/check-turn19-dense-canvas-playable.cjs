@@ -7,7 +7,7 @@ assert.equal(src.split(replacement).length,2,'one exact density-aware theatre dr
 const historic=src.replace(replacement,marker);
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
 assert(html.includes('/v3/v3.js?v=turn19-dense-canvas1')&&sw.includes('/v3/v3.js?v=turn19-dense-canvas1'),'pinned HTML/SW cache must use new runtime URL');
-assert(sw.includes('showdown-lab-release-turn19-densecanvas1'),'new offline cache version');
+assert(sw.includes("const CACHE='showdown-lab-release-turn20-fronts1'"),'new offline cache version after live-front update');
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');
 assert.equal(scale(160,1,3),1);assert.equal(scale(300,1,3),1);assert.equal(scale(300,10,3),.85);assert.equal(scale(300,10,1),.85);

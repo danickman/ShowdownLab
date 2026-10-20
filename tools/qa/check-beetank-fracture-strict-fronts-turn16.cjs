@@ -1,7 +1,14 @@
 'use strict';
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const real=read('tools/qa/check-completed-match-quality.cjs'),old=read('tools/qa/fixtures/beetank-prefracture-ultimate-turn16.js');
+const currentCore=read('v3/legacy-sim-core.js'),newFormation="yStep=Math.min(entries.length<=20?.120:.065,(entries.length<=20?.78:.50)/Math.max(4,lanes-1))",oldFormation="yStep=Math.min(.065,.50/Math.max(4,lanes-1))";
+assert.equal(currentCore.split(newFormation).length,2,'live geometry integration must be present');
+// Freeze the PRE-TURN20 geometry only inside legacy Turn16/17 relative non-regression research.
+// The separately mandatory strict current-live Turn20 gate proves >=40 genuine fronts on today's geometry.
+const originalQuality=read('tools/qa/check-completed-match-quality.cjs'),coreLoader="const core=read('v3/legacy-sim-core.js');";
+assert.equal(originalQuality.split(coreLoader).length,2,'frozen legacy quality source moved');
+const frozenLoader="const core=read('v3/legacy-sim-core.js').replace("+JSON.stringify(newFormation)+","+JSON.stringify(oldFormation)+");";
+const real=originalQuality.replace(coreLoader,frozenLoader),old=read('tools/qa/fixtures/beetank-prefracture-ultimate-turn16.js');
 const incoming="function incoming(t,damage,units,tick,bastions=units,turtleGuardians=units){",after="if(!r||!['sniper','dragon','beetank','mole','barbarian'].includes(a.type))return hits;";
 assert.equal(old.split(incoming).length,2);assert.equal(old.split(after).length,2);
 const fracture=old.replace(incoming,incoming+'\n'+"if(t.siegeFractureUntil>tick&&['beetank','turtle','dragon'].includes(t.type))damage*=1.65;").replace(after,"if(a.type==='beetank'&&r===2&&['horn','ram'].includes(a.action)&&dealt>0&&t.hp>0&&['beetank','turtle','dragon'].includes(t.type)){t.siegeFractureUntil=Math.max(t.siegeFractureUntil||0,tick+96);cue(a,'siege',tick,t)}"+'\n'+after);
