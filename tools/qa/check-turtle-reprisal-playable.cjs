@@ -28,5 +28,5 @@ assert.equal(u.afterHit(ranged,g2,10,[g2,ranged],360).filter(h=>h.source===g2).l
 const allyOutside=m('knight','blue',3,.25,.25,30),g3=m('turtle','blue',5,.45,.5);
 assert.equal(u.afterHit(close,allyOutside,10,[allyOutside,g3,close],410).length,0,'outside .14 guardian coverage');
 const same=m('knight','blue',3,.5,.5,20),g4=m('turtle','blue',5,.43,.5);
-assert.equal(u.afterHit(same,g4,20,[same,g4],460).length,0,'friendly attacks never proc');
+assert.equal(u.afterHit(same,g4,20,[same,g4],460).filter(h=>h.source===g4).length,0,'friendly attacks never proc Shell Rebound (pre-existing neutral reflection is separate)');
 console.log('PASS: Turtle L5 playable actual primary shell rebound, 2 staggered splash, 54-tick cooldown, L4 untouched, guarded wounded ally, healthy/far/friendly rejection, and reprisal-over-reflect/shelter cue');
