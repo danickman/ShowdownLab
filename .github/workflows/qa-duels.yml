@@ -2734,3 +2734,26 @@ jobs:
           name: turn22-barbarian-iron-tide
           path: turn22-barbarian-iron-tide.json
           if-no-files-found: warn
+
+  turn23-dragon-telegraph-roi:
+    # Bounded source-only alternate charge fairness comparison. Once decided archive to manual-only.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Turn23 source-only Dragon L4 charge fairness harness
+        run: node --check tools/qa/check-turn23-dragon-telegraph.cjs
+      - name: Run 336 real 20/40 terminal, 12 severe, source parity and physical-front ROI
+        env:
+          QA_TURN23_RECEIPT: turn23-dragon-telegraph.json
+        run: node tools/qa/check-turn23-dragon-telegraph.cjs
+      - name: Archive immutable per-seed real battle results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn23-dragon-telegraph
+          path: turn23-dragon-telegraph.json
+          if-no-files-found: warn
