@@ -2613,6 +2613,8 @@ jobs:
           if-no-files-found: warn
 
   turn20-formation-front-research:
+    # Completed source-only .105 physical spread study; manual historical archive only.
+    if: github.event_name == 'workflow_dispatch'
     # Small-roster physical deployment spacing study, no attack/damage/collision change.
     runs-on: ubuntu-latest
     timeout-minutes: 26
@@ -2633,4 +2635,27 @@ jobs:
         with:
           name: turn20-formation-front
           path: turn20-formation-front.json
+          if-no-files-found: warn
+
+  turn20-formation-refinement-research:
+    # One bounded followup of proven physical 40-body separation; no synthetic HP.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate final source-only formation lane refinement
+        run: node --check tools/qa/check-turn20-formation-refined.cjs
+      - name: Actual current ultimate 20/40 full terminal independent HP fronts, 32/arm
+        env:
+          QA_TURN20_FRONTS: turn20-formation-refined.json
+        run: node tools/qa/check-turn20-formation-refined.cjs
+      - name: Archive matched real 20/40 positive HP battle fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-formation-refined
+          path: turn20-formation-refined.json
           if-no-files-found: warn
