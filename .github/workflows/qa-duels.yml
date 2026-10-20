@@ -2952,6 +2952,7 @@ jobs:
           path: goblin-topic-fortified-bloodbond.json
           if-no-files-found: warn
   goblin-topic-trick-ambush-roi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -2971,4 +2972,25 @@ jobs:
         with:
           name: goblin-topic-trick-ambush
           path: goblin-topic-trick-ambush.json
+          if-no-files-found: warn
+  goblin-topic-sabotage-focus-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check L5 Goblin deeper sabotage/source exact-state syntax
+        run: node --check tools/qa/check-goblin-topic-sabotage-focus.cjs
+      - name: Real 336 complete 20/40 and 12 severe, observer RAF, true damage fronts
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-sabotage-focus.json
+        run: node tools/qa/check-goblin-topic-sabotage-focus.cjs
+      - name: Preserve full authentic terminal winner and physical front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-sabotage-focus
+          path: goblin-topic-sabotage-focus.json
           if-no-files-found: warn
