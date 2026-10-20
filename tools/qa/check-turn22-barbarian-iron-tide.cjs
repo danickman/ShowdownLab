@@ -1,6 +1,6 @@
 'use strict';
 // Turn22: genuine 20/40-body Barbarian L5 Iron Tide physical multi-target splash ROI.
-// Bounded three arms: shipped, contact-only, and one cohesive Bloodstorm proposal.
+// Two source-only arms: exact playable and one final bounded five-victim Iron Tide.
 const fs=require('fs'),path=require('path'),vm=require('vm'),crypto=require('crypto'),assert=require('assert/strict');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const orig=read('tools/qa/check-first-ultimate-tier-spike.cjs'),cut='const matched=[];';
@@ -12,7 +12,7 @@ const substitute=(a,b)=>{assert.equal(h.split(a).length,2,'canonical harness anc
 // the same 5 geographically eligible secondary victims. No new attacks.
 const oldSplash="damage:a.dmg*(r===2?1.00:.58)",newSplash="damage:a.dmg*(r===2?1.65:.58)";
 const oldStagger="v.stun=Math.max(v.stun,r===2?12:8)",newStagger="v.stun=Math.max(v.stun,r===2?18:8)";
-const definitions=[
+const injected=[
  'const oldSplash='+JSON.stringify(oldSplash)+';',
  'const newSplash='+JSON.stringify(newSplash)+';',
  'const oldStagger='+JSON.stringify(oldStagger)+';',
@@ -112,7 +112,7 @@ const receipt={
  seeds:{calibration:seeds.slice(0,2),heldout:seeds.slice(2)},counts,report,severeWins,
  nodeWallMs:round(Number(process.hrtime.bigint()-start)/1e6),fixtures,extreme
 };
-if(process.env.QA_TURN22_RECEIPT)fs.writeFileSync(process.env.QA_TURN21_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
+if(process.env.QA_TURN22_RECEIPT)fs.writeFileSync(process.env.QA_TURN22_RECEIPT,JSON.stringify(receipt,null,2)+'\n');
 const compact={};for(const phase of ['calibration','heldout']){
  const a=report[phase].scenarios;compact[phase]={};
  for(const choice of choices)compact[phase][choice]=Object.fromEntries(variants.map(arm=>[arm,a[choice][arm].win]));
