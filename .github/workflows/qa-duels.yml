@@ -2686,6 +2686,8 @@ jobs:
           if-no-files-found: warn
 
   turn21-barbarian-opening-fury:
+    # Completed exact source-only 224+8, insufficient winner payoff, manual archive only.
+    if: github.event_name == 'workflow_dispatch'
     # One time-bounded genuine physical first L5 trial; no runtime updates on study failure.
     runs-on: ubuntu-latest
     timeout-minutes: 18
