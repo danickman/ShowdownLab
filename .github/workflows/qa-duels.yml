@@ -2588,6 +2588,8 @@ jobs:
           if-no-files-found: warn
 
   turn20-collider-contact-research:
+    # Completed 30 to 32 fronts but insufficient for live 40 target; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
     # One physical barrier-touch fix only on 20/40 crowded actual melee, no fake damage.
     runs-on: ubuntu-latest
     timeout-minutes: 26
@@ -2608,4 +2610,27 @@ jobs:
         with:
           name: turn20-collider-contact
           path: turn20-collider-contact.json
+          if-no-files-found: warn
+
+  turn20-formation-front-research:
+    # Small-roster physical deployment spacing study, no attack/damage/collision change.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate small-army physical deployment research script
+        run: node --check tools/qa/check-turn20-formation-front.cjs
+      - name: 32 authentic live 20/40 full matches per arm and true positive-HP fronts
+        env:
+          QA_TURN20_FRONTS: turn20-formation-front.json
+        run: node tools/qa/check-turn20-formation-front.cjs
+      - name: Archive current-live physical formation experiment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-formation-front
+          path: turn20-formation-front.json
           if-no-files-found: warn
