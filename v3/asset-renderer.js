@@ -62,6 +62,40 @@ function presentationInk(img){
   // One small processed bitmap per canonical image, never per unit or frame.
   presentationInkCache.set(img,result);return result;
 }
+
+// Cached, bounded blue/red silhouette rim: computed once per real authored
+// pose and team, never as per-fighter per-frame Canvas filtering/blur.
+// The 300-body renderer keeps its original image-only fast path.
+const teamRimCache=new Map(),TEAM_RIM_CACHE_LIMIT=96;
+function teamRim(img,team){
+  if(team!=='blue'&&team!=='red')return null;
+  const key=img.src+'|'+team,old=teamRimCache.get(key);
+  if(old){teamRimCache.delete(key);teamRimCache.set(key,old);return old}
+  let result=null;
+  try{
+    const maxSide=Math.max(img.naturalWidth,img.naturalHeight);
+    if(maxSide>0){
+      const factor=Math.min(1,192/maxSide),w=Math.max(1,Math.round(img.naturalWidth*factor)),
+        h=Math.max(1,Math.round(img.naturalHeight*factor)),pad=5;
+      const mask=window.document?.createElement('canvas'),out=window.document?.createElement('canvas');
+      if(mask&&out){
+        mask.width=w;mask.height=h;out.width=w+pad*2;out.height=h+pad*2;
+        const m=mask.getContext('2d'),c=out.getContext('2d');
+        if(m&&c){
+          m.drawImage(img,0,0,w,h);m.globalCompositeOperation='source-in';
+          m.fillStyle=team==='red'?'#db5745':'#258fbe';m.fillRect(0,0,w,h);
+          for(const [dx,dy] of [[-5,0],[5,0],[0,-5],[0,5],[-4,-4],[-4,4],[4,-4],[4,4]]){
+            c.drawImage(mask,pad+dx,pad+dy);
+          }
+          result=out;
+        }
+      }
+    }
+  }catch{}
+  if(result){teamRimCache.set(key,result);
+    while(teamRimCache.size>TEAM_RIM_CACHE_LIMIT)teamRimCache.delete(teamRimCache.keys().next().value)}
+  return result;
+}
 const ACTION_STATES={
   knight:{move:'move',march:'move',charge:'signature',attack:'attack',kill:'attack',guard:'guard',brace:'guard',ready:'idle'},
   sniper:{move:'idle',retreat:'idle',aim:'signature',attack:'attack',kill:'attack',buttstroke:'attack',guard_close:'idle',reload:'idle'},
@@ -295,6 +329,16 @@ function drawAuthored(c,type,x,y,size,team,o){
     c.save();c.filter='brightness(0)';c.globalAlpha=.92;
     const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;
     c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()
+  }
+  // Combat-only team edge survives body overlap where floor rings are hidden.
+  // Disabled entirely at >=160 bodies and on all presentation cards.
+  const crowd=Number(o.density)||0;
+  if(!o.presentation&&crowd<=120){
+    const rim=teamRim(img,team);
+    if(rim){
+      const bleed=Math.max(1.5,Math.min(3.5,size*.035));
+      c.drawImage(rim,-w*ax-bleed,-h*ay-bleed,w+bleed*2,h+bleed*2);
+    }
   }
   drawLevelAccent(c,img,w,h,ax,ay,size,o,type);
   c.drawImage(o.presentation&&!fighter.cleanSprite?presentationInk(img):img,-w*ax,-h*ay,w,h);c.restore();return true

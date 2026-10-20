@@ -124,6 +124,38 @@ const server=http.createServer((req,res)=>{
   const readyArt=await measure('[data-screen="ready"].active .ready-team canvas[data-art]');
   verify(readyArt,2,'Ready duel');
   if(width===430)await(await page.$('[data-screen="ready"].active .ready-showcase')).screenshot({path:path.join(out,'ready-duel-430.png')});
+  // Real authored Knight art must show team color above the floor rings,
+  // even as combat sprites overlap; extreme 300-density must stay image-only.
+  await page.waitForFunction(()=>FighterAssets.diagnostics().byFighter.knight.idle==='ready',{timeout:60000});
+  const teamRims=await page.evaluate(()=>{
+    const measure=density=>{
+      const paint=team=>{
+        const cv=document.createElement('canvas');cv.width=260;cv.height=280;
+        const ctx=cv.getContext('2d',{willReadFrequently:true});
+        FighterAssets.draw(ctx,'knight',130,240,150,team,{id:771,time:1200,action:'idle',level:1,density});
+        return{pixels:ctx.getImageData(0,0,cv.width,cv.height).data,cv};
+      };
+      const blue=paint('blue'),red=paint('red');let changed=0,redDominant=0,blueDominant=0;
+      for(let y=25;y<195;y+=2)for(let x=25;x<235;x+=2){
+        const i=(y*260+x)*4,p=blue.pixels,q=red.pixels;
+        if(Math.abs(p[i]-q[i])+Math.abs(p[i+1]-q[i+1])+Math.abs(p[i+2]-q[i+2])>65)changed++;
+        if(p[i+2]>p[i]*1.2&&p[i+2]>p[i+1]*1.05&&p[i+3]>170)blueDominant++;
+        if(q[i]>q[i+1]*1.15&&q[i]>q[i+2]*1.15&&q[i+3]>170)redDominant++;
+      }
+      return{density,changed,blueDominant,redDominant};
+    };
+    const comparisons=[measure(40),measure(120),measure(300)];
+    const proof=document.createElement('canvas');proof.width=520;proof.height=310;
+    const c=proof.getContext('2d');c.fillStyle='#eee5c8';c.fillRect(0,0,520,310);
+    c.fillStyle='#254550';c.font='bold 18px sans-serif';c.fillText('BLUE',95,28);c.fillText('RED',375,28);
+    FighterAssets.draw(c,'knight',130,250,155,'blue',{id:100,time:1200,action:'idle',level:1,density:40});
+    FighterAssets.draw(c,'knight',390,250,155,'red',{id:101,time:1200,action:'idle',level:1,density:40});
+    return{comparisons,proof:proof.toDataURL('image/png')};
+  });
+  assert(teamRims.comparisons[0].changed>90,'40-fighter teams need visible authored silhouette difference above rings');
+  assert(teamRims.comparisons[1].changed>90,'120-fighter teams need visible authored silhouette difference above rings');
+  assert.equal(teamRims.comparisons[2].changed,0,'300 fighters must skip extra per-body rim rendering');
+  if(width===430)fs.writeFileSync(path.join(out,'team-rims-430.png'),Buffer.from(teamRims.proof.split(',')[1],'base64'));
   // A stopped/abandoned battle has no surviving MVP; a prior portrait must NEVER linger.
   await page.evaluate(()=>{
     const cv=document.querySelector('#resultArt');cv.dataset.art='dragon';cv.dataset.team='red';cv.dataset.level='5';
@@ -145,11 +177,11 @@ const server=http.createServer((req,res)=>{
   assert.equal(empty.message,'BATTLE COMPLETE','clear no-MVP copy');
   if(width===430)await(await page.$('[data-screen="results"].active .podium')).screenshot({path:path.join(out,'no-mvp-result-430.png')});
 
-  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,draftScroll:{initial:draft,final:last},extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
+  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,teamRims:teamRims.comparisons,draftScroll:{initial:draft,final:last},extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
   await page.close();
  }
  assert.deepEqual(errors,[],'no portrait rendering exceptions');
  fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify({note:'Chromium DPR3 touch only; native Safari not tested',results},null,2)+'\n');
- console.log('PASS: 90 actual authored art canvases (10 fighters x3 forms x3 DPR3 viewports), panel geometry, nonblank full-body alpha, tactical Guide truth, bottom-row Draft tapping, zero missing art');
+ console.log('PASS: 90 actual authored art canvases (10 fighters x3 forms x3 DPR3 viewports), panel geometry, nonblank full-body alpha, tactical Guide truth, team-color combat silhouette proof at 40/120 with 300 bypass, bottom-row Draft tapping, zero missing art');
  }finally{if(browser)await browser.close();server.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
