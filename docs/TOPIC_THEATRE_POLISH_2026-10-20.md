@@ -12,3 +12,7 @@ Active after VERIFIED Turtle L5 Shell Rebound, Barbarian L5 Measured Charge and 
 1. Inventory existing authored sprite bounds and actual render/Guide/Upgrade frames and prior QA captures; reproduce specific clipping/readability defects by viewport and mode.
 2. Fix high-signal presentation bugs in source with visual/QA receipts, not speculative design churn. Re-run performance/300 and live 40 independent damage fronts; physics untouched.
 3. Get user real-device screenshots or observations at final Safari release acceptance. If lacking, leave manual P1 gate open and continue automatable QA/polish only.
+
+
+## Authored-presentation QA in progress, 20 October
+Live Guide tactical tips for newly released Turtle L5 Shell Rebound, Barbarian L5 Measured Charge and Goblin L5 Earned Rabble were stale; now truthful. Source/spec and actual combat unchanged. A new full authored Guide Chromium visibility gate covers all ten families at L1/L2/L4 and 430×932, 390×844, 375×667 touch DPR3 (90 actual canvas scenes), detects missing art, panels whose figure boxes clip, high-confidence image cutoffs at canvas edges and blank sprites; uploads five 430px fighter-gallery screenshots and precise pixel receipts. This test will expose real crop problems for subsequent fixes. Native Safari iPhone device acceptance remains OPEN. All 42 root/module PWA pins updated atomically; 300/20/40 battle gates remain required; no Vercel preview, main or production changes.
