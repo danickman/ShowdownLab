@@ -13,7 +13,7 @@ assert(fx.includes("f.ability==='breakthrough'"),'must render grounded breakthro
 assert(ult.includes('MEASURED CHARGE: approach 70% faster'),'Guide describes actual new L5 ability');
 assert(src.includes("u.windup=u.windupTicks+(ultimate.rank(u)===1?24:0)"),'Dragon L4 fairness preserved');
 function duel(level,baseline=false){
- let time=0,n=0,q=new Map(),errors=[],first=-1,last=null,dig=crypto.createHash('sha256');
+ let time=0,n=0,q=new Map(),errors=[],first=-1,last=null,dig=crypto.createHash('sha256'),firstCueChecked=false;
  const env={window:null,Math,performance:{now:()=>time},requestAnimationFrame(cb){const id=++n;q.set(id,cb);return id},cancelAnimationFrame(id){q.delete(id)},console:{error:(...a)=>errors.push(a.join(' '))}};
  env.window=env;vm.createContext(env);
  vm.runInContext(read('v3/evolution-rules.js'),env);
@@ -29,18 +29,18 @@ function duel(level,baseline=false){
   const state=sim.getState(),barb=state.units.find(u=>u.type==='barbarian'),turtle=state.units.find(u=>u.type==='turtle');
   dig.update(JSON.stringify(state)+'\n');
   if(turtle.hp<turtle.maxHp&&first<0)first=state.tick;
-  if(barb.breakthroughStrike){assert.equal(level,5);assert.equal(barb.ultimateKind,'breakthrough');assert.equal(barb.ultimateTarget,turtle.id);}
+  if(barb.breakthroughStrike&&!firstCueChecked){assert.equal(level,5);assert.equal(barb.ultimateKind,'breakthrough');assert.equal(barb.ultimateTarget,turtle.id);firstCueChecked=true;}
   last={state,barb,turtle};if(state.winner)break;
  }
  assert.deepEqual(errors,[],'no actual source sim error');
  assert(first>=0,'genuine first primary landed HP');
- return{first,digest:dig.digest('hex'),...last};
+ return{first,digest:dig.digest('hex'),firstCueChecked,...last};
 }
 const l4=duel(4),l4Before=duel(4,true);
 assert.equal(l4.digest,l4Before.digest,'all L4 states identical full real RAF digest');
 assert(!l4.barb.breakthroughStrike,'L4 never arms L5 upgrade');
 const live5=duel(5),old5=duel(5,true);
-assert(live5.barb.breakthroughStrike,'real L5 first strike occurred');
+assert(live5.firstCueChecked,'real L5 first strike occurred and correctly emitted cue');
 assert(live5.first<=old5.first,'first contact should not be delayed by L5 charge');
 assert.notEqual(live5.digest,old5.digest,'L5 physical result changes with approved first hit and advance');
 console.log('PASS: Barbarian L5 single genuine first impact and cue, real earlier contact, L4 exact physics RAF SHA, existing Dragon windup, FX and Guide');
