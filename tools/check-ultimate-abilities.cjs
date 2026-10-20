@@ -19,7 +19,7 @@ for(const level of [4,5]){
  t.hp=75;assert.equal(U.outgoing(assassin,t,100,[assassin,t],75),100,'75% boundary is strictly below');
  t.hp=40;assert.equal(U.outgoing(assassin,t,100,[assassin,t],89),rank===2?220.00000000000003:100,'L4 40% boundary unchanged');
  const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);assert.equal(beetank.ultimateKind,rank===2?'siege':'seismic','L5 distinct contact-breach cue; preserve L4');
- const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,1);close(hits[0].damage,rank===2?18:12);
+ const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,rank===2?2:1,'L5 has real Rebound in addition to original reflection');close(hits[0].damage,rank===2?18:12);if(rank===2){assert.equal(hits[1].source,turtle);assert.equal(hits[1].target,attacker);close(hits[1].damage,145);}
  attacker.x=turtle.x+.095;hits=U.afterHit(attacker,turtle,40,[attacker,turtle],45);assert.equal(hits.length,1,'close collision-edge attacker should trigger Ricochet');close(hits[0].damage,rank===2?18:12);
  attacker.x=turtle.x+.101;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0,'outside 0.10 Ricochet radius must preserve ranged counterplay');
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
@@ -50,7 +50,7 @@ for(const level of [4,5]){
 // The actual core damage path applies resistance, reflection and splash once.
 let src=fs.readFileSync('v3/legacy-sim-core.js','utf8');src=src.replace('window.LegacySimCore={','window.TestCombat={hurt,step,setUnits:v=>{units=v;bastions=v.filter(u=>u.type==="knight"&&ultimate.rank(u))},getUnits:()=>units};window.LegacySimCore={');vm.runInContext(src,e);
 let mole=unit('mole',4,'red',2),a=unit('sniper',1);e.TestCombat.setUnits([a,mole]);e.TestCombat.hurt(mole,100,a);assert.equal(mole.hp,35);
-let x=unit('turtle',4,'blue'),y=unit('turtle',5,'red',2,.51);e.TestCombat.setUnits([x,y]);e.TestCombat.hurt(y,20,x);assert.equal(y.hp,80);assert.equal(x.hp,91,'reflection does not reflect recursively');
+let x=unit('turtle',4,'blue'),y=unit('turtle',5,'red',2,.51);e.TestCombat.setUnits([x,y]);e.TestCombat.hurt(y,20,x);assert.equal(y.hp,80);assert.equal(x.hp,0,'L5 real primary Shell Rebound lands after ordinary 9-point reflect and cannot recursively reflect');
 let sniper=unit('sniper',4),target=unit('goose',1,'red',2,.6),behind=unit('goose',1,'red',3,.68);e.TestCombat.setUnits([sniper,target,behind]);e.TestCombat.hurt(target,20,sniper);assert.equal(target.hp,80);close(behind.hp,45);assert.equal(sniper.ultimateKind,'pierce');
 console.log('PASS: ten role-specific L4 abilities and stronger L5 variants; no L1–3 abilities; actual resistance/reflection/piercing paths, finite splash and burrow-safe burns');
 
