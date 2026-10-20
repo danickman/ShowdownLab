@@ -2974,6 +2974,7 @@ jobs:
           path: goblin-topic-trick-ambush.json
           if-no-files-found: warn
   goblin-topic-sabotage-focus-roi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -2993,4 +2994,25 @@ jobs:
         with:
           name: goblin-topic-sabotage-focus
           path: goblin-topic-sabotage-focus.json
+          if-no-files-found: warn
+  goblin-topic-earned-warpack-roi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check physically summoned bounded Goblin L5 variant source
+        run: node --check tools/qa/check-goblin-topic-earned-warpack.cjs
+      - name: Source-real 336 terminal 20/40 plus 12 severe, all RAF and actual extra-body accounting
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-earned-warpack.json
+        run: node tools/qa/check-goblin-topic-earned-warpack.cjs
+      - name: Record real extra Goblin bodies, counters, physical HP fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-earned-warpack
+          path: goblin-topic-earned-warpack.json
           if-no-files-found: warn
