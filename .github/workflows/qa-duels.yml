@@ -2684,3 +2684,26 @@ jobs:
           name: turn20-current-live-fronts
           path: turn20-current-live-fronts.json
           if-no-files-found: warn
+
+  turn21-barbarian-opening-fury:
+    # One time-bounded genuine physical first L5 trial; no runtime updates on study failure.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check source-only opening rage scenario
+        run: node --check tools/qa/check-turn21-barbarian-first-fury.cjs
+      - name: 224 actual terminal mirrored 20/40 draft matches, 8 severe and RAF controls
+        env:
+          QA_TURN21_RECEIPT: turn21-barbarian-first-fury.json
+        run: node tools/qa/check-turn21-barbarian-first-fury.cjs
+      - name: Archive raw first unlock/peer/whole army counterplay and physical front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn21-barbarian-first-fury
+          path: turn21-barbarian-first-fury.json
+          if-no-files-found: warn
