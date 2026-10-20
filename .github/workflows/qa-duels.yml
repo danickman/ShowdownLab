@@ -2562,6 +2562,8 @@ jobs:
           if-no-files-found: warn
 
   turn20-pressure-spread-research:
+    # Completed source-only study; archive rather than rerun.
+    if: github.event_name == 'workflow_dispatch'
     # Third distinct physical source-only hypothesis: distribute real melee target pressure;
     # reject if true current-live 40 persistence target is not attained.
     runs-on: ubuntu-latest
@@ -2583,4 +2585,27 @@ jobs:
         with:
           name: turn20-pressure-spread
           path: turn20-pressure-spread.json
+          if-no-files-found: warn
+
+  turn20-collider-contact-research:
+    # One physical barrier-touch fix only on 20/40 crowded actual melee, no fake damage.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check strict real physical contact front test
+        run: node --check tools/qa/check-turn20-collider-contact.cjs
+      - name: Current live all-ten-role 20/40 authentic HP terminal contact A/B
+        env:
+          QA_TURN20_FRONTS: turn20-collider-contact.json
+        run: node tools/qa/check-turn20-collider-contact.cjs
+      - name: Preserve genuine 32 completed matched live-battle results per arm
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-collider-contact
+          path: turn20-collider-contact.json
           if-no-files-found: warn
