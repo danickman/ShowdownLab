@@ -132,8 +132,16 @@ const server=http.createServer((req,res)=>{
    samples:profile.samples?.length||0,topSelfSamples:hotspots,note:'CDP V8 profiler, sampled after density timing; includes JS and profiler overhead. Not Safari.'};
   assert(report.cpuProfile.samples>0,'Chromium V8 CPU profile contains no samples');
   console.log('DENSITY CPU HOTSPOTS '+JSON.stringify(report.cpuProfile));
-  // Real original physics QUAKE cast: expose an unlockable button only inside
-  // this QA viewport, then capture actual hit and settled arena frames.
+  // The 300 stress sweep can leave a *real* between-rounds draft overlay
+  // on top of the battle. Re-enter a fresh Quick Match UI before asserting
+  // that the QUAKE control is physically hittable by a touch.
+  await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownQA&&window.ShowdownAdapter,{timeout:90000});
+  await page.click('[data-mode="quick"]');
+  if(await page.$('.screen-ready.active'))await page.click('.screen-ready [data-go="battle"]');
+  await page.waitForFunction(()=>ShowdownQA.snapshot().screen==='battle',{timeout:20000});
+  // Real original physics QUAKE cast: reveal this otherwise unlockable spell
+  // only in QA, then capture its actual hit and settled arena frames.
   await page.evaluate(()=>{
    ShowdownAdapter.startMatch({blue:{knight:20},red:{knight:20},blueLives:1,redLives:1,seed:42026});
    ShowdownAdapter.setSpeed(1);
@@ -141,7 +149,12 @@ const server=http.createServer((req,res)=>{
    addEventListener('showdown:spell',e=>{if(e.detail?.spell==='quake')window.__quakeSpellQA={spell:'quake',power:e.detail.power}},{once:true});
    document.querySelector('[data-spell="quake"]').hidden=false;
   });
-  await page.waitForFunction(()=>ShowdownQA.snapshot().phase==='battle'&&!document.querySelector('[data-spell="quake"]').disabled,{timeout:12000});
+  await page.waitForFunction(()=>{
+    if(ShowdownQA.snapshot().phase!=='battle')return false;
+    const b=document.querySelector('[data-spell="quake"]');if(!b||b.disabled||b.hidden)return false;
+    const r=b.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,hit=document.elementFromPoint(x,y);
+    return hit===b||b.contains(hit);
+  },{timeout:12000});
   await page.screenshot({path:path.join(out,'quake-before-430.png')});
   await page.click('[data-spell="quake"]');
   await page.waitForFunction(()=>window.__quakeSpellQA?.spell==='quake'&&document.querySelector('.ability-callout.spell-quake'),{timeout:12000});
@@ -150,7 +163,7 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>ShowdownAdapter.pauseBattle());
   await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,980)));
   await page.screenshot({path:path.join(out,'quake-fractures-430.png')});
-  report.quakeCast=await page.evaluate(()=>({spell:window.__quakeSpellQA,screen:ShowdownQA.snapshot().screen}));
+  report.quakeCast=await page.evaluate(()=>({spell:window.__quakeSpellQA,screen:ShowdownQA.snapshot().screen,mode:document.body.dataset.gameMode}));
   assert.equal(report.quakeCast.spell?.spell,'quake','real current-source QUAKE cast');
   console.log('PASS: actual 40-unit QUAKE cast/impact and persistent arena screenshot receipts');
   assert.deepEqual(report.failures,[]);
