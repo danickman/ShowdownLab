@@ -245,8 +245,13 @@ const server=http.createServer((req,res)=>{
           }
         }return{greens,light,samples};
       });
-      report.bloomSideline=visibleGarden;
-      console.log('BLOOM CLEAR FLANK RENDERED PIXELS '+JSON.stringify(visibleGarden));
+      const proof=await page.evaluate(()=>({painter:window.__bloomPainter||null,
+        reducedMotion:window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        speed:ShowdownAdapter.getState().speed,
+        density:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length}));
+      report.bloomSideline={...visibleGarden,...proof};
+      console.log('BLOOM GATE AND VISIBLE PIXELS '+JSON.stringify(report.bloomSideline));
+      assert(proof.painter?.density<160,'actual BLOOM painter must run for current 40-body spell');
       assert(visibleGarden.greens>=55,'genuine BLOOM cast must produce visible green leaves in the open flank');
     }
     await page.evaluate(()=>ShowdownAdapter.pauseBattle());
