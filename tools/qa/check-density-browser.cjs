@@ -231,6 +231,24 @@ const server=http.createServer((req,res)=>{
     assert(receipt.callout,kind+' real DOM ribbon');
     await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,185)));
     await page.screenshot({path:path.join(out,'spell-'+kind+'-impact-430.png')});
+    if(kind==='heal'){
+      const visibleGarden=await page.evaluate(()=>{
+        const canvas=document.querySelector('#battleCanvas'),ctx=canvas.getContext('2d',{willReadFrequently:true}),
+          factor=canvas.width/canvas.getBoundingClientRect().width,w=canvas.width,h=canvas.height,
+          rgba=ctx.getImageData(0,0,w,h).data,step=Math.max(1,Math.round(2*factor));
+        let greens=0,light=0,samples=0;
+        for(let y=Math.round(200*factor);y<Math.min(h-Math.round(90*factor),Math.round(790*factor));y+=step){
+          for(let x=Math.round(18*factor);x<Math.min(w,Math.round(116*factor));x+=step){
+            const i=(y*w+x)*4,r=rgba[i],g=rgba[i+1],b=rgba[i+2];samples++;
+            if(g>r*1.24&&g>b*1.2&&g>80)greens++;
+            if(r>150&&g>170&&b<175&&g>r*1.04)light++;
+          }
+        }return{greens,light,samples};
+      });
+      report.bloomSideline=visibleGarden;
+      console.log('BLOOM CLEAR FLANK RENDERED PIXELS '+JSON.stringify(visibleGarden));
+      assert(visibleGarden.greens>=55,'genuine BLOOM cast must produce visible green leaves in the open flank');
+    }
     await page.evaluate(()=>ShowdownAdapter.pauseBattle());
     await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,900)));
     await page.screenshot({path:path.join(out,'spell-'+kind+'-aftermath-430.png')});
