@@ -1,5 +1,5 @@
 'use strict';
-const fs=require('fs'),crypto=require('crypto'),assert=require('node:assert/strict'),path=require('path');
+const fs=require('fs'),crypto=require('crypto'),assert=require('node:assert/strict'),path=require('path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const src=read('v3/v3.js'),html=read('index.html'),sw=read('sw.js');
 const marker="function draw(time){if(current!=='battle'||!cam)return;",replacement="function draw(time){if(current!=='battle'||!cam)return;\n// Only exceptional full-arena stress density uses lower raster backing; positions, fighters, FX, and combat remain unchanged.\nconst __denseScale=state.units.length>=160?((state.speed||1)>=10?.85:1):Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);\nif(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}";
@@ -7,6 +7,20 @@ assert.equal(src.split(replacement).length,2,'one exact density-aware theatre dr
 // Strip ONLY documented live tactical tips, preserving the entire original physics,
 // renderer and density gate byte-for-byte. Any unrelated runtime change still fails.
 let historic=src.replace(replacement,marker);
+// Exact accepted presentation overlay only; original engine SHA remains strict.
+const legacyFX="const fxCap=tier==='minimal'?34:tier==='reduced'?50:tier==='balanced'?70:94;if(fx.length>fxCap)fx.splice(0,fx.length-fxCap);",liveFX="const fxCap=tier==='minimal'?34:tier==='reduced'?50:tier==='balanced'?70:94;if(fx.length>fxCap){const spill=fx.length-fxCap;if(!fx.some(f=>/Spell$/.test(f.kind)))fx.splice(0,spill);else{let drop=spill;fx=fx.filter(f=>{if(drop>0&&!/Spell$/.test(f.kind)){drop--;return false}return true}).slice(-fxCap)}}";
+assert.equal(historic.split(liveFX).length,2,'only one bounded active-spell FX priority overlay');
+historic=historic.replace(liveFX,legacyFX);
+for(const [tier,cap] of [['minimal',34],['reduced',50],['balanced',70],['full',94]]){
+ const hits=Array.from({length:cap+17},(_,i)=>({id:i,kind:'hit'}));
+ function evaluateFX(items){const c={tier,fx:items.map(x=>({...x}))};vm.runInNewContext(liveFX,c);return c.fx}
+ const noSpell=evaluateFX(hits);assert.equal(noSpell.length,cap);
+ assert.deepEqual(noSpell.map(x=>x.id),hits.slice(-cap).map(x=>x.id),'byte-equivalent no-spell ordering');
+ const real=evaluateFX([{id:1e5,kind:'bloomSpell'},{id:1e5+1,kind:'arcSpell'},{id:1e5+2,kind:'aegisSpell'},...hits]);
+ assert.equal(real.length,cap,'no extra FX at any tier');
+ assert(real.some(x=>x.kind==='bloomSpell')&&real.some(x=>x.kind==='arcSpell')&&real.some(x=>x.kind==='aegisSpell'),'real spells survive hit FX churn');
+}
+
 const resultCurrentStart="if(mvp&&art){art.style.visibility='visible';const mvpBadge=document.querySelector('.mvp-badge');if(mvpBadge)mvpBadge.style.visibility='visible';art.dataset.art=mvp.type;",resultLegacyStart="if(mvp&&art){art.dataset.art=mvp.type;";
 const resultCurrentEmpty="}else{if(art){art.style.visibility='hidden';art.getContext('2d').clearRect(0,0,art.width,art.height);staticCanvasKeys.delete(art);delete art.dataset.art;delete art.dataset.team;delete art.dataset.level}const mvpBadge=document.querySelector('.mvp-badge');if(mvpBadge)mvpBadge.style.visibility='hidden';document.querySelector('#resultMvp').textContent='BATTLE COMPLETE';",resultLegacyEmpty="}else{document.querySelector('#resultMvp').textContent='BATTLE COMPLETE';";
 for(const [current,legacy] of [[resultCurrentStart,resultLegacyStart],[resultCurrentEmpty,resultLegacyEmpty]]){
@@ -47,4 +61,4 @@ const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^show
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');
 assert.equal(scale(160,1,3),1);assert.equal(scale(300,1,3),1);assert.equal(scale(300,10,3),.85);assert.equal(scale(300,10,1),.85);
-console.log('PASS Turn19 playable density-aware canvas contract, preserved art source, 300 dual-speed and 80/120 full-resolution');
+console.log('PASS Turn19 historical source SHA and hard 34/50/70/94 spell-priority FX caps, legacy no-spell order unchanged');
