@@ -35,12 +35,18 @@ function crack(type,tier='full',age=.32){
  assert.equal(depth,0);assert.equal(JSON.stringify(m),unchanged);
  return{strokes,fills,points};
 }
-const fault=crack('quake'),ordinary=crack('impact'),minimal=crack('quake','minimal');
+const fault=crack('quake'),ordinary=crack('impact'),reducedFault=crack('quake','reduced'),minimal=crack('quake','minimal');
 assert.deepStrictEqual(fault,crack('quake'),'QUAKE cached fracture geometry must be stable');
 assert.equal(crack('quake','full',1).strokes.length,0,'nine-second expiry intact');
 assert(fault.strokes.some(([color,width])=>color==='#241a15'&&width>=6),'dark bold fault missing');
 assert(fault.strokes.some(([color])=>color==='#ffdf9d'),'sunlit fault rim missing');
 assert(fault.fills.includes('#d6b080'),'raised earth shards missing');
+assert(fault.fills.filter(c=>c==='#231811').length>=8,'full QUAKE must carve eight *filled* dark fissures');
+assert(fault.fills.filter(c=>c==='#e3ba83').length>=8,'full QUAKE must lift sunlit stone edges');
+assert(reducedFault.fills.filter(c=>c==='#231811').length>=5,'40-fighter reduced tier must keep five visible dark ground openings');
+assert.equal(reducedFault.fills.filter(c=>c==='#e3ba83').length,0,'reduced mode skips extra paving fill');
+assert.equal(minimal.fills.filter(c=>c==='#231811').length,0,'300-body minimal tier must skip extra chasm fills');
+assert(!ordinary.fills.includes('#231811'),'ordinary impacts retain protected scar presentation');
 const furthest=q=>Math.max(...q.points.map(([x,y])=>Math.hypot(x,y)),0);
 assert(furthest(fault)>furthest(ordinary)*2.1,'QUAKE must rupture beyond ordinary small hit scars');
 const west=Math.min(...fault.points.map(v=>v[0]));
@@ -70,5 +76,5 @@ assert(redHP<initialRed,'genuine source spell HP damage occurred');
 assert.equal(after.units.length,40,'no phantom bodies from null attacker');
 assert.equal(after.units.filter(u=>u.team==='blue'&&u.hp>0).length,20,'spell never harms own side');
 console.log('PASS: live 40-fighter ARC+QUAKE real core casts no null-attacker crash, deterministic damage and unchanged roster');
-console.log('PASS: QUAKE physically wider bold fracturing, angular rocks, deterministic marks, expiry and 300 budget');
+console.log('PASS: QUAKE eight cached filled ground chasms and uplifted stone, five reduced visible fissures, zero extra 300 fills, expiry and physics parity');
 console.log('PASS: clean authored sky without ovals, finite 430/375 geometry, moving birds/light and 300 budget, reduced-motion gated');

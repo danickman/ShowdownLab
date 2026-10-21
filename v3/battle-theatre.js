@@ -16,10 +16,19 @@
       // any rays, marks, particles, draw calls or physics changes.
       const midfield=quake?(Math.cos(a)<-.45?2.1:Math.cos(a)<0?1.34:1):1;
       const r=radius*midfield*(.68+.32*(.5+.5*Math.sin(seed*1.7+i*3.1)));
-      return {points:[[Math.cos(a)*3,Math.sin(a)*1.4],
+      const points=[[Math.cos(a)*3,Math.sin(a)*1.4],
         [Math.cos(a+.13)*r*.38,Math.sin(a+.13)*r*.18],
         [Math.cos(a-.1)*r*.7,Math.sin(a-.1)*r*.32],
-        [Math.cos(a+.08)*r,Math.sin(a+.08)*r*.46]],
+        [Math.cos(a+.08)*r,Math.sin(a+.08)*r*.46]];
+      // Precompute TWO irregular walls of the split ground ONCE per world mark.
+      // Stage foreshortening keeps them embedded in paving, not floating above.
+      const nx=-Math.sin(a),ny=Math.cos(a)*.44;
+      const edges=quake?points.map(([x,y],j)=>{
+        const half=[2.8,10.5,8.7,3.8][j]*(1+.16*Math.sin(seed+j*2+i));
+        return{upper:[x+nx*half,y+ny*half],lower:[x-nx*half,y-ny*half],
+          lip:[x+nx*(half+3.2),y+ny*(half+3.2)]};
+      }):null;
+      return {points,edges,
         branch:[Math.cos(a+.65)*r*.83,Math.sin(a+.65)*r*.38]};
     });
     const chips=Array.from({length:10},(_,i)=>{const a=i*2.399+seed,r=radius*(.45+(i%4)*.19);return {x:Math.cos(a)*r,y:Math.sin(a)*r*.43,size:(quake?3.1:1.8)+(i%3)*(quake?1.45:.9),angle:a}});
@@ -38,6 +47,26 @@
     ctx.beginPath();ctx.ellipse(0,2,g.radius*.81,g.radius*.30,-.08,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=fade*(g.burn?.48:quake?.90:.62);ctx.lineCap='round';ctx.lineJoin='round';
     for(const ray of g.rays.slice(0,limit)){
+      // A *filled* jagged opening, not just a thin stroke. Reuses the eight
+      // source-authored ground faults and existing 3/5/8 density caps.
+      // Omit the extra fills entirely at 300-fighter minimal spectacle.
+      if(quake&&tier!=='minimal'&&ray.edges){
+        ctx.fillStyle='#231811';ctx.globalAlpha=fade*.90;
+        ctx.beginPath();
+        ray.edges.forEach((e,i)=>i?ctx.lineTo(...e.upper):ctx.moveTo(...e.upper));
+        for(let i=ray.edges.length-1;i>=0;i--)ctx.lineTo(...ray.edges[i].lower);
+        ctx.closePath();ctx.fill();
+        if(tier!=='reduced'){
+          // A separate light uplifted paving edge explains the silhouette:
+          // the stone physically rises beside the exposed dark fault.
+          ctx.fillStyle='#e3ba83';ctx.globalAlpha=fade*.70;
+          ctx.beginPath();
+          ray.edges.forEach((e,i)=>i?ctx.lineTo(...e.lip):ctx.moveTo(...e.lip));
+          for(let i=ray.edges.length-1;i>=0;i--)ctx.lineTo(...ray.edges[i].upper);
+          ctx.closePath();ctx.fill();
+        }
+        ctx.globalAlpha=fade*.90;
+      }
       // Three narrow layers suggest split, sunlit stone rather than a glowing
       // circle. The crowd-minimal tier only draws the dark primary fracture.
       ctx.strokeStyle=quake?'#241a15':'#4d3c2b';
