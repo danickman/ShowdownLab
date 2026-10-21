@@ -248,47 +248,45 @@ const server=http.createServer((req,res)=>{
     assert.equal(receipt.cast?.spell,kind,kind+' actual original physics cast');
     assert(receipt.callout,kind+' real DOM ribbon');
     await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,185)));
-    await page.screenshot({path:path.join(out,'spell-'+kind+'-impact-430.png')});
+    // Capture the real composited battle canvas before Puppeteer's slow
+    // full-page PNG work allows the ~1s spell burst to expire. The earlier
+    // gate inspected the framebuffer AFTER awaiting screenshot, causing a
+    // false failure despite source-observed green leaf pixels (144 immediate).
     if(kind==='heal'){
-      const visibleGarden=await page.evaluate(()=>{
-        const canvas=document.querySelector('#battleCanvas'),ctx=canvas.getContext('2d',{willReadFrequently:true}),
-          factor=canvas.width/canvas.getBoundingClientRect().width,w=canvas.width,h=canvas.height,
+      const nowBloom=await page.evaluate(()=>{
+        const cv=document.querySelector('#battleCanvas'),
+          ctx=cv.getContext('2d',{willReadFrequently:true}),
+          factor=cv.width/cv.getBoundingClientRect().width,w=cv.width,h=cv.height,
           rgba=ctx.getImageData(0,0,w,h).data,step=Math.max(1,Math.round(2*factor));
         let greens=0,light=0,samples=0;
         for(let y=Math.round(200*factor);y<Math.min(h-Math.round(90*factor),Math.round(790*factor));y+=step){
           for(let x=Math.round(18*factor);x<Math.min(w,Math.round(116*factor));x+=step){
             const i=(y*w+x)*4,r=rgba[i],g=rgba[i+1],b=rgba[i+2];samples++;
-            if(g>r*1.24&&g>b*1.2&&g>80)greens++;
+            if(g>r*1.24&&g>b*1.20&&g>80)greens++;
             if(r>150&&g>170&&b<175&&g>r*1.04)light++;
           }
-        }return{greens,light,samples};
-      });
-      const proof=await page.evaluate(()=>({painter:window.__bloomPainter||null,
-        reducedMotion:window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-        speed:ShowdownAdapter.getState().speed,
-        density:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length}));
-      report.bloomSideline={...visibleGarden,...proof};
-      report.bloomFillTrace=await page.evaluate(()=>window.__bloomFillTrace||[]);
-      const framePixel=await page.evaluate(()=>{
-        const trace=(window.__bloomFillTrace||[]).find(e=>e.color==='#54ae55'&&e.immediateGreen>0);
-        if(!trace)return null;
-        const cv=document.querySelector('#battleCanvas'),c=cv.getContext('2d');
-        const [x,y]=trace.sampleCenter,d=c.getImageData(x,y,12,12).data;
-        let loose=0,strict=0;for(let i=0;i<d.length;i+=4){
-          if(d[i+1]>d[i]*1.2&&d[i+1]>d[i+2]*1.2)loose++;
-          if(d[i+1]>d[i]*1.24&&d[i+1]>d[i+2]*1.2&&d[i+1]>80)strict++;
         }
-        const rect=cv.getBoundingClientRect();
-        return{sample:[x,y],immediate:trace.immediateGreen,finalLoose:loose,finalStrict:strict,
-          pixel:Array.from(d.slice(0,4)),canvas:[cv.width,cv.height],rect:[rect.x,rect.y,rect.width,rect.height]};
+        const trace=window.__bloomFillTrace||[],leaf=trace.find(e=>e.color==='#54ae55'&&e.immediateGreen>0);
+        const painter=window.__bloomPainter||null;
+        // This encodes the CURRENT real battle canvas immediately, without
+        // another RAF or a full-page screenshot scheduling delay.
+        return{greens,light,samples,leaf:leaf?{sample:leaf.sampleCenter,immediate:leaf.immediateGreen}:null,
+          painter,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,
+          density:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length,
+          png:cv.toDataURL('image/png')};
       });
-      report.bloomRetainedPixel=framePixel;
-      console.log('BLOOM RETAINED LEAF PIXEL '+JSON.stringify(framePixel));
-      console.log('BLOOM ACTUAL CANVAS LEAF FILLS '+JSON.stringify(report.bloomFillTrace.slice(0,15)));
-      console.log('BLOOM GATE AND VISIBLE PIXELS '+JSON.stringify(report.bloomSideline));
-      assert(proof.painter?.density<160,'actual BLOOM painter must run for current 40-body spell');
-      assert(visibleGarden.greens>=55,'genuine BLOOM cast must produce visible green leaves in the open flank');
+      fs.writeFileSync(path.join(out,'spell-heal-live-canvas-430.png'),Buffer.from(nowBloom.png.split(',')[1],'base64'));
+      const {png,...proof}=nowBloom;
+      report.bloomSideline=proof;
+      console.log('BLOOM ON-FRAME REAL PIXELS '+JSON.stringify(proof));
+      assert.equal(proof.density,40,'real 40-fighter BLOOM snapshot');
+      assert(proof.painter?.density===40,'real BLOOM painter ran in the same fight');
+      assert(proof.leaf&&proof.leaf.immediate>0,'actual source-green leaf must paint on Canvas');
+      assert(proof.greens>=55,'visible BLOOM greenery should survive on its ACTUAL immediate frame');
     }
+    // Supplementary full-page screenshot may land after the brief FX fades;
+    // do NOT use it as a same-frame pixel measurement.
+    await page.screenshot({path:path.join(out,'spell-'+kind+'-impact-430.png')});
     await page.evaluate(()=>ShowdownAdapter.pauseBattle());
     await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,900)));
     await page.screenshot({path:path.join(out,'spell-'+kind+'-aftermath-430.png')});
