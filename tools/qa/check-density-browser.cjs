@@ -269,6 +269,21 @@ const server=http.createServer((req,res)=>{
         density:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length}));
       report.bloomSideline={...visibleGarden,...proof};
       report.bloomFillTrace=await page.evaluate(()=>window.__bloomFillTrace||[]);
+      const framePixel=await page.evaluate(()=>{
+        const trace=(window.__bloomFillTrace||[]).find(e=>e.color==='#54ae55'&&e.immediateGreen>0);
+        if(!trace)return null;
+        const cv=document.querySelector('#battleCanvas'),c=cv.getContext('2d');
+        const [x,y]=trace.sampleCenter,d=c.getImageData(x,y,12,12).data;
+        let loose=0,strict=0;for(let i=0;i<d.length;i+=4){
+          if(d[i+1]>d[i]*1.2&&d[i+1]>d[i+2]*1.2)loose++;
+          if(d[i+1]>d[i]*1.24&&d[i+1]>d[i+2]*1.2&&d[i+1]>80)strict++;
+        }
+        const rect=cv.getBoundingClientRect();
+        return{sample:[x,y],immediate:trace.immediateGreen,finalLoose:loose,finalStrict:strict,
+          pixel:Array.from(d.slice(0,4)),canvas:[cv.width,cv.height],rect:[rect.x,rect.y,rect.width,rect.height]};
+      });
+      report.bloomRetainedPixel=framePixel;
+      console.log('BLOOM RETAINED LEAF PIXEL '+JSON.stringify(framePixel));
       console.log('BLOOM ACTUAL CANVAS LEAF FILLS '+JSON.stringify(report.bloomFillTrace.slice(0,15)));
       console.log('BLOOM GATE AND VISIBLE PIXELS '+JSON.stringify(report.bloomSideline));
       assert(proof.painter?.density<160,'actual BLOOM painter must run for current 40-body spell');
