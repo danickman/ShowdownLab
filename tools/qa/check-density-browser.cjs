@@ -198,12 +198,17 @@ const server=http.createServer((req,res)=>{
         const baseFill=CanvasRenderingContext2D.prototype.fill;
         CanvasRenderingContext2D.prototype.fill=function(...args){
           const color=this.fillStyle;
+          const result=baseFill.apply(this,args);
           if(['#dcf49c','#54ae55','#85ca61','#f5edb2'].includes(color)&&window.__bloomFillTrace.length<25){
-            const t=this.getTransform();
+            const t=this.getTransform(),cx=Math.max(0,Math.min(this.canvas.width-12,Math.floor(t.e)-6)),
+              cy=Math.max(0,Math.min(this.canvas.height-12,Math.floor(t.f)-6));
+            const pixels=this.getImageData(cx,cy,12,12).data;let green=0;
+            for(let i=0;i<pixels.length;i+=4)if(pixels[i+1]>pixels[i]*1.2&&pixels[i+1]>pixels[i+2]*1.2)green++;
             window.__bloomFillTrace.push({color,alpha:this.globalAlpha,mode:this.globalCompositeOperation,
-              transform:[t.a,t.b,t.c,t.d,t.e,t.f],canvas:[this.canvas.width,this.canvas.height]});
+              transform:[t.a,t.b,t.c,t.d,t.e,t.f],canvas:[this.canvas.width,this.canvas.height],
+              immediateGreen:green,sampleCenter:[cx,cy]});
           }
-          return baseFill.apply(this,args);
+          return result;
         };
       }
       addEventListener('showdown:spell',e=>{if(e.detail?.spell===kind)window.__spellCastQA={spell:e.detail.spell,power:e.detail.power,amount:e.detail.amount,targets:e.detail.targets||1}},{once:true});
