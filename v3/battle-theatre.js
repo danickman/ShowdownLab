@@ -5,9 +5,9 @@
   function shape(mark){
     if(geometry.has(mark))return geometry.get(mark);
     const seed=(mark.seed||0)+(mark.t||0)*.013+(mark.x||0)*71+(mark.y||0)*113;
-    const quake=mark.type==='quake',burn=mark.type==='arc'||mark.type==='fire';
+    const quake=mark.type==='quake',arc=mark.type==='arc',burn=arc||mark.type==='fire';
     // QUAKE marks open a broader chasm than everyday hits. Cache per mark.
-    const radius=(quake?62:burn?25:mark.heavy?29:20)+(mark.tech||0)*(quake?2.8:2);
+    const radius=(quake?62:arc?35:burn?25:mark.heavy?29:20)+(mark.tech||0)*(quake?2.8:2);
     const rays=Array.from({length:quake?8:6},(_,i)=>{
       const a=i*Math.PI*2/(quake?8:6)+Math.sin(seed+i)*.24;
       // A genuine QUAKE must split open *clear* floor toward the blue/red
@@ -43,7 +43,7 @@
         lip:[x,y-half[i]*.50-3.5]
       }));
     })():null;
-    const value={radius,rays,chips,burn,focus};geometry.set(mark,value);return value;
+    const value={radius,rays,chips,burn,arc,focus};geometry.set(mark,value);return value;
   }
   function polygon(ctx,x,y,size,angle){
     ctx.beginPath();for(let k=0;k<4;k++){const a=angle+k*Math.PI/2,r=size*(k%2?.65:1);const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r*.6;k?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.closePath();
@@ -54,7 +54,7 @@
     ctx.save();ctx.translate(p.x,p.y);ctx.scale(grow,grow);
     // Settled dirt/char sits flat on the floor; fractured edges catch the same daylight.
     const quake=mark.type==='quake';
-    ctx.globalAlpha=fade*(g.burn?.31:quake?.43:.22);ctx.fillStyle=g.burn?'#493d31':quake?'#705038':'#98714d';
+    ctx.globalAlpha=fade*(g.arc?.48:g.burn?.31:quake?.43:.22);ctx.fillStyle=g.arc?'#29323a':g.burn?'#493d31':quake?'#705038':'#98714d';
     ctx.beginPath();ctx.ellipse(0,2,g.radius*.81,g.radius*.30,-.08,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=fade*(g.burn?.48:quake?.90:.62);ctx.lineCap='round';ctx.lineJoin='round';
     if(quake&&tier!=='minimal'&&g.focus){
@@ -94,24 +94,24 @@
       }
       // Three narrow layers suggest split, sunlit stone rather than a glowing
       // circle. The crowd-minimal tier only draws the dark primary fracture.
-      ctx.strokeStyle=quake?'#241a15':'#4d3c2b';
-      ctx.lineWidth=quake?(tier==='minimal'?3.2:tier==='reduced'?5.4:6.3):mark.heavy?2:1.5;
+      ctx.strokeStyle=quake?'#241a15':g.arc?'#263747':'#4d3c2b';
+      ctx.lineWidth=quake?(tier==='minimal'?3.2:tier==='reduced'?5.4:6.3):g.arc?(tier==='minimal'?1.8:2.6):mark.heavy?2:1.5;
       ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
       if(tier!=='minimal'){
         if(quake){
           ctx.strokeStyle='#875c37';ctx.lineWidth=tier==='reduced'?2.1:2.9;
           ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y+1):ctx.moveTo(x,y+1));ctx.stroke();
         }
-        ctx.strokeStyle=quake?'#3b2b20':'#4d3c2b';ctx.lineWidth=quake?1.7:.9;
+        ctx.strokeStyle=quake?'#3b2b20':g.arc?'#375c70':'#4d3c2b';ctx.lineWidth=quake?1.7:g.arc?1.4:.9;
         ctx.beginPath();ctx.moveTo(...ray.points[2]);ctx.lineTo(...ray.branch);ctx.stroke();
-        ctx.strokeStyle=quake?'#ffdf9d':'#fff2ca';ctx.lineWidth=quake?1.15:.85;
+        ctx.strokeStyle=quake?'#ffdf9d':g.arc?'#83c8d7':'#fff2ca';ctx.lineWidth=quake?1.15:g.arc?1.1:.85;
         ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y-(quake?3:1.3)):ctx.moveTo(x,y-(quake?3:1.3)));ctx.stroke();
       }
     }
     ctx.globalAlpha=fade*(quake?.92:.7);
     for(const chip of g.chips.slice(0,limit+2)){
-      ctx.fillStyle=quake?'#3f2e23':'#6e543b';polygon(ctx,chip.x+1,chip.y+1,chip.size,chip.angle);ctx.fill();
-      ctx.fillStyle=g.burn?'#85745a':quake?'#d6b080':'#c5a879';
+      ctx.fillStyle=quake?'#3f2e23':g.arc?'#283640':'#6e543b';polygon(ctx,chip.x+1,chip.y+1,chip.size,chip.angle);ctx.fill();
+      ctx.fillStyle=g.arc?'#8ba5ad':g.burn?'#85745a':quake?'#d6b080':'#c5a879';
       polygon(ctx,chip.x,chip.y-(quake?2:1),chip.size,chip.angle);ctx.fill();
     }
     ctx.restore();

@@ -35,7 +35,7 @@ function crack(type,tier='full',age=.32,seed=17){
  assert.equal(depth,0);assert.equal(JSON.stringify(m),unchanged);
  return{strokes,fills,points};
 }
-const fault=crack('quake'),ordinary=crack('impact'),reducedFault=crack('quake','reduced'),minimal=crack('quake','minimal');
+const fault=crack('quake'),ordinary=crack('impact'),reducedFault=crack('quake','reduced'),minimal=crack('quake','minimal'),arcScar=crack('arc'),arcMinimal=crack('arc','minimal');
 assert.deepStrictEqual(fault,crack('quake'),'QUAKE cached fracture geometry must be stable');
 assert.equal(crack('quake','full',1).strokes.length,0,'nine-second expiry intact');
 assert(fault.strokes.some(([color,width])=>color==='#241a15'&&width>=6),'dark bold fault missing');
@@ -47,6 +47,12 @@ assert(reducedFault.fills.filter(c=>c==='#231811').length>=5,'40-fighter reduced
 assert.equal(reducedFault.fills.filter(c=>c==='#e3ba83').length,0,'reduced mode skips extra paving fill');
 assert.equal(minimal.fills.filter(c=>c==='#231811').length,0,'300-body minimal tier must skip extra chasm fills');
 assert(!ordinary.fills.includes('#231811'),'ordinary impacts retain protected scar presentation');
+assert(arcScar.strokes.some(([c,w])=>c==='#263747'&&w>=2.5),'ARC needs a dark scorched lightning fork');
+assert(arcScar.strokes.some(([c])=>c==='#83c8d7'),'ARC needs a subtle icy lightning rim, not a whiteout');
+assert(arcScar.fills.includes('#29323a')&&arcScar.fills.includes('#8ba5ad'),'ARC cold ash and charred ground texture');
+assert(!ordinary.fills.includes('#29323a'),'normal ground scars unchanged');
+assert(!arcMinimal.strokes.some(([c])=>c==='#83c8d7'),'300-body minimal ARC skips edge highlights');
+assert(arcScar.strokes.length<40&&arcMinimal.strokes.length<12,'ARC must stay within existing 6/3 branch budget');
 const focusFault=crack('quake','reduced',.32,0),plainFault=crack('quake','reduced',.32,1);
 assert.equal(focusFault.fills.filter(c=>c==='#26180f').length,1,'one and only one connected open-earth fault for the real first QUAKE victim');
 assert(focusFault.strokes.some(([c,w])=>c==='#e8b77e'&&w>=2),'coherent sunlit fault rim absent');
@@ -84,5 +90,5 @@ assert(redHP<initialRed,'genuine source spell HP damage occurred');
 assert.equal(after.units.length,40,'no phantom bodies from null attacker');
 assert.equal(after.units.filter(u=>u.team==='blue'&&u.hp>0).length,20,'spell never harms own side');
 console.log('PASS: live 40-fighter ARC+QUAKE real core casts no null-attacker crash, deterministic damage and unchanged roster');
-console.log('PASS: QUAKE five reduced chasms plus ONE 184px connected real-cast fault over midfield, intact 300 fast path and exact spell physics');
+console.log('PASS: distinct bounded ARC cold lightning scorch and unchanged other scars; QUAKE single 184px grounded front fracture, no extra 300 effects');
 console.log('PASS: clean authored sky without ovals, finite 430/375 geometry, moving birds/light and 300 budget, reduced-motion gated');

@@ -180,6 +180,46 @@ const server=http.createServer((req,res)=>{
   report.quakeCast=await page.evaluate(()=>({spell:window.__quakeSpellQA,screen:ShowdownQA.snapshot().screen,mode:document.body.dataset.gameMode,clicks:window.__quakeClickQA}));
   assert.equal(report.quakeCast.spell?.spell,'quake','real current-source QUAKE cast');
   console.log('PASS: actual 40-unit QUAKE cast/impact and persistent arena screenshot receipts');
+  // Genuine touch-cast visibility probes for all remaining spells, using
+  // current LIVE Ultimate Lab controls (never simulated pixels/unlocked Quick
+  // buttons). Reset each match to avoid residue and enforce true physics.
+  report.spellGallery=[];
+  for(const kind of ['zap','heal','aegis']){
+    await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1&spell='+kind,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownAdapter&&window.ShowdownQA,{timeout:90000});
+    await page.click('[data-go="lab"]');await page.waitForSelector('[data-screen="lab"].active #labRun');
+    await page.click('#labRun');await page.waitForFunction(()=>ShowdownQA.snapshot().screen==='battle',{timeout:20000});
+    await page.evaluate(kind=>{
+      ShowdownAdapter.startMatch({blue:{knight:20},red:{knight:20},blueLives:1,redLives:1,seed:48000+kind.length});
+      ShowdownAdapter.setSpeed(1);
+      window.__spellCastQA=null;window.__spellTouchQA=0;window.__spellCalloutQA=false;
+      addEventListener('showdown:spell',e=>{if(e.detail?.spell===kind)window.__spellCastQA={spell:e.detail.spell,power:e.detail.power,amount:e.detail.amount,targets:e.detail.targets||1}},{once:true});
+      document.querySelector('[data-spell="'+kind+'"]').addEventListener('click',()=>window.__spellTouchQA++,{capture:true,once:true});
+      new MutationObserver(()=>{if(document.querySelector('.ability-callout.spell-'+kind))window.__spellCalloutQA=true})
+        .observe(document.querySelector('.screen-battle'),{childList:true,subtree:true});
+    },kind);
+    await page.waitForFunction(kind=>{
+      if(ShowdownQA.snapshot().phase!=='battle'||!ShowdownAdapter.getState().playing)return false;
+      const b=document.querySelector('[data-spell="'+kind+'"]');if(!b||b.disabled||b.hidden)return false;
+      const r=b.getBoundingClientRect(),hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+      return hit===b||b.contains(hit);
+    },{timeout:12000},kind);
+    await page.screenshot({path:path.join(out,'spell-'+kind+'-before-430.png')});
+    await page.click('[data-spell="'+kind+'"]');
+    const receipt=await page.evaluate(()=>({touch:window.__spellTouchQA,cast:window.__spellCastQA,callout:window.__spellCalloutQA,
+      playing:ShowdownAdapter.getState().playing,redAlive:ShowdownAdapter.getState().units.filter(u=>u.team==='red'&&u.hp>0).length}));
+    assert.equal(receipt.touch,1,kind+' touch dispatched');
+    assert.equal(receipt.cast?.spell,kind,kind+' actual original physics cast');
+    assert(receipt.callout,kind+' real DOM ribbon');
+    await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,185)));
+    await page.screenshot({path:path.join(out,'spell-'+kind+'-impact-430.png')});
+    await page.evaluate(()=>ShowdownAdapter.pauseBattle());
+    await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,900)));
+    await page.screenshot({path:path.join(out,'spell-'+kind+'-aftermath-430.png')});
+    report.spellGallery.push({kind,...receipt});
+    console.log('LIVE SPELL QA '+JSON.stringify({kind,...receipt}));
+  }
+  console.log('PASS: source-native ARC/BLOOM/AEGIS Lab touch casts, real callouts and nine Chromium viewport receipts');
   assert.deepEqual(report.failures,[]);
   report.passed=true;
   console.log('PASS: Chromium density snapshot/frame-budget diagnostic; performance remains advisory until physical Safari validation');
