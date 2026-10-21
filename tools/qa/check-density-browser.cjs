@@ -213,6 +213,15 @@ const server=http.createServer((req,res)=>{
       }
       addEventListener('showdown:spell',e=>{if(e.detail?.spell===kind)window.__spellCastQA={spell:e.detail.spell,power:e.detail.power,amount:e.detail.amount,targets:e.detail.targets||1}},{once:true});
       document.querySelector('[data-spell="'+kind+'"]').addEventListener('click',()=>window.__spellTouchQA++,{capture:true,once:true});
+      if(kind==='zap'){
+        const canvas=document.querySelector('#battleCanvas'),ctx=canvas.getContext('2d'),original=ctx.stroke;
+        window.__arcBoltPaint=[];
+        ctx.stroke=function(...args){
+          if(this.strokeStyle==='#116b9b'&&window.__arcBoltPaint.length<8)
+            window.__arcBoltPaint.push({mode:this.globalCompositeOperation,width:this.lineWidth});
+          return original.apply(this,args);
+        };
+      }
       new MutationObserver(()=>{if(document.querySelector('.ability-callout.spell-'+kind))window.__spellCalloutQA=true})
         .observe(document.querySelector('.screen-battle'),{childList:true,subtree:true});
     },kind);
@@ -283,6 +292,17 @@ const server=http.createServer((req,res)=>{
       assert(proof.painter?.density===40,'real BLOOM painter ran in the same fight');
       assert(proof.leaf&&proof.leaf.immediate>0,'actual source-green leaf must paint on Canvas');
       assert(proof.greens>=55,'visible BLOOM greenery should survive on its ACTUAL immediate frame');
+    }
+    if(kind==='zap'){
+      const evidence=await page.evaluate(()=>{
+        const canvas=document.querySelector('#battleCanvas');
+        return{strokes:window.__arcBoltPaint||[],png:canvas.toDataURL('image/png')};
+      });
+      fs.writeFileSync(path.join(out,'spell-zap-live-canvas-430.png'),Buffer.from(evidence.png.split(',')[1],'base64'));
+      report.arcInk=evidence.strokes;
+      console.log('ARC REAL BOLT COMPOSITOR '+JSON.stringify(report.arcInk));
+      assert(report.arcInk.length>0,'actual ARC must draw blue bolt');
+      assert(report.arcInk.every(x=>x.mode==='source-over'&&x.width>0),'ARC core shadow must not be additively washed out');
     }
     // Supplementary full-page screenshot may land after the brief FX fades;
     // do NOT use it as a same-frame pixel measurement.
