@@ -42,7 +42,9 @@ assert(fault.strokes.some(([color,width])=>color==='#241a15'&&width>=6),'dark bo
 assert(fault.strokes.some(([color])=>color==='#ffdf9d'),'sunlit fault rim missing');
 assert(fault.fills.includes('#d6b080'),'raised earth shards missing');
 const furthest=q=>Math.max(...q.points.map(([x,y])=>Math.hypot(x,y)),0);
-assert(furthest(fault)>furthest(ordinary)*1.3,'QUAKE must span more ground than a normal scar');
+assert(furthest(fault)>furthest(ordinary)*2.1,'QUAKE must rupture beyond ordinary small hit scars');
+const west=Math.min(...fault.points.map(v=>v[0]));
+assert(west< -100&&west> -250,'cached midfield fault must traverse clear ground but stay bounded');
 assert(minimal.strokes.length<fault.strokes.length*.45,'300-body minimal tier must drop strokes');
 assert(fault.strokes.length<40&&minimal.strokes.length<10,'bounded draw path count');
 

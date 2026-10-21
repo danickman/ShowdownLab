@@ -7,10 +7,15 @@
     const seed=(mark.seed||0)+(mark.t||0)*.013+(mark.x||0)*71+(mark.y||0)*113;
     const quake=mark.type==='quake',burn=mark.type==='arc'||mark.type==='fire';
     // QUAKE marks open a broader chasm than everyday hits. Cache per mark.
-    const radius=(quake?55:burn?25:mark.heavy?29:20)+(mark.tech||0)*(quake?2.5:2);
+    const radius=(quake?62:burn?25:mark.heavy?29:20)+(mark.tech||0)*(quake?2.8:2);
     const rays=Array.from({length:quake?8:6},(_,i)=>{
       const a=i*Math.PI*2/(quake?8:6)+Math.sin(seed+i)*.24;
-      const r=radius*(.68+.32*(.5+.5*Math.sin(seed*1.7+i*3.1)));
+      // A genuine QUAKE must split open *clear* floor toward the blue/red
+      // front, not draw every fracture invisibly beneath the target army.
+      // Leftward fault branches reach across the midfield, without adding
+      // any rays, marks, particles, draw calls or physics changes.
+      const midfield=quake?(Math.cos(a)<-.45?2.1:Math.cos(a)<0?1.34:1):1;
+      const r=radius*midfield*(.68+.32*(.5+.5*Math.sin(seed*1.7+i*3.1)));
       return {points:[[Math.cos(a)*3,Math.sin(a)*1.4],
         [Math.cos(a+.13)*r*.38,Math.sin(a+.13)*r*.18],
         [Math.cos(a-.1)*r*.7,Math.sin(a-.1)*r*.32],
@@ -36,7 +41,7 @@
       // Three narrow layers suggest split, sunlit stone rather than a glowing
       // circle. The crowd-minimal tier only draws the dark primary fracture.
       ctx.strokeStyle=quake?'#241a15':'#4d3c2b';
-      ctx.lineWidth=quake?(tier==='minimal'?3.2:tier==='reduced'?4.6:6.3):mark.heavy?2:1.5;
+      ctx.lineWidth=quake?(tier==='minimal'?3.2:tier==='reduced'?5.4:6.3):mark.heavy?2:1.5;
       ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
       if(tier!=='minimal'){
         if(quake){
