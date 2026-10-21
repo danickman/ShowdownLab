@@ -36,6 +36,11 @@ function crack(type,tier='full',age=.32,seed=17){
  return{strokes,fills,points};
 }
 const fault=crack('quake'),ordinary=crack('impact'),reducedFault=crack('quake','reduced'),minimal=crack('quake','minimal'),arcScar=crack('arc'),arcMinimal=crack('arc','minimal');
+assert.equal(world.window.BattleTheatre.effectLife('bloomSpell','reduced',0),1650,'BLOOM readable portrait hold');
+assert.equal(world.window.BattleTheatre.effectLife('bloomSpell','full',4),1650,'BLOOM remains bounded');
+assert.equal(world.window.BattleTheatre.effectLife('bloomSpell','minimal',0),820,'300-body minimal bloom unchanged');
+assert.equal(world.window.BattleTheatre.effectLife('arcSpell','reduced',0),820,'ARC lifetime unchanged');
+assert.equal(world.window.BattleTheatre.effectLife('aegisSpell','reduced',0),820,'AEGIS lifetime unchanged');
 assert.deepStrictEqual(fault,crack('quake'),'QUAKE cached fracture geometry must be stable');
 assert.equal(crack('quake','full',1).strokes.length,0,'nine-second expiry intact');
 assert(fault.strokes.some(([color,width])=>color==='#241a15'&&width>=6),'dark bold fault missing');

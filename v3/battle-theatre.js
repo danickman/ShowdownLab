@@ -172,6 +172,10 @@
     if(kind==='honk')return 420;
     if(kind==='chargeWake')return 420;
     if(kind==='comic')return 1050;
+    // Give real healing leaves a readable hold in portrait, without extra
+    // marks, timers, entities, RAF work or physics changes. Dense minimal
+    // rendering keeps the original 820ms budget.
+    if(kind==='bloomSpell'&&tier!=='minimal')return 1650;
     if(/Spell$/.test(kind))return Math.min(1250,820+tech*70);
     if(['shot','muzzle','muzzleShock'].includes(kind))return 180;
     if(['slash','weaponTrail','impactArc'].includes(kind))return tier==='minimal'?170:260;
