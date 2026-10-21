@@ -4,7 +4,7 @@
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const source=read('v3/legacy-sim-core.js'),evo=read('v3/evolution-rules.js'),ult=read('v3/ultimate-abilities.js'),fx=read('v3/ultimate-effects.js');
-const anchor="if(!secondary)for(const hit of ultimate.afterHit(a,t,dealt,units,tick))hurt(hit.target,hit.damage,hit.source,true)",deltaStart=" // L5 GOBLIN EARNED RABBLE:";
+const anchor="if(!secondary&&a)for(const hit of ultimate.afterHit(a,t,dealt,units,tick))hurt(hit.target,hit.damage,hit.source,true)",deltaStart=" // L5 GOBLIN EARNED RABBLE:";
 const start=source.indexOf(deltaStart),end=source.indexOf(anchor,start);
 assert(start>0&&end>start&&source.split(deltaStart).length===2,'one L5 physical earned spawn source block');
 const before=source.slice(0,start)+source.slice(end);

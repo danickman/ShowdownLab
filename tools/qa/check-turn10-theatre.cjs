@@ -45,5 +45,28 @@ const furthest=q=>Math.max(...q.points.map(([x,y])=>Math.hypot(x,y)),0);
 assert(furthest(fault)>furthest(ordinary)*1.3,'QUAKE must span more ground than a normal scar');
 assert(minimal.strokes.length<fault.strokes.length*.45,'300-body minimal tier must drop strokes');
 assert(fault.strokes.length<40&&minimal.strokes.length<10,'bounded draw path count');
+
+// Genuine current physics: an unattached spell must never enter the
+// attacker-only afterHit path. These were actual browser QUAKE/ARC failures.
+const combat={window:null,Math,performance:{now:()=>0},
+ requestAnimationFrame(){return 1},cancelAnimationFrame(){},console};
+combat.window=combat;vm.createContext(combat);
+for(const file of ['v3/evolution-rules.js','v3/ultimate-abilities.js','v3/legacy-sim-core.js'])
+ vm.runInContext(fs.readFileSync(file,'utf8'),combat,{filename:file});
+const sim=combat.LegacySimCore;
+sim.configure({seed:42026,speed:1,onState:()=>{}});
+sim.deploy(Array.from({length:20},()=>({type:'knight',level:1})),
+           Array.from({length:20},()=>({type:'knight',level:1})));
+sim.setRunning(true);
+const prior=sim.getState(),initialRed=prior.units.filter(u=>u.team==='red').reduce((s,u)=>s+u.hp,0);
+const arc=sim.castSpell('zap','blue',1),quake=sim.castSpell('quake','blue',1);
+assert.equal(arc?.ok,true,'real ARC should cast with null attacker');
+assert.equal(quake?.ok,true,'real QUAKE should cast with null attacker');
+assert.equal(quake.targets,20,'entire true opposing army receives physics QUAKE');
+const after=sim.getState(),redHP=after.units.filter(u=>u.team==='red').reduce((s,u)=>s+u.hp,0);
+assert(redHP<initialRed,'genuine source spell HP damage occurred');
+assert.equal(after.units.length,40,'no phantom bodies from null attacker');
+assert.equal(after.units.filter(u=>u.team==='blue'&&u.hp>0).length,20,'spell never harms own side');
+console.log('PASS: live 40-fighter ARC+QUAKE real core casts no null-attacker crash, deterministic damage and unchanged roster');
 console.log('PASS: QUAKE physically wider bold fracturing, angular rocks, deterministic marks, expiry and 300 budget');
 console.log('PASS: clean authored sky without ovals, finite 430/375 geometry, moving birds/light and 300 budget, reduced-motion gated');
