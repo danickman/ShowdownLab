@@ -17,4 +17,33 @@ assert.equal(b.filter(x=>x[0]==='fill').length,0,'no beams at high density');
 assert.notDeepEqual(a,sample(20,430,320,9000),'ambient movement persists without cloud banks');
 assert([...a,...b,...small].every(p=>(p[0]==='fill'||p[0]==='stroke')||p.every(Number.isFinite)),'invalid finite geometry');
 assert(code.includes('if(w<=0||h<=0||reduced())return;'),'reduce-motion guard lost');
+
+// QUAKE-specific real registered Canvas geometry, not an invented spell model.
+const battleSrc=fs.readFileSync('v3/battle-theatre.js','utf8'),world={window:{}};
+vm.createContext(world);vm.runInContext(battleSrc,world);
+function crack(type,tier='full',age=.32){
+ let depth=0;const strokes=[],fills=[],points=[],m={type,x:.31,y:.58,t:501,tech:4,seed:17,heavy:true};
+ const unchanged=JSON.stringify(m),c={globalAlpha:1,lineWidth:1,strokeStyle:'',fillStyle:'',
+  save(){depth++},restore(){depth--;assert(depth>=0)},
+  translate(...v){assert(v.every(Number.isFinite))},scale(...v){assert(v.every(Number.isFinite))},
+  beginPath(){},closePath(){},moveTo(...v){assert(v.every(Number.isFinite));points.push(v)},
+  lineTo(...v){assert(v.every(Number.isFinite));points.push(v)},
+  ellipse(...v){assert(v.every(Number.isFinite))},
+  stroke(){strokes.push([this.strokeStyle,this.lineWidth])},
+  fill(){fills.push(this.fillStyle)}};
+ world.window.BattleTheatre.drawDamage(c,{x:190,y:560},m,age,tier);
+ assert.equal(depth,0);assert.equal(JSON.stringify(m),unchanged);
+ return{strokes,fills,points};
+}
+const fault=crack('quake'),ordinary=crack('impact'),minimal=crack('quake','minimal');
+assert.deepStrictEqual(fault,crack('quake'),'QUAKE cached fracture geometry must be stable');
+assert.equal(crack('quake','full',1).strokes.length,0,'nine-second expiry intact');
+assert(fault.strokes.some(([color,width])=>color==='#241a15'&&width>=6),'dark bold fault missing');
+assert(fault.strokes.some(([color])=>color==='#ffdf9d'),'sunlit fault rim missing');
+assert(fault.fills.includes('#d6b080'),'raised earth shards missing');
+const furthest=q=>Math.max(...q.points.map(([x,y])=>Math.hypot(x,y)),0);
+assert(furthest(fault)>furthest(ordinary)*1.3,'QUAKE must span more ground than a normal scar');
+assert(minimal.strokes.length<fault.strokes.length*.45,'300-body minimal tier must drop strokes');
+assert(fault.strokes.length<40&&minimal.strokes.length<10,'bounded draw path count');
+console.log('PASS: QUAKE physically wider bold fracturing, angular rocks, deterministic marks, expiry and 300 budget');
 console.log('PASS: clean authored sky without ovals, finite 430/375 geometry, moving birds/light and 300 budget, reduced-motion gated');

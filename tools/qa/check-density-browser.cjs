@@ -132,6 +132,27 @@ const server=http.createServer((req,res)=>{
    samples:profile.samples?.length||0,topSelfSamples:hotspots,note:'CDP V8 profiler, sampled after density timing; includes JS and profiler overhead. Not Safari.'};
   assert(report.cpuProfile.samples>0,'Chromium V8 CPU profile contains no samples');
   console.log('DENSITY CPU HOTSPOTS '+JSON.stringify(report.cpuProfile));
+  // Real original physics QUAKE cast: expose an unlockable button only inside
+  // this QA viewport, then capture actual hit and settled arena frames.
+  await page.evaluate(()=>{
+   ShowdownAdapter.startMatch({blue:{knight:20},red:{knight:20},blueLives:1,redLives:1,seed:42026});
+   ShowdownAdapter.setSpeed(1);
+   window.__quakeSpellQA=null;
+   addEventListener('showdown:spell',e=>{if(e.detail?.spell==='quake')window.__quakeSpellQA={spell:'quake',power:e.detail.power}},{once:true});
+   document.querySelector('[data-spell="quake"]').hidden=false;
+  });
+  await page.waitForFunction(()=>ShowdownQA.snapshot().phase==='battle'&&!document.querySelector('[data-spell="quake"]').disabled,{timeout:12000});
+  await page.screenshot({path:path.join(out,'quake-before-430.png')});
+  await page.click('[data-spell="quake"]');
+  await page.waitForFunction(()=>window.__quakeSpellQA?.spell==='quake'&&document.querySelector('.ability-callout.spell-quake'),{timeout:12000});
+  await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,180)));
+  await page.screenshot({path:path.join(out,'quake-impact-430.png')});
+  await page.evaluate(()=>ShowdownAdapter.pauseBattle());
+  await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,980)));
+  await page.screenshot({path:path.join(out,'quake-fractures-430.png')});
+  report.quakeCast=await page.evaluate(()=>({spell:window.__quakeSpellQA,screen:ShowdownQA.snapshot().screen}));
+  assert.equal(report.quakeCast.spell?.spell,'quake','real current-source QUAKE cast');
+  console.log('PASS: actual 40-unit QUAKE cast/impact and persistent arena screenshot receipts');
   assert.deepEqual(report.failures,[]);
   report.passed=true;
   console.log('PASS: Chromium density snapshot/frame-budget diagnostic; performance remains advisory until physical Safari validation');

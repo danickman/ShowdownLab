@@ -6,7 +6,8 @@
     if(geometry.has(mark))return geometry.get(mark);
     const seed=(mark.seed||0)+(mark.t||0)*.013+(mark.x||0)*71+(mark.y||0)*113;
     const quake=mark.type==='quake',burn=mark.type==='arc'||mark.type==='fire';
-    const radius=(quake?35:burn?25:mark.heavy?29:20)+(mark.tech||0)*2;
+    // QUAKE marks open a broader chasm than everyday hits. Cache per mark.
+    const radius=(quake?55:burn?25:mark.heavy?29:20)+(mark.tech||0)*(quake?2.5:2);
     const rays=Array.from({length:quake?8:6},(_,i)=>{
       const a=i*Math.PI*2/(quake?8:6)+Math.sin(seed+i)*.24;
       const r=radius*(.68+.32*(.5+.5*Math.sin(seed*1.7+i*3.1)));
@@ -16,7 +17,7 @@
         [Math.cos(a+.08)*r,Math.sin(a+.08)*r*.46]],
         branch:[Math.cos(a+.65)*r*.83,Math.sin(a+.65)*r*.38]};
     });
-    const chips=Array.from({length:10},(_,i)=>{const a=i*2.399+seed,r=radius*(.45+(i%4)*.19);return {x:Math.cos(a)*r,y:Math.sin(a)*r*.43,size:1.8+(i%3)*.9,angle:a}});
+    const chips=Array.from({length:10},(_,i)=>{const a=i*2.399+seed,r=radius*(.45+(i%4)*.19);return {x:Math.cos(a)*r,y:Math.sin(a)*r*.43,size:(quake?3.1:1.8)+(i%3)*(quake?1.45:.9),angle:a}});
     const value={radius,rays,chips,burn};geometry.set(mark,value);return value;
   }
   function polygon(ctx,x,y,size,angle){
@@ -27,21 +28,32 @@
     const g=shape(mark),grow=Math.min(1,age*42),fade=Math.min(1,(1-age)/.28),limit=budget(tier);
     ctx.save();ctx.translate(p.x,p.y);ctx.scale(grow,grow);
     // Settled dirt/char sits flat on the floor; fractured edges catch the same daylight.
-    ctx.globalAlpha=fade*(g.burn?.31:.22);ctx.fillStyle=g.burn?'#493d31':'#98714d';
+    const quake=mark.type==='quake';
+    ctx.globalAlpha=fade*(g.burn?.31:quake?.43:.22);ctx.fillStyle=g.burn?'#493d31':quake?'#705038':'#98714d';
     ctx.beginPath();ctx.ellipse(0,2,g.radius*.81,g.radius*.30,-.08,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=fade*(g.burn?.48:.62);ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.globalAlpha=fade*(g.burn?.48:quake?.90:.62);ctx.lineCap='round';ctx.lineJoin='round';
     for(const ray of g.rays.slice(0,limit)){
-      ctx.strokeStyle='#4d3c2b';ctx.lineWidth=mark.type==='quake'?2.5:mark.heavy?2:1.5;
+      // Three narrow layers suggest split, sunlit stone rather than a glowing
+      // circle. The crowd-minimal tier only draws the dark primary fracture.
+      ctx.strokeStyle=quake?'#241a15':'#4d3c2b';
+      ctx.lineWidth=quake?(tier==='minimal'?3.2:tier==='reduced'?4.6:6.3):mark.heavy?2:1.5;
       ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
       if(tier!=='minimal'){
-        ctx.lineWidth=.9;ctx.beginPath();ctx.moveTo(...ray.points[2]);ctx.lineTo(...ray.branch);ctx.stroke();
-        ctx.strokeStyle='#fff2ca';ctx.lineWidth=.85;ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y-1.3):ctx.moveTo(x,y-1.3));ctx.stroke();
+        if(quake){
+          ctx.strokeStyle='#875c37';ctx.lineWidth=tier==='reduced'?2.1:2.9;
+          ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y+1):ctx.moveTo(x,y+1));ctx.stroke();
+        }
+        ctx.strokeStyle=quake?'#3b2b20':'#4d3c2b';ctx.lineWidth=quake?1.7:.9;
+        ctx.beginPath();ctx.moveTo(...ray.points[2]);ctx.lineTo(...ray.branch);ctx.stroke();
+        ctx.strokeStyle=quake?'#ffdf9d':'#fff2ca';ctx.lineWidth=quake?1.15:.85;
+        ctx.beginPath();ray.points.forEach(([x,y],i)=>i?ctx.lineTo(x,y-(quake?3:1.3)):ctx.moveTo(x,y-(quake?3:1.3)));ctx.stroke();
       }
     }
-    ctx.globalAlpha=fade*.7;
+    ctx.globalAlpha=fade*(quake?.92:.7);
     for(const chip of g.chips.slice(0,limit+2)){
-      ctx.fillStyle='#6e543b';polygon(ctx,chip.x+1,chip.y+1,chip.size,chip.angle);ctx.fill();
-      ctx.fillStyle=g.burn?'#85745a':'#c5a879';polygon(ctx,chip.x,chip.y-1,chip.size,chip.angle);ctx.fill();
+      ctx.fillStyle=quake?'#3f2e23':'#6e543b';polygon(ctx,chip.x+1,chip.y+1,chip.size,chip.angle);ctx.fill();
+      ctx.fillStyle=g.burn?'#85745a':quake?'#d6b080':'#c5a879';
+      polygon(ctx,chip.x,chip.y-(quake?2:1),chip.size,chip.angle);ctx.fill();
     }
     ctx.restore();
   }
