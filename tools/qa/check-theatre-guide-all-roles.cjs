@@ -160,6 +160,54 @@ const server=http.createServer((req,res)=>{
   for(const sample of teamRims.comparisons)assert.deepEqual(sample.drawCalls,[1,1],
     'each authored Knight requires exactly one Canvas sprite drawImage at density '+sample.density);
   if(width===430)fs.writeFileSync(path.join(out,'team-rims-430.png'),Buffer.from(teamRims.proof.split(',')[1],'base64'));
+  // Actual authored combat pose pixels: a fresh battle must never inherit a
+  // prior soldier's defeat/hit/attack state when deterministic IDs are reused.
+  // This checks the real registered canvas renderer, not a mocked sprite model.
+  let poseReset={};
+  if(width===430){
+    await page.evaluate(()=>{
+      for(const [type,level] of [['knight',1],['turtle',2],['dragon',4]])FighterAssets.preloadSpecies(type,level);
+    });
+    await page.waitForFunction(()=>{
+      const a=FighterAssets.assetStatus();return a.requested>40&&a.ready===a.requested&&a.errors===0;
+    },{timeout:90000});
+    poseReset=await page.evaluate(()=>{
+      const results=[];
+      for(const [type,level] of [['knight',1],['turtle',2],['dragon',4]]){
+        const id=8427,opts=(action,time)=>({id,time,action,level,density:40,flip:false});
+        const paint=(action,time)=>{
+          const cv=document.createElement('canvas');cv.width=320;cv.height=370;
+          const c=cv.getContext('2d',{willReadFrequently:true});
+          if(!FighterAssets.draw(c,type,160,305,185,'blue',opts(action,time)))throw Error('authored '+type+' sprite not drawn');
+          return c.getImageData(0,0,cv.width,cv.height).data;
+        };
+        const equal=(a,b)=>{let changed=0,opaque=0;for(let i=0;i<a.length;i+=4){
+          if(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2])+Math.abs(a[i+3]-b[i+3])>24)changed++;
+          if(a[i+3]>160)opaque++;
+        }return{changed,opaque}};
+        FighterAssets.resetPoseMemory();
+        const fresh=paint('idle',2500);
+        FighterAssets.resetPoseMemory();
+        paint('attack',1600);
+        FighterAssets.notifyHit(id,1680,1);
+        paint('hit',1700);
+        const defeated=paint('defeat',1900);
+        const before=equal(fresh,defeated);
+        FighterAssets.resetPoseMemory();
+        const reused=paint('idle',2500);
+        const after=equal(fresh,reused);
+        results.push({type,level,defeatVsIdle:before.changed,baselinePixels:before.opaque,
+          replayPixelDifference:after.changed});
+      }
+      FighterAssets.resetPoseMemory();
+      return results;
+    });
+    for(const x of poseReset){
+      assert(x.baselinePixels>1500,'nonblank authored combat baseline '+x.type);
+      assert(x.defeatVsIdle>250,'actual authored defeat is visually distinct '+x.type);
+      assert.equal(x.replayPixelDifference,0,'new fighter must not inherit prior defeat or hit pose '+x.type);
+    }
+  }
   // A stopped/abandoned battle has no surviving MVP; a prior portrait must NEVER linger.
   await page.evaluate(()=>{
     const cv=document.querySelector('#resultArt');cv.dataset.art='dragon';cv.dataset.team='red';cv.dataset.level='5';
@@ -181,11 +229,11 @@ const server=http.createServer((req,res)=>{
   assert.equal(empty.message,'BATTLE COMPLETE','clear no-MVP copy');
   if(width===430)await(await page.$('[data-screen="results"].active .podium')).screenshot({path:path.join(out,'no-mvp-result-430.png')});
 
-  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,teamRims:teamRims.comparisons,draftScroll:{initial:draft,final:last},extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
+  results.push({width,height,assets:{requested:view.assets.requested,ready:view.assets.ready},art:view.art.map(x=>({type:x.type,level:x.level,opaque:x.opaque,edge:x.edge})),overflow:view.overflow,teamRims:teamRims.comparisons,poseReset,draftScroll:{initial:draft,final:last},extraSurfaces:{roster:rosterArt.length,draft:draftArt.length,ready:readyArt.length,noMvp:empty}});
   await page.close();
  }
  assert.deepEqual(errors,[],'no portrait rendering exceptions');
  fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify({note:'Chromium DPR3 touch only; native Safari not tested',results},null,2)+'\n');
- console.log('PASS: 90 actual authored art canvases (10 fighters x3 forms x3 DPR3 viewports), panel geometry, nonblank full-body alpha, tactical Guide truth, one-draw cached team-color composite at 40/120 with 300 bypass, bottom-row Draft tapping, zero missing art');
+ console.log('PASS: 90 actual authored art canvases (10 fighters x3 forms x3 DPR3 viewports), panel geometry, nonblank full-body alpha, tactical Guide truth, one-draw cached team-color composite at 40/120 with 300 bypass, bottom-row Draft tapping, fresh-battle authored pose reset pixels, zero missing art');
  }finally{if(browser)await browser.close();server.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
