@@ -32,7 +32,18 @@
         branch:[Math.cos(a+.65)*r*.83,Math.sin(a+.65)*r*.38]};
     });
     const chips=Array.from({length:10},(_,i)=>{const a=i*2.399+seed,r=radius*(.45+(i%4)*.19);return {x:Math.cos(a)*r,y:Math.sin(a)*r*.43,size:(quake?3.1:1.8)+(i%3)*(quake?1.45:.9),angle:a}});
-    const value={radius,rays,chips,burn};geometry.set(mark,value);return value;
+    // ONE existing targeted mark per QUAKE cast (seed=0) extends a coherent
+    // earth fault over exposed midfield. No additional marks, targets or FX.
+    // Its angular trench/lip is cached with the same WeakMap geometry.
+    const focus=quake&&mark.seed===0?(()=>{
+      const spine=[[0,0],[-28,8],[-63,31],[-99,17],[-142,46],[-184,40]];
+      const half=[3,9,15,12,17,4];
+      return spine.map(([x,y],i)=>({
+        upper:[x,y-half[i]*.50],lower:[x,y+half[i]*.54],
+        lip:[x,y-half[i]*.50-3.5]
+      }));
+    })():null;
+    const value={radius,rays,chips,burn,focus};geometry.set(mark,value);return value;
   }
   function polygon(ctx,x,y,size,angle){
     ctx.beginPath();for(let k=0;k<4;k++){const a=angle+k*Math.PI/2,r=size*(k%2?.65:1);const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r*.6;k?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.closePath();
@@ -46,6 +57,20 @@
     ctx.globalAlpha=fade*(g.burn?.31:quake?.43:.22);ctx.fillStyle=g.burn?'#493d31':quake?'#705038':'#98714d';
     ctx.beginPath();ctx.ellipse(0,2,g.radius*.81,g.radius*.30,-.08,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=fade*(g.burn?.48:quake?.90:.62);ctx.lineCap='round';ctx.lineJoin='round';
+    if(quake&&tier!=='minimal'&&g.focus){
+      // Broad connected earth opening actually crosses the empty battlefield.
+      // Draw underneath all fighters, so there is no deceptive damage hitbox.
+      ctx.fillStyle='#26180f';ctx.globalAlpha=fade*.93;ctx.beginPath();
+      g.focus.forEach((e,i)=>i?ctx.lineTo(...e.upper):ctx.moveTo(...e.upper));
+      for(let i=g.focus.length-1;i>=0;i--)ctx.lineTo(...g.focus[i].lower);
+      ctx.closePath();ctx.fill();
+      // Bright broken-stone lip remains available even under reduced motion:
+      // a single fine edge, not flashing overlays or a screen shake increase.
+      ctx.strokeStyle='#e8b77e';ctx.lineWidth=tier==='reduced'?2.1:3.1;
+      ctx.globalAlpha=fade*.84;ctx.beginPath();
+      g.focus.forEach((e,i)=>i?ctx.lineTo(...e.lip):ctx.moveTo(...e.lip));ctx.stroke();
+      ctx.globalAlpha=fade*.90;
+    }
     for(const ray of g.rays.slice(0,limit)){
       // A *filled* jagged opening, not just a thin stroke. Reuses the eight
       // source-authored ground faults and existing 3/5/8 density caps.

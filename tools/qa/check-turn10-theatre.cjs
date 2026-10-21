@@ -21,8 +21,8 @@ assert(code.includes('if(w<=0||h<=0||reduced())return;'),'reduce-motion guard lo
 // QUAKE-specific real registered Canvas geometry, not an invented spell model.
 const battleSrc=fs.readFileSync('v3/battle-theatre.js','utf8'),world={window:{}};
 vm.createContext(world);vm.runInContext(battleSrc,world);
-function crack(type,tier='full',age=.32){
- let depth=0;const strokes=[],fills=[],points=[],m={type,x:.31,y:.58,t:501,tech:4,seed:17,heavy:true};
+function crack(type,tier='full',age=.32,seed=17){
+ let depth=0;const strokes=[],fills=[],points=[],m={type,x:.31,y:.58,t:501,tech:4,seed,heavy:true};
  const unchanged=JSON.stringify(m),c={globalAlpha:1,lineWidth:1,strokeStyle:'',fillStyle:'',
   save(){depth++},restore(){depth--;assert(depth>=0)},
   translate(...v){assert(v.every(Number.isFinite))},scale(...v){assert(v.every(Number.isFinite))},
@@ -47,6 +47,14 @@ assert(reducedFault.fills.filter(c=>c==='#231811').length>=5,'40-fighter reduced
 assert.equal(reducedFault.fills.filter(c=>c==='#e3ba83').length,0,'reduced mode skips extra paving fill');
 assert.equal(minimal.fills.filter(c=>c==='#231811').length,0,'300-body minimal tier must skip extra chasm fills');
 assert(!ordinary.fills.includes('#231811'),'ordinary impacts retain protected scar presentation');
+const focusFault=crack('quake','reduced',.32,0),plainFault=crack('quake','reduced',.32,1);
+assert.equal(focusFault.fills.filter(c=>c==='#26180f').length,1,'one and only one connected open-earth fault for the real first QUAKE victim');
+assert(focusFault.strokes.some(([c,w])=>c==='#e8b77e'&&w>=2),'coherent sunlit fault rim absent');
+assert(!plainFault.fills.includes('#26180f'),'no repeated midfield trenches on every enemy');
+assert(!crack('quake','minimal',.32,0).fills.includes('#26180f'),'300-body minimal must not paint the focal trench');
+const westFocus=Math.min(...focusFault.points.map(([x])=>x));
+assert(westFocus< -175&&westFocus> -260,'real quake focus must reach across midfield without leaving the stage');
+assert(focusFault.fills.length-plainFault.fills.length===1,'one additional bounded focal polygon, no extra particles');
 const furthest=q=>Math.max(...q.points.map(([x,y])=>Math.hypot(x,y)),0);
 assert(furthest(fault)>furthest(ordinary)*2.1,'QUAKE must rupture beyond ordinary small hit scars');
 const west=Math.min(...fault.points.map(v=>v[0]));
@@ -76,5 +84,5 @@ assert(redHP<initialRed,'genuine source spell HP damage occurred');
 assert.equal(after.units.length,40,'no phantom bodies from null attacker');
 assert.equal(after.units.filter(u=>u.team==='blue'&&u.hp>0).length,20,'spell never harms own side');
 console.log('PASS: live 40-fighter ARC+QUAKE real core casts no null-attacker crash, deterministic damage and unchanged roster');
-console.log('PASS: QUAKE eight cached filled ground chasms and uplifted stone, five reduced visible fissures, zero extra 300 fills, expiry and physics parity');
+console.log('PASS: QUAKE five reduced chasms plus ONE 184px connected real-cast fault over midfield, intact 300 fast path and exact spell physics');
 console.log('PASS: clean authored sky without ovals, finite 430/375 geometry, moving birds/light and 300 budget, reduced-motion gated');
