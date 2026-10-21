@@ -215,10 +215,12 @@ const server=http.createServer((req,res)=>{
       document.querySelector('[data-spell="'+kind+'"]').addEventListener('click',()=>window.__spellTouchQA++,{capture:true,once:true});
       if(kind==='zap'){
         const canvas=document.querySelector('#battleCanvas'),ctx=canvas.getContext('2d'),original=ctx.stroke;
-        window.__arcBoltPaint=[];
+        window.__arcBoltPaint=[];window.__arcOuterPaint=[];
         ctx.stroke=function(...args){
           if(this.strokeStyle==='#116b9b'&&window.__arcBoltPaint.length<8)
             window.__arcBoltPaint.push({mode:this.globalCompositeOperation,width:this.lineWidth});
+          if(this.strokeStyle==='#10293f'&&window.__arcOuterPaint.length<8)
+            window.__arcOuterPaint.push({mode:this.globalCompositeOperation,width:this.lineWidth});
           return original.apply(this,args);
         };
       }
@@ -296,13 +298,14 @@ const server=http.createServer((req,res)=>{
     if(kind==='zap'){
       const evidence=await page.evaluate(()=>{
         const canvas=document.querySelector('#battleCanvas');
-        return{strokes:window.__arcBoltPaint||[],png:canvas.toDataURL('image/png')};
+        return{strokes:window.__arcBoltPaint||[],outer:window.__arcOuterPaint||[],png:canvas.toDataURL('image/png')};
       });
       fs.writeFileSync(path.join(out,'spell-zap-live-canvas-430.png'),Buffer.from(evidence.png.split(',')[1],'base64'));
-      report.arcInk=evidence.strokes;
-      console.log('ARC REAL BOLT COMPOSITOR '+JSON.stringify(report.arcInk));
-      assert(report.arcInk.length>0,'actual ARC must draw blue bolt');
-      assert(report.arcInk.every(x=>x.mode==='source-over'&&x.width>0),'ARC core shadow must not be additively washed out');
+      report.arcInk=evidence.strokes;report.arcOuter=evidence.outer;
+      console.log('ARC REAL BOLT COMPOSITOR '+JSON.stringify({blue:report.arcInk,navy:report.arcOuter}));
+      assert(report.arcInk.length>0,'real ARC draws blue bolt');
+      assert(report.arcOuter.length>0,'real ARC draws dark outer channel');
+      assert(report.arcOuter.every(x=>x.mode==='source-over'&&x.width>=6.4),'bold navy ARC contrast required');
     }
     // Supplementary full-page screenshot may land after the brief FX fades;
     // do NOT use it as a same-frame pixel measurement.
