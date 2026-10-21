@@ -137,33 +137,47 @@ const server=http.createServer((req,res)=>{
   // that the QUAKE control is physically hittable by a touch.
   await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownQA&&window.ShowdownAdapter,{timeout:90000});
-  await page.click('[data-mode="quick"]');
-  if(await page.$('.screen-ready.active'))await page.click('.screen-ready [data-go="battle"]');
+  // Use the genuine Ultimate Lab entry point: its spells are available
+  // without manipulating the Quick Match permanent unlock state.
+  await page.click('[data-go="lab"]');
+  await page.waitForSelector('[data-screen="lab"].active #labRun');
+  await page.click('#labRun');
   await page.waitForFunction(()=>ShowdownQA.snapshot().screen==='battle',{timeout:20000});
-  // Real original physics QUAKE cast: reveal this otherwise unlockable spell
-  // only in QA, then capture its actual hit and settled arena frames.
+  // Real original physics QUAKE cast: actual Lab-mode clickable spell.
   await page.evaluate(()=>{
    ShowdownAdapter.startMatch({blue:{knight:20},red:{knight:20},blueLives:1,redLives:1,seed:42026});
    ShowdownAdapter.setSpeed(1);
-   window.__quakeSpellQA=null;
+   window.__quakeSpellQA=null;window.__quakeClickQA=0;window.__quakeRibbonQA=false;
    addEventListener('showdown:spell',e=>{if(e.detail?.spell==='quake')window.__quakeSpellQA={spell:'quake',power:e.detail.power}},{once:true});
-   document.querySelector('[data-spell="quake"]').hidden=false;
+   const button=document.querySelector('[data-spell="quake"]');
+   button.addEventListener('click',()=>window.__quakeClickQA++,{capture:true,once:true});
+   new MutationObserver(()=>{if(document.querySelector('.ability-callout.spell-quake'))window.__quakeRibbonQA=true})
+     .observe(document.querySelector('.screen-battle'),{childList:true,subtree:true});
   });
   await page.waitForFunction(()=>{
-    if(ShowdownQA.snapshot().phase!=='battle')return false;
+    if(ShowdownQA.snapshot().phase!=='battle'||!ShowdownAdapter.getState().playing)return false;
     const b=document.querySelector('[data-spell="quake"]');if(!b||b.disabled||b.hidden)return false;
     const r=b.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,hit=document.elementFromPoint(x,y);
     return hit===b||b.contains(hit);
   },{timeout:12000});
   await page.screenshot({path:path.join(out,'quake-before-430.png')});
   await page.click('[data-spell="quake"]');
-  await page.waitForFunction(()=>window.__quakeSpellQA?.spell==='quake'&&document.querySelector('.ability-callout.spell-quake'),{timeout:12000});
+  const castDiagnostic=await page.evaluate(()=>({
+    clickCount:window.__quakeClickQA,cast:window.__quakeSpellQA,observedRibbon:window.__quakeRibbonQA,
+    adapter:{phase:ShowdownAdapter.getState().phase,playing:ShowdownAdapter.getState().playing,
+      enemies:ShowdownAdapter.getState().units.filter(u=>u.team==='red'&&u.hp>0).length},
+    cooling:document.querySelector('[data-spell="quake"]').classList.contains('cooling')
+  }));
+  console.log('QUAKE TOUCH RECEIPT '+JSON.stringify(castDiagnostic));
+  assert.equal(castDiagnostic.clickCount,1,'actual Lab QUAKE touch reached the button');
+  assert.equal(castDiagnostic.cast?.spell,'quake','actual QUAKE touch triggered live engine cast');
+  assert(castDiagnostic.observedRibbon,'real QUAKE DOM callout appeared during cast');
   await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,180)));
   await page.screenshot({path:path.join(out,'quake-impact-430.png')});
   await page.evaluate(()=>ShowdownAdapter.pauseBattle());
   await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,980)));
   await page.screenshot({path:path.join(out,'quake-fractures-430.png')});
-  report.quakeCast=await page.evaluate(()=>({spell:window.__quakeSpellQA,screen:ShowdownQA.snapshot().screen,mode:document.body.dataset.gameMode}));
+  report.quakeCast=await page.evaluate(()=>({spell:window.__quakeSpellQA,screen:ShowdownQA.snapshot().screen,mode:document.body.dataset.gameMode,clicks:window.__quakeClickQA}));
   assert.equal(report.quakeCast.spell?.spell,'quake','real current-source QUAKE cast');
   console.log('PASS: actual 40-unit QUAKE cast/impact and persistent arena screenshot receipts');
   assert.deepEqual(report.failures,[]);
