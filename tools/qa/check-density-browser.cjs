@@ -198,6 +198,24 @@ const server=http.createServer((req,res)=>{
       new MutationObserver(()=>{if(document.querySelector('.ability-callout.spell-'+kind))window.__spellCalloutQA=true})
         .observe(document.querySelector('.screen-battle'),{childList:true,subtree:true});
     },kind);
+    // AEGIS is the FOURTH spell in a deliberately horizontally-scrollable
+    // mobile rack. First scroll it into the finger-accessible viewport; a
+    // hit-test of its *off-screen* center is an invalid reachability test.
+    const rackReach=await page.evaluate(kind=>{
+      const rack=document.querySelector('.spell-rack'),button=rack.querySelector('[data-spell="'+kind+'"]');
+      const scrollable=rack.scrollWidth>rack.clientWidth+2;
+      rack.scrollLeft=kind==='aegis'?rack.scrollWidth-rack.clientWidth:0;
+      return{kind,scrollable,maxScroll:rack.scrollWidth-rack.clientWidth,requested:rack.scrollLeft,hidden:button.hidden,disabled:button.disabled};
+    },kind);
+    await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
+    const rackActual=await page.evaluate(kind=>{
+      const rack=document.querySelector('.spell-rack'),button=rack.querySelector('[data-spell="'+kind+'"]'),
+        r=button.getBoundingClientRect(),b=rack.getBoundingClientRect();
+      return{scrollLeft:rack.scrollLeft,visible:r.left>=b.left-2&&r.right<=b.right+2,screenX:r.left+r.width/2};
+    },kind);
+    console.log('SPELL RACK TOUCH ACCESS '+JSON.stringify({...rackReach,...rackActual}));
+    if(kind==='aegis')assert(rackActual.visible&&(!rackReach.scrollable||rackActual.scrollLeft>0),
+      'AEGIS must be physically reachable after horizontal rack scroll');
     await page.waitForFunction(kind=>{
       if(ShowdownQA.snapshot().phase!=='battle'||!ShowdownAdapter.getState().playing)return false;
       const b=document.querySelector('[data-spell="'+kind+'"]');if(!b||b.disabled||b.hidden)return false;
