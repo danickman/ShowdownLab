@@ -193,6 +193,19 @@ const server=http.createServer((req,res)=>{
       ShowdownAdapter.startMatch({blue:{knight:20},red:{knight:20},blueLives:1,redLives:1,seed:48000+kind.length});
       ShowdownAdapter.setSpeed(1);
       window.__spellCastQA=null;window.__spellTouchQA=0;window.__spellCalloutQA=false;
+      if(kind==='heal'){
+        window.__bloomFillTrace=[];
+        const baseFill=CanvasRenderingContext2D.prototype.fill;
+        CanvasRenderingContext2D.prototype.fill=function(...args){
+          const color=this.fillStyle;
+          if(['#dcf49c','#54ae55','#85ca61','#f5edb2'].includes(color)&&window.__bloomFillTrace.length<25){
+            const t=this.getTransform();
+            window.__bloomFillTrace.push({color,alpha:this.globalAlpha,mode:this.globalCompositeOperation,
+              transform:[t.a,t.b,t.c,t.d,t.e,t.f],canvas:[this.canvas.width,this.canvas.height]});
+          }
+          return baseFill.apply(this,args);
+        };
+      }
       addEventListener('showdown:spell',e=>{if(e.detail?.spell===kind)window.__spellCastQA={spell:e.detail.spell,power:e.detail.power,amount:e.detail.amount,targets:e.detail.targets||1}},{once:true});
       document.querySelector('[data-spell="'+kind+'"]').addEventListener('click',()=>window.__spellTouchQA++,{capture:true,once:true});
       new MutationObserver(()=>{if(document.querySelector('.ability-callout.spell-'+kind))window.__spellCalloutQA=true})
@@ -250,6 +263,8 @@ const server=http.createServer((req,res)=>{
         speed:ShowdownAdapter.getState().speed,
         density:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length}));
       report.bloomSideline={...visibleGarden,...proof};
+      report.bloomFillTrace=await page.evaluate(()=>window.__bloomFillTrace||[]);
+      console.log('BLOOM ACTUAL CANVAS LEAF FILLS '+JSON.stringify(report.bloomFillTrace.slice(0,15)));
       console.log('BLOOM GATE AND VISIBLE PIXELS '+JSON.stringify(report.bloomSideline));
       assert(proof.painter?.density<160,'actual BLOOM painter must run for current 40-body spell');
       assert(visibleGarden.greens>=55,'genuine BLOOM cast must produce visible green leaves in the open flank');
