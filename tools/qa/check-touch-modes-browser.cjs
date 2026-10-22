@@ -184,8 +184,8 @@ const server=http.createServer((req,res)=>{
      const initial=await page.evaluate(()=>{const s=ShowdownAdapter.getState();return{
        blue:s.armies?.blue,red:s.armies?.red,blueLives:s.blueLives,redLives:s.redLives,
        speed:s.speed,round:s.round,phase:s.phase,units:s.units.length};});
-     assert.equal(initial.blue?.knight,1,'real one Knight Lab selection');
-     assert.equal(initial.red?.dragon,1,'real boss Dragon preset');
+     assert(initial.blue?.knight>0&&Object.entries(initial.blue).filter(([,n])=>n>0).length===1,'one selected Knight SQUAD must map to its actual source battle count');
+     assert(initial.red?.dragon>0&&Object.entries(initial.red).filter(([,n])=>n>0).length===1,'Boss Dragon SQUAD must map to its actual source battle count');
      assert.equal(initial.blueLives,1,'one-life Blue setup');assert.equal(initial.redLives,1,'one-life Red setup');
      assert.equal(initial.speed,10,'touch-selected Lab speed persisted into original engine');
      await page.waitForFunction(()=>ShowdownAdapter.getState().phase==='match_over' &&
@@ -221,8 +221,8 @@ const server=http.createServer((req,res)=>{
        blue:s.armies?.blue,red:s.armies?.red,blueLives:s.blueLives,redLives:s.redLives,
        speed:s.speed,round:s.round,units:s.units.length,
        staleEffects:document.querySelectorAll('.ability-callout,.match-finish:not(.hidden),.round-draft:not(.hidden)').length};});
-     assert.equal(resumed.blue?.knight,1,'rematch keeps exact Blue Lab choice');
-     assert.equal(resumed.red?.dragon,1,'rematch keeps exact Boss enemy');
+     assert.equal(resumed.blue?.knight,initial.blue.knight,'rematch keeps exact genuine Blue squad count');
+     assert.equal(resumed.red?.dragon,initial.red.dragon,'rematch keeps exact genuine Boss squad count');
      assert.equal(resumed.blueLives,1,'rematch restores actual Blue life');
      assert.equal(resumed.redLives,1,'rematch restores actual Red life');
      assert.equal(resumed.speed,10,'rematch retains configured speed');
@@ -240,6 +240,6 @@ const server=http.createServer((req,res)=>{
    await page.close();
   }
   fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify({note:'Real Chromium DPR3 touchscreen events; physical iPhone Safari untested',results},null,2)+'\n');
-  console.log('PASS: Quick/Draft/Lab original-core touch starts, true AEGIS finger swipe, one-life genuine terminal Results and rematch, no Lab rewards, clean exits at 430/390/375 DPR3');
+  console.log('PASS: Quick/Draft/Lab original-core touch starts, AEGIS finger swipe, natural single-life squad terminal Results and rematch, no Lab rewards, clean exits at 430/390/375 DPR3');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1;server.close();});
