@@ -14,6 +14,40 @@ concurrency:
   group: showdown-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  raf-clock-worker-research:
+    # Source-only, one-shot CI: frame-clock synchronization vs overactive worker
+    # must pass exact physical progression, not merely smooth idle frames.
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check research worker and bridge syntax
+        run: |
+          node --check tools/qa/turn20-raf-clock-worker.js
+          node --check tools/qa/turn20-raf-clock-bridge.js
+          node --check tools/qa/check-turn20-raf-clock-worker-browser.cjs
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Real 300 1x and 10x Worker vs inline RAF plus 80 120 controls
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_RAFCLOCK_WORKER_OUTPUT: ${{ runner.temp }}/raf-clock-worker
+        run: node tools/qa/check-turn20-raf-clock-worker-browser.cjs
+      - name: Save real-frame and actual positive HP tick-rate receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raf-clock-worker-study
+          path: ${{ runner.temp }}/raf-clock-worker/turn20-raf-clock-worker.json
+          if-no-files-found: warn
   fast300-collision-candidate-study:
     # Final Chromium A/B rejected; manual archive only, avoid extra QA credits.
     if: github.event_name == 'workflow_dispatch'
