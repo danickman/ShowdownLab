@@ -7,6 +7,10 @@ assert.equal(src.split(replacement).length,2,'one exact density-aware theatre dr
 // Strip ONLY documented live tactical tips, preserving the entire original physics,
 // renderer and density gate byte-for-byte. Any unrelated runtime change still fails.
 let historic=src.replace(replacement,marker);
+// One exact accepted battle-exit presentation cleanup only. Do not loosen SHA guard.
+const exitVisualCleanup="if(current==='battle'&&name!=='battle'){const battle=document.querySelector('.screen-battle');battle.querySelectorAll('.ability-callout').forEach(el=>el.remove());battle.classList.remove('spell-cast-zap','spell-cast-heal','spell-cast-quake','spell-cast-aegis')}";
+assert.equal(historic.split(exitVisualCleanup).length,2,'one exact battle-exit callout cleanup allowed');
+historic=historic.replace(exitVisualCleanup,'');
 // Exact accepted presentation overlay only; original engine SHA remains strict.
 const legacyFX="const fxCap=tier==='minimal'?34:tier==='reduced'?50:tier==='balanced'?70:94;if(fx.length>fxCap)fx.splice(0,fx.length-fxCap);",liveFX="const fxCap=tier==='minimal'?34:tier==='reduced'?50:tier==='balanced'?70:94;if(fx.length>fxCap){const spill=fx.length-fxCap;if(!fx.some(f=>/Spell$/.test(f.kind)))fx.splice(0,spill);else{let drop=spill;fx=fx.filter(f=>{if(drop>0&&!/Spell$/.test(f.kind)){drop--;return false}return true}).slice(-fxCap)}}";
 assert.equal(historic.split(liveFX).length,2,'only one bounded active-spell FX priority overlay');
@@ -65,7 +69,7 @@ for(const [old,current,count] of approvedSpellImpactOverlays){
  historic=historic.split(current).join(old);
 }
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
-assert(html.includes('/v3/v3.js?v=theatre-arc-ink2')&&sw.includes('/v3/v3.js?v=theatre-arc-ink2'),'pinned root and SW must include current Guide-truth runtime version');
+assert(html.includes('/v3/v3.js?v=theatre-touch-exit1')&&sw.includes('/v3/v3.js?v=theatre-touch-exit1'),'pinned root and SW must include current Guide-truth runtime version');
 const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^showdown-lab-release-[a-z0-9-]+$/.test(releaseCache[1])&&releaseCache[1]!=='showdown-lab-release-turn23-dragon-charge1','new Turtle runtime requires distinct, valid offline cache identity rather than silently reusing old release');
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');
