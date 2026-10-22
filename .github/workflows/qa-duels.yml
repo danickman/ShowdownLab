@@ -15,7 +15,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   fast300-collision-candidate-study:
-    # Bounded research only: do not ship to playable runtime on a green study.
+    # Final Chromium A/B rejected; manual archive only, avoid extra QA credits.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 26
     steps:
