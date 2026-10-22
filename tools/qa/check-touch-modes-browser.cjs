@@ -201,6 +201,25 @@ const server=http.createServer((req,res)=>{
      if(finished.winner==='blue')assert(finished.blueAlive>0&&finished.redAlive===0,'Blue actual terminal winner');
      if(finished.winner==='red')assert(finished.redAlive>0&&finished.blueAlive===0,'Red actual terminal winner');
      if(finished.winner==='draw')assert(finished.blueAlive===0&&finished.redAlive===0,'draw only for physical double KO');
+     // Genuine match-finish HTML layout at three DPR3 portrait sizes.
+     // Test existing actual winner and text; no synthetic DOM or fake result.
+     const finishLayouts=[];
+     for(const [vw,vh] of [[430,932],[390,844],[375,667]]){
+       await page.setViewport({width:vw,height:vh,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+       const metrics=await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+         const rect=e=>{const r=e.getBoundingClientRect();return{top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height}},
+           card=rect(document.querySelector('.match-finish:not(.hidden) .mf-card')),
+           message=rect(document.querySelector('.match-finish:not(.hidden) #mfText')),
+           button=rect(document.querySelector('.match-finish:not(.hidden) #mfContinue'));
+         done({viewport:[innerWidth,innerHeight],card,message,button,gap:button.top-message.bottom});
+       }))));
+       assert(metrics.gap>=14,'real terminal message/button must have 14px separation '+JSON.stringify(metrics));
+       assert(metrics.button.height>=48&&metrics.button.bottom<=vh-12&&metrics.card.top>=12,
+         'finish card and finger target must fit viewport '+JSON.stringify(metrics));
+       finishLayouts.push(metrics);
+     }
+     await page.setViewport({width,height,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+     await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
      await page.screenshot({path:path.join(output,'lab-terminal-430.png')});
      await touch('#mfContinue');
      await page.waitForSelector('[data-screen="results"].active #resultTitle');
@@ -227,7 +246,7 @@ const server=http.createServer((req,res)=>{
      assert.equal(resumed.redLives,1,'rematch restores actual Red life');
      assert.equal(resumed.speed,10,'rematch retains configured speed');
      assert.equal(resumed.staleEffects,0,'rematch cannot inherit old end-of-match overlays');
-     terminal={initial,finished,shown,rematch:{...rematch,...resumed}};
+     terminal={initial,finished,finishLayouts,shown,rematch:{...rematch,...resumed}};
      console.log('REAL LAB TERMINAL '+JSON.stringify(terminal));
      await exitBattle();
    }
