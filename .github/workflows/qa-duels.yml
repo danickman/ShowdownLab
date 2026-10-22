@@ -15,8 +15,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   raf-clock-worker-research:
-    # Source-only, one-shot CI: frame-clock synchronization vs overactive worker
-    # must pass exact physical progression, not merely smooth idle frames.
+    # Archived rejected browser trial. Run only on manual dispatch.
+    # One-shot Chromium report is captured in RAF_CLOCK_WORKER_300_2026-10-22.md.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 23
     steps:
