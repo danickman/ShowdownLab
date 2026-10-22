@@ -1081,6 +1081,21 @@ jobs:
         run: |
           node --check tools/qa/check-theatre-guide-all-roles.cjs
           node tools/qa/check-theatre-guide-all-roles.cjs
+      - name: Verify true three-mode phone touch paths and horizontal AEGIS swipe
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TOUCH_MODES_OUTPUT: ${{ runner.temp }}/touch-modes
+        run: |
+          node --check tools/qa/check-touch-modes-browser.cjs
+          node tools/qa/check-touch-modes-browser.cjs
+      - name: Upload three-mode native Chromium touchscreen receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: touch-modes-browser
+          path: ${{ runner.temp }}/touch-modes
+          if-no-files-found: warn
       - name: Upload fighter theatre gallery and pixel visibility receipt
         if: always()
         uses: actions/upload-artifact@v4
