@@ -36,8 +36,12 @@
     // earth fault over exposed midfield. No additional marks, targets or FX.
     // Its angular trench/lip is cached with the same WeakMap geometry.
     const focus=quake&&mark.seed===0?(()=>{
-      const spine=[[0,0],[-28,8],[-63,31],[-99,17],[-142,46],[-184,40]];
-      const half=[3,9,15,12,17,4];
+      // Continue the SAME seeded fault into the visible foreground after
+      // crossing the crowded contact line. No extra marks, particles or
+      // Canvas draw calls: just a grounded zig-zag in the existing polygon.
+      const spine=[[0,0],[-28,8],[-63,31],[-99,17],[-142,46],[-184,40],
+        [-157,76],[-108,113],[-98,145],[-74,181],[-46,221]];
+      const half=[3,9,15,12,17,4,13,15,11,13,3];
       return spine.map(([x,y],i)=>({
         upper:[x,y-half[i]*.50],lower:[x,y+half[i]*.54],
         lip:[x,y-half[i]*.50-3.5]

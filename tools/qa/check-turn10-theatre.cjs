@@ -65,6 +65,10 @@ assert(!plainFault.fills.includes('#26180f'),'no repeated midfield trenches on e
 assert(!crack('quake','minimal',.32,0).fills.includes('#26180f'),'300-body minimal must not paint the focal trench');
 const westFocus=Math.min(...focusFault.points.map(([x])=>x));
 assert(westFocus< -175&&westFocus> -260,'real quake focus must reach across midfield without leaving the stage');
+const nearDepth=Math.max(...focusFault.points.map(([x,y])=>y));
+assert(nearDepth>=215&&nearDepth<=245,'one QUAKE fissure must continue toward open foreground without crossing its 245px bound');
+assert(Math.max(...plainFault.points.map(([x,y])=>y))<nearDepth*.45,'ordinary mark must not inherit QUAKE foreground fault');
+assert(!crack('quake','minimal',.32,0).points.some(([x,y])=>y>=160),'300-fighter minimal stays free of the long foreground trench');
 assert(focusFault.fills.length-plainFault.fills.length===1,'one additional bounded focal polygon, no extra particles');
 const furthest=q=>Math.max(...q.points.map(([x,y])=>Math.hypot(x,y)),0);
 assert(furthest(fault)>furthest(ordinary)*2.1,'QUAKE must rupture beyond ordinary small hit scars');

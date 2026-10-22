@@ -159,19 +159,26 @@ const server=http.createServer((req,res)=>{
        x=Math.max(0,Math.floor((p.x-190)*scaleX+matrix.e)),
        y=Math.max(0,Math.floor((p.y-38)*scaleY+matrix.f)),
        width=Math.min(ctx.canvas.width-x,Math.ceil(210*scaleX)),
-       height=Math.min(ctx.canvas.height-y,Math.ceil(110*scaleY));
+       height=Math.min(ctx.canvas.height-y,Math.ceil(280*scaleY));
      if(scaleX<=0||scaleY<=0||width<30||height<30)
        return realGround.apply(this,arguments);
      const pre=ctx.getImageData(x,y,width,height).data;
      const result=realGround.apply(this,arguments);
      const post=ctx.getImageData(x,y,width,height).data;
-     let changed=0,darkened=0;
+     let changed=0,darkened=0,foregroundChanged=0,foregroundDarkened=0;
      for(let i=0;i<post.length;i+=4){
-       const dr=pre[i]-post[i],dg=pre[i+1]-post[i+1],db=pre[i+2]-post[i+2];
-       if(Math.abs(dr)+Math.abs(dg)+Math.abs(db)>=32)changed++;
-       if(dr>12&&dg>12&&db>8)darkened++;
+       const dr=pre[i]-post[i],dg=pre[i+1]-post[i+1],db=pre[i+2]-post[i+2],
+         change=Math.abs(dr)+Math.abs(dg)+Math.abs(db)>=32,
+         dark=dr>12&&dg>12&&db>8;
+       if(change)changed++;
+       if(dark)darkened++;
+       // In the original source the farthest seed-0 crack reached only
+       // +~50 CSS pixels. The open foreground starts +125px below target.
+       const row=Math.floor(i/4/width),near=row>=Math.floor(163*scaleY);
+       if(near&&change)foregroundChanged++;
+       if(near&&dark)foregroundDarkened++;
      }
-     window.__quakeInkQA={changed,darkened,pixels:width*height,
+     window.__quakeInkQA={changed,darkened,foregroundChanged,foregroundDarkened,pixels:width*height,
        rect:[x,y,width,height],age,tier,seed:mark.seed,
        population:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length,
        canvas:[ctx.canvas.width,ctx.canvas.height]};
@@ -217,6 +224,8 @@ const server=http.createServer((req,res)=>{
   assert.notEqual(report.quakeInk?.tier,'minimal','40-body QUAKE retains daylight fissure');
   assert(report.quakeInk.changed>=300,'QUAKE must create a materially broad real Canvas fracture');
   assert(report.quakeInk.darkened>=120,'QUAKE must open visibly dark earth, not only bright flash overlays');
+  assert(report.quakeInk.foregroundChanged>=600,'seed-0 QUAKE fault must paint genuine changed pixels on previously open foreground floor');
+  assert(report.quakeInk.foregroundDarkened>=250,'seed-0 foreground QUAKE must create visibly dark soil, not bright UI overlays');
   await page.screenshot({path:path.join(out,'quake-impact-430.png')});
   await page.evaluate(()=>ShowdownAdapter.pauseBattle());
   await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,980)));
