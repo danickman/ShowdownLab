@@ -249,6 +249,161 @@ const server=http.createServer((req,res)=>{
      terminal={initial,finished,finishLayouts,shown,rematch:{...rematch,...resumed}};
      console.log('REAL LAB TERMINAL '+JSON.stringify(terminal));
      await exitBattle();
+
+     // Complete BOTH standard four-life modes through their true own
+     // between-round flows. Never fake match_over, units, winner or lives.
+     // One 430px viewport is enough here; 390/375 retain all touch gates.
+     async function completeMultiround(mode){
+       const firstParts=Number(await page.$eval('[data-screen="home"] [data-parts]',x=>x.textContent));
+       if(mode==='quick'){
+         await touch('.screen-home.active [data-mode="quick"]');
+         await page.waitForSelector('.screen-ready.active');
+       }else{
+         await touch('.screen-home.active [data-go="draft"]');
+         await page.waitForSelector('.screen-draft.active #draftGrid .fighter-card');
+         await touch('#draftGrid [data-unit="knight"]');
+         await touch('#draftGrid [data-unit="sniper"]');
+         await touch('#confirmDraft');
+         await page.waitForSelector('.screen-ready.active');
+       }
+       await touch('.screen-ready.active [data-go="battle"]');
+       const started=await battle(mode);
+       const initial=await page.evaluate(()=>{const s=ShowdownAdapter.getState();return{
+         lives:[s.blueLives,s.redLives],round:s.round,phase:s.phase,speed:s.speed,battleId:s.battleId};});
+       assert.deepEqual(initial.lives,[4,4],mode+' original four-life rules');
+       assert.equal(initial.round,1,mode+' starts Round 1');
+       await touch('#battleMenu');
+       await touch('#battleSheet:not(.hidden) [data-speed="10"]');
+       assert.equal(Number(await page.$eval('#speedReadout',x=>x.textContent.replace(/[^\d]/g,''))),10,
+         mode+' real touchscreen switched to 10x');
+       // Observe transitions on the ACTUAL adapter; state is read-only.
+       await page.evaluate(()=>{
+         window.__modeRoundQA=[];
+         window.__modeStateUnsubQA?.();
+         window.__modeStateUnsubQA=ShowdownAdapter.subscribe(s=>{
+           if(s.phase==='round_over'||s.phase==='match_over'){
+             const prev=window.__modeRoundQA.at(-1);
+             if(prev?.battleId!==s.battleId||prev?.phase!==s.phase)
+               window.__modeRoundQA.push({phase:s.phase,battleId:s.battleId,round:s.round,
+                 winner:s.winner,roundWinner:s.roundWinner,
+                 blueLives:s.blueLives,redLives:s.redLives,
+                 blueAlive:s.units.filter(u=>u.team==='blue'&&u.hp>0).length,
+                 redAlive:s.units.filter(u=>u.team==='red'&&u.hp>0).length});
+           }
+         });
+       });
+       let selections=0,autoPicks=0;
+       for(let step=0;step<14;step++){
+         await page.waitForFunction(()=>
+           ShowdownAdapter.getState().phase==='match_over' ||
+           !!document.querySelector('.round-draft:not(.hidden) .rd-choices button'),
+           {timeout:100000});
+         const current=await page.evaluate(()=>{
+           const s=ShowdownAdapter.getState(),pane=document.querySelector('.round-draft');
+           return{phase:s.phase,round:s.round,paneVisible:!!pane&&!pane.classList.contains('hidden'),
+             quick:pane?.classList.contains('quick-pick'),choices:pane?.querySelectorAll('.rd-choices button').length||0};
+         });
+         if(current.phase==='match_over')break;
+         assert.equal(current.phase,'round_over',mode+' draft only after actual engine round ends');
+         assert(current.paneVisible&&current.choices>0,'real RoundLoop presents playable choices');
+         if(mode==='quick'){
+           // On round one a real finger chooses; subsequent rounds also
+           // prove the natural four-second quick auto-pick is functional.
+           if(selections===0){
+             await touch('.round-draft:not(.hidden) .rd-choices button:first-child',true);
+             selections++;
+           }else{
+             const priorRound=current.round;
+             await page.waitForFunction(r=>ShowdownAdapter.getState().round>r||
+               ShowdownAdapter.getState().phase==='match_over',{timeout:12000},priorRound);
+             autoPicks++;
+           }
+         }else{
+           // Real Draft preview must first ENABLE its Deploy control.
+           await touch('.round-draft:not(.hidden) .rd-choices button:first-child',true);
+           assert.equal(await page.$eval('#rdNext',e=>e.disabled),false,'Draft pick enables deploy');
+           await touch('.round-draft:not(.hidden) #rdNext',true);
+           selections++;
+         }
+         // Do not issue another choice until the original engine starts
+         // the next battle, or naturally finishes the whole match.
+         await page.waitForFunction(r=>
+           ShowdownAdapter.getState().round>r ||
+           ShowdownAdapter.getState().phase==='match_over',{timeout:20000},current.round);
+       }
+       await page.waitForFunction(()=>ShowdownAdapter.getState().phase==='match_over'&&
+         !!document.querySelector('.match-finish:not(.hidden) #mfContinue'),{timeout:100000});
+       const completed=await page.evaluate(()=>{
+         const s=ShowdownAdapter.getState();return{phase:s.phase,round:s.round,winner:s.winner,
+           lives:[s.blueLives,s.redLives],blueAlive:s.units.filter(u=>u.team==='blue'&&u.hp>0).length,
+           redAlive:s.units.filter(u=>u.team==='red'&&u.hp>0).length,
+           rounds:window.__modeRoundQA.slice(),banner:document.querySelector('#mfTitle').textContent};
+       });
+       assert(completed.round>=2,mode+' must naturally finish AFTER at least one round transition');
+       assert(completed.rounds.filter(x=>x.phase==='round_over').length>=1,
+         mode+' must really register a nonfinal terminal round');
+       assert.equal(completed.rounds.filter(x=>x.phase==='match_over').length,1,
+         mode+' has exactly one final match result');
+       assert(completed.lives.some(l=>l===0),'original four-life match ended due to depleted lives');
+       assert(completed.blueAlive===0||completed.redAlive===0,'terminal has true eliminated army');
+       assert(['blue','red','draw'].includes(completed.winner));
+       if(completed.winner==='blue')assert(completed.blueAlive>0&&completed.redAlive===0,'actual Blue survivors');
+       if(completed.winner==='red')assert(completed.redAlive>0&&completed.blueAlive===0,'actual Red survivors');
+       if(completed.winner==='draw')assert(completed.blueAlive===0&&completed.redAlive===0,'real double KO');
+       if(mode==='quick')assert(selections===1,'Quick touchscreen boost chosen on first opportunity');
+       else assert(selections>=1,'Draft user must actually pick and deploy');
+       const finishCheck=await page.evaluate(()=>{
+         const a=document.querySelector('#mfText').getBoundingClientRect(),
+           b=document.querySelector('#mfContinue').getBoundingClientRect();
+         return{gap:b.top-a.bottom,buttonHeight:b.height,ctaReach:document.elementFromPoint(
+           b.left+b.width/2,b.top+b.height/2)?.closest('#mfContinue')!==null};
+       });
+       assert(finishCheck.gap>=14&&finishCheck.ctaReach&&finishCheck.buttonHeight>=48,
+         mode+' natural end panel stays touch readable');
+       await page.screenshot({path:path.join(output,mode+'-real-four-life-finish-430.png')});
+       await touch('#mfContinue');
+       await page.waitForSelector('[data-screen="results"].active #resultTitle');
+       const shown=await page.evaluate(()=>({
+         title:document.querySelector('#resultTitle').textContent,
+         parts:Number(document.querySelector('[data-screen="home"] [data-parts]').textContent),
+         reward:document.querySelector('#resultReward').textContent,
+         screen:ShowdownQA.snapshot().screen}));
+       assert.equal(shown.screen,'results');
+       assert.match(shown.title,completed.winner==='draw'?/DRAW/:new RegExp(completed.winner.toUpperCase()+' WINS'));
+       if(completed.winner==='draw')assert.equal(shown.parts,firstParts,'draw does not mint Parts');
+       else{
+         assert(shown.parts>firstParts,mode+' terminal should earn real match reward');
+         assert.match(shown.reward,/PARTS/);
+       }
+       await page.screenshot({path:path.join(output,mode+'-real-four-life-results-430.png')});
+       const next=mode==='quick'?'[data-screen="results"].active [data-mode="quick"]':
+         '[data-screen="results"].active .result-actions .primary';
+       await touch(next);
+       await page.waitForSelector(mode==='quick'?'.screen-ready.active':'.screen-draft.active');
+       const restarted=await page.evaluate(()=>({
+         screen:ShowdownQA.snapshot().screen,
+         leaks:document.querySelectorAll('.round-draft:not(.hidden),.match-finish:not(.hidden),.ability-callout').length,
+         parts:Number(document.querySelector('[data-screen="home"] [data-parts]').textContent)}));
+       assert.equal(restarted.screen,mode==='quick'?'ready':'draft');
+       assert.equal(restarted.parts,shown.parts,'restart cannot double-award old result');
+       assert.equal(restarted.leaks,0,'no old battle overlays leak into next match');
+       return{started,initial,completed,shown,finishCheck,selections,autoPicks,restarted};
+     }
+     // Leave no artificial adapter manipulation. Only legal finger actions
+     // and the original 10x speed switch accelerate these terminal matches.
+     const naturalQuick=await completeMultiround('quick');
+     if(naturalQuick.restarted.screen==='ready'){
+       await touch('.screen-ready.active [data-go="battle"]');
+       await exitBattle();
+     }
+     const naturalDraft=await completeMultiround('draft');
+     if(naturalDraft.restarted.screen==='draft')await touch('.screen-draft.active [data-go="home"]');
+     terminal.naturalModes={quick:naturalQuick,draft:naturalDraft};
+     console.log('REAL FOUR-LIFE MODE TERMINALS '+JSON.stringify({
+       quick:{round:naturalQuick.completed.round,winner:naturalQuick.completed.winner,
+         picks:naturalQuick.selections,auto:naturalQuick.autoPicks,parts:naturalQuick.shown.parts},
+       draft:{round:naturalDraft.completed.round,winner:naturalDraft.completed.winner,
+         picks:naturalDraft.selections,parts:naturalDraft.shown.parts}}));
    }
    const receipt={width,height,quick:{ready:quickReady,...quick,exit:quickExit},
      draft:{picks,...draft,exit:draftExit},lab:{...lab,customEnemyTurtles:configured,swipe:{beforeRack,afterRack},aegis,exit:labExit,terminal}};
