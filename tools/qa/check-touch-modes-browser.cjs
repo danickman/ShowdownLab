@@ -20,7 +20,7 @@ const server=http.createServer((req,res)=>{
  const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
  const results=[];
  try{
-  for(const [width,height] of [[430,932],[390,844],[375,667]]){
+  for(const [width,height] of [[430,932],[390,844],[375,667],[320,568]]){
    const page=await browser.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
    await page.setViewport({width,height,deviceScaleFactor:3,isMobile:true,hasTouch:true});
@@ -158,6 +158,7 @@ const server=http.createServer((req,res)=>{
    assert.equal(aegis.cast?.spell,'aegis','actual engine AEGIS event');
    assert(aegis.protected>0&&aegis.cast.targets>0,'real source AEGIS warded live blue units');
    if(width===430)await page.screenshot({path:path.join(output,'lab-aegis-touch-430.png')});
+   if(width===320)await page.screenshot({path:path.join(output,'lab-aegis-touch-320.png')});
    const labExit=await exitBattle();
    assert.equal(labExit.screen,'home');
    assert.equal(labExit.overlays,0,'old spell callout leaked after leaving Lab');
@@ -420,6 +421,6 @@ const server=http.createServer((req,res)=>{
    await page.close();
   }
   fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify({note:'Real Chromium DPR3 touchscreen events; physical iPhone Safari untested',results},null,2)+'\n');
-  console.log('PASS: Quick/Draft/Lab original-core touch starts, AEGIS finger swipe, natural single-life squad terminal Results and rematch, no Lab rewards, clean exits at 430/390/375 DPR3');
+  console.log('PASS: Quick/Draft/Lab original-core touch starts, AEGIS finger swipe, true four-life Quick/Draft and Lab Results at 430, 390, 375, 320 DPR3');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1;server.close();});
