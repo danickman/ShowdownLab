@@ -97,13 +97,13 @@ const server=http.createServer((req,res)=>{
    // Lab customization must carry through to the ORIGINAL source adapter
    // before the isolated 40-fighter spell visibility fixture is arranged.
    await touch('.screen-home.active [data-go="lab"]');
-   await page.waitForSelector('.screen-lab.active #labRun');
+   await page.waitForSelector('[data-screen="lab"].active #labRun');
    await touch('#labChooseEnemies',true);
    await page.waitForSelector('[data-screen="lab-enemies"].active #labEnemyPicker');
    await touch('[data-enemy-plus-five="turtle"]',true);
    assert.match(await page.$eval('#labEnemyTotal',x=>x.textContent),/^5 \/ 60/);
    await touch('#labEnemyDone',true);
-   await page.waitForSelector('.screen-lab.active');
+   await page.waitForSelector('[data-screen="lab"].active');
    await touch('#labRun',true);
    const lab=await battle('lab');
    const configured=await page.evaluate(()=>ShowdownAdapter.getState().armies?.red?.turtle||0);
