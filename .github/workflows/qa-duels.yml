@@ -14,6 +14,45 @@ concurrency:
   group: showdown-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  fast300-collision-candidate-study:
+    # Bounded research only: do not ship to playable runtime on a green study.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source candidate and genuine full-RAF parity tool
+        run: |
+          node --check tools/qa/fast300-candidate.cjs
+          node --check tools/qa/check-fast300-exact.cjs
+          node --check tools/qa/check-fast300-browser.cjs
+      - name: Compare genuine 20/40/80/120/300 source engine frames and six heldout 300 cases
+        env:
+          QA_TURN19_RECEIPT: ${{ runner.temp }}/fast300-exact.json
+        run: node tools/qa/check-fast300-exact.cjs
+      - name: Install real Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Alternating-order real 430 DPR3 300-fighter Chromium A/B 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_BROWSER_OUTPUT: ${{ runner.temp }}/fast300-browser
+        run: node tools/qa/check-fast300-browser.cjs
+      - name: Upload exact-physical-state and real browser measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-latency-research
+          path: |
+            ${{ runner.temp }}/fast300-exact.json
+            ${{ runner.temp }}/fast300-browser/fast300-browser-study.json
+          if-no-files-found: warn
   root-release-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
