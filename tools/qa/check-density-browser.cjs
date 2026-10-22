@@ -147,6 +147,36 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>{
    ShowdownAdapter.startMatch({blue:{knight:20},red:{knight:20},blueLives:1,redLives:1,seed:42026});
    ShowdownAdapter.setSpeed(1);
+   // QA-only instrumentation of the LIVE registered Canvas painter.
+   // Read pixels before and after the actual seed-0 fracture draw on the
+   // same 40-fighter frame. No mocked ctx, synthetic ink or gameplay change.
+   window.__quakeInkQA=null;
+   const realGround=window.BattleTheatre.drawDamage;
+   window.BattleTheatre.drawDamage=function(ctx,p,mark,age,tier){
+     if(mark?.type!=='quake'||mark.seed!==0||age<.018||age>.3||window.__quakeInkQA)
+       return realGround.apply(this,arguments);
+     const matrix=ctx.getTransform(),scaleX=matrix.a,scaleY=matrix.d,
+       x=Math.max(0,Math.floor((p.x-190)*scaleX+matrix.e)),
+       y=Math.max(0,Math.floor((p.y-38)*scaleY+matrix.f)),
+       width=Math.min(ctx.canvas.width-x,Math.ceil(210*scaleX)),
+       height=Math.min(ctx.canvas.height-y,Math.ceil(110*scaleY));
+     if(scaleX<=0||scaleY<=0||width<30||height<30)
+       return realGround.apply(this,arguments);
+     const pre=ctx.getImageData(x,y,width,height).data;
+     const result=realGround.apply(this,arguments);
+     const post=ctx.getImageData(x,y,width,height).data;
+     let changed=0,darkened=0;
+     for(let i=0;i<post.length;i+=4){
+       const dr=pre[i]-post[i],dg=pre[i+1]-post[i+1],db=pre[i+2]-post[i+2];
+       if(Math.abs(dr)+Math.abs(dg)+Math.abs(db)>=32)changed++;
+       if(dr>12&&dg>12&&db>8)darkened++;
+     }
+     window.__quakeInkQA={changed,darkened,pixels:width*height,
+       rect:[x,y,width,height],age,tier,seed:mark.seed,
+       population:ShowdownAdapter.getState().units.filter(u=>u.hp>0).length,
+       canvas:[ctx.canvas.width,ctx.canvas.height]};
+     return result;
+   };
    window.__quakeSpellQA=null;window.__quakeClickQA=0;window.__quakeRibbonQA=false;
    addEventListener('showdown:spell',e=>{if(e.detail?.spell==='quake')window.__quakeSpellQA={spell:'quake',power:e.detail.power}},{once:true});
    const button=document.querySelector('[data-spell="quake"]');
@@ -172,7 +202,21 @@ const server=http.createServer((req,res)=>{
   assert.equal(castDiagnostic.clickCount,1,'actual Lab QUAKE touch reached the button');
   assert.equal(castDiagnostic.cast?.spell,'quake','actual QUAKE touch triggered live engine cast');
   assert(castDiagnostic.observedRibbon,'real QUAKE DOM callout appeared during cast');
-  await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,180)));
+  // A synchronous snapshot of the REAL composited Canvas, before the
+  // full-page screenshot can outlive the QUAKE foreground animation.
+  await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,260)));
+  const quakeFrame=await page.evaluate(()=>{
+    const canvas=document.querySelector('#battleCanvas');
+    return{paint:window.__quakeInkQA,png:canvas.toDataURL('image/png')};
+  });
+  fs.writeFileSync(path.join(out,'quake-live-canvas-430.png'),Buffer.from(quakeFrame.png.split(',')[1],'base64'));
+  report.quakeInk=quakeFrame.paint;
+  console.log('QUAKE SAME-FRAME REAL FRACTURE PIXELS '+JSON.stringify(report.quakeInk));
+  assert.equal(report.quakeInk?.seed,0,'source-seeded central QUAKE fracture was actually painted');
+  assert.equal(report.quakeInk?.population,40,'real 40-body current-source QUAKE');
+  assert.notEqual(report.quakeInk?.tier,'minimal','40-body QUAKE retains daylight fissure');
+  assert(report.quakeInk.changed>=300,'QUAKE must create a materially broad real Canvas fracture');
+  assert(report.quakeInk.darkened>=120,'QUAKE must open visibly dark earth, not only bright flash overlays');
   await page.screenshot({path:path.join(out,'quake-impact-430.png')});
   await page.evaluate(()=>ShowdownAdapter.pauseBattle());
   await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,980)));
