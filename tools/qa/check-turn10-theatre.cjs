@@ -99,5 +99,5 @@ assert(redHP<initialRed,'genuine source spell HP damage occurred');
 assert.equal(after.units.length,40,'no phantom bodies from null attacker');
 assert.equal(after.units.filter(u=>u.team==='blue'&&u.hp>0).length,20,'spell never harms own side');
 console.log('PASS: live 40-fighter ARC+QUAKE real core casts no null-attacker crash, deterministic damage and unchanged roster');
-console.log('PASS: distinct bounded ARC cold lightning scorch and unchanged other scars; QUAKE single 184px grounded front fracture, no extra 300 effects');
+console.log('PASS: distinct bounded ARC cold lightning scorch and unchanged other scars; QUAKE one cached >=215px grounded foreground rupture plus protected original west reach, no extra 300 effects');
 console.log('PASS: clean authored sky without ovals, finite 430/375 geometry, moving birds/light and 300 budget, reduced-motion gated');
