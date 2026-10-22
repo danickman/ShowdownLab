@@ -36,6 +36,15 @@ for(const [current,legacy] of [["turtle:'Anchor the front beside wounded allies.
  historic=historic.replace(current,legacy);
 }
 
+// Exact accepted Results and wallet copy changes only; preserve original
+// source physics, renderer, and all unrelated implementation bytes.
+for(const [live,original] of [
+ ["Play Quick or Draft for Parts. Blue victories earn a bonus. Spend Parts here permanently.","Win Quick or Draft battles to earn Parts. Spend them here permanently."],
+ ["document.querySelector('.screen-results .eyebrow').textContent=activeMode==='lab'?'EXPERIMENT COMPLETE':'SHOWDOWN COMPLETE';",""]
+]){
+ assert.equal(historic.split(live).length,2,'one exact approved player-facing Results or Parts label');
+ historic=historic.replace(live,original);
+}
 // Only these exact ARC/BLOOM presentation constant replacements are allowed.
 // Restore every accepted occurrence BEFORE immutable Turn19 physics SHA check.
 const approvedSpellVisualDeltas=[["strike=Math.max(.15,1-age*4)","strike=Math.max(.18,1-age*2.4)",1],["ctx.strokeStyle='#76d86b';ctx.shadowColor='#7cec72';ctx.shadowBlur=12+tech*3;ctx.lineWidth=Math.max(1.5,4*(1-age));","ctx.strokeStyle='#34b95a';ctx.shadowColor='#9fffc2';ctx.shadowBlur=tier==='minimal'?0:tier==='reduced'?8:12+tech*3;ctx.lineWidth=Math.max(2.1,5.6*(1-age));",1],["r=10+age*(38+tech*6)+(i%3)*3","r=13+age*(58+tech*6)+(i%3)*3",1],["(5+tech*.35)","(7.5+tech*.35)",3],["ctx.strokeStyle='#d9ffb7';ctx.lineWidth=Math.max(1.2,3.4*(1-age));","ctx.strokeStyle='#e4ffc2';ctx.lineWidth=Math.max(1.6,4.5*(1-age));",1],["ctx.strokeStyle='#4c9f4c';ctx.lineWidth=1.4+tech*.18;","ctx.strokeStyle='#398f4b';ctx.lineWidth=2.1+tech*.18;",1],["rr=10+tech*2+(i%2)*5;","rr=23+tech*3+(i%2)*7;",1]];
@@ -69,7 +78,7 @@ for(const [old,current,count] of approvedSpellImpactOverlays){
  historic=historic.split(current).join(old);
 }
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
-assert(html.includes('/v3/v3.js?v=theatre-touch-exit1')&&sw.includes('/v3/v3.js?v=theatre-touch-exit1'),'pinned root and SW must include current Guide-truth runtime version');
+assert(html.includes('/v3/v3.js?v=theatre-results-copy1')&&sw.includes('/v3/v3.js?v=theatre-results-copy1'),'pinned root and SW must include current Guide-truth runtime version');
 const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^showdown-lab-release-[a-z0-9-]+$/.test(releaseCache[1])&&releaseCache[1]!=='showdown-lab-release-turn23-dragon-charge1','new Turtle runtime requires distinct, valid offline cache identity rather than silently reusing old release');
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');

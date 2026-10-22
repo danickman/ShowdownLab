@@ -27,6 +27,9 @@ const server=http.createServer((req,res)=>{
    const port=server.address().port;
    await page.goto('http://127.0.0.1:'+port+'/?qa=1&touch-modes=1',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&!!window.ShowdownAdapter&&!!window.ShowdownQA,{timeout:90000});
+   assert.match(await page.$eval('#rosterContent .bay-wallet small',x=>x.textContent),
+      /Play Quick or Draft for Parts.*Blue victories earn a bonus/,
+      'visible Upgrade Bay description must match actual currency rewards');
    async function touch(selector,scroll=false){
     const rect=await page.evaluate(({selector,scroll})=>{
       const e=document.querySelector(selector);
@@ -229,6 +232,7 @@ const server=http.createServer((req,res)=>{
        parts:Number(document.querySelector('[data-screen="home"] [data-parts]').textContent),
        calls:document.querySelectorAll('.ability-callout').length}));
      assert.equal(shown.screen,'results');
+     assert.equal(await page.$eval('.screen-results .eyebrow',e=>e.textContent),'EXPERIMENT COMPLETE');
      assert.match(shown.reward,/no Parts awarded/i,'Lab must not earn match currency');
      assert.equal(shown.parts,partsBefore,'no Lab Parts farming');
      assert.equal(shown.calls,0,'no stale spell callout on Results');
@@ -364,11 +368,13 @@ const server=http.createServer((req,res)=>{
        await touch('#mfContinue');
        await page.waitForSelector('[data-screen="results"].active #resultTitle');
        const shown=await page.evaluate(()=>({
+         heading:document.querySelector('.screen-results .eyebrow').textContent,
          title:document.querySelector('#resultTitle').textContent,
          parts:Number(document.querySelector('[data-screen="home"] [data-parts]').textContent),
          reward:document.querySelector('#resultReward').textContent,
          screen:ShowdownQA.snapshot().screen}));
        assert.equal(shown.screen,'results');
+       assert.equal(shown.heading,'SHOWDOWN COMPLETE','Quick/Draft Results label must not say experiment');
        assert.match(shown.title,completed.winner==='draw'?/DRAW/:new RegExp(completed.winner.toUpperCase()+' WINS'));
        if(completed.winner==='draw')assert.equal(shown.parts,firstParts,'draw does not mint Parts');
        else{
