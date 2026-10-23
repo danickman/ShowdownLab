@@ -271,7 +271,8 @@ jobs:
           path: ${{ runner.temp }}/fast300-worker-raster/
           if-no-files-found: warn
   fast300-worker-raster70-one-shot:
-    # One-shot visual and genuine 300 Chromium Worker .70 1x research; source-only.
+    # Successful measured 300 candidate archived: manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -304,6 +305,39 @@ jobs:
         with:
           name: fast300-worker-raster70-study
           path: ${{ runner.temp }}/fast300-worker-raster70/
+          if-no-files-found: warn
+  fast300-worker-lifecycle-one-shot:
+    # Production-intended bridge and worker isolated browser lifecycle trial.
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate production-intended Worker and integration QA
+        run: |
+          node --check tools/qa/fast300-production-worker.js
+          node --check tools/qa/fast300-production-bridge.js
+          node --check tools/qa/check-fast300-worker-lifecycle.cjs
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: True 300 pause resume 10x pending spell once Worker retire 40 and unsupported fallback
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_LIFECYCLE_OUTPUT: ${{ runner.temp }}/fast300-lifecycle
+        run: node tools/qa/check-fast300-worker-lifecycle.cjs
+      - name: Archive real browser lifecycle receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-worker-lifecycle
+          path: ${{ runner.temp }}/fast300-lifecycle/lifecycle.json
           if-no-files-found: warn
   root-release-gate:
     runs-on: ubuntu-latest
