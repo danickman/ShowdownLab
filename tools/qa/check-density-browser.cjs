@@ -35,6 +35,7 @@ const server=http.createServer((req,res)=>{
     const make=()=>{const o={};for(let i=0;i<perSide;i++)o[types[i%10]]=(o[types[i%10]]||0)+1;return o};
     const blue=make(),red=make(),levels=Object.fromEntries(types.map((t,i)=>[t,[1,4,5][i%3]]));
     ShowdownAdapter.startMatch({blue,red,blueLevels:levels,redLevels:levels,blueLives:4,redLives:4,seed:81337});
+    const deadline=performance.now()+25000;while(ShowdownAdapter.getState().units.length!==count&&performance.now()<deadline){if(window.__showdownThreadStats?.errors?.length)throw Error('dense Worker failure: '+JSON.stringify(window.__showdownThreadStats));await new Promise(r=>setTimeout(r,50))}
     ShowdownAdapter.setSpeed(1);
     // Capture ALL 300 bodies at the same unadvanced deployment state; later
     // timed screenshots are expected to have casualties and cannot prove it.
@@ -92,7 +93,7 @@ const server=http.createServer((req,res)=>{
      await page.screenshot({path:path.join(out,'density-'+count+'-portrait.png')});
     }
     assert(result.frames>0,'browser RAF did not produce frames at '+count+' fighters '+speed+'x');
-    const expectedScale=count>=160?(speed>=10?.85:1):2;
+    const expectedScale=count>=160?(speed>=10?.85:.70):2;
     assert(Math.abs(result.rasterScale-expectedScale)<.05,'real browser backing scale mismatch at '+count+' units '+speed+'x: '+result.rasterScale+' expected '+expectedScale);
     assert(result.onScreen==='battle'||result.phase==='round_over'||result.phase==='match_over','browser navigated away unexpectedly');
     console.log('DENSITY BROWSER '+JSON.stringify({count,speed,frames:result.frames,p95IntervalMs:result.p95IntervalMs,renderP95Ms:result.timings.total.p95Ms,alive:result.aliveOrDrawn,clipped:result.clippedSpriteBoxes,censored:result.censored}));

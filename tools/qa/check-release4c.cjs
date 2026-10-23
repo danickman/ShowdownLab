@@ -50,6 +50,8 @@ const request=(p,mode='cors')=>({url:'https://showdownlab.vercel.app'+p,method:'
  await assert.rejects(broken.event('install'));
  assert(stores.has('showdown-lab-old'),'failed update must leave old app');
  assert(!stores.has(broken.cacheName),'failed staged cache must be discarded');
+ const workerPath=shellList.find(u=>u.startsWith('/v3/fast300-physics-worker.js?v='));assert(workerPath,'offline physics Worker shell missing');
+ const corruptedWorker=create({tamper:workerPath,stores});await assert.rejects(corruptedWorker.event('install'),/integrity mismatch/);assert(!stores.has(corruptedWorker.cacheName),'tampered worker release staged');
  const corrupt=create({tamper:required[2],stores});
  await assert.rejects(corrupt.event('install'),/integrity mismatch/);
  assert(stores.has('showdown-lab-old'),'hash mismatch evicted old release');

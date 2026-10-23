@@ -354,6 +354,7 @@ jobs:
           node tools/qa/release-hashes.cjs --verify
           node tools/qa/check-turn3-consistency.cjs
           node tools/qa/check-turn19-dense-canvas-playable.cjs
+          node tools/qa/check-fast300-playable-contract.cjs
       - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
         run: node tools/qa/check-primary-device-contract.cjs
       - name: Verify offline precache graph and rollback

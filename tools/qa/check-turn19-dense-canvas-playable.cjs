@@ -2,7 +2,7 @@
 const fs=require('fs'),crypto=require('crypto'),assert=require('node:assert/strict'),path=require('path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const src=read('v3/v3.js'),html=read('index.html'),sw=read('sw.js');
-const marker="function draw(time){if(current!=='battle'||!cam)return;",replacement="function draw(time){if(current!=='battle'||!cam)return;\n// Only exceptional full-arena stress density uses lower raster backing; positions, fighters, FX, and combat remain unchanged.\nconst __denseScale=state.units.length>=160?((state.speed||1)>=10?.85:1):Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);\nif(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}";
+const marker="function draw(time){if(current!=='battle'||!cam)return;",replacement="function draw(time){if(current!=='battle'||!cam)return;\n// Only exceptional full-arena stress density uses lower raster backing; positions, fighters, FX, and combat remain unchanged.\nconst __denseScale=state.units.length>=160?((state.speed||1)>=10?.85:.70):Math.min(devicePixelRatio||1,2),__bw=Math.round(view.w*__denseScale),__bh=Math.round(view.h*__denseScale);\nif(canvas.width!==__bw||canvas.height!==__bh){canvas.width=__bw;canvas.height=__bh;ctx.setTransform(__denseScale,0,0,__denseScale,0,0);}";
 assert.equal(src.split(replacement).length,2,'one exact density-aware theatre draw rule required');
 // Strip ONLY documented live tactical tips, preserving the entire original physics,
 // renderer and density gate byte-for-byte. Any unrelated runtime change still fails.
@@ -78,9 +78,9 @@ for(const [old,current,count] of approvedSpellImpactOverlays){
  historic=historic.split(current).join(old);
 }
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
-assert(html.includes('/v3/v3.js?v=theatre-results-copy1')&&sw.includes('/v3/v3.js?v=theatre-results-copy1'),'pinned root and SW must include current Guide-truth runtime version');
+assert(html.includes('/v3/v3.js?v=fast300-raster70-qa1')&&sw.includes('/v3/v3.js?v=fast300-raster70-qa1'),'pinned root and SW must include current Guide-truth runtime version');
 const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^showdown-lab-release-[a-z0-9-]+$/.test(releaseCache[1])&&releaseCache[1]!=='showdown-lab-release-turn23-dragon-charge1','new Turtle runtime requires distinct, valid offline cache identity rather than silently reusing old release');
-const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:1):Math.min(dpr,2);
+const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:.70):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');
-assert.equal(scale(160,1,3),1);assert.equal(scale(300,1,3),1);assert.equal(scale(300,10,3),.85);assert.equal(scale(300,10,1),.85);
+assert.equal(scale(160,1,3),.70);assert.equal(scale(300,1,3),.70);assert.equal(scale(300,10,3),.85);assert.equal(scale(300,10,1),.85);
 console.log('PASS Turn19 historical source SHA and hard 34/50/70/94 spell-priority FX caps, legacy no-spell order unchanged');
