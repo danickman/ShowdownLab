@@ -3,6 +3,7 @@ const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),asse
 const root=path.resolve(__dirname,'../..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const art=read('v3/asset-renderer.js'),cam=read('v3/camera.js'),names=['knight','sniper','goose','dragon','assassin','beetank','mole','turtle','goblin','barbarian'];
 assert(cam.includes('e?(e.above+e.below):0')&&!cam.includes('2*e.left,2*e.right'),'horizontal weapon reach must not cap fighter height');
+assert(cam.includes("kind==='large'?maxSpriteHeight*1.30:maxSpriteHeight"),'large Dragon class must keep intentional extra vertical room');
 const window={ShowdownEvolution:{tier:n=>n>=4?'ultimate':n>=2?'evolved':'base',normalize:n=>Math.max(1,Math.min(5,n||1)),accent:n=>n===3||n===5},matchMedia:()=>({matches:false}),dispatchEvent(){},document:{createElement:()=>({})}};
 class DummyImage{set src(v){this.uri=v}get naturalWidth(){return 0}get naturalHeight(){return 0}}
 const ctx={window,Image:DummyImage,CustomEvent:class{},Map,Set,WeakMap,Date,Math,console};
