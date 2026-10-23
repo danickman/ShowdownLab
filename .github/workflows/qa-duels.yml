@@ -307,7 +307,7 @@ jobs:
           path: ${{ runner.temp }}/fast300-worker-raster70/
           if-no-files-found: warn
   fast300-worker-lifecycle-one-shot:
-    # Production-intended bridge and worker isolated browser lifecycle trial.
+    # Live QA-playable 300 Worker import, spells, pause/resume, fallback; no research interception.
     runs-on: ubuntu-latest
     timeout-minutes: 23
     steps:
@@ -315,11 +315,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validate production-intended Worker and integration QA
+      - name: Validate live playable Worker, bridge, source-exact core and browser QA
         run: |
-          node --check tools/qa/fast300-production-worker.js
-          node --check tools/qa/fast300-production-bridge.js
+          node --check v3/fast300-physics-worker.js
+          node --check v3/fast300-worker-bridge.js
           node --check tools/qa/check-fast300-worker-lifecycle.cjs
+          node tools/qa/check-fast300-playable-contract.cjs
       - name: Install pinned browser dependencies
         env:
           PUPPETEER_SKIP_DOWNLOAD: '1'
