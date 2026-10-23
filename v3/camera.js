@@ -5,7 +5,9 @@ function create(viewW,viewH,o={}){
   const a={x:pad,y:top+pad,w:Math.max(1,viewW-pad*2),h:Math.max(1,viewH-top-bottom-pad*2)};
   let frame={x:.5,y:.5,zoom:.92},density=0,initialized=false;
   const maxScale={normal:1.36,heavy:1.36,large:1.36,small:1.36,boss:1.36};
-  for(const [type,spec]of Object.entries(window.FighterAssets?.authored||{})){const k=type==='dragon'?'large':['beetank','turtle'].includes(type)?'heavy':['goose','goblin'].includes(type)?'small':'normal';const e=window.FighterAssets.visualEnvelope?.(type,5);maxScale[k]=Math.max(maxScale[k],(spec.scale||1.36)*(spec.inkBoost||1),e?Math.max(e.above+e.below,2*e.left,2*e.right):0)}
+  for(const [type,spec]of Object.entries(window.FighterAssets?.authored||{})){const k=type==='dragon'?'large':['beetank','turtle'].includes(type)?'heavy':['goose','goblin'].includes(type)?'small':'normal';const e=window.FighterAssets.visualEnvelope?.(type,5);// Sideways equipment reach belongs in focus() edge clearance, never in this HEIGHT cap.
+  // Treating Beetank/Turtle sideways lunges as sprite height made them smaller than Geese.
+  maxScale[k]=Math.max(maxScale[k],(spec.scale||1.36)*(spec.inkBoost||1),e?(e.above+e.below):0)}
   const maxSpriteHeight=Math.max(1,Math.min(a.h*.70-12,a.w*.40-16));
   const project=(x,y)=>{const d=Math.max(0,Math.min(1,y)),p=.78+d*.28;return{x:.5+(x-.5)*p,y:.16+d*.76}};
   const kindFor=type=>type==='dragon'?'large':type==='beetank'||type==='turtle'?'heavy':type==='goblin'||type==='goose'?'small':'normal';
