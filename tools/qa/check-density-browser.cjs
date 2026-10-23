@@ -38,15 +38,19 @@ const server=http.createServer((req,res)=>{
     // fighters before the asynchronous 160+ Worker emits its initial exact population.
     ShowdownAdapter.setSpeed(1);
     ShowdownAdapter.startMatch({blue,red,blueLevels:levels,redLevels:levels,blueLives:4,redLives:4,seed:81337});
-    const deadline=performance.now()+25000;while(ShowdownAdapter.getState().units.length!==count&&performance.now()<deadline){if(window.__showdownThreadStats?.errors?.length)throw Error('dense Worker failure: '+JSON.stringify(window.__showdownThreadStats));await new Promise(r=>setTimeout(r,50))}
-    // 1x was selected before deployment, not after potentially lethal 10x warmup.
-    // Capture ALL 300 bodies at the same unadvanced deployment state; later
-    // timed screenshots are expected to have casualties and cannot prove it.
+    // The 160+ Worker publishes its initial state asynchronously. Pause immediately:
+    // waiting while it fights will invalidate the exact-deployment population test.
     ShowdownAdapter.pauseBattle();
+    const deadline=performance.now()+25000;
+    while(ShowdownAdapter.getState().units.length<count&&performance.now()<deadline){
+      if(window.__showdownThreadStats?.errors?.length)throw Error('dense Worker failure: '+JSON.stringify(window.__showdownThreadStats));
+      await new Promise(r=>setTimeout(r,50));
+    }
+    // Capture ALL original bodies while paused; no real combat time elapses here.
     ShowdownQA.clearRenderProfile();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     const s=ShowdownQA.snapshot();
-    if(s.units.length!==count)throw Error('Expected exactly '+count+' intact deployment sprites, observed '+s.units.length+'; '+JSON.stringify({phase:ShowdownAdapter.getState().phase,speed:ShowdownAdapter.getState().speed,worker:window.__showdownThreadStats||null}));
+    if(s.units.length!==count)throw Error('Expected '+count+' living initial deployment sprites, observed '+s.units.length+'; '+JSON.stringify({phase:ShowdownAdapter.getState().phase,speed:ShowdownAdapter.getState().speed,rawUnits:ShowdownAdapter.getState().units.length,worker:window.__showdownThreadStats||null}));
     const rect=document.querySelector('#battleCanvas').getBoundingClientRect();
     return{count:s.units.length,arena:s.arena,canvas:{width:rect.width,height:rect.height,backingWidth:document.querySelector('#battleCanvas').width,backingHeight:document.querySelector('#battleCanvas').height},assetStatus:typeof FighterAssets.assetStatus==='function'?FighterAssets.assetStatus():null};
    },count);

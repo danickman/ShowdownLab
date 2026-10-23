@@ -20,3 +20,8 @@ The live lifecycle harness now verifies deployed optimized core against the froz
 ### QA density test startup race at 180/300 isolated
 
 After the first QA playable commit, density-browser saw an initial 180 attempt report 4 survivors rather than 180. The stress harness carried over the previous 120-fighter test's 10x speed into `startMatch` and only called `setSpeed(1)` after waiting for the asynchronous Worker deployment. The new Worker correctly advances authentic HP combat at the selected speed; therefore the 180 roster can die before the snapshot intended to assert all original fighters. Harness now selects 1x **before** calling `startMatch` for each density/cold 300 CDP profile, and reports phase, speed and Worker counters if it still cannot capture all deployed bodies. The 300 Worker/engine and playable speed semantics stay unchanged. Must reconfirm from real CI; do not excuse actual missing fighters.
+
+
+### Second strict 180 initial-deployment test correction
+
+The follow-up dense Chromium run still produced a false initial-roster failure after waiting 25 seconds at 1×, by which time the match had genuinely ended (`workerTicks:565`, 48 real Worker snapshots, zero Worker errors, phase `match_over`, four **living** rendered units). The test had been pausing *after* the wait and used an end-of-battle living-sprite count as if it were the initial deployed count. The harness now pauses immediately after starting the real Worker, before any wait, and only then samples the complete 180/300 original formation after the asynchronous snapshot. Exact counts remain required (no fighters hidden), and raw Worker/adapter diagnostic counts are recorded if this still fails. No simulated fighter, speed, raster, source hash or playable behavior changed.
