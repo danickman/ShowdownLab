@@ -90,8 +90,8 @@ jobs:
             ${{ runner.temp }}/fast300-browser/fast300-browser-study.json
           if-no-files-found: warn
   fast300-ink-mask-one-shot:
-    # New native filtered-silhouette mechanism; research only.
-    if: github.event_name == 'pull_request'
+    # Actual 300-frame native-mask candidate inactive in production art; archived rejected trial.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 26
     steps:
