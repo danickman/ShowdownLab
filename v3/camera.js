@@ -13,7 +13,9 @@ function create(viewW,viewH,o={}){
   const maxSpriteHeight=Math.max(1,Math.min(a.h*.70-12,a.w*.40-16));
   const project=(x,y)=>{const d=Math.max(0,Math.min(1,y)),p=.78+d*.28;return{x:.5+(x-.5)*p,y:.16+d*.76}};
   const kindFor=type=>type==='dragon'?'large':type==='beetank'||type==='turtle'?'heavy':type==='goblin'||type==='goose'?'small':'normal';
-  function sizeFor(kind,count,zoom){let n=kind==='boss'?132:kind==='large'?112:kind==='heavy'?96:kind==='small'?72:84;if(count>20)n*=.92;if(count>35)n*=.84;if(count>55)n*=.76;n*=Math.min(1.12,Math.sqrt(zoom));const crowdScale=Math.max(.58,1-Math.max(0,count-60)*.0035);return Math.max(1,Math.min(Math.round(Math.max(kind==='large'?68:kind==='heavy'?58:kind==='small'?42:48,n)*crowdScale),(kind==='large'?maxSpriteHeight*1.30:maxSpriteHeight)/(maxScale[kind]||1.36)))}
+  // Phone silhouettes: close the small/heavy gap without flattening distinct species.
+  // Goose/Goblin remain smaller; armored Beetank/Turtle remain heavier; Dragon stays large.
+  function sizeFor(kind,count,zoom){let n=kind==='boss'?132:kind==='large'?112:kind==='heavy'?83:kind==='small'?80:84;if(count>20)n*=.92;if(count>35)n*=.84;if(count>55)n*=.76;n*=Math.min(1.12,Math.sqrt(zoom));const crowdScale=Math.max(.58,1-Math.max(0,count-60)*.0035);return Math.max(1,Math.min(Math.round(Math.max(kind==='large'?68:kind==='heavy'?58:kind==='small'?42:48,n)*crowdScale),(kind==='large'?maxSpriteHeight*1.30:maxSpriteHeight)/(maxScale[kind]||1.36)))}
   function unitSize(kind='normal',count=density||8){return sizeFor(kind,count,frame.zoom)}
   function focus(units=[]){
     const live=units.filter(u=>u.hp>0);if(!live.length)return;density=live.length;
