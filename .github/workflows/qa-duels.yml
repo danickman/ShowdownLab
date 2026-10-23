@@ -157,6 +157,46 @@ jobs:
           name: fast300-bitmap-study
           path: ${{ runner.temp }}/fast300-bitmap/fast300-bitmap-study.json
           if-no-files-found: warn
+  fast300-physical-grid-one-shot:
+    # Current-raster exact physics A/B; archive after measured verdict.
+    runs-on: ubuntu-latest
+    timeout-minutes: 29
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify combined physics source and test syntax
+        run: |
+          node --check tools/qa/fast300-physical-combined-candidate.cjs
+          node --check tools/qa/check-fast300-physical-combined-exact.cjs
+          node --check tools/qa/check-fast300-physical-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-physical-combined-candidate.cjs')(fs.readFileSync('v3/legacy-sim-core.js','utf8')))"
+      - name: Exact all-frame source SHA 20 40 80 120 300 both speeds and six holdouts
+        env:
+          QA_TURN19_RECEIPT: ${{ runner.temp }}/physical-combined-exact.json
+        run: node tools/qa/check-fast300-physical-combined-exact.cjs
+      - name: Install pinned Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Real active 300 full-FX rendered A/B at 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_PHYSICAL_BROWSER_OUTPUT: ${{ runner.temp }}/fast300-physical
+        run: node tools/qa/check-fast300-physical-browser.cjs
+      - name: Archive exact state and measured browser receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-physical-combined-study
+          path: |
+            ${{ runner.temp }}/physical-combined-exact.json
+            ${{ runner.temp }}/fast300-physical/fast300-physical-browser-study.json
+          if-no-files-found: warn
   root-release-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
