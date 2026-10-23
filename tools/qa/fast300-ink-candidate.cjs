@@ -1,0 +1,7 @@
+'use strict';
+const assert=require('node:assert/strict');
+module.exports=function make(source){
+const marker="function drawAuthored(c,type,x,y,size,team,o){",old="c.save();c.filter='brightness(0)';c.globalAlpha=.92;\n    const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;\n    c.drawImage(img,-bw*ax,-bh*ay,bw,bh);c.restore()",changed="c.save();c.globalAlpha=.92;\n    const bw=w*fighter.inkBoost,bh=h*fighter.inkBoost;\n    c.drawImage(fast300InkSilhouette(img),-bw*ax,-bh*ay,bw,bh);c.restore()",helper="// QA only: prefilter the black alpha silhouette once rather than in every Canvas paint.\nconst __fast300InkCache=new WeakMap(),__fast300InkStats={builds:0,hits:0,draws:0};\nwindow.__fast300InkStats=__fast300InkStats;\nfunction fast300InkSilhouette(img){\n __fast300InkStats.draws++;\n const cached=__fast300InkCache.get(img);if(cached){__fast300InkStats.hits++;return cached}\n const sw=img.naturalWidth,sh=img.naturalHeight;if(!sw||!sh)return img;\n const cv=document.createElement('canvas'),scale=Math.min(1,512/Math.max(sw,sh));\n cv.width=Math.max(1,Math.round(sw*scale));cv.height=Math.max(1,Math.round(sh*scale));\n const c=cv.getContext('2d');if(!c)return img;\n c.filter='brightness(0)';c.drawImage(img,0,0,cv.width,cv.height);c.filter='none';\n __fast300InkCache.set(img,cv);__fast300InkStats.builds++;return cv\n}\n";
+assert.equal(source.split(marker).length,2,'drawAuthored missing or repeated');assert.equal(source.split(old).length,2,'inkBoost block moved');
+return source.replace(marker,helper+marker).replace(old,changed);
+};
