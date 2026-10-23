@@ -199,7 +199,8 @@ jobs:
             ${{ runner.temp }}/fast300-physical/fast300-physical-browser-study.json
           if-no-files-found: warn
   fast300-physical-worker-one-shot:
-    # Exact live Worker+current-raster synergy trial, not a playable engine.
+    # Historic Worker 300 real A/B rejected on 1x; manual archive.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -232,6 +233,41 @@ jobs:
         with:
           name: fast300-physical-worker-study
           path: ${{ runner.temp }}/fast300-physical-worker/fast300-physical-worker-study.json
+          if-no-files-found: warn
+  fast300-worker-raster-one-shot:
+    # One real-browser 300 current-raster Worker and 1x .75 native compositor trial.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify current source/screenshot trial syntax
+        run: |
+          node --check tools/qa/fast300-worker-raster-candidate.cjs
+          node --check tools/qa/check-fast300-worker-raster-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-worker-raster-candidate.cjs')(fs.readFileSync('v3/v3.js','utf8')))"
+      - name: Confirm original and exact combined 300 physical simulation state parity
+        run: node tools/qa/check-fast300-physical-combined-exact.cjs
+      - name: Install pinned Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Original 300 versus exact Worker at .75 1x with original 10x, screenshots and full FX
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_WORKER_RASTER_OUTPUT: ${{ runner.temp }}/fast300-worker-raster
+        run: node tools/qa/check-fast300-worker-raster-browser.cjs
+      - name: Save genuine 300 RAF physics throughput and full viewport images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-worker-raster-study
+          path: ${{ runner.temp }}/fast300-worker-raster/
           if-no-files-found: warn
   root-release-gate:
     runs-on: ubuntu-latest
