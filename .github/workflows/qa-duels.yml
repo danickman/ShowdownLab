@@ -377,6 +377,7 @@ jobs:
           node tools/qa/check-turn3-consistency.cjs
           node tools/qa/check-turn19-dense-canvas-playable.cjs
           node tools/qa/check-round-visual-calibration.cjs
+          node tools/qa/check-fighter-visual-size.cjs
           node tools/qa/check-fast300-playable-contract.cjs
           node tools/qa/check-fast300-worker-transition.cjs
       - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
