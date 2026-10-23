@@ -7,6 +7,10 @@ assert.equal(src.split(replacement).length,2,'one exact density-aware theatre dr
 // Strip ONLY documented live tactical tips, preserving the entire original physics,
 // renderer and density gate byte-for-byte. Any unrelated runtime change still fails.
 let historic=src.replace(replacement,marker);
+const roundFXCleanup="ShowdownAdapter.subscribe(s=>{if(current==='battle'&&cam){if(s.phase==='battle'&&(s.round!==state.round||s.battleId!==state.battleId)){fx=[];scars=[];spellMarks=[];defeated.clear();prev.clear();shake=flash=0;impactPunch=null;storyBeat=null;comicGate.clear();storyGate.clear();}if(s.phase==='battle'&&battleOutro)battleOutro=null;spawnFX(s);";
+const roundFXOriginal="ShowdownAdapter.subscribe(s=>{if(current==='battle'&&cam){if(s.phase==='battle'&&battleOutro)battleOutro=null;spawnFX(s);";
+assert.equal(historic.split(roundFXCleanup).length,2,'one accepted new-round FX cleanup');
+historic=historic.replace(roundFXCleanup,roundFXOriginal);
 // One exact accepted battle-exit presentation cleanup only. Do not loosen SHA guard.
 const exitVisualCleanup="if(current==='battle'&&name!=='battle'){const battle=document.querySelector('.screen-battle');battle.querySelectorAll('.ability-callout').forEach(el=>el.remove());battle.classList.remove('spell-cast-zap','spell-cast-heal','spell-cast-quake','spell-cast-aegis')}";
 assert.equal(historic.split(exitVisualCleanup).length,2,'one exact battle-exit callout cleanup allowed');
@@ -78,7 +82,7 @@ for(const [old,current,count] of approvedSpellImpactOverlays){
  historic=historic.split(current).join(old);
 }
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
-assert(html.includes('/v3/v3.js?v=fast300-raster70-qa1')&&sw.includes('/v3/v3.js?v=fast300-raster70-qa1'),'pinned root and SW must include current Guide-truth runtime version');
+assert(html.includes('/v3/v3.js?v=round-fx-cleanup1')&&sw.includes('/v3/v3.js?v=round-fx-cleanup1'),'pinned root and SW must include the new round-boundary visual runtime');
 const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^showdown-lab-release-[a-z0-9-]+$/.test(releaseCache[1])&&releaseCache[1]!=='showdown-lab-release-turn23-dragon-charge1','new Turtle runtime requires distinct, valid offline cache identity rather than silently reusing old release');
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:.70):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');

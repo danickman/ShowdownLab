@@ -34,15 +34,17 @@ function cueOffset(type,level,action,role,size,facing=1){
   const e=selectedArt(type,level);if(!e)return null;
   const state=e.actions?.[action]||authoredState(type,action),cue=e.poses[state]?.cues?.[role];
   if(!cue)return null;
-  const k=size*e.scale/e.referenceHeight;return{x:cue[0]*k*facing,y:cue[1]*k};
+  const pose=e.poses[state]||e.poses.idle,k=size*e.scale/e.referenceHeight*combatBodyScale(type,pose.width*e.scale/e.referenceHeight,pose.height*e.scale/e.referenceHeight);return{x:cue[0]*k*facing,y:cue[1]*k};
 }
+const combatSizeLimits=Object.freeze({knight:[1.42,1.34],sniper:[1.33,1.32],goose:[1.22,1.25],dragon:[1.88,1.67],assassin:[1.37,1.33],beetank:[1.75,1.52],mole:[1.28,1.22],turtle:[1.55,1.36],goblin:[1.12,1.10],barbarian:[1.58,1.46]});
+function combatBodyScale(type,w,h){const limit=combatSizeLimits[type]||[1.4,1.4];return Math.min(1,limit[0]/Math.max(.001,w),limit[1]/Math.max(.001,h))}
 const envelopeCache=new Map();
 function visualEnvelope(type,level=1){
   const key=type+':'+visualForm(type,level);if(envelopeCache.has(key))return envelopeCache.get(key);
   const f=authored[type],h=(f?.scale||1.36)*(f?.inkBoost||1),a=f?.anchor||[.5,.948];
   if(!selectedArt(type,level)){const box={left:h*.5,right:h*.5,above:h*a[1],below:h*(1-a[1])};envelopeCache.set(key,box);return box}
   const evolved=selectedArt(type,level),e={left:0,right:0,above:0,below:0},k=evolved.scale/evolved.referenceHeight;
-  for(const p of Object.values(evolved.poses)){e.left=Math.max(e.left,p.width*p.anchor[0]*k);e.right=Math.max(e.right,p.width*(1-p.anchor[0])*k);e.above=Math.max(e.above,p.height*p.anchor[1]*k);e.below=Math.max(e.below,p.height*(1-p.anchor[1])*k)}
+  for(const p of Object.values(evolved.poses)){const scaled=k*combatBodyScale(type,p.width*k,p.height*k);e.left=Math.max(e.left,p.width*p.anchor[0]*scaled);e.right=Math.max(e.right,p.width*(1-p.anchor[0])*scaled);e.above=Math.max(e.above,p.height*p.anchor[1]*scaled);e.below=Math.max(e.below,p.height*(1-p.anchor[1])*scaled)}
   // Equipment and recoil reserve, symmetric for either team facing.
   const side=Math.max(e.left,e.right)+.12,box={left:side,right:side,above:e.above+.08,below:Math.max(.14,e.below+.05)};envelopeCache.set(key,box);return box;
 }
@@ -321,6 +323,8 @@ function drawAuthored(c,type,x,y,size,team,o){
   const anchor=registration&&!o.presentation?(registration.poses[state]||registration.poses.idle).anchor:fighter.anchor;
   const ratio=img.naturalWidth/img.naturalHeight,ax=anchor[0],ay=anchor[1],m=o.presentation?{dx:0,dy:0,rot:0,sx:1,sy:1}:motion(type,state,o,size,pose.age,pose.hold);
   let h=o.presentation?size:registration?img.naturalHeight*size*registration.scale/registration.referenceHeight:size*fighter.scale,drawX=x,drawY=y;
+  // Combat-only physical footprint ceiling: small Goblins stay smaller than Beetank.
+  if(!o.presentation){const rawH=h/size,rawW=rawH*ratio;h*=combatBodyScale(type,rawW,rawH)}
   let frame=null;
   if(o.presentation){
     frame=presentationFrame(o.presentationBounds||{width:c.canvas?.width||size,height:c.canvas?.height||size},ratio,fighter.anchor,o.presentationScale??1);
@@ -358,5 +362,5 @@ function notifyHit(id,time,strength=1){if(id==null)return;hitReactions.set(Strin
 function resetPoseMemory(){poseMemory.clear();hitReactions.clear()}
 function diagnostics(){const byFighter={};for(const [type,f] of Object.entries(authored)){const states={};for(const [state,url] of Object.entries(f.urls)){const r=cache.get(url);states[state]=r?.error?'error':r?.ready?'ready':'loading'}for(const [form,packs]of [['base',bases],['evolved',evolutions],['ultimate',ultimates]])if(packs[type]){states[form]={};for(const [state,url]of Object.entries(packs[type].urls)){const r=cache.get(url);states[form][state]=r?.error?'error':r?.ready?'ready':'loading'}}byFighter[type]=states}const urls=allAuthoredUrls(),errors=urls.filter(u=>cache.get(u)?.error),ready=urls.filter(u=>cache.get(u)?.ready);return{mode:'authored',total:urls.length,ready:ready.length,errors:errors.length,loading:urls.filter(u=>!cache.get(u)?.ready&&!cache.get(u)?.error),missing:[...missing],byFighter}}
 preloadHome();
-window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,draw,preload,preloadHome,preloadRoster,preloadSpecies,preloadBattle,assetStatus,offlinePackUrls,prepareOffline,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
+window.FighterAssets={manifest,authored,visualForm,visualEnvelope,cueOffset,combatBodyScale,combatSizeLimits,draw,preload,preloadHome,preloadRoster,preloadSpecies,preloadBattle,assetStatus,offlinePackUrls,prepareOffline,missing,authoredState,diagnostics,ACTION_STATES,resetPoseMemory,presentationFrame,notifyHit}
 })();
