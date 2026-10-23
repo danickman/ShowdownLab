@@ -2,6 +2,8 @@
 // End-to-end offline PWA installation: actual Chromium service worker, no mock cache/network.
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),puppeteer=require('puppeteer');
 const root=path.resolve(__dirname,'../..'),out=path.resolve(process.env.QA_FAST300_OFFLINE_OUTPUT||'/tmp/fast300-offline');fs.mkdirSync(out,{recursive:true});
+const currentSw=fs.readFileSync(path.join(root,'sw.js'),'utf8'),cacheMatch=currentSw.match(/const CACHE='([^']+)'/),cacheName=cacheMatch?.[1];
+assert(cacheName&&/^showdown-lab-release-[a-z0-9-]+$/.test(cacheName),'offline harness must use current versioned SW cache');
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.webmanifest':'application/manifest+json','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{const url=new URL(req.url,'http://localhost'),route=decodeURIComponent(url.pathname).replace(/\/$/,'/index.html'),file=path.resolve(root,'.'+route);if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end()}try{res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file))}catch(error){res.writeHead(404);res.end('missing '+route)}});
 (async()=>{await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const address='http://127.0.0.1:'+server.address().port;
@@ -18,7 +20,7 @@ const precache=await page.evaluate(async({cacheName,workerUrl,engineUrl})=>{cons
 const urls=['/',workerUrl,engineUrl,'/v3/fast300-worker-bridge.js?v=fast300-thread3','/v3/simulation-adapter.js?v=fast300-thread1'];
 const entries=await Promise.all(urls.map(async url=>({url,present:!!(await cache.match(url))})));
 return{controller:navigator.serviceWorker.controller.state,active:(await navigator.serviceWorker.getRegistration())?.active?.state,cache:names.includes(cacheName),entries}},
-{cacheName:"showdown-lab-release-fast300-worker-raster70-qa3",workerUrl:"/v3/fast300-physics-worker.js?v=fast300-thread1",engineUrl:"/v3/legacy-sim-core.js?v=fast300-exact1"});
+{cacheName,workerUrl:"/v3/fast300-physics-worker.js?v=fast300-thread1",engineUrl:"/v3/legacy-sim-core.js?v=fast300-exact1"});
 assert.equal(precache.controller,'activated');assert(precache.cache);assert(precache.entries.every(e=>e.present),'offline release bundle incomplete');report.checks.push({type:'online-atomic-install',...precache});
 await page.setOfflineMode(true);
 // A genuine offline navigation must be served entirely by the installed worker.

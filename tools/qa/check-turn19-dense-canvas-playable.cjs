@@ -82,7 +82,7 @@ for(const [old,current,count] of approvedSpellImpactOverlays){
  historic=historic.split(current).join(old);
 }
 assert.equal(crypto.createHash('sha256').update(historic).digest('hex'),"74346d4692d4d001dd4df2351b2583c835ae728bbb34984dafaee01d649fbbfe",'only density-aware art draw rule may differ from frozen original');
-assert(html.includes('/v3/v3.js?v=fast300-raster70-qa1')&&sw.includes('/v3/v3.js?v=fast300-raster70-qa1'),'pinned root and SW must include current Guide-truth runtime version');
+assert(html.includes('/v3/v3.js?v=round-fx-cleanup1')&&sw.includes('/v3/v3.js?v=round-fx-cleanup1'),'pinned root and SW must include the new round-boundary visual runtime');
 const releaseCache=sw.match(/const CACHE='([^']+)'/);assert(releaseCache&&/^showdown-lab-release-[a-z0-9-]+$/.test(releaseCache[1])&&releaseCache[1]!=='showdown-lab-release-turn23-dragon-charge1','new Turtle runtime requires distinct, valid offline cache identity rather than silently reusing old release');
 const scale=(units,speed,dpr)=>units>=160?(speed>=10?.85:.70):Math.min(dpr,2);
 for(const n of [20,40,80,120,159])for(const speed of [1,10])assert.equal(scale(n,speed,3),2,'normal density retained 2x');
