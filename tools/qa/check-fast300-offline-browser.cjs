@@ -7,7 +7,8 @@ const server=http.createServer((req,res)=>{const url=new URL(req.url,'http://loc
 (async()=>{await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const address='http://127.0.0.1:'+server.address().port;
 const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
 const report={sha:process.env.GITHUB_SHA||'',kind:'real offline-controlled PWA cold reload and exact 300-fighter Worker import/ticks',browser:await browser.version(),checks:[],errors:[]};
-try{const page=await browser.newPage();await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+let page;
+try{page=await browser.newPage();await page.setViewport({width:430,height:932,deviceScaleFactor:3,isMobile:true,hasTouch:true});
 page.on('pageerror',e=>report.errors.push('script: '+e.message));page.on('workercreated',w=>w.on('error',e=>report.errors.push('worker: '+e.message)));
 await page.goto(address+'/?qa=1',{waitUntil:'load',timeout:90000});
 await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.ShowdownAdapter&&window.ShowdownQA,{timeout:90000});
@@ -45,4 +46,4 @@ assert(combat.ended.snapshots>=3&&combat.ended.physicalStats?.targetBuilds>0&&co
 assert.deepEqual(combat.ended.errors,[]);assert.equal(combat.ended.rollbacks,0);assert.equal(combat.small.population,40);assert.equal(combat.small.mode,'inline');
 report.checks.push({type:'offline-300-authentic-combat',...combat});report.passed=true;assert.deepEqual(report.errors,[]);
 console.log('FAST300 OFFLINE PWA '+JSON.stringify(report.checks));
-}finally{await page.setOfflineMode(false).catch(()=>{});fs.writeFileSync(path.join(out,'fast300-offline.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}})().catch(e=>{console.error('FAST300 OFFLINE PWA FAILURE',e.stack||e);process.exitCode=1}).finally(()=>server.close());
+}finally{if(page)await page.setOfflineMode(false).catch(()=>{});fs.writeFileSync(path.join(out,'fast300-offline.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}})().catch(e=>{console.error('FAST300 OFFLINE PWA FAILURE',e.stack||e);process.exitCode=1}).finally(()=>server.close());
