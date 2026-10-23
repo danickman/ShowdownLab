@@ -34,15 +34,19 @@ const server=http.createServer((req,res)=>{
     const perSide=count/2;
     const make=()=>{const o={};for(let i=0;i<perSide;i++)o[types[i%10]]=(o[types[i%10]]||0)+1;return o};
     const blue=make(),red=make(),levels=Object.fromEntries(types.map((t,i)=>[t,[1,4,5][i%3]]));
+    // Reset persisted stress speed BEFORE deployment; otherwise previous 10x can eliminate
+    // fighters before the asynchronous 160+ Worker emits its initial exact population.
+    ShowdownAdapter.setSpeed(1);
     ShowdownAdapter.startMatch({blue,red,blueLevels:levels,redLevels:levels,blueLives:4,redLives:4,seed:81337});
     const deadline=performance.now()+25000;while(ShowdownAdapter.getState().units.length!==count&&performance.now()<deadline){if(window.__showdownThreadStats?.errors?.length)throw Error('dense Worker failure: '+JSON.stringify(window.__showdownThreadStats));await new Promise(r=>setTimeout(r,50))}
-    ShowdownAdapter.setSpeed(1);
+    // 1x was selected before deployment, not after potentially lethal 10x warmup.
     // Capture ALL 300 bodies at the same unadvanced deployment state; later
     // timed screenshots are expected to have casualties and cannot prove it.
     ShowdownAdapter.pauseBattle();
     ShowdownQA.clearRenderProfile();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     const s=ShowdownQA.snapshot();
+    if(s.units.length!==count)throw Error('Expected exactly '+count+' intact deployment sprites, observed '+s.units.length+'; '+JSON.stringify({phase:ShowdownAdapter.getState().phase,speed:ShowdownAdapter.getState().speed,worker:window.__showdownThreadStats||null}));
     const rect=document.querySelector('#battleCanvas').getBoundingClientRect();
     return{count:s.units.length,arena:s.arena,canvas:{width:rect.width,height:rect.height,backingWidth:document.querySelector('#battleCanvas').width,backingHeight:document.querySelector('#battleCanvas').height},assetStatus:typeof FighterAssets.assetStatus==='function'?FighterAssets.assetStatus():null};
    },count);
@@ -105,8 +109,8 @@ const server=http.createServer((req,res)=>{
    const types=['knight','sniper','dragon','assassin','beetank','mole','turtle','goblin','barbarian','goose'];
    const large=Object.fromEntries(types.map(t=>[t,15]));
    const stages=Object.fromEntries(types.map((t,i)=>[t,[1,4,5][i%3]]));
-   ShowdownAdapter.startMatch({blue:large,red:large,blueLevels:stages,redLevels:stages,blueLives:1,redLives:1,seed:81337});
    ShowdownAdapter.setSpeed(1);
+   ShowdownAdapter.startMatch({blue:large,red:large,blueLevels:stages,redLevels:stages,blueLives:1,redLives:1,seed:81337});
   });
   const cpuSession=await page.createCDPSession();
   await cpuSession.send('Profiler.enable');
