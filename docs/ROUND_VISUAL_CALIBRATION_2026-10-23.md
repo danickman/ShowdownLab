@@ -1,0 +1,5 @@
+# iPhone Safari feedback: round Quake cleanup and fighter body-size normalization
+
+Quake marks/scars/effects no longer persist between successive rounds. On the first state of each new round or battle ID, reset transient FX and marks, defeated art, prior health snapshot, camera shake and brief story text *before* generating new battle effects. Normal within-round aftermath fades remain. The physics engine, damage, spells and deterministic RNG are untouched.
+
+All ten authored species now enforce consistent combat-only maximum drawn body width/height relative to camera unit size, preserving smaller Goblin/Goose and intentionally large Beetank/Dragon forms. Pose drawing, cues and visual envelopes use the same derived scaling factor. Presentation/Guide images remain unchanged. The renderer uses no extra Canvas draws. The SW cache version, root SHA256, 2 runtime source SHA256 entries and script URL pins are updated atomically. Follow-up needs genuine portrait screenshots and physical Safari acceptance before release; no merge or deployment is authorized by this change.

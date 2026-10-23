@@ -7,6 +7,10 @@ assert.equal(src.split(replacement).length,2,'one exact density-aware theatre dr
 // Strip ONLY documented live tactical tips, preserving the entire original physics,
 // renderer and density gate byte-for-byte. Any unrelated runtime change still fails.
 let historic=src.replace(replacement,marker);
+const roundFXCleanup="ShowdownAdapter.subscribe(s=>{if(current==='battle'&&cam){if(s.phase==='battle'&&(s.round!==state.round||s.battleId!==state.battleId)){fx=[];scars=[];spellMarks=[];defeated.clear();prev.clear();shake=flash=0;impactPunch=null;storyBeat=null;comicGate.clear();storyGate.clear();}if(s.phase==='battle'&&battleOutro)battleOutro=null;spawnFX(s);";
+const roundFXOriginal="ShowdownAdapter.subscribe(s=>{if(current==='battle'&&cam){if(s.phase==='battle'&&battleOutro)battleOutro=null;spawnFX(s);";
+assert.equal(historic.split(roundFXCleanup).length,2,'one accepted new-round FX cleanup');
+historic=historic.replace(roundFXCleanup,roundFXOriginal);
 // One exact accepted battle-exit presentation cleanup only. Do not loosen SHA guard.
 const exitVisualCleanup="if(current==='battle'&&name!=='battle'){const battle=document.querySelector('.screen-battle');battle.querySelectorAll('.ability-callout').forEach(el=>el.remove());battle.classList.remove('spell-cast-zap','spell-cast-heal','spell-cast-quake','spell-cast-aegis')}";
 assert.equal(historic.split(exitVisualCleanup).length,2,'one exact battle-exit callout cleanup allowed');
