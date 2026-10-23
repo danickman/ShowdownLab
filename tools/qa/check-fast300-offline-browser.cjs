@@ -36,7 +36,12 @@ while((s.units.length<300||!(s.debug?.tick>=10))&&performance.now()<limit){if(wi
 const began={population:s.units.length,tick:s.debug?.tick||0,phase:s.phase,mode:window.__showdownThreadStats?.mode,errors:window.__showdownThreadStats?.errors||[]};
 if(began.population<300||began.tick<10)throw Error('offline Worker never advanced an authentic 300-fighter battle: '+JSON.stringify(began));
 ShowdownAdapter.setSpeed(10);const latestLimit=performance.now()+20000;
-while(window.__showdownThreadStats?.workerDamage<=0&&performance.now()<latestLimit){if(window.__showdownThreadStats?.errors?.length)throw Error('offline Worker crashed midbattle');await wait(75)}
+// Damage may already be positive at the initial 1x receipt. Require NEW physics
+// ticks after changing speed; never treat unchanged before/after as successful.
+while((window.__showdownThreadStats?.workerDamage<=0||(window.__showdownThreadStats?.workerTicks||0)<began.tick+10)&&performance.now()<latestLimit){
+ if(window.__showdownThreadStats?.errors?.length)throw Error('offline Worker crashed midbattle');
+ await wait(75)
+}
 s=ShowdownAdapter.getState();const stats=window.__showdownThreadStats;
 const ended={tick:s.debug?.tick||stats.workerTicks,damage:stats.workerDamage,mode:stats.mode,snapshots:stats.workerSnapshots,physicalStats:stats.physicalStats,errors:stats.errors,rollbacks:stats.rollbacks,phase:s.phase};
 ShowdownAdapter.stopBattle();ShowdownAdapter.startMatch({blue:{knight:20},red:{turtle:20},blueLives:1,redLives:1,seed:93562});
