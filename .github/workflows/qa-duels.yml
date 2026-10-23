@@ -323,6 +323,7 @@ jobs:
           node --check tools/qa/check-fast300-worker-transition.cjs
           node --check tools/qa/check-fast300-worker-recovery.cjs
           node --check tools/qa/check-fast300-worker-recovery-browser.cjs
+          node --check tools/qa/check-fast300-offline-browser.cjs
           node tools/qa/check-fast300-playable-contract.cjs
           node tools/qa/check-fast300-worker-recovery.cjs
           node tools/qa/check-fast300-worker-transition.cjs
@@ -344,6 +345,12 @@ jobs:
           QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
           QA_FAST300_RECOVERY_OUTPUT: ${{ runner.temp }}/fast300-recovery
         run: node tools/qa/check-fast300-worker-recovery-browser.cjs
+      - name: Real offline service-worker controlled reload and cached 300 physics Worker
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_OFFLINE_OUTPUT: ${{ runner.temp }}/fast300-offline
+        run: node tools/qa/check-fast300-offline-browser.cjs
       - name: Archive real browser lifecycle receipts
         if: always()
         uses: actions/upload-artifact@v4
@@ -352,6 +359,7 @@ jobs:
           path: |
             ${{ runner.temp }}/fast300-lifecycle/lifecycle.json
             ${{ runner.temp }}/fast300-recovery/worker-recovery.json
+            ${{ runner.temp }}/fast300-offline/fast300-offline.json
           if-no-files-found: warn
   root-release-gate:
     runs-on: ubuntu-latest
