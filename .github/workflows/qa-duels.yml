@@ -124,7 +124,8 @@ jobs:
           path: ${{ runner.temp }}/fast300-ink/fast300-ink-study.json
           if-no-files-found: warn
   fast300-bitmap-one-shot:
-    # One-time A/B QA study, archive after verdict.
+    # Archived negative actual-Chromium receipt; do not run on ordinary PR changes.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 26
     steps:
