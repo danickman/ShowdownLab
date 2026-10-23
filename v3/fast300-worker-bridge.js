@@ -3,18 +3,19 @@
 if(typeof Worker!=='function'||!window.LegacySimCore)return;
 const inline=window.LegacySimCore;
 const WORKER_PATH='/v3/fast300-physics-worker.js?v=fast300-thread1',THRESHOLD=159;
-let worker=null,epoch=0,queuedFrame=0,callback=()=>{},settings={seed:1337,speed:1},running=false,last=null,rosters=null,hardError=null;
+let worker=null,epoch=0,queuedFrame=0,callback=()=>{},suppressInline=false,settings={seed:1337,speed:1},running=false,last=null,rosters=null,hardError=null;
 const stats={mode:'inline',messages:0,workerSnapshots:0,workerTicks:0,workerDamage:0,errors:[],rollbacks:0};
 window.__showdownThreadStats=stats;
 function retire(){if(queuedFrame){cancelAnimationFrame(queuedFrame);queuedFrame=0}if(worker){worker.terminate();worker=null}running=false;last=null;stats.mode='inline'}
 function send(type,data={}){if(worker)worker.postMessage({type,epoch,...data})}
+function forwardInline(snapshot){if(!suppressInline&&!worker)callback(snapshot)}
 function invokeFallback(message){
  stats.errors.push(message);hardError=message;
  if(!worker)return;
  const data=rosters,wasRunning=running;
- retire();stats.rollbacks++;
+ retire();stats.rollbacks++;suppressInline=false;
  if(!data)return;
- inline.configure({...settings,onState:callback});
+ inline.configure({...settings,onState:forwardInline});
  inline.deploy(data.blue,data.red);
  inline.setSpeed(settings.speed);
  inline.setRunning(wasRunning);
@@ -51,15 +52,17 @@ window.LegacySimCore={
  configure(o={}){
   settings={...settings,...Object.fromEntries(Object.entries(o).filter(([key])=>key!=='onState'))};
   if(typeof o.onState==='function')callback=o.onState;
-  inline.configure({...o,onState:callback});
+  inline.configure({...o,onState:forwardInline});
   if(worker){send('speed',{value:settings.speed})}
  },
  deploy(blue,red){
   const count=blue.length+red.length;rosters={blue,red};
   if(count>THRESHOLD){
-   inline.setRunning(false);retire();
-   try{startWorker(blue,red)}catch(err){stats.errors.push('spawn: '+String(err));retire();inline.deploy(blue,red)}
-  }else{retire();inline.deploy(blue,red)}
+   // Do not forward the outgoing inline battle's terminal setRunning(false) snapshot
+   // into the NEW battle adapter callback. That could end a fresh Worker battle.
+   suppressInline=true;inline.setRunning(false);retire();
+   try{startWorker(blue,red)}catch(err){stats.errors.push('spawn: '+String(err));retire();suppressInline=false;inline.deploy(blue,red)}
+  }else{retire();suppressInline=false;inline.deploy(blue,red)}
  },
  setRunning(value){
   running=!!value;
