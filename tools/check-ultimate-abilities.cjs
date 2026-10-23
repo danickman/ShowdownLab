@@ -15,18 +15,50 @@ for(const level of [4,5]){
  const dragon=unit('dragon',level);dragon.action='fire';U.afterHit(dragon,t,100,[dragon,t],30);let burn=0;for(let i=0;i<90;i++)burn+=U.burn(t);assert(Math.abs(burn-(rank===2?75:45))<1e-10);assert.equal(U.burn(t),0);
  U.afterHit(dragon,t,100,[dragon,t],45);t.burrow=90;for(let i=0;i<90;i++)assert.equal(U.burn(t),0);t.burrow=0;
  const assassin=unit('assassin',level);assassin.action='backstab';t.hp=30;assert.equal(U.outgoing(assassin,t,100,[assassin,t],30),rank===2?220.00000000000003:180);t.hp=90;assert.equal(U.outgoing(assassin,t,100,[assassin,t],50),100);
- const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);
- const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,1);close(hits[0].damage,rank===2?18:12);
- attacker.x=.1;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0);
+ t.hp=74;assert.equal(U.outgoing(assassin,t,100,[assassin,t],61),rank===2?220.00000000000003:100,'L5 Execution triggers below 75%; L4 remains below 40%');
+ t.hp=75;assert.equal(U.outgoing(assassin,t,100,[assassin,t],75),100,'75% boundary is strictly below');
+ t.hp=40;assert.equal(U.outgoing(assassin,t,100,[assassin,t],89),rank===2?220.00000000000003:100,'L4 40% boundary unchanged');
+ const beetank=unit('beetank',level);beetank.action='horn';for(let i=0;i<(rank===2?2:3)-1;i++)assert.equal(U.afterHit(beetank,t,100,[beetank,t,behind],i*20).length,0);hits=U.afterHit(beetank,t,100,[beetank,t,behind],60);close(hits[0].damage,rank===2?55.00000000000001:35);assert.equal(behind.stun,rank===2?20:12);assert.equal(beetank.ultimateKind,rank===2?'siege':'seismic','L5 distinct contact-breach cue; preserve L4');
+ const turtle=unit('turtle',level,'red',8,.51),attacker=unit('knight',1);hits=U.afterHit(attacker,turtle,40,[attacker,turtle],30);assert.equal(hits.length,rank===2?2:1,'L5 has real Rebound in addition to original reflection');close(hits[0].damage,rank===2?18:12);if(rank===2){assert.equal(hits[1].source,turtle);assert.equal(hits[1].target,attacker);close(hits[1].damage,145);}
+ attacker.x=turtle.x+.095;hits=U.afterHit(attacker,turtle,40,[attacker,turtle],45);assert.equal(hits.length,1,'close collision-edge attacker should trigger Ricochet');close(hits[0].damage,rank===2?18:12);
+ attacker.x=turtle.x+.101;assert.equal(U.afterHit(attacker,turtle,40,[attacker,turtle],50).length,0,'outside 0.10 Ricochet radius must preserve ranged counterplay');
  const goblin=unit('goblin',level),pack=Array.from({length:8},(_,i)=>unit('goblin',1,'blue',i+2,.52));assert.equal(U.outgoing(goblin,t,100,[goblin,...pack],30),rank===2?220.00000000000003:160);
- const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>h.damage===(rank===2?65:40)));
- const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);close(hits[0].damage,rank===2?75:45);assert.equal(t.stun,rank===2?32:22);
+ const barbarian=unit('barbarian',level);barbarian.action='axe_swing';const crowd=Array.from({length:8},(_,i)=>unit('goose',1,'red',i+10,.62,.5+i*.002));hits=U.afterHit(barbarian,t,100,[barbarian,t,...crowd],30);assert.equal(hits.length,rank===2?5:3);assert(hits.every(h=>Math.abs(h.damage-(rank===2?100:58))<1e-9),'premium Cleave physical secondary damage');
+ assert(hits.every(h=>h.target.stun===(rank===2?12:8)),'premium Cleave stagger on real splash victims');
+
+ const twinMole=unit('mole',5,'blue',100,.2,.5);twinMole.action='erupt';
+ const primaryMole=unit('knight',1,'red',101,.5,.5);
+ const f1=unit('goblin',1,'red',102,.56,.5),f2=unit('goblin',1,'red',103,.68,.54);
+ const f3=unit('goblin',1,'red',104,.75,.5),back=unit('goblin',1,'red',105,.4,.5);
+ hits=U.afterHit(twinMole,primaryMole,40,[twinMole,primaryMole,f3,f2,back,f1],99);
+ assert.equal(hits.length,2);assert.equal(hits.map(h=>h.target.id).join(','),'102,103');
+ assert(hits.every(h=>Math.abs(h.damage-62)<1e-9),'Twin L5 physical source contract');
+ assert.equal(f1.stun,3);assert.equal(f2.stun,3);assert.equal(f3.stun,0);assert.equal(back.stun,0);
+ assert.equal(twinMole.ultimateKind,'fissure');
+ const oldMole=unit('mole',4,'blue',106,.2,.5);oldMole.action='erupt';
+ assert.equal(U.afterHit(oldMole,primaryMole,40,[oldMole,primaryMole,f1,f2],100).length,0);
+ const goose=unit('goose',level);hits=U.honk(goose,[goose,t],30);
+ close(hits[0].damage,rank===2?110:75);assert.equal(t.stun,rank===2?64:44);
+ const direct=unit('knight',1,'red',45,rank===2?.73:.68),echo=unit('goblin',1,'red',46,rank===2?.86:.77);
+ const two=U.honk(goose,[goose,direct,echo],31);
+ assert.equal(two.length,2,'Impact must hit a primary and a physically different echo target');
+ close(two.find(x=>x.target.id===45).damage,rank===2?110:75);
+ close(two.find(x=>x.target.id===46).damage,rank===2?83:60);
+ assert.equal(direct.stun,rank===2?64:44,'primary stun should remain powerful');
+ assert.equal(echo.stun,4,'Impact echo must only briefly stagger a secondary foe');
 }
 // The actual core damage path applies resistance, reflection and splash once.
 let src=fs.readFileSync('v3/legacy-sim-core.js','utf8');src=src.replace('window.LegacySimCore={','window.TestCombat={hurt,step,setUnits:v=>{units=v;bastions=v.filter(u=>u.type==="knight"&&ultimate.rank(u))},getUnits:()=>units};window.LegacySimCore={');vm.runInContext(src,e);
 let mole=unit('mole',4,'red',2),a=unit('sniper',1);e.TestCombat.setUnits([a,mole]);e.TestCombat.hurt(mole,100,a);assert.equal(mole.hp,35);
-let x=unit('turtle',4,'blue'),y=unit('turtle',5,'red',2,.51);e.TestCombat.setUnits([x,y]);e.TestCombat.hurt(y,20,x);assert.equal(y.hp,80);assert.equal(x.hp,91,'reflection does not reflect recursively');
+let x=unit('turtle',4,'blue'),y=unit('turtle',5,'red',2,.51);e.TestCombat.setUnits([x,y]);e.TestCombat.hurt(y,20,x);assert.equal(y.hp,80);assert.equal(x.hp,0,'L5 real primary Shell Rebound lands after ordinary 9-point reflect and cannot recursively reflect');
 let sniper=unit('sniper',4),target=unit('goose',1,'red',2,.6),behind=unit('goose',1,'red',3,.68);e.TestCombat.setUnits([sniper,target,behind]);e.TestCombat.hurt(target,20,sniper);assert.equal(target.hp,80);close(behind.hp,45);assert.equal(sniper.ultimateKind,'pierce');
 console.log('PASS: ten role-specific L4 abilities and stronger L5 variants; no L1–3 abilities; actual resistance/reflection/piercing paths, finite splash and burrow-safe burns');
 
 let knight=unit('knight',4),ally=unit('goose',1,'blue',2,.55),enemy=unit('sniper',1,'red',3,.6);e.TestCombat.setUnits([knight,ally,enemy]);e.TestCombat.hurt(ally,100,enemy);assert.equal(ally.hp,20,'actual Bastion protection uses prepared roster');
+
+// Siege Breaker physical melee contact is strictly an L5-only engine gate.
+{const core=fs.readFileSync('v3/legacy-sim-core.js','utf8');
+ assert(core.includes("function beetankStep(u,t,d){const r=ultimate.rank(u)===2&&['beetank','turtle','dragon'].includes(t.type)?Math.max(u.range/500,visualSpacingRadius(u)+visualSpacingRadius(t)+.002):u.range/500;"),'L5 Beetank contact must match tested collision radius');
+ assert(!core.includes('function beetankStep(u,t,d){const r=u.range/500;'),'old unreachable heavy contact rule reappeared');
+ assert.equal((core.match(/function beetankStep\(/g)||[]).length,1);
+}

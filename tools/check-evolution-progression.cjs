@@ -14,9 +14,29 @@ for(const type of types){
   assert.equal(u.level,level);if(level>1){const prev=stats[level-2];assert(Math.abs(u.hp/prev.hp-1.4)<1e-10);assert(Math.abs(u.dmg/prev.dmg-1.4)<1e-10);for(const key of ['spd','cd','range','armor','dodge'])assert.equal(u[key],prev[key])}}
  A.startMatch({blue:{[type]:1},red:{knight:1},blueLevels:{[type]:99},blueMastery:{[type]:5}});let s=A.getState(),u=s.units.find(u=>u.team==='blue');assert.equal(u.level,5);assert(Math.abs(u.hp/stats[4].hp-1.25)<1e-10);
  const before=JSON.stringify(s);assert.equal(A.applyDraft('blue',{kind:'up',type,amount:1}),false);assert.equal(JSON.stringify(A.getState()),before);
- A.startMatch({blue:{[type]:1},red:{[type]:1}});
- for(let level=2;level<=5;level++){assert(A.applyDraft('blue',{kind:'up',type,amount:99}));assert(A.applyDraft('red',{kind:'up',type,amount:99}));assert.equal(A.getState().levels.blue[type],level);assert.equal(A.getState().levels.red[type],level)}
- assert.equal(A.applyDraft('red',{kind:'up',type}),false);
+ // Upgrades are now legal ONLY between completed rounds; use real core fights,
+ // never forge a phase or skip the one-pick-per-side draft invariant.
+ A.startMatch({blue:{[type]:1},red:{[type]:1},blueLives:9,redLives:9,seed:99});
+ A.setSpeed(10);
+ const finishDuel=()=>{
+  for(let f=0;f<12000&&A.getState().phase==='battle';f++){
+   now+=16.667;const jobs=[...queue.values()];queue.clear();for(const callback of jobs)callback(now);
+  }
+  assert.equal(A.getState().phase,'round_over','real duel must finish before a draft choice');
+ };
+ for(let level=2;level<=5;level++){
+  assert.equal(A.applyDraft('blue',{kind:'up',type,amount:99}),false,'no combat-time evolution');
+  finishDuel();
+  assert(A.applyDraft('blue',{kind:'up',type,amount:99}),'blue evolves once after completed round');
+  assert(A.applyDraft('red',{kind:'up',type,amount:99}),'red bot independently evolves once');
+  assert.equal(A.applyDraft('blue',{kind:'up',type}),false,'one pick per team in intermission');
+  assert.equal(A.getState().levels.blue[type],level);assert.equal(A.getState().levels.red[type],level);
+  assert.equal(A.getState().round,level-1);
+  assert(A.nextRound(99+level),'advance after legal paired upgrades');
+ }
+ finishDuel();
+ assert.equal(A.applyDraft('red',{kind:'up',type}),false,'level 5 red cannot ascend further');
+ assert.equal(A.applyDraft('blue',{kind:'up',type}),false,'level 5 blue cannot ascend further');
 }
 for(let round=1;round<=100;round++){
  const state={round,blueLives:4,redLives:3,armies:{blue:{knight:6,sniper:2}},levels:{blue:{knight:5,sniper:5}}};

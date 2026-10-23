@@ -1,0 +1,3410 @@
+name: Duel and combat regression
+on:
+  # Test QA changes once via the open PR rather than twice on push and PR.
+  push:
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+# Only the newest QA push per ref needs expensive stress/browser jobs.
+# Protect PR runs on distinct refs; cancel superseded work without weakening tests.
+concurrency:
+  group: showdown-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  raf-clock-worker-research:
+    # Archived rejected browser trial. Run only on manual dispatch.
+    # One-shot Chromium report is captured in RAF_CLOCK_WORKER_300_2026-10-22.md.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check research worker and bridge syntax
+        run: |
+          node --check tools/qa/turn20-raf-clock-worker.js
+          node --check tools/qa/turn20-raf-clock-bridge.js
+          node --check tools/qa/check-turn20-raf-clock-worker-browser.cjs
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Real 300 1x and 10x Worker vs inline RAF plus 80 120 controls
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_RAFCLOCK_WORKER_OUTPUT: ${{ runner.temp }}/raf-clock-worker
+        run: node tools/qa/check-turn20-raf-clock-worker-browser.cjs
+      - name: Save real-frame and actual positive HP tick-rate receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raf-clock-worker-study
+          path: ${{ runner.temp }}/raf-clock-worker/turn20-raf-clock-worker.json
+          if-no-files-found: warn
+  fast300-collision-candidate-study:
+    # Final Chromium A/B rejected; manual archive only, avoid extra QA credits.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source candidate and genuine full-RAF parity tool
+        run: |
+          node --check tools/qa/fast300-candidate.cjs
+          node --check tools/qa/check-fast300-exact.cjs
+          node --check tools/qa/check-fast300-browser.cjs
+      - name: Compare genuine 20/40/80/120/300 source engine frames and six heldout 300 cases
+        env:
+          QA_TURN19_RECEIPT: ${{ runner.temp }}/fast300-exact.json
+        run: node tools/qa/check-fast300-exact.cjs
+      - name: Install real Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Alternating-order real 430 DPR3 300-fighter Chromium A/B 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_BROWSER_OUTPUT: ${{ runner.temp }}/fast300-browser
+        run: node tools/qa/check-fast300-browser.cjs
+      - name: Upload exact-physical-state and real browser measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-latency-research
+          path: |
+            ${{ runner.temp }}/fast300-exact.json
+            ${{ runner.temp }}/fast300-browser/fast300-browser-study.json
+          if-no-files-found: warn
+  fast300-ink-mask-one-shot:
+    # Actual 300-frame native-mask candidate inactive in production art; archived rejected trial.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and real source signature
+        run: |
+          node --check tools/qa/fast300-ink-candidate.cjs
+          node --check tools/qa/check-fast300-ink-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-ink-candidate.cjs')(fs.readFileSync('v3/asset-renderer.js','utf8')))"
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare real Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Real 300 fighters, full FX, alternating original vs prefiltered masks 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_INK_OUTPUT: ${{ runner.temp }}/fast300-ink
+        run: node tools/qa/check-fast300-ink-browser.cjs
+      - name: Save actual Chromium RAF and true physics results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-ink-raster-research
+          path: ${{ runner.temp }}/fast300-ink/fast300-ink-study.json
+          if-no-files-found: warn
+  fast300-bitmap-one-shot:
+    # Archived negative actual-Chromium receipt; do not run on ordinary PR changes.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real source candidate and test
+        run: |
+          node --check tools/qa/fast300-bitmap-candidate.cjs
+          node --check tools/qa/check-fast300-bitmap-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-bitmap-candidate.cjs')(fs.readFileSync('v3/asset-renderer.js','utf8')))"
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Full 300 authored fighters active HP and FX original versus shared-raster source at 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_BITMAP_OUTPUT: ${{ runner.temp }}/fast300-bitmap
+        run: node tools/qa/check-fast300-bitmap-browser.cjs
+      - name: Save uncensored browser intervals and real physics throughput
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-bitmap-study
+          path: ${{ runner.temp }}/fast300-bitmap/fast300-bitmap-study.json
+          if-no-files-found: warn
+  fast300-physical-grid-one-shot:
+    # Archived rejected current-raster physical grid A/B; manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 29
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify combined physics source and test syntax
+        run: |
+          node --check tools/qa/fast300-physical-combined-candidate.cjs
+          node --check tools/qa/check-fast300-physical-combined-exact.cjs
+          node --check tools/qa/check-fast300-physical-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-physical-combined-candidate.cjs')(fs.readFileSync('v3/legacy-sim-core.js','utf8')))"
+      - name: Exact all-frame source SHA 20 40 80 120 300 both speeds and six holdouts
+        env:
+          QA_TURN19_RECEIPT: ${{ runner.temp }}/physical-combined-exact.json
+        run: node tools/qa/check-fast300-physical-combined-exact.cjs
+      - name: Install pinned Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Real active 300 full-FX rendered A/B at 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_PHYSICAL_BROWSER_OUTPUT: ${{ runner.temp }}/fast300-physical
+        run: node tools/qa/check-fast300-physical-browser.cjs
+      - name: Archive exact state and measured browser receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-physical-combined-study
+          path: |
+            ${{ runner.temp }}/physical-combined-exact.json
+            ${{ runner.temp }}/fast300-physical/fast300-physical-browser-study.json
+          if-no-files-found: warn
+  fast300-physical-worker-one-shot:
+    # Historic Worker 300 real A/B rejected on 1x; manual archive.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source candidate and true threaded browser test
+        run: |
+          node --check tools/qa/fast300-physical-combined-candidate.cjs
+          node --check tools/qa/check-fast300-physical-worker-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-physical-combined-candidate.cjs')(fs.readFileSync('v3/legacy-sim-core.js','utf8')))"
+      - name: Reconfirm all physical states across 20 40 80 120 300 1x 10x
+        run: node tools/qa/check-fast300-physical-combined-exact.cjs
+      - name: Install pinned Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Run full 300 Worker versus current baseline and 80 120 inline controls
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_PHYSICAL_WORKER_OUTPUT: ${{ runner.temp }}/fast300-physical-worker
+        run: node tools/qa/check-fast300-physical-worker-browser.cjs
+      - name: Save native Chromium P95 actual HP and real worker ticks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-physical-worker-study
+          path: ${{ runner.temp }}/fast300-physical-worker/fast300-physical-worker-study.json
+          if-no-files-found: warn
+  fast300-worker-raster-one-shot:
+    # Archived QA .75 1x research with authentic 10-second run; dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify current source/screenshot trial syntax
+        run: |
+          node --check tools/qa/fast300-worker-raster-candidate.cjs
+          node --check tools/qa/check-fast300-worker-raster-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-worker-raster-candidate.cjs')(fs.readFileSync('v3/v3.js','utf8')))"
+      - name: Confirm original and exact combined 300 physical simulation state parity
+        run: node tools/qa/check-fast300-physical-combined-exact.cjs
+      - name: Install pinned Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Original 300 versus exact Worker at .75 1x with original 10x, screenshots and full FX
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_WORKER_RASTER_OUTPUT: ${{ runner.temp }}/fast300-worker-raster
+        run: node tools/qa/check-fast300-worker-raster-browser.cjs
+      - name: Save genuine 300 RAF physics throughput and full viewport images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-worker-raster-study
+          path: ${{ runner.temp }}/fast300-worker-raster/
+          if-no-files-found: warn
+  fast300-worker-raster70-one-shot:
+    # Successful measured 300 candidate archived: manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify whole source transformation and A/B screenshot harness
+        run: |
+          node --check tools/qa/fast300-worker-raster70-candidate.cjs
+          node --check tools/qa/check-fast300-worker-raster70-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-worker-raster70-candidate.cjs')(fs.readFileSync('v3/v3.js','utf8')))"
+      - name: Source full-RAF all-population exact physical combat parity
+        run: node tools/qa/check-fast300-physical-combined-exact.cjs
+      - name: Install browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified real Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Real 300 all FX at 1x and 10x with two matched seeds and paused-art PNG
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_WORKER_RASTER70_OUTPUT: ${{ runner.temp }}/fast300-worker-raster70
+        run: node tools/qa/check-fast300-worker-raster70-browser.cjs
+      - name: Save original and candidate paused-300 art screenshots plus true RAF receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-worker-raster70-study
+          path: ${{ runner.temp }}/fast300-worker-raster70/
+          if-no-files-found: warn
+  fast300-worker-lifecycle-one-shot:
+    # Live QA-playable 300 Worker import, spells, pause/resume, fallback; no research interception.
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate live playable Worker, bridge, source-exact core and browser QA
+        run: |
+          node --check v3/fast300-physics-worker.js
+          node --check v3/fast300-worker-bridge.js
+          node --check tools/qa/check-fast300-worker-lifecycle.cjs
+          node --check tools/qa/check-fast300-worker-transition.cjs
+          node --check tools/qa/check-fast300-worker-recovery.cjs
+          node --check tools/qa/check-fast300-worker-recovery-browser.cjs
+          node --check tools/qa/check-fast300-offline-browser.cjs
+          node tools/qa/check-fast300-playable-contract.cjs
+          node tools/qa/check-fast300-worker-recovery.cjs
+          node tools/qa/check-fast300-worker-transition.cjs
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: True 300 pause resume 10x pending spell once Worker retire 40 and unsupported fallback
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_LIFECYCLE_OUTPUT: ${{ runner.temp }}/fast300-lifecycle
+        run: node tools/qa/check-fast300-worker-lifecycle.cjs
+      - name: Fault-inject actual 300 Chromium Worker after real damage and check safe-mode restart
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_RECOVERY_OUTPUT: ${{ runner.temp }}/fast300-recovery
+        run: node tools/qa/check-fast300-worker-recovery-browser.cjs
+      - name: Real offline service-worker controlled reload and cached 300 physics Worker
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_OFFLINE_OUTPUT: ${{ runner.temp }}/fast300-offline
+        run: node tools/qa/check-fast300-offline-browser.cjs
+      - name: Archive real browser lifecycle receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-worker-lifecycle
+          path: |
+            ${{ runner.temp }}/fast300-lifecycle/lifecycle.json
+            ${{ runner.temp }}/fast300-recovery/worker-recovery.json
+            ${{ runner.temp }}/fast300-offline/fast300-offline.json
+          if-no-files-found: warn
+  root-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify canonical root-only entry and pinned integrity
+        run: |
+          test -f index.html
+          test ! -e v3/index.html
+          node tools/qa/release-hashes.cjs --verify
+          node tools/qa/check-turn3-consistency.cjs
+          node tools/qa/check-turn19-dense-canvas-playable.cjs
+          node tools/qa/check-fast300-playable-contract.cjs
+          node tools/qa/check-fast300-worker-transition.cjs
+      - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
+        run: node tools/qa/check-primary-device-contract.cjs
+      - name: Verify offline precache graph and rollback
+        run: node tools/qa/check-release4c.cjs
+      - name: Turn16 historical Beetank source plus Turn17 playable Anvil exact contract
+        run: |
+          node --check v3/ultimate-abilities.js
+          node tools/qa/check-beetank-fracture-playable-turn16.cjs
+          node --check tools/qa/check-beetank-anvil-playable-turn17.cjs
+          node tools/qa/check-beetank-anvil-playable-turn17.cjs
+      - name: Turn23 Dragon L4 exposed charge physical 16/40/16 contract
+        run: node tools/qa/check-turn23-dragon-playable.cjs
+      - name: Verify Home art streaming
+        run: node tools/qa/check-streaming.cjs
+      - name: Verify launch guide and PWA hooks
+        run: node tools/check-launch-guide.cjs
+      - name: Turn 10 visible Mole rupture, persistent scar and crowd-safe sunny sky
+        run: |
+          node --check v3/ultimate-effects.js
+          node --check v3/arena-ambience.js
+          node --check v3/v3.js
+          node tools/qa/check-mole-rift-spectacle.cjs
+          node tools/qa/check-turn10-theatre.cjs
+      - name: Turn 11 source-cached sky and crystal/solar floor integrity
+        run: |
+          node --check v3/arena-art.js
+          node --check v3/arena-stage.js
+          node --check tools/qa/check-turn11-arena.cjs
+          node tools/qa/check-turn11-arena.cjs
+  goblin-l5-relay-roi-turn12:
+    # Completed rejected experiment; manual research only to conserve CI.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only L5 Goblin pack timing candidate
+        run: node --check tools/qa/check-goblin-l5-relay-roi-turn12.cjs
+      - name: Match real 20/40 terminal ROI, peer, numeric counters, true fronts and RAF
+        env:
+          QA_GOBLIN_RELAY_RECEIPT: goblin-l5-relay-turn12.json
+        run: node tools/qa/check-goblin-l5-relay-roi-turn12.cjs
+      - name: Preserve physical matched source-only research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-relay-turn12
+          path: goblin-l5-relay-turn12.json
+          if-no-files-found: warn
+
+  goblin-l5-smoke-veil-roi-turn13:
+    # Completed rejected experiment; explicit manual research only to limit CI cost.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate actual-source Goblin Smoke Veil experiment
+        run: node --check tools/qa/check-goblin-l5-smoke-veil-roi-turn13.cjs
+      - name: Match real terminal ROI, counterplay, full RAF and independent HP fronts
+        env:
+          QA_GOBLIN_VEIL_RECEIPT: goblin-l5-smoke-veil-turn13.json
+        run: node tools/qa/check-goblin-l5-smoke-veil-roi-turn13.cjs
+      - name: Preserve matched receipts for acceptance and rejection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-smoke-veil-turn13
+          path: goblin-l5-smoke-veil-turn13.json
+          if-no-files-found: warn
+
+  turn14-spatial-300-ab:
+    # Verified exact but slower at 300; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify spatial index source-study syntax
+        run: node --check tools/qa/check-turn14-spatial-300.cjs
+      - name: Run original-vs-spatial exact RAF and same-host 300 benchmark
+        env:
+          QA_TURN14_RECEIPT: turn14-spatial-receipt.json
+        run: node tools/qa/check-turn14-spatial-300.cjs
+      - name: Archive full matched source benchmark
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn14-spatial-receipt
+          path: turn14-spatial-receipt.json
+          if-no-files-found: warn
+
+  turn14-targets-300-ab:
+    # Source exact-state safe but 300 P95 not improved; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only target-list A/B harness
+        run: node --check tools/qa/check-turn14-targets-300.cjs
+      - name: Paired exact-RAF 300 / 1x+10x real-source target-list optimization
+        env:
+          QA_TURN14_RECEIPT: turn14-target-lists.json
+        run: node tools/qa/check-turn14-targets-300.cjs
+      - name: Archive source-only direct comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn14-target-lists
+          path: turn14-target-lists.json
+          if-no-files-found: warn
+
+  turn15-live-slot-300-ab:
+    # Completed parity study; browser 10x P95 regressed; manual-only archive.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Turn 15 exact-source live slot grouping
+        run: node --check tools/qa/check-turn15-live-slots-300.cjs
+      - name: Matched real full-RAF SHA and 300 1x/10x CPU cost
+        env:
+          QA_TURN15_RECEIPT: turn15-live-slots-receipt.json
+        run: node tools/qa/check-turn15-live-slots-300.cjs
+      - name: Archive source receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn15-live-slots
+          path: turn15-live-slots-receipt.json
+          if-no-files-found: warn
+
+  turn15-browser-ab:
+    # Completed source A/B; manual-only to conserve CI.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate Turn 15 actual RAF browser A/B script
+        run: node --check tools/qa/check-turn15-browser-ab.cjs
+      - name: Execute paired 300 1x and 10x real Chromium source A/B
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN15_BROWSER_OUTPUT: ${{ runner.temp }}/turn15-browser
+        run: node tools/qa/check-turn15-browser-ab.cjs
+      - name: Archive browser RAF p95 receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn15-browser
+          path: ${{ runner.temp }}/turn15-browser
+          if-no-files-found: warn
+
+  beetank-l5-fracture-roi-turn16:
+    # Completed exact source-only ROI; preserved with frozen preintegration fixture.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate heavy-only Siege Fracture study
+        run: node --check tools/qa/check-beetank-l5-siege-fracture-turn16.cjs
+      - name: Run real terminal Beetank ROI and RAF parity
+        env:
+          QA_BEETANK_FRACTURE_RECEIPT: beetank-l5-fracture-turn16.json
+        run: node tools/qa/check-beetank-l5-siege-fracture-turn16.cjs
+      - name: Archive actual-source ROI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-l5-fracture-turn16
+          path: beetank-l5-fracture-turn16.json
+          if-no-files-found: warn
+
+  beetank-l5-fracture-front-gate-turn16:
+    # Actual CURRENT Goose/Beetank L5 ultimates under unchanged strict 20/40 front quality floors.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate exact live-source strict front gate
+        run: node --check tools/qa/check-beetank-fracture-strict-fronts-turn16.cjs
+      - name: Execute strict actual 20/40 multirole full-terminal live-ultimate source A/B
+        env:
+          QA_BEETANK_FRACTURE_FRONTS: beetank-fracture-strict-fronts.json
+        run: node tools/qa/check-beetank-fracture-strict-fronts-turn16.cjs
+      - name: Archive real front quality receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-fracture-strict-fronts
+          path: beetank-fracture-strict-fronts.json
+          if-no-files-found: warn
+
+  beetank-l5-anvil-roi-turn17:
+    # Completed 232 terminal candidate ROI: archive for explicit manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify final Beetank one-candidate A/B source
+        run: node --check tools/qa/check-beetank-l5-anvil-roi-turn17.cjs
+      - name: Genuine matched 20/40 ROI and heavy fronts, counters, full RAF
+        env:
+          QA_BEETANK_ANVIL_RECEIPT: beetank-l5-anvil-turn17.json
+        run: node tools/qa/check-beetank-l5-anvil-roi-turn17.cjs
+      - name: Archive complete physics-based ROI receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-l5-anvil-turn17
+          path: beetank-l5-anvil-turn17.json
+          if-no-files-found: warn
+
+  beetank-l5-anvil-front-gate-turn17:
+    # Preserve accepted 64-match pre-Anvil vs Anvil A/B regression on every QA PR.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate genuine live-source 20/40 Anvil quality gate
+        run: node --check tools/qa/check-beetank-anvil-live-fronts-turn17.cjs
+      - name: Real 32 full terminal matches per arm, no persistent-front loss
+        env:
+          QA_BEETANK_ANVIL_FRONTS: beetank-anvil-fronts-turn17.json
+        run: node tools/qa/check-beetank-anvil-live-fronts-turn17.cjs
+      - name: Archive real all-role damage-front counters
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-anvil-live-fronts-turn17
+          path: beetank-anvil-fronts-turn17.json
+          if-no-files-found: warn
+
+  node-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify pinned SHA256 release manifest
+        run: node tools/qa/release-hashes.cjs --verify
+      - name: Validate iPhone 14 Pro Max primary device and portrait QA contract
+        run: node tools/qa/check-primary-device-contract.cjs
+      - name: Ordered 300-duel sweep
+        env:
+          QA_RECEIPT: duel-receipt.json
+          QA_SHA: ${{ github.sha }}
+        run: node tools/qa/check-duels.cjs
+      - name: Turn 5C paired 80 and 120 fighter deterministic stress
+        env:
+          QA_STRESS_RECEIPT: stress5c-receipt.json
+        run: node tools/qa/check-stress5c.cjs
+      - name: Turn 5D staging geometry and performance parity
+        env:
+          QA_STAGING_RECEIPT: staging5d-receipt.json
+        run: node tools/qa/check-staging5d.cjs
+      - name: Turn 5E 61 to 160 fighter dense staging visual bounds
+        env:
+          QA_DENSE_RECEIPT: dense5e-receipt.json
+        run: node tools/qa/check-dense5e.cjs
+      - name: Turn 5F staging lookup caching parity
+        env:
+          QA_STAGING5F_RECEIPT: staging5f-receipt.json
+        run: node tools/qa/check-staging5f.cjs
+      - name: Turn 5G dense depth ordering
+        run: node tools/qa/check-depth5g.cjs
+      - name: Existing evolution and deterministic checks
+        if: success()
+        run: node tools/check-evolution-progression.cjs
+      - name: Turn 3 Guide mastery and touch consistency
+        if: success()
+        run: node tools/qa/check-turn3-consistency.cjs
+      - name: Turn 4A prioritized sprite loading
+        run: node tools/qa/check-streaming.cjs
+      - name: Turn 4C atomic release and offline tests
+        run: node tools/qa/check-release4c.cjs
+      - name: Legacy launch guide and SW compatibility
+        run: node tools/check-launch-guide.cjs
+      - name: Existing Ultimate ability checks
+        if: success()
+        run: node tools/check-ultimate-abilities.cjs
+      - name: Upload duel receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: duel-receipt
+          path: |
+            duel-receipt.json
+            stress5c-receipt.json
+            staging5d-receipt.json
+            dense5e-receipt.json
+            staging5f-receipt.json
+          if-no-files-found: warn
+
+  exploratory-formations:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run optional staging and formation experiments
+        run: |
+          node tools/qa/check-composition5h.cjs
+          node tools/qa/check-staging5h-candidate.cjs
+          node tools/qa/check-formation-density.cjs
+          node tools/qa/check-formation-variants.cjs
+          node tools/qa/check-formation-spacing.cjs
+          node tools/qa/check-horizontal-formation.cjs
+          node tools/qa/check-engagement-zones.cjs
+          node tools/qa/check-zone-engagement.cjs
+          node tools/qa/check-zone-locality.cjs
+          node tools/qa/check-zone-terminal.cjs
+          node tools/qa/check-zone-mirrors.cjs
+
+  population-and-disruption:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate draft source and QA syntax
+        run: |
+          node --check v3/evolution-rules.js
+          node --check v3/simulation-adapter.js
+          node --check v3/round-loop.js
+          node --check tools/qa/check-population-draft.cjs
+          node --check tools/qa/check-lab-enemy-batch.cjs
+          node --check tools/qa/check-round-lifecycle-guards.cjs
+          node --check tools/qa/check-double-ko-terminal.cjs
+      - name: Verify projected cap and one-round nonpermanent sabotage
+        run: node tools/qa/check-population-draft.cjs
+      - name: Verify round winner, losing-side lives and mirrored match results
+        run: node tools/qa/check-round-winner-lives.cjs
+      - name: Verify phase-gated one-pick drafting, stale events and round leakage
+        run: node tools/qa/check-round-lifecycle-guards.cjs
+      - name: Resolve real L4 Turtle simultaneous eliminations and unbiased final draws
+        run: node tools/qa/check-double-ko-terminal.cjs
+      - name: Verify Lab batch enemy types, single counts and cap
+        run: node tools/qa/check-lab-enemy-batch.cjs
+  extreme-300-fighters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate 300 fighter edge harness
+        run: node --check tools/qa/check-300-population.cjs
+      - name: Run 300 fighter 1x and 10x extreme stress
+        env:
+          QA_300_RECEIPT: extreme-300-receipt.json
+        run: node tools/qa/check-300-population.cjs
+      - name: Upload 300 fighter performance receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extreme-300-receipt
+          path: extreme-300-receipt.json
+          if-no-files-found: warn
+
+  threat-observer-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate pure observer and QA syntax
+        run: |
+          node --check tools/qa/threat-observer.cjs
+          node --check tools/qa/check-threat-observer.cjs
+      - name: Verify Sniper and Goblin decisions plus deterministic combat parity
+        env:
+          QA_THREAT_SIZES: '40,80,120'
+          QA_THREAT_SEEDS: '1337'
+          QA_THREAT_RECEIPT: threat-observer-receipt.json
+        run: node tools/qa/check-threat-observer.cjs
+      - name: Upload read-only observer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: threat-observer-receipt
+          path: threat-observer-receipt.json
+          if-no-files-found: warn
+
+  assassin-counterplay-outcomes:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify isolated Assassin counterplay research syntax
+        run: node --check tools/qa/check-assassin-counterplay-outcomes.cjs
+      - name: Compare matched Assassin versus guarded, ranged, swarm and mixed opposition
+        env:
+          QA_ASSASSIN_FAIR_COUNTS: '20,40,80'
+          QA_ASSASSIN_FAIR_RECEIPT: assassin-counterplay-outcomes.json
+        run: node tools/qa/check-assassin-counterplay-outcomes.cjs
+      - name: Upload real damage, winner, survival and Assassin rear-access metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-counterplay-outcomes
+          path: assassin-counterplay-outcomes.json
+          if-no-files-found: warn
+
+  assassin-l5-execution-payoff:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Assassin execution true-counterplay regression syntax
+        run: node --check tools/qa/check-assassin-execution-payoff.cjs
+      - name: Run 40 fully terminal real-damage/role samples and armored solo L5 counters
+        env:
+          QA_ASSASSIN_EXECUTION_RECEIPT: assassin-execution-payoff.json
+        run: node tools/qa/check-assassin-execution-payoff.cjs
+      - name: Upload L5 Execution real impact and front parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-execution-payoff
+          path: assassin-execution-payoff.json
+          if-no-files-found: warn
+
+  assassin-heavy-contact-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Beetank Turtle contact regression syntax
+        run: node --check tools/qa/check-assassin-heavy-contact.cjs
+      - name: Exercise seeded true-damage counterplay and Turtle reflection
+        env:
+          QA_ASSASSIN_HEAVY_RECEIPT: assassin-heavy-contact.json
+        run: node tools/qa/check-assassin-heavy-contact.cjs
+      - name: Upload hit, winner, HP-reflection and real-front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-heavy-contact
+          path: assassin-heavy-contact.json
+          if-no-files-found: warn
+
+  assassin-dragon-contact-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Dragon-only Assassin reach QA syntax
+        run: node --check tools/qa/check-assassin-dragon-contact.cjs
+      - name: Verify actual Dragon hits, unchanged tank counters and real fight fronts
+        env:
+          QA_ASSASSIN_DRAGON_RECEIPT: assassin-dragon-contact.json
+        run: node tools/qa/check-assassin-dragon-contact.cjs
+      - name: Upload measured Dragon Assassin matchup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-dragon-contact
+          path: assassin-dragon-contact.json
+          if-no-files-found: warn
+
+  assassin-rear-opportunity-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check rear-access research syntax
+        run: node --check tools/qa/check-assassin-rear-study.cjs
+      - name: A/B Assassin rear entry and counterplay over matched seeds
+        env:
+          QA_ASSASSIN_COUNTS: '40,80,120'
+          QA_ASSASSIN_RECEIPT: assassin-rear-opportunity.json
+        run: node tools/qa/check-assassin-rear-study.cjs
+      - name: Archive original and rear-side candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-rear-opportunity-study
+          path: assassin-rear-opportunity.json
+          if-no-files-found: warn
+
+  goblin-heavy-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original and candidate Goblin source study
+        run: node --check tools/qa/check-goblin-heavy-counterplay.cjs
+      - name: Compare Goblin swarms, armored defenders and light-duel parity
+        env:
+          QA_GOBLIN_RECEIPT: goblin-heavy-counterplay.json
+        run: node tools/qa/check-goblin-heavy-counterplay.cjs
+      - name: Upload Goblin per-side actual hits and defender-survival receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-heavy-counterplay
+          path: goblin-heavy-counterplay.json
+          if-no-files-found: warn
+
+  melee-contact-reach-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source-anchored geometry research syntax
+        run: node --check tools/qa/check-melee-contact-reach-study.cjs
+      - name: Evaluate live spacing gaps and isolated role melee reach at L1 L4 L5
+        env:
+          QA_MELEE_RECEIPT: melee-contact-reach.json
+        run: node tools/qa/check-melee-contact-reach-study.cjs
+      - name: Upload mirrored duel and mixed-army real-hit receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: melee-contact-reach-research
+          path: melee-contact-reach.json
+          if-no-files-found: warn
+
+  sniper-shot-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Sniper shot cooldown cue study syntax
+        run: node --check tools/qa/check-sniper-shot-cue.cjs
+      - name: Match real Sniper shot calls to sampled FX at 1x 4x and 10x
+        env:
+          QA_SNIPER_RECEIPT: sniper-shot-cue.json
+        run: node tools/qa/check-sniper-shot-cue.cjs
+      - name: Upload sampled rifle fire and no-phantom-fx evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sniper-shot-cue-sampling
+          path: sniper-shot-cue.json
+          if-no-files-found: warn
+
+  assassin-backstab-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual Assassin backstab cue test syntax
+        run: node --check tools/qa/check-assassin-backstab-cue.cjs
+      - name: Test real backstabs, no phantom cues and full previous physical state parity
+        env:
+          QA_BACKSTAB_RECEIPT: assassin-backstab-cue.json
+        run: node tools/qa/check-assassin-backstab-cue.cjs
+      - name: Upload source and visual-event match receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-backstab-cue-sampling
+          path: assassin-backstab-cue.json
+          if-no-files-found: warn
+
+  mole-eruption-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify true Mole eruption cue study syntax
+        run: node --check tools/qa/check-mole-eruption-cue.cjs
+      - name: Validate real Mole eruptions, no phantom effects and exact old-core physical parity
+        env:
+          QA_MOLE_RECEIPT: mole-eruption-cue.json
+        run: node tools/qa/check-mole-eruption-cue.cjs
+      - name: Upload seed and mirror real-event audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-eruption-cue-sampling
+          path: mole-eruption-cue.json
+          if-no-files-found: warn
+
+  turtle-shell-slam-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real Turtle shell-slam event study syntax
+        run: node --check tools/qa/check-turtle-shell-slam-cue.cjs
+      - name: Compare actual shell slam cues to baseline combat at 1x 4x and 10x
+        env:
+          QA_TURTLE_RECEIPT: turtle-shell-slam-cue.json
+        run: node tools/qa/check-turtle-shell-slam-cue.cjs
+      - name: Upload exact physical combat parity and no-phantom-slam evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-shell-slam-cue-sampling
+          path: turtle-shell-slam-cue.json
+          if-no-files-found: warn
+
+  beetank-charge-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real charge wind-up cue study syntax
+        run: node --check tools/qa/check-beetank-charge-cue.cjs
+      - name: Match real Beetank charge starts to rendered evidence at 1x 4x 10x
+        env:
+          QA_RAM_RECEIPT: beetank-charge-cue.json
+        run: node tools/qa/check-beetank-charge-cue.cjs
+      - name: Upload true charges, active wakes and no-phantom-impact receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-charge-cue-sampling
+          path: beetank-charge-cue.json
+          if-no-files-found: warn
+
+  turtle-ricochet-value-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate true Turtle reflection test syntax
+        run: node --check tools/qa/check-turtle-ricochet-value.cjs
+      - name: Measure post-defense reflected HP and genuine battle-front safety
+        env:
+          QA_TURTLE_REFLECTION_RECEIPT: turtle-reflection-value.json
+        run: node tools/qa/check-turtle-ricochet-value.cjs
+      - name: Upload Turtle role value and armored/ranged counterplay receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-reflection-value
+          path: turtle-reflection-value.json
+          if-no-files-found: warn
+
+  goose-ultimate-stun-counterplay:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Thunder Honk real-stun QA syntax
+        run: node --check tools/qa/check-goose-ultimate-stun.cjs
+      - name: Measure full physical stun ticks and mirrored ranged counterplay
+        env:
+          QA_GOOSE_ULT_RECEIPT: goose-ultimate-stun.json
+        run: node tools/qa/check-goose-ultimate-stun.cjs
+      - name: Upload measured Goose Ultimate damage and control receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-ultimate-stun
+          path: goose-ultimate-stun.json
+          if-no-files-found: warn
+
+  goose-honk-cue-sampling:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check renderer honk signal test syntax
+        run: node --check tools/qa/check-goose-honk-cue.cjs
+      - name: Detect real Goose honks at 1x 4x and 10x without modifying RC4
+        env:
+          QA_HONK_RECEIPT: goose-honk-cue.json
+        run: node tools/qa/check-goose-honk-cue.cjs
+      - name: Upload actual cast, visible cue and duplicate-prevention receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-honk-cue-sampling
+          path: goose-honk-cue.json
+          if-no-files-found: warn
+
+  local-front-lane-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate independent small-front lane research syntax
+        run: node --check tools/qa/check-local-front-lane-study.cjs
+      - name: Compare actual damage-positive local fronts, per-role hits, and strict 60-300 parity
+        env:
+          QA_FRONT_LANE_RECEIPT: local-front-lane-research.json
+        run: node tools/qa/check-local-front-lane-study.cjs
+      - name: Upload actual front, matchup and large-army parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-front-lane-research
+          path: local-front-lane-research.json
+          if-no-files-found: warn
+
+  assassin-l4-shadow-mark:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Shadow Mark test syntax
+        run: node --check tools/qa/check-assassin-l4-shadow-mark.cjs
+      - name: Run actual terminal L4 mark and counterplay study
+        env:
+          QA_ASSASSIN_SHADOW_RECEIPT: assassin-l4-shadow-mark.json
+        run: node tools/qa/check-assassin-l4-shadow-mark.cjs
+      - name: Keep exact source A/B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-shadow-mark
+          path: assassin-l4-shadow-mark.json
+          if-no-files-found: warn
+
+  assassin-l4-last-mile-pursuit:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate bounded Assassin source A/B syntax
+        run: node --check tools/qa/check-assassin-l4-pursuit.cjs
+      - name: Compare 312 real terminal backline pursuit battles and L5 physical parity
+        env:
+          QA_ASSASSIN_PURSUIT_RECEIPT: assassin-l4-pursuit.json
+        run: node tools/qa/check-assassin-l4-pursuit.cjs
+      - name: Publish L4 pursuit matched HP, front and counterplay verdict
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l4-pursuit
+          path: assassin-l4-pursuit.json
+          if-no-files-found: warn
+
+  turtle-guardian-prototype:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source-only guardian A/B syntax
+        run: node --check tools/qa/check-turtle-guardian-prototype.cjs
+      - name: Verify 48 terminal pairwise Turtle guardian trades and unchanged counter physics
+        env:
+          QA_TURTLE_GUARDIAN_RECEIPT: turtle-guardian-prototype.json
+        run: node tools/qa/check-turtle-guardian-prototype.cjs
+      - name: Archive real wins damage fronts counters and dense-state receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-guardian-prototype
+          path: turtle-guardian-prototype.json
+          if-no-files-found: warn
+
+  evolution-investment-value:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate tier ROI test syntax
+        run: node --check tools/qa/check-evolution-investment-value.cjs
+      - name: Compare 216 real full-match Assassin Turtle and Beetank tier investments
+        env:
+          QA_EVOLUTION_ROI_RECEIPT: evolution-investment-value.json
+        run: node tools/qa/check-evolution-investment-value.cjs
+      - name: Archive paired win damage reflection shell and Execution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolution-investment-value
+          path: evolution-investment-value.json
+          if-no-files-found: warn
+
+  completed-match-quality-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check fully terminal battle-quality test syntax
+        run: node --check tools/qa/check-completed-match-quality.cjs
+      - name: Measure real attacker-HP damage, durable fronts and role participation in 32 complete battles
+        env:
+          QA_COMPLETED_BATTLES_RECEIPT: completed-match-quality.json
+        run: node tools/qa/check-completed-match-quality.cjs
+      - name: Upload completed 20 and 40 fighter match quality scorecards
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: completed-match-quality
+          path: completed-match-quality.json
+          if-no-files-found: warn
+
+  role-multifront-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify role/front diagnostic syntax
+        run: node --check tools/qa/check-role-fronts-baseline.cjs
+      - name: Inspect actual role damage, pursuit and independent live fronts at 20–300
+        env:
+          QA_ROLE_COUNTS: '20,40,80,120,180,300'
+          QA_ROLE_RECEIPT: role-fronts-baseline.json
+        run: node tools/qa/check-role-fronts-baseline.cjs
+      - name: Upload deterministic role-damage and real-front baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: role-multifront-baseline
+          path: role-fronts-baseline.json
+          if-no-files-found: warn
+
+  effective-engagement-observer:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check effective engagement measurement syntax
+        run: node --check tools/qa/check-effective-engagement.cjs
+      - name: Observe real hit, ranged threat and pursuit without combat intervention
+        env:
+          QA_EFFECTIVE_COUNTS: '40,80,120,180,300'
+          QA_EFFECTIVE_RECEIPT: effective-engagement-receipt.json
+        run: node tools/qa/check-effective-engagement.cjs
+      - name: Upload engagement evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: effective-engagement-receipt
+          path: effective-engagement-receipt.json
+          if-no-files-found: warn
+
+  nearest-scan-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check exact-state perf spike syntax
+        run: node --check tools/qa/check-nearest-scan-spike.cjs
+      - name: Compare allocation-lean nearest scan to RC4 at 1x and 10x
+        env:
+          QA_NEAREST_COUNTS: '40,80,120,180,300'
+          QA_NEAREST_RECEIPT: nearest-scan-spike.json
+        run: node tools/qa/check-nearest-scan-spike.cjs
+      - name: Upload matched traces and directional timing summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nearest-scan-spike
+          path: nearest-scan-spike.json
+          if-no-files-found: warn
+
+  browser-density-portrait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify density test syntax
+        run: node --check tools/qa/check-density-browser.cjs
+      - name: Capture portrait L1/L4/L5 density and 10x stress frames
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_DENSITY_OUTPUT: ${{ runner.temp }}/density-browser
+          QA_DENSITY_COUNTS: '40,80,120,180,300'
+        run: node tools/qa/check-density-browser.cjs
+      - name: Verify Guide Ultimate artwork and draft safe areas at three mobile widths
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN9_OUTPUT: ${{ runner.temp }}/turn9-portrait
+        run: |
+          node --check tools/qa/check-turn9-portrait.cjs
+          node tools/qa/check-turn9-portrait.cjs
+      - name: Check all ten fighter art canvases, Guide truth and cropping at three touch widths
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_THEATRE_GALLERY_OUTPUT: ${{ runner.temp }}/theatre-all-roles
+        run: |
+          node --check tools/qa/check-theatre-guide-all-roles.cjs
+          node tools/qa/check-theatre-guide-all-roles.cjs
+      - name: Verify true three-mode phone touch paths and horizontal AEGIS swipe
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TOUCH_MODES_OUTPUT: ${{ runner.temp }}/touch-modes
+        run: |
+          node --check tools/qa/check-touch-modes-browser.cjs
+          node tools/qa/check-touch-modes-browser.cjs
+      - name: Upload three-mode native Chromium touchscreen receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: touch-modes-browser
+          path: ${{ runner.temp }}/touch-modes
+          if-no-files-found: warn
+      - name: Upload fighter theatre gallery and pixel visibility receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: theatre-all-roles
+          path: ${{ runner.temp }}/theatre-all-roles
+          if-no-files-found: warn
+      - name: Upload Turn 9 phone gallery and reward safe-area evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn9-portrait
+          path: ${{ runner.temp }}/turn9-portrait
+          if-no-files-found: warn
+      - name: Upload real Chromium receipts and 430x932 screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: density-portrait-evidence
+          path: ${{ runner.temp }}/density-browser
+          if-no-files-found: warn
+
+  distance-bound-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check deterministic distance-bound QA syntax
+        run: node --check tools/qa/check-distance-bound-spike.cjs
+      - name: Mirror and stress 40–300 fighter distance-bound alternatives
+        env:
+          QA_DISTANCE_COUNTS: '40,80,120,180,300'
+          QA_DISTANCE_RECEIPT: distance-bound-spike.json
+        run: node tools/qa/check-distance-bound-spike.cjs
+      - name: Archive A/B seeded traces and CPU evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: distance-bound-spike
+          path: distance-bound-spike.json
+          if-no-files-found: warn
+
+  pressure-cache-runtime-parity:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check pressure-cache full trace verifier syntax
+        run: node --check tools/qa/check-target-pressure-cache-parity.cjs
+      - name: Confirm 32 terminal and twelve 80/120/300 body full-state parity arms
+        env:
+          QA_PRESSURE_LIVE_RECEIPT: pressure-cache-live.json
+        run: node tools/qa/check-target-pressure-cache-parity.cjs
+      - name: Upload true battle equivalence receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pressure-cache-runtime-parity
+          path: pressure-cache-live.json
+          if-no-files-found: warn
+
+  pressure-cache-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check cached-pressure research syntax
+        run: node --check tools/qa/check-pressure-cache-spike.cjs
+      - name: Compare exact RC4 target pressure at 1x and 10x
+        env:
+          QA_PRESSURE_COUNTS: '40,80,120,180,300'
+          QA_PRESSURE_RECEIPT: pressure-cache-spike.json
+        run: node tools/qa/check-pressure-cache-spike.cjs
+      - name: Upload mirrored combat parity and directional CPU results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pressure-cache-spike
+          path: pressure-cache-spike.json
+          if-no-files-found: warn
+
+  collision-coarse-bound-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate universal collision-bound QA syntax
+        run: node --check tools/qa/check-collision-coarse-bound-spike.cjs
+      - name: ABBA-test universal collision reach with exact role/parity traces
+        env:
+          QA_COARSE_COUNTS: '40,80,120,180,300'
+          QA_COARSE_RECEIPT: collision-coarse-spike.json
+        run: node tools/qa/check-collision-coarse-bound-spike.cjs
+      - name: Archive mirrored collision-bound performance and parity receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collision-coarse-bound-spike
+          path: collision-coarse-spike.json
+          if-no-files-found: warn
+
+  collision-separation-research:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check safe collision pair-reject syntax
+        run: node --check tools/qa/check-collision-separation-spike.cjs
+      - name: Compare exact RC4 collision response at 1x and 10x
+        env:
+          QA_COLLISION_COUNTS: '40,80,120,180,300'
+          QA_COLLISION_RECEIPT: collision-separation-spike.json
+        run: node tools/qa/check-collision-separation-spike.cjs
+      - name: Upload collision response parity and timing evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collision-separation-spike
+          path: collision-separation-spike.json
+          if-no-files-found: warn
+
+  engagement-director-spike:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate isolated director research harness
+        run: node --check tools/qa/check-engagement-director.cjs
+      - name: Test real mixed-role combat without runtime modifications
+        env:
+          QA_ENGAGEMENT_COUNTS: '40,80'
+          QA_ENGAGEMENT_SEEDS: '1337'
+          QA_ENGAGEMENT_RECEIPT: engagement-director-spike.json
+        run: node tools/qa/check-engagement-director.cjs
+      - name: Save experimental evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engagement-director-spike
+          path: engagement-director-spike.json
+          if-no-files-found: warn
+
+  wider-front-fast-signal:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate six-variant battle test syntax
+        run: node --check tools/qa/check-zone-damage.cjs
+      - name: Single-seed early formation signal
+        env:
+          QA_DAMAGE_SEEDS: '1337'
+        run: node tools/qa/check-zone-damage.cjs
+
+  damage-attribution-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate damage attribution syntax
+        run: node --check tools/qa/check-zone-damage.cjs
+      - name: Paired attributed damage smoke test
+        env:
+          QA_DAMAGE_SEEDS: '1337,7301,8675309'
+          QA_LANES_RECEIPT: zone-damage-smoke.json
+        run: node tools/qa/check-zone-damage.cjs
+      - name: Upload attributed damage smoke receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zone-damage-smoke
+          path: zone-damage-smoke.json
+          if-no-files-found: warn
+
+  browser-turn3:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser runtime
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify packaged Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Browser QA for Dragon and touch
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_BROWSER_OUTPUT: ${{ runner.temp }}/turn3-browser
+        run: node tools/qa/check-turn3-browser.cjs
+      - name: Upload screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn3-browser
+          path: ${{ runner.temp }}/turn3-browser
+          if-no-files-found: warn
+
+  browser-composition5h:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Capture exact formation snapshots
+        env:
+          QA_LANES_RECEIPT: ${{ runner.temp }}/turn5h-browser/formation-exact.json
+        run: |
+          mkdir -p "${{ runner.temp }}/turn5h-browser"
+          node tools/qa/check-formation-visual-snapshots.cjs
+      - name: Capture exact tri-zone combat snapshots
+        env:
+          QA_LANES_RECEIPT: ${{ runner.temp }}/turn5h-browser/zones-exact.json
+        run: node tools/qa/check-zones-visual-snapshots.cjs
+      - name: Matched authored sprite camera screenshots
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_VISUAL_OUTPUT: ${{ runner.temp }}/turn5h-browser
+        run: node tools/qa/check-composition5h-browser.cjs
+      - name: Ultimate Lab enemy picker browser QA
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+        run: node tools/qa/check-lab-enemies-browser.cjs
+      - name: Upload A/B sprite contact sheets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn5h-composition
+          path: ${{ runner.temp }}/turn5h-browser
+          if-no-files-found: warn
+
+  browser-turn4d:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Cold warm and offline service worker QA
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_BROWSER_OUTPUT: ${{ runner.temp }}/turn4d-browser
+        run: node tools/qa/check-turn4d-browser.cjs
+      - name: Upload real browser network receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn4d-browser
+          path: ${{ runner.temp }}/turn4d-browser
+          if-no-files-found: warn
+
+  browser-upgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Interrupted upgrade and offline recovery
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_UPGRADE_OUTPUT: ${{ runner.temp }}/upgrade-browser
+        run: node tools/qa/check-upgrade-browser.cjs
+      - name: Upload failed-upgrade recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upgrade-browser
+          path: ${{ runner.temp }}/upgrade-browser
+          if-no-files-found: warn
+
+  knight-art-candidate:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install extraction dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy scipy
+      - name: Generate six larger Base Knight pose candidates
+        run: python tools/rebuild-base-knight.py --dest tools/qa/knight-candidate
+      - name: Upload proposed Knight assets and contact sheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knight-base-256-candidate
+          path: tools/qa/knight-candidate
+          if-no-files-found: error
+
+  borderline-choice-regression:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate accepted borderline choice regression syntax
+        run: node --check tools/qa/check-borderline-choice-regression.cjs
+      - name: Protect Turtle L4 real-win value and monitor Assassin counter trade
+        env:
+          QA_BORDERLINE_SMOKE_RECEIPT: borderline-choice-regression.json
+        run: node tools/qa/check-borderline-choice-regression.cjs
+      - name: Upload 128 real-match physical damage-front regression receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: borderline-choice-regression
+          path: borderline-choice-regression.json
+          if-no-files-found: error
+
+  assassin-backline-telegraph-opportunity:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual-ranged-threat observer syntax
+        run: node --check tools/qa/check-assassin-backline-telegraph-opportunity.cjs
+      - name: Measure real physical backstab overlaps with Sniper aiming and Dragon windup
+        env:
+          QA_ASSASSIN_THREAT_RECEIPT: assassin-backline-telegraph-opportunity.json
+        run: node tools/qa/check-assassin-backline-telegraph-opportunity.cjs
+      - name: Upload source-real aim windup and physical RAF-parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-backline-telegraph-opportunity
+          path: assassin-backline-telegraph-opportunity.json
+          if-no-files-found: error
+
+  first-ultimate-tier-spike:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify first-to-tier full-match audit syntax
+        run: node --check tools/qa/check-first-ultimate-tier-spike.cjs
+      - name: Measure all ten families first-L4/L5 versus peer-tier and x2 counters
+        env:
+          QA_TIER_SPIKE_RECEIPT: first-ultimate-tier-spike.json
+        run: node tools/qa/check-first-ultimate-tier-spike.cjs
+      - name: Retain 720 true match and 24 frame-parity tier receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-ultimate-tier-spike
+          path: first-ultimate-tier-spike.json
+          if-no-files-found: error
+
+  goose-impact-shockwave-ab:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate damage-led short-stagger Goose shockwave runner syntax
+        run: node --check tools/qa/check-goose-impact-shockwave-ab.cjs
+      - name: Compare true L4/L5 first unlock and fully doubled opponent against four source arms
+        env:
+          QA_GOOSE_IMPACT_RECEIPT: goose-impact-shockwave-ab.json
+        run: node tools/qa/check-goose-impact-shockwave-ab.cjs
+      - name: Preserve full physical-Goose power and damage-front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-impact-shockwave-ab
+          path: goose-impact-shockwave-ab.json
+          if-no-files-found: error
+
+  goose-impact-density-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Goose Impact CPU and state sample syntax
+        run: node --check tools/qa/check-goose-impact-density.cjs
+      - name: Compare original vs Impact at 80 120 300 bodies 1x and 10x
+        env:
+          QA_GOOSE_DENSITY_RECEIPT: goose-impact-density.json
+        run: node tools/qa/check-goose-impact-density.cjs
+      - name: Upload CPU sample and bounded physical state receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goose-impact-density
+          path: goose-impact-density.json
+          if-no-files-found: error
+
+  goose-impact-offtarget-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify no-Goose and pre-L4 Goose original/current RAF SHA parity
+        run: node tools/qa/check-goose-impact-offtarget-parity.cjs
+
+  barbarian-first-ultimate-signature-ab:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source-only first Barbarian evolution A/B syntax
+        run: node --check tools/qa/check-barbarian-first-ultimate-ab.cjs
+      - name: Compare real L4 L5 secondary HP and counterplay
+        env:
+          QA_BARBARIAN_SPIKE_RECEIPT: barbarian-first-ultimate-ab.json
+        run: node tools/qa/check-barbarian-first-ultimate-ab.cjs
+      - name: Keep source real wins fronts and RAF evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-first-ultimate-ab
+          path: barbarian-first-ultimate-ab.json
+          if-no-files-found: error
+
+  barbarian-premium-density-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Barbarian premium source density syntax
+        run: node --check tools/qa/check-barbarian-premium-density.cjs
+      - name: Compare 80 120 300 fighter Barbarian source frame costs and off-target physics
+        env:
+          QA_BARBARIAN_DENSITY_RECEIPT: barbarian-premium-density.json
+        run: node tools/qa/check-barbarian-premium-density.cjs
+      - name: Preserve physical state and Node CPU source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-premium-density
+          path: barbarian-premium-density.json
+          if-no-files-found: error
+
+  assassin-l5-live-draft-roi:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse read-only live Assassin L5 opportunity cost
+        run: node --check tools/qa/check-assassin-l5-live-roi.cjs
+      - name: Compare L5 Assassin to recruiting and upgrading Beetank on current live source
+        env:
+          QA_ASSASSIN_L5_ROI_RECEIPT: assassin-l5-live-roi.json
+        run: node tools/qa/check-assassin-l5-live-roi.cjs
+      - name: Save 192 complete matched battles, positive HP, Execution, independent fronts, exact state parity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l5-live-roi
+          path: assassin-l5-live-roi.json
+          if-no-files-found: warn
+
+  assassin-l5-difficulty-gradient:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check actual Assassin L5 difficulty gradient research syntax
+        run: node --check tools/qa/check-assassin-l5-difficulty-gradient.cjs
+      - name: Measure 1 3 and 5 heavy or ranged foe substitutions across real 20 and 40 fighters
+        env:
+          QA_ASSASSIN_GRADIENT_RECEIPT: assassin-l5-difficulty-gradient.json
+        run: node tools/qa/check-assassin-l5-difficulty-gradient.cjs
+      - name: Preserve 288 full-terminal match outcomes and 16 exact physical state parity guards
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assassin-l5-difficulty-gradient
+          path: assassin-l5-difficulty-gradient.json
+          if-no-files-found: warn
+
+  mole-l5-physical-fissure-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only Mole L5 eruption fissure comparison
+        run: node --check tools/qa/check-mole-l5-fissure-ab.cjs
+      - name: Measure true terminal first-L5 wins peer and whole-army counters and physical fronts
+        env:
+          QA_MOLE_RIFT_RECEIPT: mole-l5-fissure-source.json
+        run: node tools/qa/check-mole-l5-fissure-ab.cjs
+      - name: Preserve 204 real source matches and whole RAF physical state parity receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-l5-fissure-source
+          path: mole-l5-fissure-source.json
+          if-no-files-found: warn
+
+  mole-l5-low-collateral-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify smaller physically grounded Mole eruption source A/B syntax
+        run: node --check tools/qa/check-mole-l5-low-collateral-ab.cjs
+      - name: Compare original with Shard and Twin L5 effects against peer and number counters
+        env:
+          QA_MOLE_LOW_COLLATERAL_RECEIPT: mole-l5-low-collateral.json
+        run: node tools/qa/check-mole-l5-low-collateral-ab.cjs
+      - name: Preserve complete real-winner hit and separate-front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-l5-low-collateral
+          path: mole-l5-low-collateral.json
+          if-no-files-found: warn
+
+  mole-l5-twin-density-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate actual source CPU and off-target physics
+        run: node --check tools/qa/check-mole-l5-twin-density.cjs
+      - name: Measure 80 120 300 real fighters at 1x and 10x with Twin activation
+        env:
+          QA_MOLE_TWIN_DENSITY_RECEIPT: mole-twin-density.json
+        run: node tools/qa/check-mole-l5-twin-density.cjs
+      - name: Retain physical SHA and Node p95 source CPU receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mole-twin-density
+          path: mole-twin-density.json
+          if-no-files-found: warn
+
+  mole-l5-playable-twin-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse playable Twin, presentation, and source provenance
+        run: |
+          node --check v3/ultimate-abilities.js
+          node --check v3/ultimate-effects.js
+          node --check v3/v3.js
+          node --check tools/qa/check-mole-l5-playable-integration.cjs
+      - name: Assert exact proven Twin source and grounded effects
+        run: node tools/qa/check-mole-l5-playable-integration.cjs
+      - name: Verify atomic versioned PWA integrity
+        run: node tools/qa/release-hashes.cjs --verify
+
+  mole-twin-ground-theatre:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Confirm dramatic real-event local fracture and crowded/reduced motion safeguards
+        run: |
+          node --check v3/ultimate-effects.js
+          node --check v3/v3.js
+          node --check tools/qa/check-mole-rift-spectacle.cjs
+          node tools/qa/check-mole-rift-spectacle.cjs
+          node --check tools/qa/check-turn10-theatre.cjs
+          node tools/qa/check-turn10-theatre.cjs
+      - name: Confirm gameplay unchanged and atomic pinned bundle
+        run: |
+          node tools/qa/check-mole-l5-playable-integration.cjs
+          node tools/qa/release-hashes.cjs --verify
+
+  goblin-l5-pack-first-unlock-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-only Goblin L5 Pack Hunt vs Double Fang suite
+        run: node --check tools/qa/check-goblin-l5-pack-first-unlock.cjs
+      - name: Measure true first-L5 full-game win swings, peer and number counters and authentic fronts
+        env:
+          QA_GOBLIN_PACK_RECEIPT: goblin-l5-pack-first-unlock.json
+        run: node tools/qa/check-goblin-l5-pack-first-unlock.cjs
+      - name: Preserve all 204 terminal matches and untouched L4 whole-RAF fingerprints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-pack-first-unlock
+          path: goblin-l5-pack-first-unlock.json
+          if-no-files-found: warn
+
+  goblin-l5-fang-refinement-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check source-only Goblin Fang Surge and Pin refinements
+        run: node --check tools/qa/check-goblin-l5-fang-refinement.cjs
+      - name: Measure real terminal first-L5 peer and whole-army doubling outcomes and true damaging fronts
+        env:
+          QA_GOBLIN_FANG_REFINEMENT_RECEIPT: goblin-l5-fang-refinement.json
+        run: node tools/qa/check-goblin-l5-fang-refinement.cjs
+      - name: Preserve 204 authentic terminal matches and full physical RAF parity receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-fang-refinement
+          path: goblin-l5-fang-refinement.json
+          if-no-files-found: warn
+
+  goblin-l5-stagger-isolation-source:
+    # Deferred research: only explicit full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check exact-damage Goblin stun-isolation suite
+        run: node --check tools/qa/check-goblin-l5-stagger-isolation.cjs
+      - name: Execute 272 real Goblin terminal matches and entire RAF controls
+        env:
+          QA_GOBLIN_STAGGER_RECEIPT: goblin-l5-stagger.json
+        run: node tools/qa/check-goblin-l5-stagger-isolation.cjs
+      - name: Upload actual win and genuine damaging-front physical receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-l5-stagger-isolation
+          path: goblin-l5-stagger.json
+          if-no-files-found: warn
+
+  consolidated-live-evolution-roi:
+    # Complete research gate is run once on demand, not per QA edit.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate current-source ROI script syntax
+        run: node --check tools/qa/check-consolidated-live-evolution-roi.cjs
+      - name: Run full terminal ten-family L4/L5 alternatives and counters
+        env:
+          QA_SHA: ${{ github.sha }}
+          QA_CONSOLIDATED_ROI_RECEIPT: consolidated-live-evolution-roi.json
+        run: node tools/qa/check-consolidated-live-evolution-roi.cjs
+      - name: Upload complete source SHA and terminal match evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: consolidated-live-evolution-roi
+          path: consolidated-live-evolution-roi.json
+          if-no-files-found: warn
+
+  beetank-l5-reach-roi:
+    # Verified four-arm ROI at cca94d5. Archived for manual dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check physical contact experiment syntax
+        run: node --check tools/qa/check-beetank-l5-reach-roi.cjs
+      - name: Matched real terminal physical contact Beetank L5 A/B
+        env:
+          QA_BEETANK_REACH_RECEIPT: beetank-l5-reach-roi.json
+        run: node tools/qa/check-beetank-l5-reach-roi.cjs
+      - name: Retain role-counter and RAF parity data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beetank-l5-reach-roi
+          path: beetank-l5-reach-roi.json
+          if-no-files-found: warn
+
+  beetank-siege-front-diagnostic:
+    # Previous full physical quality diagnosis complete; keep for manual research only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compare genuine 20 and 40 fighter damage-front scenarios
+        env:
+          QA_SIEGE_FRONT_RECEIPT: siege-front-diagnostic.json
+        run: node tools/qa/check-beetank-siege-front-variants.cjs
+      - name: Upload measured full-match front-quality alternatives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siege-front-diagnostic
+          path: siege-front-diagnostic.json
+          if-no-files-found: warn
+
+  goblin-warband-roi:
+    # Completed failed physical-DPS hypothesis; manual only
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate current source matched Warband script
+        run: node --check tools/qa/check-goblin-warband-roi.cjs
+      - name: Measure heldout first L4 L5 and true numerical counters
+        env:
+          QA_WARBAND_RECEIPT: goblin-warband-roi.json
+        run: node tools/qa/check-goblin-warband-roi.cjs
+      - name: Archive current source matched full battle and RAF receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-warband-roi
+          path: goblin-warband-roi.json
+          if-no-files-found: warn
+
+  goblin-rally-coordination-roi:
+    # Completed final rejected Warband study, explicit archive execution only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source check Goblin Rally conditional local cohesion
+        run: node --check tools/qa/check-goblin-rally-roi.cjs
+      - name: Complete real L4 and L5 draft outcome and true-front cases
+        env:
+          QA_WARBAND_RECEIPT: goblin-rally-roi.json
+        run: node tools/qa/check-goblin-rally-roi.cjs
+      - name: Preserve complete Goblin Rally physical ROI receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-rally-roi
+          path: goblin-rally-roi.json
+          if-no-files-found: warn
+
+  barbarian-bloodstorm-source-roi:
+    # Source-only final hypothesis measured and rejected; expensive archive by explicit dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check current-source bounded Barbarian Bloodstorm
+        run: node --check tools/qa/check-barbarian-bloodstorm-roi.cjs
+      - name: Full match evidence including real fronts and counterplay
+        env:
+          QA_BLOODSTORM_RECEIPT: barbarian-bloodstorm-roi.json
+        run: node tools/qa/check-barbarian-bloodstorm-roi.cjs
+      - name: Preserve real heldout ROI and exact unaffected frame parity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-bloodstorm-roi
+          path: barbarian-bloodstorm-roi.json
+          if-no-files-found: warn
+
+  dragon-l4-numerical-fairness:
+    # Completed no-effect source comparison; archive expensive study for deliberate full-suite dispatch.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check current-source L4-only cone-cap fairness code
+        run: node --check tools/qa/check-dragon-l4-numerical-fairness.cjs
+      - name: Run real full battle and true numeric-counter fairness fixtures
+        env:
+          QA_DRAGON_FAIRNESS_RECEIPT: dragon-l4-numerical-fairness.json
+        run: node tools/qa/check-dragon-l4-numerical-fairness.cjs
+      - name: Save current source damage, objective wins and parity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-l4-numerical-fairness
+          path: dragon-l4-numerical-fairness.json
+          if-no-files-found: warn
+
+  nearest-allocation-lean-parity:
+    # Proven exact, but slower at 20/40/80/120/300. Archive for explicit research dispatch only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check allocation-free targeting and source equivalence
+        run: node --check tools/qa/check-nearest-allocation-lean-parity.cjs
+      - name: Preserve real-target whole-RAF parity and 80/120/300 source timing
+        env:
+          QA_TARGET_SCAN_RECEIPT: nearest-allocation-lean-parity.json
+        run: node tools/qa/check-nearest-allocation-lean-parity.cjs
+      - name: Preserve verified target scan receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nearest-allocation-lean-parity
+          path: nearest-allocation-lean-parity.json
+          if-no-files-found: warn
+
+  turn18-bitlane-300-ab:
+    # Closed after deterministic parity PASS but 300 10x CPU slowdown; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # One source-only synchronous integer-bitset broadphase, distinct from rejected Map/Set buckets.
+    # No runtime promotion without parity AND repeatable both-speed browser evidence.
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check bitset axis-index exact collision source trial
+        run: node --check tools/qa/check-turn18-bitlane-300.cjs
+      - name: Test 20/40/80/120/300 full RAF state parity and matched 300 CPU cost
+        env:
+          QA_TURN18_RECEIPT: turn18-bitlane.json
+        run: node tools/qa/check-turn18-bitlane-300.cjs
+      - name: Preserve source-exact physical benchmark evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn18-bitlane
+          path: turn18-bitlane.json
+          if-no-files-found: warn
+
+  turn19-thread-browser-ab:
+    if: github.event_name == 'workflow_dispatch'
+    # Source-only architectural worker alternative; full app, actual 300, matched RAF.
+    # Promoting requires independent physics/spell/offline validation after measured success.
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Puppeteer runtime and bundled Chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify actual thread bridge and browser A/B syntax
+        run: |
+          node --check tools/qa/turn19-thread-bridge.js
+          node --check tools/qa/turn19-sim-worker.js
+          node --check tools/qa/check-turn19-thread-browser-ab.cjs
+      - name: Paired original versus worker full browser 300 1x/10x RAF, 80/120 controls
+        env:
+          NODE_PATH: ${{ github.workspace }}/tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-browser
+        run: node tools/qa/check-turn19-thread-browser-ab.cjs
+      - name: Preserve real-browser receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-thread-raf
+          path: ${{ runner.temp }}/turn19-browser
+          if-no-files-found: warn
+
+  turn19-dense-solver-source:
+    if: github.event_name == 'workflow_dispatch'
+    # One distinct structure-of-arrays deterministic Gauss-Seidel acceleration candidate.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check exact full-RAF dense-300 solver candidate
+        run: node --check tools/qa/check-turn19-dense-solver-300.cjs
+      - name: Paired current versus structure-of-arrays original-contact-order physics
+        env:
+          QA_TURN19_DENSE_RECEIPT: turn19-dense-300.json
+        run: node tools/qa/check-turn19-dense-solver-300.cjs
+      - name: Archive real full RAF SHA and 1x/10x CPU P95
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-dense-solver
+          path: turn19-dense-300.json
+          if-no-files-found: warn
+
+  turn19-yband-source:
+    # Rejected after source parity but measured repeated 300 slowdown.
+    if: github.event_name == 'workflow_dispatch'
+    # Bounded ordered physical collision pruning by LIVE y-band membership.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate one-axis band candidate syntax
+        run: node --check tools/qa/check-turn19-yband-300.cjs
+      - name: Full RAF exact parity and matched CPU P95 for physical 300 fighters
+        env:
+          QA_TURN19_YBAND_RECEIPT: turn19-yband-300.json
+        run: node tools/qa/check-turn19-yband-300.cjs
+      - name: Preserve source-real original-vs-yband receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-yband-300
+          path: turn19-yband-300.json
+          if-no-files-found: warn
+
+  turn19-wasm-300-source:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
+    # New architecture: WebAssembly exact-ordered numeric collision kernel, not a bucket heuristic.
+    # Source-only candidate. Do not promote absent full physics SHA parity and true browser 1x/10x P95.
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check genuine WebAssembly collision parity trial
+        run: node --check tools/qa/check-turn19-wasm-300.cjs
+      - name: Match 20/40/80/120/300 real full-RAF physics and 300 CPU at both speeds
+        env:
+          QA_TURN19_WASM_RECEIPT: turn19-wasm-300.json
+        run: node tools/qa/check-turn19-wasm-300.cjs
+      - name: Preserve actual full-state comparisons and CPU receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-300
+          path: turn19-wasm-300.json
+          if-no-files-found: warn
+
+  turn19-wasm-300-browser:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
+    # Source-only same-host original/WASM actual 300 full-FX Chromium RAF, no preview.
+    # Distinguish real RAF intervals from CPU callback or physical iPhone Safari FPS.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify browser engine
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate exact WebAssembly browser A/B harness
+        run: node --check tools/qa/check-turn19-wasm-browser-ab.cjs
+      - name: Same-host 300 real fighters, 430x932 DPR3, matched both speeds
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_WASM_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-wasm-browser
+        run: node tools/qa/check-turn19-wasm-browser-ab.cjs
+      - name: Preserve full Chromium frame and physics receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-browser
+          path: ${{ runner.temp }}/turn19-wasm-browser
+          if-no-files-found: warn
+
+  turn19-source-cpu-attribution:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
+    # One source-only research diagnostic for next substantive hot function.
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check source function-level performance analysis
+        run: node --check tools/qa/check-turn19-cpu-attribution.cjs
+      - name: Attribute genuine 300 source target, collision, hit and state CPU
+        env:
+          QA_TURN19_PROFILE_RECEIPT: turn19-cpu-attribution.json
+        run: node tools/qa/check-turn19-cpu-attribution.cjs
+      - name: Preserve real-source attribution receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-cpu-attribution
+          path: turn19-cpu-attribution.json
+          if-no-files-found: warn
+
+  turn19-wasm-target-source:
+    # Completed research: manual archive only, not automatically rerun for QA changes.
+    if: github.event_name == 'workflow_dispatch'
+    # Compiled exact nearest-target ranking after physical collision profile confirmed 70%+ hotspot.
+    # Source-only, no gameplay promotion until full SHA parity and material dual-speed browser gains.
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate WASM combined collision and nearest source harness
+        run: node --check tools/qa/check-turn19-wasm-nearest.cjs
+      - name: Match true full RAF state and same-host 300 CPU both rates
+        env:
+          QA_TURN19_TARGET_RECEIPT: turn19-wasm-target.json
+        run: node tools/qa/check-turn19-wasm-nearest.cjs
+      - name: Preserve full source parity and CPU receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-target
+          path: turn19-wasm-target.json
+          if-no-files-found: warn
+
+  turn19-wasm-combined-browser:
+    # Completed underperforming 300 study; archive manual dispatch only, no routine high-cost repeats.
+    if: github.event_name == 'workflow_dispatch'
+    # One actual same-host 300 real RAF test after full-RAF SHA source parity of both kernels.
+    # Source-only via HTTP interception: no runtime or PWA mutation.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ensure native clang WASM compiler available
+        run: clang --version
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify browser engine
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate combined exact WebAssembly Chromium benchmark
+        run: node --check tools/qa/check-turn19-wasm-combined-browser.cjs
+      - name: 300 actual full-FX real Chromium RAF original versus two-kernel WASM both rates
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_COMBINED_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-combined-browser
+        run: node tools/qa/check-turn19-wasm-combined-browser.cjs
+      - name: Preserve real original/dual-WASM browser P95 and HP/tick receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-wasm-combined-browser
+          path: ${{ runner.temp }}/turn19-combined-browser
+          if-no-files-found: warn
+
+  turn19-cooperative-300-browser:
+    # Closed after FAILING real tick throughput; explicit workflow_dispatch archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # Source-only architecture: render RAF and complete real physics ticks scheduled separately.
+    # Real 300 full-fighter FX, no faked speed or reduced physical contacts.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify browser engine
+        run: node tools/qa/setup-browser.cjs
+      - name: Verify full source-exact physics step and cooperative browser A/B script
+        run: node --check tools/qa/check-turn19-cooperative-browser.cjs
+      - name: Run real current/cooperative Chromium RAF + tick throughput at 300, both rates
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_COOPERATIVE_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-cooperative-browser
+        run: node tools/qa/check-turn19-cooperative-browser.cjs
+      - name: Preserve actual 300 RAF and real throughput evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-cooperative-300
+          path: ${{ runner.temp }}/turn19-cooperative-browser
+          if-no-files-found: warn
+
+  turn19-anchored-nearest-source:
+    # Rejected after true full-RAF parity but slower at 300; manual research archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # New deterministic previous-target distance bound with original target order and equal-score tie semantics.
+    # Source-only, cheap parity+timing gate before any browser run.
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source-nearest trial syntax
+        run: node --check tools/qa/check-turn19-anchored-nearest.cjs
+      - name: Check 20/40/80/120/300 1x and 10x exact full-RAF state, matched CPU P95
+        env:
+          QA_TURN19_ANCHORED_RECEIPT: turn19-anchored-nearest.json
+        run: node tools/qa/check-turn19-anchored-nearest.cjs
+      - name: Archive actual source parity and paired benchmark
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-anchored-nearest
+          path: turn19-anchored-nearest.json
+          if-no-files-found: warn
+
+  turn19-message-channel-300-browser:
+    # Rejected due actual tick-per-second collapse; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # Source-only true-physics MessageChannel scheduling with strict TPS+P95 acceptance.
+    # Do not infer victory from smooth rendering while combat speed collapses.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify Chromium runtime
+        run: node tools/qa/setup-browser.cjs
+      - name: Source-exact physics step and strict channel A/B checks
+        run: node --check tools/qa/check-turn19-channel-browser.cjs
+      - name: Real 300 full FX 1x and 10x RAF plus >=85% baseline genuine TPS
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_CHANNEL_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-channel-browser
+        run: node tools/qa/check-turn19-channel-browser.cjs
+      - name: Preserve strict research receipt, even on rejected candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-channel-browser
+          path: ${{ runner.temp }}/turn19-channel-browser
+          if-no-files-found: warn
+
+  turn19-live-target-grid-source:
+    # Source full RAF exact but browser speed inadequate; archive expensive research.
+    if: github.event_name == 'workflow_dispatch'
+    # Speed up repeat nearest lookups, not collision, with exact dynamic target invalidations.
+    # No playable source changes; strict exact physical full RAF SHA 10+6 and real source CPU P95.
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-check spatial-nearest 300 research candidate
+        run: node --check tools/qa/check-turn19-live-target-grid.cjs
+      - name: Compare all 20/40/80/120/300 1x 10x exact full RAF SHA plus paired 300 CPU
+        env:
+          QA_TURN19_GRID_RECEIPT: turn19-target-grid.json
+        run: node tools/qa/check-turn19-live-target-grid.cjs
+      - name: Preserve full physical research receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-target-grid
+          path: turn19-target-grid.json
+          if-no-files-found: warn
+
+  turn19-target-grid-real-browser:
+    # REJECT: strict 300 P95 browser acceptance failed both speeds, archive manual-only.
+    if: github.event_name == 'workflow_dispatch'
+    # Rigorous source-only real full 300 1x/10x P95 and >=85% genuine ticks-per-second,
+    # prompted by 10+6 full-RAF SHA parity and large matched CPU gains.
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare Chromium browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Verify Chromium binary
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate source-exact grid A/B browser test
+        run: node --check tools/qa/check-turn19-target-grid-browser.cjs
+      - name: Matched live 300 original/grid Chromium P95 and actual combat TPS both speeds
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_GRID_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-grid-browser
+        run: node tools/qa/check-turn19-target-grid-browser.cjs
+      - name: Archive uncensored RAF, HP, ticks and matched source timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-target-grid-browser
+          path: ${{ runner.temp }}/turn19-grid-browser
+          if-no-files-found: warn
+  turn19-real-mainthread-profile:
+    # Completed sampled actual 300 browser attribution; archive manually, no automatic reruns.
+    if: github.event_name == 'workflow_dispatch'
+    # One actual Chrome CPU profile of unmodified 300-fighter physics and UI,
+    # strict 1x + 10x elapsed/ticks/HP; dedicated diagnostic, no source promotion.
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate unmodified-physics 300 main thread attribution script
+        run: node --check tools/qa/check-turn19-mainthread-profile.cjs
+      - name: Profile real 300 fighter 1x/10x physical CPU, publish, draw and RAF
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_PROFILE_OUTPUT: ${{ runner.temp }}/turn19-profile
+        run: node tools/qa/check-turn19-mainthread-profile.cjs
+      - name: Archive exact sampled Chrome CPU flame counts and 300 RAF receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-mainthread-profile
+          path: ${{ runner.temp }}/turn19-profile
+          if-no-files-found: warn
+  turn19-dense-canvas-real-browser:
+    # Accepted source-only paired performance trial; archive manual-only because current playable is now candidate.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare browser
+        run: node tools/qa/setup-browser.cjs
+      - name: Validate exact physics and source-only dense canvas benchmark
+        run: node --check tools/qa/check-turn19-canvas-scale-browser.cjs
+      - name: Real 300 full FX 1x and 10x browser P95 versus authentic HP ticks
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_TURN19_CANVAS_BROWSER_OUTPUT: ${{ runner.temp }}/turn19-canvas
+        run: node tools/qa/check-turn19-canvas-scale-browser.cjs
+      - name: Archive 300 P95 and real tick-throughput evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn19-dense-canvas
+          path: ${{ runner.temp }}/turn19-canvas
+          if-no-files-found: warn
+
+  turn20-live-cohesion-research:
+    # REJECTED 40-front penalty, archive manual-only.
+    if: github.event_name == 'workflow_dispatch'
+    # One user-funded source-only study; no runtime mutation. Can become manual archive.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check actual-live physical front cohesion study
+        run: node --check tools/qa/check-turn20-live-cohesion.cjs
+      - name: Run 64 full live ten-fighter terminal battles with physical actual HP fronts
+        env:
+          QA_TURN20_FRONTS: turn20-live-fronts.json
+        run: node tools/qa/check-turn20-live-cohesion.cjs
+      - name: Archive actual source front quality and per-role receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-live-fronts
+          path: turn20-live-fronts.json
+          if-no-files-found: warn
+
+  turn20-local-commitment-research:
+    # REJECTED weak 40 persistence; archive to manual.
+    if: github.event_name == 'workflow_dispatch'
+    # Source-only physical close-contact continuity after stronger lane penalty proved worse at 40.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Turn20 local melee engagement continuity research syntax
+        run: node --check tools/qa/check-turn20-local-commitment.cjs
+      - name: Run real 20/40 mixed/heavy/swarm/ranged current-ultimate HP-front matches
+        env:
+          QA_TURN20_FRONTS: turn20-local-commitment.json
+        run: node tools/qa/check-turn20-local-commitment.cjs
+      - name: Preserve strict actual-HP attribution research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-local-commitment
+          path: turn20-local-commitment.json
+          if-no-files-found: warn
+
+  turn20-pressure-spread-research:
+    # Completed source-only study; archive rather than rerun.
+    if: github.event_name == 'workflow_dispatch'
+    # Third distinct physical source-only hypothesis: distribute real melee target pressure;
+    # reject if true current-live 40 persistence target is not attained.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check real pressure-spread physical study syntax
+        run: node --check tools/qa/check-turn20-pressure-spread.cjs
+      - name: Compare full 20/40 all-role live battle positive-HP front graph
+        env:
+          QA_TURN20_FRONTS: turn20-pressure-spread.json
+        run: node tools/qa/check-turn20-pressure-spread.cjs
+      - name: Archive source-real full-terminal live metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-pressure-spread
+          path: turn20-pressure-spread.json
+          if-no-files-found: warn
+
+  turn20-collider-contact-research:
+    # Completed 30 to 32 fronts but insufficient for live 40 target; manual archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # One physical barrier-touch fix only on 20/40 crowded actual melee, no fake damage.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check strict real physical contact front test
+        run: node --check tools/qa/check-turn20-collider-contact.cjs
+      - name: Current live all-ten-role 20/40 authentic HP terminal contact A/B
+        env:
+          QA_TURN20_FRONTS: turn20-collider-contact.json
+        run: node tools/qa/check-turn20-collider-contact.cjs
+      - name: Preserve genuine 32 completed matched live-battle results per arm
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-collider-contact
+          path: turn20-collider-contact.json
+          if-no-files-found: warn
+
+  turn20-formation-front-research:
+    # Completed source-only .105 physical spread study; manual historical archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # Small-roster physical deployment spacing study, no attack/damage/collision change.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate small-army physical deployment research script
+        run: node --check tools/qa/check-turn20-formation-front.cjs
+      - name: 32 authentic live 20/40 full matches per arm and true positive-HP fronts
+        env:
+          QA_TURN20_FRONTS: turn20-formation-front.json
+        run: node tools/qa/check-turn20-formation-front.cjs
+      - name: Archive current-live physical formation experiment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-formation-front
+          path: turn20-formation-front.json
+          if-no-files-found: warn
+
+  turn20-formation-refinement-research:
+    # Completed source-only 58 persistent proof; archive after integration, no costly reruns.
+    if: github.event_name == 'workflow_dispatch'
+    # One bounded followup of proven physical 40-body separation; no synthetic HP.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate final source-only formation lane refinement
+        run: node --check tools/qa/check-turn20-formation-refined.cjs
+      - name: Actual current ultimate 20/40 full terminal independent HP fronts, 32/arm
+        env:
+          QA_TURN20_FRONTS: turn20-formation-refined.json
+        run: node tools/qa/check-turn20-formation-refined.cjs
+      - name: Archive matched real 20/40 positive HP battle fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-formation-refined
+          path: turn20-formation-refined.json
+          if-no-files-found: warn
+
+  turn20-current-live-hp-front-mandatory:
+    # Actual CURRENT live all-ten-role 32 completed 20+40; historical fixed-Goose mandatory unchanged.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate current-live physical front graph acceptance gate
+        run: node --check tools/qa/check-turn20-current-live-hp-fronts.cjs
+      - name: Require current all-ultimate 40 >=40 persistent true positive-HP windows
+        env:
+          QA_TURN20_LIVE_RECEIPT: turn20-current-live-fronts.json
+        run: node tools/qa/check-turn20-current-live-hp-fronts.cjs
+      - name: Preserve strict unaltered metric source result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn20-current-live-fronts
+          path: turn20-current-live-fronts.json
+          if-no-files-found: warn
+
+  turn21-barbarian-opening-fury:
+    # Completed exact source-only 224+8, insufficient winner payoff, manual archive only.
+    if: github.event_name == 'workflow_dispatch'
+    # One time-bounded genuine physical first L5 trial; no runtime updates on study failure.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check source-only opening rage scenario
+        run: node --check tools/qa/check-turn21-barbarian-first-fury.cjs
+      - name: 224 actual terminal mirrored 20/40 draft matches, 8 severe and RAF controls
+        env:
+          QA_TURN21_RECEIPT: turn21-barbarian-first-fury.json
+        run: node tools/qa/check-turn21-barbarian-first-fury.cjs
+      - name: Archive raw first unlock/peer/whole army counterplay and physical front evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn21-barbarian-first-fury
+          path: turn21-barbarian-first-fury.json
+          if-no-files-found: warn
+
+  turn22-barbarian-iron-tide-roi:
+    # Study complete/rejected; retained for manual audit only to avoid wasted CI.
+    if: github.event_name == 'workflow_dispatch'
+    # One final user-funded L5 Barbarian candidate, source-real true terminals.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Turn22 bounded Iron Tide L5 source study
+        run: node --check tools/qa/check-turn22-barbarian-iron-tide.cjs
+      - name: Run 224 actual terminal 20/40 mixed-role draft choices plus 8 severe & all RAF parity
+        env:
+          QA_TURN22_RECEIPT: turn22-barbarian-iron-tide.json
+        run: node tools/qa/check-turn22-barbarian-iron-tide.cjs
+      - name: Archive physical Iron Tide counterplay, terminal and damaging-front results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn22-barbarian-iron-tide
+          path: turn22-barbarian-iron-tide.json
+          if-no-files-found: warn
+
+  turn23-dragon-telegraph-roi:
+    if: github.event_name == 'workflow_dispatch'
+    # Bounded source-only alternate charge fairness comparison. Once decided archive to manual-only.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Turn23 source-only Dragon L4 charge fairness harness
+        run: node --check tools/qa/check-turn23-dragon-telegraph.cjs
+      - name: Run 336 real 20/40 terminal, 12 severe, source parity and physical-front ROI
+        env:
+          QA_TURN23_RECEIPT: turn23-dragon-telegraph.json
+        run: node tools/qa/check-turn23-dragon-telegraph.cjs
+      - name: Archive immutable per-seed real battle results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn23-dragon-telegraph
+          path: turn23-dragon-telegraph.json
+          if-no-files-found: warn
+
+  turn24-turtle-sanctuary-roi:
+    if: github.event_name == 'workflow_dispatch'
+    # One funded final fighter source-only ROI decision; archive manual-only afterward.
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate actual Turtle Guardian strict matched source harness
+        run: node --check tools/qa/check-turn24-turtle-sanctuary.cjs
+      - name: Run 224 true complete matches, severe 3v15, physical fronts and RAF parity
+        env:
+          QA_TURN24_RECEIPT: turn24-turtle-sanctuary.json
+        run: node tools/qa/check-turn24-turtle-sanctuary.cjs
+      - name: Retain per-match physical turtle guardian source receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn24-turtle-sanctuary
+          path: turn24-turtle-sanctuary.json
+          if-no-files-found: warn
+
+  turn25-turtle-lastwall-roi:
+    if: github.event_name == 'workflow_dispatch'
+    # One bounded front-preserving P2 re-test; source-only and automatically archived after verdict.
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check moderated wounded-only Turtle L5 study
+        run: node --check tools/qa/check-turn25-turtle-lastwall.cjs
+      - name: Actual source 224 complete 20/40 matches, 8 severe and all RAF nonregression
+        env:
+          QA_TURN25_RECEIPT: turn25-turtle-lastwall.json
+        run: node tools/qa/check-turn25-turtle-lastwall.cjs
+      - name: Save seeded true-HP/counterplay/ROI receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turn25-turtle-lastwall
+          path: turn25-turtle-lastwall.json
+          if-no-files-found: warn
+
+  turtle-topic-shell-reprisal-roi:
+    if: github.event_name == 'workflow_dispatch'
+    # Source-only new mechanics; must not block future topic refinements.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check topic harness syntax
+        run: node --check tools/qa/check-turtle-topic-shell-reprisal.cjs
+      - name: Compare live Turtle versus genuine L5 counter-pulse variants
+        env:
+          QA_TURTLE_TOPIC_RECEIPT: turtle-topic-shell-reprisal.json
+        run: node tools/qa/check-turtle-topic-shell-reprisal.cjs
+      - name: Keep every actual terminal fixture, counter and HP-front receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turtle-topic-shell-reprisal
+          path: turtle-topic-shell-reprisal.json
+          if-no-files-found: warn
+
+  turtle-shell-rebound-playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-aligned tangible Turtle L5 behavior
+        run: node tools/qa/check-turtle-reprisal-playable.cjs
+      - name: Verify atomic 42 root and runtime release SHA pins
+        run: node tools/qa/release-hashes.cjs --verify
+
+  barbarian-topic-breakthrough-roi:
+    if: github.event_name == 'workflow_dispatch'
+    # Independently controlled, source-only geometry/engagement study; no previews or merges.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check Barbarian contact/entry source study
+        run: node --check tools/qa/check-barbarian-topic-breakthrough.cjs
+      - name: Genuine 336 full terminal matches and 12 severe, RAF and HP fronts
+        env:
+          QA_BARBARIAN_TOPIC_RECEIPT: barbarian-topic-breakthrough.json
+        run: node tools/qa/check-barbarian-topic-breakthrough.cjs
+      - name: Preserve detailed physical ROI and numeric-counter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-topic-breakthrough
+          path: barbarian-topic-breakthrough.json
+          if-no-files-found: warn
+
+  barbarian-topic-refined-engagement-roi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check refined Barbarian topic four-arm source study
+        run: node --check tools/qa/check-barbarian-topic-refined-engagement.cjs
+      - name: Compare real 448 terminal games and 16 severe plus source-parity and HP-front truth
+        env:
+          QA_BARBARIAN_REFINED_TOPIC_RECEIPT: barbarian-topic-refined-engagement.json
+        run: node tools/qa/check-barbarian-topic-refined-engagement.cjs
+      - name: Save full physical battle ROI and source states
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barbarian-topic-refined-engagement
+          path: barbarian-topic-refined-engagement.json
+          if-no-files-found: warn
+
+  barbarian-measured-playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Real source first impact, earlier collision, FX, exact L4 RAF parity
+        run: node tools/qa/check-barbarian-measured-playable.cjs
+      - name: Full offline atomic pinned release integrity
+        run: node tools/qa/release-hashes.cjs --verify
+
+  goblin-topic-frenzy-feast-roi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source syntax Goblin pack survival and self tempo
+        run: node --check tools/qa/check-goblin-topic-frenzy-feast.cjs
+      - name: 336 genuine terminals +12 severe with independent real positive HP fronts
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-frenzy-feast.json
+        run: node tools/qa/check-goblin-topic-frenzy-feast.cjs
+      - name: Keep real scenario ROI, counters and untouched-role traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-frenzy-feast
+          path: goblin-topic-frenzy-feast.json
+          if-no-files-found: warn
+
+  goblin-topic-fortified-bloodbond-roi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Goblin fortified/bloodbond source syntax
+        run: node --check tools/qa/check-goblin-topic-fortified-bloodbond.cjs
+      - name: Verify physical 336 real terminal and 12 severe outcomes, front and RAF parity
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-fortified-bloodbond.json
+        run: node tools/qa/check-goblin-topic-fortified-bloodbond.cjs
+      - name: Retain full terminal ROI
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-fortified-bloodbond
+          path: goblin-topic-fortified-bloodbond.json
+          if-no-files-found: warn
+  goblin-topic-trick-ambush-roi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check genuine source L5 Goblin Trick Ambush syntax
+        run: node --check tools/qa/check-goblin-topic-trick-ambush.cjs
+      - name: Simulate 336 complete 20/40 duels and 12 3v15, exact RAF and physical fronts
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-trick-ambush.json
+        run: node tools/qa/check-goblin-topic-trick-ambush.cjs
+      - name: Upload true attributed HP/wins and entire-foe counter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-trick-ambush
+          path: goblin-topic-trick-ambush.json
+          if-no-files-found: warn
+  goblin-topic-sabotage-focus-roi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check L5 Goblin deeper sabotage/source exact-state syntax
+        run: node --check tools/qa/check-goblin-topic-sabotage-focus.cjs
+      - name: Real 336 complete 20/40 and 12 severe, observer RAF, true damage fronts
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-sabotage-focus.json
+        run: node tools/qa/check-goblin-topic-sabotage-focus.cjs
+      - name: Preserve full authentic terminal winner and physical front receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-sabotage-focus
+          path: goblin-topic-sabotage-focus.json
+          if-no-files-found: warn
+  goblin-topic-earned-warpack-roi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check physically summoned bounded Goblin L5 variant source
+        run: node --check tools/qa/check-goblin-topic-earned-warpack.cjs
+      - name: Source-real 336 terminal 20/40 plus 12 severe, all RAF and actual extra-body accounting
+        env:
+          QA_GOBLIN_REFINED_TOPIC_RECEIPT: goblin-topic-earned-warpack.json
+        run: node tools/qa/check-goblin-topic-earned-warpack.cjs
+      - name: Record real extra Goblin bodies, counters, physical HP fronts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goblin-topic-earned-warpack
+          path: goblin-topic-earned-warpack.json
+          if-no-files-found: warn
+  goblin-earned-rabble-playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Genuine playable L4-negative, L5 temporary fighters, 300 active, replay
+        run: node tools/qa/check-goblin-earned-rabble-playable.cjs
+      - name: Verify all 42 atomic PWA/root runtime module digests
+        run: node tools/qa/release-hashes.cjs --verify

@@ -1,0 +1,31 @@
+'use strict';
+// Actual touch-viewport Chromium layout of the deployed asset stack;
+// emulated CSS insets do not prove native iOS Safari UI.
+const fs=require('fs'),path=require('path'),http=require('http'),assert=require('assert/strict'),puppeteer=require('puppeteer');
+const root=path.resolve(__dirname,'../..'),output=path.resolve(process.env.QA_TURN9_OUTPUT||'/tmp/showdown-turn9');
+const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.webmanifest':'application/manifest+json'};
+fs.mkdirSync(output,{recursive:true});
+const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/\/$/,'/index.html'),file=path.resolve(root,'.'+name);if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end()}try{res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file))}catch{res.writeHead(404);res.end()}});
+(async()=>{await new Promise(ok=>server.listen(0,'127.0.0.1',ok));const browser=await puppeteer.launch({headless:true,executablePath:process.env.QA_BROWSER_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
+const out=[],errors=[];try{for(const [width,height] of [[430,932],[390,844],[375,667]]){const page=await browser.newPage();page.on('pageerror',e=>errors.push(e.message));
+await page.setViewport({width,height,deviceScaleFactor:3,isMobile:true,hasTouch:true});
+await page.goto('http://127.0.0.1:'+server.address().port+'/?qa=1',{waitUntil:'domcontentloaded'});
+await page.waitForFunction(()=>document.body.classList.contains('assets-ok')&&window.FighterAssets,{timeout:90000});
+await page.click('[data-go="guide"]');await page.waitForSelector('.sl-guide-card');await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+const g=await page.evaluate(()=>{const e=document.querySelector('.sl-guide-card[data-guide="knight"]'),wrap=e.querySelector('.guide-form-pair'),figs=[...wrap.querySelectorAll('figure')];const r=v=>{const b=v.getBoundingClientRect();return{x:b.x,y:b.y,w:b.width,h:b.height,right:b.right}};return{figs:figs.map(r),art:figs.map(x=>r(x.querySelector('canvas'))),wrap:r(wrap),cards:document.querySelectorAll('.sl-guide-card').length,overflow:document.documentElement.scrollWidth-innerWidth,scroll:[document.querySelector('.guide-content').scrollHeight,document.querySelector('.guide-content').clientHeight]};});
+assert.equal(g.cards,10);assert(g.art[2].w>g.art[0].w*1.75&&g.art[2].h>g.art[0].h*1.4,'Ultimate art too small');
+assert(g.art[2].y<g.art[0].y-15&&Math.abs(g.art[0].y-g.art[1].y)<8,'L4 should lead, L1/L2 compare below');
+assert(g.figs.every(x=>x.x>=g.wrap.x-2&&x.right<=g.wrap.right+2),'cropped figure');assert(g.overflow<=1,'horizontal overflow');
+assert(g.scroll[0]>g.scroll[1],'Guide must scroll');
+if(width===430)await (await page.$('.sl-guide-card[data-guide="knight"] .guide-form-pair')).screenshot({path:path.join(output,'guide-430.png')});
+const o=await page.evaluate(()=>{document.documentElement.style.setProperty('--safeT','59px');document.documentElement.style.setProperty('--safeB','34px');
+document.querySelector('.screen-guide').classList.remove('active');document.querySelector('.screen-battle').classList.add('active');
+const e=document.querySelector('.round-draft');e.classList.remove('hidden');e.querySelector('.rd-choices').innerHTML=Array.from({length:3},(_,i)=>'<button type="button" class="rd-choice"><span class="rd-icon">✦</span><span class="rd-copy"><strong>EVOLUTION '+i+'</strong><span>Battle-changing local upgrade. A second line of explanatory copy.</span></span></button>').join('');
+e.scrollTop=e.scrollHeight;const cs=getComputedStyle(e),b=e.querySelector('.rd-next').getBoundingClientRect();return{top:parseFloat(cs.paddingTop),bottom:parseFloat(cs.paddingBottom),ctaHeight:b.height,ctaBottom:b.bottom,scroll:e.scrollTop,viewport:innerHeight};});
+assert(o.top>=68&&o.bottom>=43,'top notch/bottom home-indicator not protected '+JSON.stringify(o));
+assert(o.ctaHeight>=48&&o.ctaBottom<=height-30,'draft confirm unsafe '+JSON.stringify(o));
+if(width===430)await page.screenshot({path:path.join(output,'draft-safe-430.png')});
+out.push({width,height,guide:g,overlay:o});await page.close();}
+assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify({note:'Chromium DPR3 touch only, not Safari',screens:out},null,2));
+console.log('PASS: three phone viewport guide L4 spotlight, no gallery cropping, safe-area draft confirm '+JSON.stringify(out.map(x=>({width:x.width,ult:x.guide.art[2].w,base:x.guide.art[0].w,safeTop:x.overlay.top,safeBottom:x.overlay.bottom}))));
+}finally{await browser.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1});

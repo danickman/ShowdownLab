@@ -1,0 +1,16 @@
+'use strict';
+const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('node:assert/strict');
+const read=p=>fs.readFileSync(path.join(__dirname,'../..',p),'utf8'),sha=s=>crypto.createHash('sha256').update(s).digest('hex');
+const old=read('tools/qa/fast300-preoptimized-core-reference.js'),core=read('v3/legacy-sim-core.js'),bridge=read('v3/fast300-worker-bridge.js'),worker=read('v3/fast300-physics-worker.js'),adapter=read('v3/simulation-adapter.js'),html=read('index.html'),sw=read('sw.js');
+assert.equal(sha(old),'b2c589a6740351b54dca6ddd551d3158449202b947a72b9d6c93068cc2dbb8dd','frozen preoptimization core changed');
+assert.equal(core,require('./fast300-physical-combined-candidate.cjs')(old),'QA playable core must be exact proven physical candidate');
+assert(bridge.includes('THRESHOLD=159')&&bridge.includes('worker.terminate()')&&bridge.includes('pending:true'),'Worker lifecycle or fallback drift');
+assert(adapter.includes("if(r?.ok&&!r.pending)window.dispatchEvent"),'duplicate pending spell events');
+assert(worker.includes("importScripts('/v3/evolution-rules.js?v=draft-cap6','/v3/ultimate-abilities.js?v=goblin-earned-rabble1','/v3/legacy-sim-core.js?v=fast300-exact1')"),'Worker source pin changed');
+assert(html.includes('/v3/fast300-worker-bridge.js?v=fast300-thread3'),'root missing Worker bridge');
+assert(bridge.includes('suppressInline=true;inline.setRunning(false);retire()')&&bridge.includes('function forwardInline(snapshot){if(!suppressInline&&!worker)callback(snapshot)}'),'stale terminal inline states must never complete new Worker battles');
+assert(bridge.includes("stats.mode='recovery'")&&bridge.includes('Restart round in safe mode')&&bridge.includes('workerDisabled=true'),'post-progress Worker failure must never silently reset combat');
+const shell=JSON.parse(sw.match(/const SHELL=(\[[^\n]*\]);/)[1]);const pinned=JSON.parse(sw.match(/const WORKER_SHA256=(\{[^\n]*\});/)[1]);
+const workerUrl='/v3/fast300-physics-worker.js?v=fast300-thread1';assert(shell.includes(workerUrl)&&pinned[workerUrl]===sha(worker),'critical offline physics worker integrity wrong');
+for(const src of [core,bridge,worker,adapter,read('v3/v3.js')])new Function(src);
+console.log('PASS: exact source-verified QA Worker, deterministic core, once-only spell event and extra offline SHA pin');
