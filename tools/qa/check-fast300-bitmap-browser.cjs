@@ -60,13 +60,13 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
    },{speed,rep});
    console.log('FAST300 BITMAP BROWSER RAW '+JSON.stringify({arm,speed,rep,...result}));assert.equal(result.count,300,'actual 300 deployed fighters required');
    assert(!result.censored&&result.frames>=(speed===10?20:38),'insufficient uncensored real RAF observations');assert(result.endHp<result.startHp&&result.tick>25,'actual simulation must advance and inflict damage');
-   return{arm,speed,rep,intercepted,...result,bitmapStats:await page.evaluate(()=>window.__fast300InkStats||null)};
+   return{arm,speed,rep,intercepted,...result,bitmapStats:await page.evaluate(()=>window.__fast300BitmapStats||null)};
   }finally{await page.close()}
  }
  for(let rep=0;rep<2;rep++)for(const speed of [1,10]){
   const order=rep===0?['current','bitmap']:['bitmap','current'],values={};
   for(const arm of order){const result=await run(arm,speed,rep);values[arm]=result;console.log('FAST300 BITMAP BROWSER CASE '+JSON.stringify(result))}
-  report.cases.push({rep,speed,order,current:values.current,ink:values.bitmap,ratio:values.bitmap.p95IntervalMs/values.current.p95IntervalMs});
+  report.cases.push({rep,speed,order,current:values.current,bitmap:values.bitmap,ratio:values.bitmap.p95IntervalMs/values.current.p95IntervalMs});
  }
  assert.deepEqual(report.failures,[]);
  for(const c of report.cases)assert(c.bitmap.bitmapStats?.builds>=1&&c.bitmap.bitmapStats.hits>20&&c.bitmap.bitmapStats.draws>20,'no real source bitmap reuse');
@@ -77,6 +77,6 @@ const percentile=(a,q)=>{const xs=[...a].sort((a,b)=>a-b);return xs.length?xs[Ma
   console.log('FAST300 PAIR VERDICT '+JSON.stringify({rep:c.rep,speed:c.speed,baseline:c.current.p95IntervalMs,candidate:c.bitmap.p95IntervalMs,ratio:c.ratio,oldTicksPerSec:oldRate,newTicksPerSec:bitmapRate}));
  }
  report.passed=true;report.promotionEligible=report.cases.every(c=>c.ratio<=.80&&(c.bitmap.tick/c.bitmap.elapsedMs)>=(c.current.tick/c.current.elapsedMs)*.95);
- console.log('FAST300 BITMAP BROWSER MATCHED '+JSON.stringify(report.cases.map(x=>({rep:x.rep,speed:x.speed,currentP95:x.current.p95IntervalMs,inkP95:x.ink.p95IntervalMs,ratio:+x.ratio.toFixed(3),censored:[x.current.censored,x.ink.censored]}))));
+ console.log('FAST300 BITMAP BROWSER MATCHED '+JSON.stringify(report.cases.map(x=>({rep:x.rep,speed:x.speed,currentP95:x.current.p95IntervalMs,bitmapP95:x.bitmap.p95IntervalMs,ratio:+x.ratio.toFixed(3),censored:[x.current.censored,x.bitmap.censored]}))));
  }finally{fs.writeFileSync(path.join(output,'fast300-bitmap-study.json'),JSON.stringify(report,null,2)+'\n');await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1}).finally(()=>server.close());
