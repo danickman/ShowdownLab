@@ -123,6 +123,39 @@ jobs:
           name: fast300-ink-raster-research
           path: ${{ runner.temp }}/fast300-ink/fast300-ink-study.json
           if-no-files-found: warn
+  fast300-bitmap-one-shot:
+    # One-time A/B QA study, archive after verdict.
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real source candidate and test
+        run: |
+          node --check tools/qa/fast300-bitmap-candidate.cjs
+          node --check tools/qa/check-fast300-bitmap-browser.cjs
+          node -e "const fs=require('fs');new Function(require('./tools/qa/fast300-bitmap-candidate.cjs')(fs.readFileSync('v3/asset-renderer.js','utf8')))"
+      - name: Install pinned Chromium dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: '1'
+        run: bash tools/qa/install-browser-deps.sh
+      - name: Prepare verified Chromium
+        run: node tools/qa/setup-browser.cjs
+      - name: Full 300 authored fighters active HP and FX original versus shared-raster source at 1x and 10x
+        env:
+          NODE_PATH: tools/qa/node_modules
+          QA_BROWSER_PATH: ${{ github.workspace }}/tools/qa/.runtime/chromium
+          QA_FAST300_BITMAP_OUTPUT: ${{ runner.temp }}/fast300-bitmap
+        run: node tools/qa/check-fast300-bitmap-browser.cjs
+      - name: Save uncensored browser intervals and real physics throughput
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast300-bitmap-study
+          path: ${{ runner.temp }}/fast300-bitmap/fast300-bitmap-study.json
+          if-no-files-found: warn
   root-release-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
